@@ -161,6 +161,8 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        //El siguiente comando es para importar la configuracion del permiso
+        Spatie\Permission\PermissionServiceProvider::class,
 
         /*
          * Package Service Providers...
