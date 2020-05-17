@@ -2,6 +2,8 @@
 
 use Illuminate\Database\Seeder;
 use App\User;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class UserTableSeeder extends Seeder
 {
@@ -24,7 +26,7 @@ class UserTableSeeder extends Seeder
             'email' => 'secretariadeescuela@gmail.com',
             'password' => bcrypt('12345678')
         ]);
-        $director->assignRole('director');
+        $director->assignRole('secretaria de escuela');
 
         $profesor=User::create([
             'name' => 'profesor',
@@ -33,6 +35,6 @@ class UserTableSeeder extends Seeder
         ]);
         $profesor->assignRole('profesor');
 
-        
+
     }
 }

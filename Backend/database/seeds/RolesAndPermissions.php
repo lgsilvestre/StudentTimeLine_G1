@@ -32,14 +32,14 @@ class RolesAndPermissions extends Seeder
         //Creacion de rol y asignacion de permisos al rol de "secretaria de escuela"
         $role = Role::create(['name' => 'secretaria de escuela']);
         //Solo puede crear y ver los usuarios
-        Permission::create(['name' => 'create user']);
-        Permission::create(['name' => 'read user']);
+        $role->givePermissionTo('create user');
+        $role->givePermissionTo('read user');
 
 
         //Creacion de rol y asignacion de permisos al rol de "profesor"
         $role = Role::create(['name' => 'profesor']);
         //No posee permisos sobre los usuarios
-        
+
 
     }
 }
