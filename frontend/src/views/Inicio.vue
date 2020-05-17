@@ -7,11 +7,13 @@
 </template>
 
 <script>
-import AppBar from '@/components/Inicio/AppBar.vue'
+import AppBar from '@/components/Inicio/AppBar.vue';
+
 export default {
     name: 'Inicio',
     components: {
         AppBar,
+
     },
 }
 </script>
