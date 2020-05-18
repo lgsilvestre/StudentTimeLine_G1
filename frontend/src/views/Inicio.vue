@@ -1,19 +1,20 @@
 <template>
     <div class="Inicio">
         <AppBar/>
-        <h1>inicio</h1>
+        <Cuerpo/>
     </div>
   
 </template>
 
 <script>
 import AppBar from '@/components/Inicio/AppBar.vue';
+import Cuerpo from '@/components/Inicio/Cuerpo.vue';
 
 export default {
     name: 'Inicio',
     components: {
         AppBar,
-
+        Cuerpo,
     },
 }
 </script>
