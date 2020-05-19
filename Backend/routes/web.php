@@ -17,6 +17,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/user/datos', 'UsuarioController@index');
+Route::resource('User', 'UsuarioController' );
+
+/*RUTAS DE PRUEBA JAVI
+#Route::get('/user/datos', 'UsuarioController@index');
+
+#Route::get('/user/datos', 'UsuarioController@createUser');
 
 #Route::get('/users/create', 'UsuarioController@createUser');
+*/

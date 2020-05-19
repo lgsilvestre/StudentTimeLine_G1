@@ -41,7 +41,7 @@ class UsuarioControllerTest extends TestCase
      *
      *
      */
-    public function testCreate()
+    public function testStore()
     {
         $this -> withoutExceptionHandling();
 

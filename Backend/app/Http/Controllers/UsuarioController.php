@@ -11,12 +11,21 @@ class UsuarioController extends Controller
     #Retorna listado de todos los usuarios
     public function index()
     {
+        $users = User::all();
+        #dd($users);
+        return $users;
+    }
 
+    //Lo creé para hacer el testing de index
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
+        return $user;
     }
 
     #public function createUser(Request $request)
     //Store
-    public function create(Request $request)
+    public function store(Request $request)
     {
         /*
         $request = new Request([
