@@ -41,10 +41,42 @@ class UsuarioControllerTest extends TestCase
      *
      *
      */
-    /*
     public function testCreate()
     {
+        $this -> withoutExceptionHandling();
 
-    }*/
+        //$user = factory(User::class)->create();
+
+        $response = $this->post('User/', [
+            'nombre'   => 'Pepito',
+            'carrera' => '1',
+            'rol' => 'Administrador', 
+            'foto' => '1',
+            'email'=> 'pepito@hotmail.com',
+            'password' => 'papa123',
+        ]);
+
+        $this -> assertCount(1,User::all());
+
+        //$test = User::first();
+
+        $this->assertDatabaseHas('users', [
+            'nombre'   => 'Pepito',
+            'carrera' => '1',
+            'rol' => 'Administrador', 
+            'foto' => '1',
+            'email'=> 'pepito@hotmail.com',
+            'password' => 'papa123'
+        ]);
+
+        #No puse todos los atributos del usuario
+        /*
+        $this->assertDatabaseHas('users', [
+            'nombre' => $user->nombre,
+            'carrera' => $user->carrera,
+            'email' => $user->email,
+            'password' => $user->password
+        ]);*/
+    }
 
 }
