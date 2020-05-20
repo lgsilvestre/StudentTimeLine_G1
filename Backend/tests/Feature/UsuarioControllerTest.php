@@ -41,6 +41,7 @@ class UsuarioControllerTest extends TestCase
      *
      *
      */
+    
     public function testStore()
     {
         $this -> withoutExceptionHandling();
@@ -60,6 +61,8 @@ class UsuarioControllerTest extends TestCase
 
         //$test = User::first();
 
+        $response -> assertOk();
+
         $this->assertDatabaseHas('users', [
             'nombre'   => 'Pepito',
             'carrera' => '1',
@@ -68,15 +71,26 @@ class UsuarioControllerTest extends TestCase
             'email'=> 'pepito@hotmail.com',
             'password' => 'papa123'
         ]);
-
-        #No puse todos los atributos del usuario
-        /*
-        $this->assertDatabaseHas('users', [
-            'nombre' => $user->nombre,
-            'carrera' => $user->carrera,
-            'email' => $user->email,
-            'password' => $user->password
-        ]);*/
     }
 
+    /**
+     * @test
+     *
+     *
+     */
+    public function testDestroy()
+    {
+        $this -> withoutExceptionHandling();
+
+        $user = factory(User::class)->create();
+
+        $response = $this->delete('User/'.$user->id);
+
+        $response -> assertOk();
+
+        $response = User::onlyTrashed()->where('id', '=', $user->id)->get();
+
+        $this->assertNotNull($response->contains('deleted_at', $response[0]->deleted_at)); 
+    }
+    
 }
