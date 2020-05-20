@@ -12,7 +12,7 @@ use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
-
+use Mail;
 
 class TokensController extends Controller
 {
@@ -89,5 +89,25 @@ class TokensController extends Controller
             ], 422);
         }
 
+    }
+
+    public function restartPassword(Request $request){
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string|email|max:255|unique:users'
+        ]);
+
+        if($validator->fails()){
+                return response()->json($validator->errors()->toJson(), 400);
+        }
+        
+        dd($request->email);
+        $user = User::get()->where('email', $request->email);
+        Mail::send($request->email, ['user' => $user], function ($m) use ($user) {
+            $m->from('hello@app.com', 'Your Application');
+
+            $m->to($user->email, $user->name)->subject('Your Reminder!');
+        });
+
+        return response()->json(['Confirmacion' => 'Se a mandado el correo exitosamente'], 200);
     }
 }

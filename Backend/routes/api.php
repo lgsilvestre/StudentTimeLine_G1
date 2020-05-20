@@ -26,4 +26,5 @@ Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
     Route::post('/auth/login', 'TokensController@login');
     Route::post('/auth/refresh', 'TokensController@refreshToken');
     Route::get('/auth/logout', 'TokensController@logoutToken');
+    Route::post('/auth/restartPassword', 'TokensController@restartPassword');
 });

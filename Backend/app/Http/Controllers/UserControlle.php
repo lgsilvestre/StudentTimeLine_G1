@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
     use Illuminate\Support\Facades\Validator;
     use JWTAuth;
     use Tymon\JWTAuth\Exceptions\JWTException;
+    
 
 class UserController extends Controller
 {
@@ -38,6 +39,7 @@ class UserController extends Controller
             return response()->json(compact('user'));
     }
 
+    /*
     public function register(Request $request)
         {
                 $validator = Validator::make($request->all(), [
@@ -60,4 +62,6 @@ class UserController extends Controller
 
             return response()->json(compact('user','token'),201);
         }
+        */
+
 }
