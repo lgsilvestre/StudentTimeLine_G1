@@ -15,26 +15,37 @@ class UserTableSeeder extends Seeder
     public function run()
     {
         $admin=User::create([
-            'name' => 'administrador',
-            'email' => 'administrador@gmail.com',
+            'nombre' => 'admin',
+            'carrera' => '1',
+            'rol' => 'admin', 
+            'foto' => '1',
+            'email' => 'admin@gmail.com',
             'password' => bcrypt('12345678')
         ]);
-        $admin->assignRole('administrador');
+        $admin->assignRole('admin');
 
         $director=User::create([
-            'name' => 'secretaria de escuela',
+            'nombre' => 'secretaria de escuela',
+            'carrera' => '1',
+            'rol' => 'secretaria de escuela', 
+            'foto' => '1',
             'email' => 'secretariadeescuela@gmail.com',
             'password' => bcrypt('12345678')
         ]);
         $director->assignRole('secretaria de escuela');
 
         $profesor=User::create([
-            'name' => 'profesor',
+            'nombre' => 'profesor',
+            'carrera' => '1',
+            'rol' => 'profesor', 
+            'foto' => '1',
             'email' => 'profesor@gmail.com',
             'password' => bcrypt('12345678')
         ]);
         $profesor->assignRole('profesor');
 
-
+        //factory(App\User::class, 10)->create();
     }
 }
+
+        

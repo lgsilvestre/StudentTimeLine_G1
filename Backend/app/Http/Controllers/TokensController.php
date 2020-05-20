@@ -12,7 +12,7 @@ use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use Mail;
+//use Mail;
 
 class TokensController extends Controller
 {
@@ -91,6 +91,7 @@ class TokensController extends Controller
 
     }
 
+    /*
     public function restartPassword(Request $request){
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email|max:255|unique:users'
@@ -109,5 +110,5 @@ class TokensController extends Controller
         });
 
         return response()->json(['Confirmacion' => 'Se a mandado el correo exitosamente'], 200);
-    }
+    }*/
 }

@@ -22,7 +22,7 @@ class RolesAndPermissions extends Seeder
         Permission::create(['name' => 'delete user']);
 
         //Creacion de rol y asignacion de permisos al rol de "administrador"
-        $role = Role::create(['name' => 'administrador']);
+        $role = Role::create(['name' => 'admin']);
         //permisos CRUD de usuario, todos los permisos
         $role->givePermissionTo('create user');
         $role->givePermissionTo('read user');

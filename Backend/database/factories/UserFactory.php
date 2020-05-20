@@ -17,12 +17,14 @@ use Illuminate\Support\Str;
 |
 */
 
+#'nombre', 'carrera', 'rol', 'foto', 'email','password',
 $factory->define(User::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
+        'nombre' => $faker->name,
+        'carrera' => 1,
+        'rol' => 'Administrador',
+        'foto' => 123,
         'email' => $faker->unique()->safeEmail,
-        'email_verified_at' => now(),
-        'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-        'remember_token' => Str::random(10),
+        'password' => 'passwordTest',
     ];
 });
