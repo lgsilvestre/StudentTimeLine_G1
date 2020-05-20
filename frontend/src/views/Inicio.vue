@@ -11,6 +11,8 @@
 import AppBar from '@/components/Inicio/AppBar.vue';
 import Cuerpo from '@/components/Inicio/Cuerpo.vue';
 import FooterInicio from '@/components/Inicio/FooterInicio.vue';
+import FooterControl from '@/components/Inicio/FooterControl.vue';
+
 
 
 export default {
@@ -19,6 +21,7 @@ export default {
         AppBar,
         Cuerpo,
         FooterInicio,
+        FooterControl,
     },
 }
 </script>
