@@ -25,10 +25,6 @@ $factory->define(User::class, function (Faker $faker) {
         'rol' => 'Administrador',
         'foto' => 123,
         'email' => $faker->unique()->safeEmail,
-        'email_verified_at' => now(),
         'password' => 'passwordTest',
-        'created_at' => now(),
-        'updated_at' => now(),
-        'delete_at' => now()
     ];
 });

@@ -19,6 +19,8 @@ Route::get('/', function () {
 
 Route::resource('User', 'UsuarioController' );
 
+//Route::get('/user/datos/{id}', 'UsuarioController@destroy');
+
 /*RUTAS DE PRUEBA JAVI
 #Route::get('/user/datos', 'UsuarioController@index');
 

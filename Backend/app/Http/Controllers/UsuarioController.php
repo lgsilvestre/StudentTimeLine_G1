@@ -23,8 +23,6 @@ class UsuarioController extends Controller
         return $user;
     }
 
-    #public function createUser(Request $request)
-    //Store
     public function store(Request $request)
     {
         /*
@@ -44,8 +42,16 @@ class UsuarioController extends Controller
         $user ->foto=$request->foto;
         $user ->email=$request->email;
         $user ->password=$request->password;
-        $r = $user ->save();
-        dd($r);
-        //return $user ;
+        $r = $user->save();
+        return compact('user');
+    }
+    
+    public function destroy($id)
+    {
+        $user = User::find($id);
+        $user->delete();
+        //dd($user);
+        //dd($user->delete_at);
+        return compact('user');
     }
 }
