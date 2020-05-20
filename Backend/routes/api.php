@@ -18,7 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1'], function () {
-    
+    Route::resource('User', 'UsuarioController');
 });
 
 Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
@@ -29,4 +29,3 @@ Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
     Route::post('/auth/restartPassword', 'TokensController@restartPassword');
 });
 
-Route::resource('User', 'UsuarioController');

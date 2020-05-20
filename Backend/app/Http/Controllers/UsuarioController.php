@@ -6,6 +6,13 @@ use Illuminate\Http\Request;
 
 class UsuarioController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['permission:create user'], ['only' => ['create', 'store']]);
+        $this->middleware(['permission:read user'], ['only' => 'index']);
+        $this->middleware(['permission:update user'], ['only' => ['edit', 'update']]);
+        $this->middleware(['permission:delete user'], ['only' => 'delete']);
+    }
 
     #Retorna listado de todos los usuarios
     public function index()
