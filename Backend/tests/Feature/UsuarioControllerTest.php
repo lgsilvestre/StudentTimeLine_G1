@@ -94,6 +94,7 @@ class UsuarioControllerTest extends TestCase
     }
     
 
+    
     public function modificar()
     {
         #sacamos el manejo de excepciones para que me muestre el error directo
@@ -102,7 +103,7 @@ class UsuarioControllerTest extends TestCase
         #contexto, crear usuarios en la bd.. 
         #en este caso solo usaremos uno para probar.
 
-        //$usuario= Factory(User::Class)->create();  llamar seeder del seba
+        $usuario= Factory(User::Class)->create();  #llamar seeder del seba
 
         #accion, generar una peticion http a la ruta del metodo actualizar
         //$response = $this->get('/');        
@@ -128,12 +129,6 @@ class UsuarioControllerTest extends TestCase
         $this->assertEquals($usuario->foto,1);
         $this->assertEquals($usuario->email,'p.parraguez.diaz@hotmail.cl');
         $this->assertEquals($usuario->password,'81697218Paulo');
-
-
-        
-
         //$response->assertStatus(200);
     }
 }
-
-     * @return void

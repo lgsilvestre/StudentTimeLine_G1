@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers;
 use App\User;
-
 use Illuminate\Http\Request;
-use App\User;
 
 class UsuarioController extends Controller
 {
+
     #Retorna listado de todos los usuarios
     public function index()
-    public function update(Request $request, $id)
     {
         $users = User::all();
         #dd($users);
         return $users;
     }
+
+    public function update(Request $request, $id)
+    {
         $usuario = User::find($id);
         $usuario-> nombre = $request->nombre;
         $usuario-> carrera = $request->carrera;
@@ -24,6 +25,7 @@ class UsuarioController extends Controller
         $usuario-> password =  $request->password;
         $usuario-> save();//
         return compact('usuario');//para indicar al frontend que se creo el objeto usuario, con los datos obtenidos del request
+    }
 
     //Lo creé para hacer el testing de index
     public function show($id)
