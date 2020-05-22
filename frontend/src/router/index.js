@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Inicio from '../views/Inicio.vue'
+import General from '../views/General.vue'
 
 Vue.use(VueRouter)
 
@@ -9,6 +10,11 @@ Vue.use(VueRouter)
     path: '/',
     name: 'Inicio',
     component: Inicio
+  },
+  {
+    path: '/General',
+    name: 'General',
+    component: General
   },
   //{
     //path: '/about',

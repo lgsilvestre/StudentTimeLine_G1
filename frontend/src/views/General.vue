@@ -1,18 +1,15 @@
 <template>
-    <div class="Inicio">
-        <AppBar/>
-        <div>
-            Hola
-        </div>
+    <div class="General">
+        <AppBarGlobal/>
     </div>
   
 </template>
 
 <script>
-import AppBarGlobal from '@/components/General/AppBarGeneral.vue';
+import AppBarGlobal from '@/components/global/AppBarGlobal.vue';
 
 export default {
-    name: 'Inicio',
+    name: 'General',
     components: {
         AppBarGlobal,        
     },
