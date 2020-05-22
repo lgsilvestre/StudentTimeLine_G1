@@ -18,12 +18,18 @@ Vue.use(VueRouter)
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '@/views/prueba.vue')
   }
+    {
+        path: '/control',
+        name: 'control',
+        component: () =>
+            import ( /* webpackChunkName: "control" */ '../views/control.vue')
+    }
 ]
 
 const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes
+    mode: 'history',
+    base: process.env.BASE_URL,
+    routes
 })
 
 export default router
