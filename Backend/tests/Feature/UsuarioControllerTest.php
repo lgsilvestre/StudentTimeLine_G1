@@ -2,21 +2,99 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase; //estoy indicando que trabajare con una bd de prueba, la cual estara solo en memoria
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-Use App\User;
+use App\User;
 
-
-class UpdateTest extends TestCase
+class UsuarioControllerTest extends TestCase
 {
-    use RefreshDatabase;// necesitamos tener creadas las migraciones en nuestra bd de prueba temporal... la bd de prueba esta en phpunit.xml
+    use RefreshDatabase;
+
     /**
-     * A basic feature test example.
-     *
-     * @return void
      * @test
+     *
+     *
      */
+    public function testIndex()
+    {
+        $this -> withoutExceptionHandling();
+
+        //Utilizo factory para crear datos de prueba.
+        $user = factory(User::class)->create();
+
+        $response = $this->get('User/'.$user->id);
+        //$user = User::first();
+        $response -> assertOk();
+        
+        #No puse todos los atributos del usuario
+        $this->assertDatabaseHas('users', [
+            'nombre' => $user->nombre,
+            'carrera' => $user->carrera,
+            'email' => $user->email,
+            'password' => $user->password
+        ]);
+    }
+
+    /**
+     * @test
+     *
+     *
+     */
+    
+    public function testStore()
+    {
+        $this -> withoutExceptionHandling();
+
+        //$user = factory(User::class)->create();
+
+        $response = $this->post('User/', [
+            'nombre'   => 'Pepito',
+            'carrera' => '1',
+            'rol' => 'Administrador', 
+            'foto' => '1',
+            'email'=> 'pepito@hotmail.com',
+            'password' => 'papa123',
+        ]);
+
+        $this -> assertCount(1,User::all());
+
+        //$test = User::first();
+
+        $response -> assertOk();
+
+        $this->assertDatabaseHas('users', [
+            'nombre'   => 'Pepito',
+            'carrera' => '1',
+            'rol' => 'Administrador', 
+            'foto' => '1',
+            'email'=> 'pepito@hotmail.com',
+            'password' => 'papa123'
+        ]);
+    }
+
+    /**
+     * @test
+     *
+     *
+     */
+    public function testDestroy()
+    {
+        $this -> withoutExceptionHandling();
+
+        $user = factory(User::class)->create();
+
+        $response = $this->delete('User/'.$user->id);
+
+        $response -> assertOk();
+
+        $response = User::onlyTrashed()->where('id', '=', $user->id)->get();
+
+        $this->assertNotNull($response->contains('deleted_at', $response[0]->deleted_at)); 
+    }
+    
+
+    
     public function modificar()
     {
         #sacamos el manejo de excepciones para que me muestre el error directo
@@ -25,7 +103,7 @@ class UpdateTest extends TestCase
         #contexto, crear usuarios en la bd.. 
         #en este caso solo usaremos uno para probar.
 
-        //$usuario= Factory(User::Class)->create();  llamar seeder del seba
+        $usuario= Factory(User::Class)->create();  #llamar seeder del seba
 
         #accion, generar una peticion http a la ruta del metodo actualizar
         //$response = $this->get('/');        
@@ -51,10 +129,6 @@ class UpdateTest extends TestCase
         $this->assertEquals($usuario->foto,1);
         $this->assertEquals($usuario->email,'p.parraguez.diaz@hotmail.cl');
         $this->assertEquals($usuario->password,'81697218Paulo');
-
-
-        
-
         //$response->assertStatus(200);
     }
 }
