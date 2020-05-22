@@ -1,5 +1,5 @@
 <template >
-  <v-footer dark padless fixed color="primary" min-width="300" >
+  <v-footer dark padless fixed color="primary" min-width="800" >
     <!-- <v-card class=" flex" flat tile  > -->
       <!-- <v-card-title class="primary"  > -->
         <v-btn color="primary white--text mt-3 mr-2 " depressed   @click="urlUniversidad" >Universidad de Talca</v-btn>
