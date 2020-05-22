@@ -10,10 +10,10 @@ const routes = [{
         component: Inicio
     },
     {
-        path: '/control',
-        name: 'control',
+        path: '/global',
+        name: 'global',
         component: () =>
-            import ( /* webpackChunkName: "control" */ '../views/control.vue')
+            import ( /* webpackChunkName: "general" */ '../views/General.vue')
     }
 ]
 
