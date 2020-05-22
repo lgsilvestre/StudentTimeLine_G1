@@ -68,7 +68,7 @@
                                 <v-container class="px-10">
                                     <v-btn rounded block color="primary" 
                                         :loading="verificandoLogin"
-                                        @click="redireccionar"
+                                        @click="login(lista)"
                                         >
                                         <!--@click="cargar = 'verificandoLogin'"-->
                                         <h4 class="white--text">Iniciar Sesión</h4>
@@ -109,9 +109,6 @@ export default {
     },
     methods:{
         ...mapMutations(['login']),
-        redireccionar(){
-            this.$router.push({path: '/prueba'});
-        },
     },
 
     watch: {
