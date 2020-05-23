@@ -18,7 +18,7 @@
         color="primary"
         elevation="0"
         rounded
-        @click="funcion"
+        @click="volverInicio"
         > 
             Volver <i class="fas fa-undo-alt pl-2"></i>
         </v-btn>
@@ -38,10 +38,14 @@ export default {
     },
     
     methods:{
-        
+        volverInicio(){
+           
+            this.$router.push({path:'/'});
+        }
     },
     computed:{
 
     },
 
 }
+</script>

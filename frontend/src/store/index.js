@@ -8,7 +8,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     status:'',
-    usuario: null
+    usuario: null,
+    RCstatus:null,
   },
   mutations: {
     login(state,lista){//funcion de login

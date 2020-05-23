@@ -101,7 +101,8 @@ export default {
             {
             text: '¿Olvidaste tu contraseña?',
             disabled: false,
-            href: 'por ver',
+            
+             to: '/recuperacionContrasena',
             },
         ],
         lista: [{email:''},{pass:''}], 

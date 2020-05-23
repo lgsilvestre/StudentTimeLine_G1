@@ -15,12 +15,15 @@
                                     <h3 class="primary--text pt-10 ">Recuperar su contraseña en SGDA</h3>
                                     <v-text-field 
                                     class="pt-5 "
-                             
+                                        v-model="email"
                                         label="Correo"
                                         outlined
                                         prepend-inner-icon="mdi-account-circle"
                                     ></v-text-field>
-                                    <v-btn rounded block color="primary px-10" >
+                                   
+                                    <v-btn rounded block color="primary " 
+                                    @click="recuperarContrasena"
+                                    >
                                     Recuperar contraseña
                                     </v-btn>
                                 </v-col>
@@ -28,16 +31,7 @@
                             </v-row>
                             
                         </v-container>
-                        <!--<h3 class="primary--text pt-10">Iniciar Sesión en SGDA</h3>
-                        <v-text-field 
-                            label="Correo"
-                            outlined
-                            prepend-inner-icon="mdi-account-circle" class="py-10"
-                        ></v-text-field>-->
 
-                        
-                            
-                        
                     </v-row>
                     
                 </v-col>
@@ -49,11 +43,31 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     name: 'BodyRC',
-
+    data () {
+      return {
+        email: '',
+        RCstatus: '',
+      }
+    },
     methods:{
-        
+        recuperarContrasena(email){
+        //funcion para recuperar contrasena
+        alert = true;
+        let post ={
+            "email": email,
+        };
+        var url = 'por ver con el backend';
+        axios.post(url,post).then((result)=>{
+            if (result.statusText =='OK') {
+               //alerta del envio 
+            } else {
+                //alerta de que no se encuentran registros de su correo
+            }
+        });
+        },
     },
     computed:{
 
