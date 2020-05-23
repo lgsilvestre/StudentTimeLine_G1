@@ -11,6 +11,24 @@ Vue.use(VueRouter)
     component: Inicio
   },
   {
+    //Enrutamiento de la vista del administrador
+    path: '/administrador',
+    name: 'Administrador',
+    component: () => import(/* webpackChunkName: "Administrador" */ '@/views/Administrador.vue')
+  },
+  {
+    //Enrutamiento de la vista del administrador
+    path: '/profesor',
+    name: 'Profesor',
+    component: () => import(/* webpackChunkName: "Profesor" */ '@/views/Profesor.vue')
+  },
+  {
+    //Enrutamiento de la vista del administrador
+    path: '/secretariaEscuela',
+    name: 'SecretariaEscuela',
+    component: () => import(/* webpackChunkName: "SecretariaEscuela" */ '@/views/SecretariaEscuela.vue')
+  },
+  {
     path: '/prueba',
     name: 'Prueba',
     // route level code-splitting
@@ -18,12 +36,12 @@ Vue.use(VueRouter)
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '@/views/prueba.vue')
   },
-    {
-        path: '/control',
-        name: 'control',
-        component: () =>
-            import ( /* webpackChunkName: "control" */ '../views/control.vue')
-    }
+  {
+      path: '/control',
+      name: 'control',
+      component: () =>
+          import ( /* webpackChunkName: "control" */ '../views/control.vue')
+  },
 ]
 
 const router = new VueRouter({
