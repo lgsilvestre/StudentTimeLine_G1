@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Inicio from '../views/Inicio.vue'
+import General from '../views/General.vue'
 
 Vue.use(VueRouter)
 
