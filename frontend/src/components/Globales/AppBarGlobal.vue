@@ -19,13 +19,13 @@
 
         <!-- Boton que abrira las notificaciones-->
         <div class="d-flex align-center">      
-          <v-btn class="ma-2"  fab small dark color="primary">
-            <v-icon>mdi-bell</v-icon>
+          <v-btn class="hola ma-2"  fab depressed small dark color="primary">
+            <v-icon color="white">mdi-bell</v-icon>
           </v-btn>      
 
         <!-- Boton que llamará al panel lateral-->
-          <v-btn class="ma-2" fab small dark color="primary">
-            <v-icon>mdi-format-list-bulleted</v-icon>
+          <v-btn class="ma-2" fab elevation="3" small dark color="white">
+            <v-icon color="primary">mdi-format-list-bulleted</v-icon>
           </v-btn>
         </div>
     </v-app-bar>
