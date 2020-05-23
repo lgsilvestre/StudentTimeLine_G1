@@ -9,6 +9,15 @@
                 </v-btn>
             </template>
             <v-sheet class="text-center" height="800px" color="white">
+                <!--<v-footer
+                    color="primary"
+                    padless
+                    absolute
+                    width="70%"
+                    class="text--center"
+                >
+                    <strong class="text--white">prueba</strong>
+                </v-footer>-->
                 <v-container fluid>
                     <v-row no-gutters>
                         <v-col class="d-none d-sm-none d-md-flex" md="6" >
@@ -16,7 +25,6 @@
                                 <v-card
                                     width="100%"
                                     height="100%"
-                                    
                                     outlined
                                     >
                                     <v-img
@@ -43,12 +51,12 @@
                                     <h3 class="primary--text mb-10 ">Iniciar Sesión en SGDA</h3>
                                 </v-container>
                                 <v-container class="px-10">
-                                    <v-text-field 
+                                    <v-text-field v-model="lista.email"
                                         label="Correo"
                                         outlined
                                         prepend-inner-icon="mdi-account-circle"
                                     ></v-text-field>
-                                    <v-text-field
+                                    <v-text-field v-model="lista.pass"
                                         :prepend-inner-icon="mostrar ? 'mdi-eye' : 'mdi-eye-off'"
                                         :type="mostrar ? 'text' : 'password'"
                                         label="Contraseña"
@@ -60,8 +68,9 @@
                                 <v-container class="px-10">
                                     <v-btn rounded block color="primary" 
                                         :loading="verificandoLogin"
-                                        @click="cargar = 'verificandoLogin'"
-                                    >
+                                        @click="login(lista)"
+                                        >
+                                        <!--@click="cargar = 'verificandoLogin'"-->
                                         <h4 class="white--text">Iniciar Sesión</h4>
                                     </v-btn>
                                 </v-container>
@@ -77,6 +86,7 @@
 </template>
 
 <script>
+import {mapMutations} from 'vuex';
 export default {
     name: 'InicioSesion',
 
@@ -91,13 +101,20 @@ export default {
             {
             text: '¿Olvidaste tu contraseña?',
             disabled: false,
-            href: 'por ver',
+            
+             to: '/recuperacionContrasena',
             },
         ],
+        lista: [{email:''},{pass:''}], 
       }
     },
+    methods:{
+        ...mapMutations(['login']),
+    },
+
     watch: {
       cargar () {
+        //login(lista)
         const l = this.cargar
         this[l] = !this[l]
         setTimeout(() => (this[l] = false), 3000)

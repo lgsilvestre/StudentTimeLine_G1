@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('MAIL_MAILER', 'smtp'),
+    'driver' => env('MAIL_DRIVER', 'log'),
 
     /*
     |--------------------------------------------------------------------------
@@ -47,6 +47,11 @@ return [
 
         'ses' => [
             'transport' => 'ses',
+            /*
+            'key' => 'your-ses-key',
+            'secret' => 'your-ses-secret',
+            'region' => 'ses-region',  // e.g. us-east-1
+            */
         ],
 
         'mailgun' => [

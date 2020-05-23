@@ -16,3 +16,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::resource('User', 'UsuarioController' );
+
+//Route::get('/user/datos/{id}', 'UsuarioController@destroy');
+
+/*RUTAS DE PRUEBA JAVI
+#Route::get('/user/datos', 'UsuarioController@index');
+
+#Route::get('/user/datos', 'UsuarioController@createUser');
+
+#Route::get('/users/create', 'UsuarioController@createUser');
+*/
