@@ -1,17 +1,21 @@
 <template>
-    <div class="General">
+    <div class="general">
         <AppBarGlobal/>
+        <FooterGeneral/>
     </div>
   
 </template>
 
 <script>
-import AppBarGlobal from '@/components/global/AppBarGlobal.vue';
+import FooterGeneral from '@/components/global/FooterGeneral.vue';
+
+
 
 export default {
-    name: 'General',
+    name: 'general',
     components: {
-        AppBarGlobal,        
+
+        FooterGeneral,
     },
 }
 </script>

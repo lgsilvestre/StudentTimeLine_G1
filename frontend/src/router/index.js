@@ -43,6 +43,12 @@ Vue.use(VueRouter)
       component: () =>
           import ( /* webpackChunkName: "control" */ '../views/control.vue')
   },
+    {
+        path: '/global',
+        name: 'global',
+        component: () =>
+            import ( /* webpackChunkName: "general" */ '../views/General.vue')
+    }
 ]
 
 const router = new VueRouter({
