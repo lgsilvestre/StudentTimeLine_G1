@@ -20,6 +20,7 @@ export default new Vuex.Store({
       };
       var url = 'http://127.0.0.1:8000/api/v1/auth/login';
       axios.post(url,post).then((result)=>{
+        state.usuario = result.data;
         if (state.usuario.user.rol == "admin") {
           //redireccionamiento hacia el usuario administrador
           router.push({path: '/administrador'});
