@@ -28,6 +28,12 @@ Vue.use(VueRouter)
     name: 'SecretariaEscuela',
     component: () => import(/* webpackChunkName: "SecretariaEscuela" */ '@/views/SecretariaEscuela.vue')
   },
+  {
+    //Enrutamiento de la vista de RecuperacionContraseña
+    path: '/recuperacionContrasena',
+    name: 'RecuperacionContrasena',
+    component: () => import(/* webpackChunkName: "RecuperacionContraseña" */ '@/views/RecuperacionContrasena.vue')
+  },
   
 ]
 
