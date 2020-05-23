@@ -41,7 +41,7 @@
 
 
 <script>
-import NosotrosComponent from '@/components/global/NosotrosComponent.vue';
+import NosotrosComponent from '@/components/Globales/NosotrosComponent.vue';
 export default {
     components:{
         NosotrosComponent
