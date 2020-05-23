@@ -1,7 +1,7 @@
 <template>
     <div >        
         <v-container class="align-center my-5" >
-            <v-img  src="https://cdn.discordapp.com/attachments/299713523548684288/711815514380435466/banner.png"></v-img>
+            <v-img  src="@/assets/Inicio/bannerInicio.png"></v-img>
         </v-container>
 
         <v-container fluid justify-center >
@@ -19,7 +19,7 @@
                     <v-img
                         class="white--text align-end"
                         height="200px"
-                        src="https://www.utalca.cl/content/uploads/2019/09/6-1-1-.jpg"
+                        src="@/assets/Inicio/profesores.jpg"
                     >
                     <!-- v-card-title>70 Profesores</v-card-title> -->
                         <v-expand-transition>
@@ -50,7 +50,7 @@
                 <v-img
                     class="white--text align-end"
                     height="200px"
-                    src="https://globalmediarocks.s3-us-west-1.amazonaws.com/uploads/61673a31-9adf-4153-9164-8ae056243c91/ASF.jpg"
+                    src="@/assets/Inicio/observaciones.jpg"
                 >
                     <v-expand-transition>
                         <div
@@ -80,7 +80,7 @@
                 <v-img
                     class="white--text align-end"
                     height="200px"
-                    src="https://www.utalca.cl/content/uploads/2019/04/fac-ing-tec-feb.jpg"
+                    src="@/assets/Inicio/carreras.jpg"
                 >
                 <v-expand-transition>
                         <div
@@ -109,7 +109,7 @@
                     <v-img
                         class="white--text align-end"
                         height="200px"
-                        src="http://www.ingenieria.utalca.cl/Repositorio/qAYsTOUtPWWsOIDOoIOmR02azDYCW1/campus2.JPG"
+                        src="@/assets/Inicio/estudiantes.jpg"
                     >
                         <v-expand-transition>
                         <div
