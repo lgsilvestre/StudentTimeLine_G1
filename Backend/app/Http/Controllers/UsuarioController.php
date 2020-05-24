@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 use App\User;
+use App\Images;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Request;
+use Validator;
+use Image;
 
 class UsuarioController extends Controller
 {
+    
     public function __construct()
     {
         $this->middleware(['permission:create user'], ['only' => ['create', 'store']]);
@@ -52,16 +57,45 @@ class UsuarioController extends Controller
             'email'=> 'pepito@hotmail.com',
             'password' => 'papa123',
         ]);*/
+            
+        $validator = Validator::make($request->all(), [
+            'nombre' => ['required','string'],
+            'carrera' => ['required'], //Cambiar lo de la foreign key dps
+            'rol' => ['required','string'], 
+            'foto' => ['image','mimes:jpeg,png,jpg,gif,svg','max:2048','nullable'],
+            'email'=> ['required','email'],
+            'password' => ['required'],
+        ]);
 
-        $user = new User();
-        $user ->nombre=$request->nombre;
-        $user ->carrera=$request->carrera;
-        $user ->rol=$request->rol;
-        $user ->foto=$request->foto;
-        $user ->email=$request->email;
-        $user ->password=$request->password;
-        $r = $user->save();
-        return compact('user');
+        if ($validator->fails()) 
+        {
+            //dd($request);
+            return response($validator->messages());
+        }
+        else
+        {
+            $user = new User();
+            $user ->nombre=$request->nombre;
+            $user ->carrera=$request->carrera;
+            $user ->rol=$request->rol;
+            $user ->email=$request->email;
+            $user ->password=$request->password;
+
+            if($request->hasfile('foto'))
+            {
+                $imagen = $request->file('foto');
+                $nombreImagen = time () . '.' . $imagen->getClientOriginalExtension();
+                Image::make($imagen)->resize(400,400)->save( public_path('/uploads/imagenes/' . $nombreImagen));
+                $user->foto=$nombreImagen;
+            }
+            else
+            {
+                $user ->foto=null;
+            }
+            
+            $r = $user->save();
+            return compact('user');
+        }    
     }
     
     public function destroy($id)
