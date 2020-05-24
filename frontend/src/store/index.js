@@ -44,6 +44,13 @@ export default new Vuex.Store({
     unLogin(state){
       //esta funcionalidad se agregara mas adelante cuando el backend tenga lista esta funcionalidad
     },
+    registrarUsuario(state,nuevoUsuario){
+      var url = 'http://127.0.0.1:8000/api/v1/User/create';
+      axios.post(url,nuevoUsuario,state.tk)
+        .then((result)=>{
+          console.log(result.statusText);
+        });
+    },
   },
   actions: {
   },
