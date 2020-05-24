@@ -15,7 +15,9 @@ class CreateCarrerasTable extends Migration
     {
         Schema::create('carreras', function (Blueprint $table) {
             $table->id();
+            $table->string('nombre',64);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
