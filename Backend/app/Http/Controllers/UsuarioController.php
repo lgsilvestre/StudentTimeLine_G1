@@ -29,6 +29,22 @@ class UsuarioController extends Controller
 
     public function update(Request $request, $id)
     {
+       
+
+        $validator = Validator::make($request->all(),[
+            'nombre' => 'required|string',
+            'carrera' => 'required|string',
+            'foto' => 'image|nullable',
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+ 
+        if ($validator->fails())
+        {
+            // It failed
+            return response($validator->messages());
+        }
+    
         $usuario = User::find($id);
         $usuario-> nombre = $request->nombre;
         $usuario-> carrera = $request->carrera;
