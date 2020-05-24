@@ -111,7 +111,7 @@ export default {
             datosUsuario:[ {nombre:''},{escuela:''},{rol:''},{correo:''},{contrasena:''} ],
             mostrar: false,     
             items: ['Ingenieria Civil en Computación', 'Ingenieria Civil Industrial','Ingenieria Civil en Minas', 'Ingenieria Civil en Obras Civiles', 'Ingenieria Civil Mecánica','Ingenieria Civil Mecatrónica', 'Ingenieria Civil Eléctrica' ],
-            roles: ['Administrador', 'Secretaría de Escuela', 'Profesor'],   
+            roles: ['admin', 'secretaria de Escuela', 'profesor'],   
             reglas:[
                 value => !!value || 'Requerido.',
                 value => (value && value.length >= 8) || 'Minimo 8 characters',

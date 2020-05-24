@@ -10,6 +10,12 @@ export default new Vuex.Store({
     status:'',
     usuario: null,
     RCstatus:null,
+    tk:null,
+    config:{
+      headers:{
+        Authorization: ''
+      }
+    },
   },
   mutations: {
     login(state,lista){//funcion de login
@@ -22,6 +28,8 @@ export default new Vuex.Store({
       var url = 'http://127.0.0.1:8000/api/v1/auth/login';
       axios.post(url,post).then((result)=>{
         state.usuario = result.data;
+        state.tk = 'Bearer '+ state.usuario.token;
+        state.config.headers.Authorization = state.tk;
         if (state.usuario.user.rol == "admin") {
           //redireccionamiento hacia el usuario administrador
           router.push({path: '/administrador'});
@@ -45,8 +53,17 @@ export default new Vuex.Store({
       //esta funcionalidad se agregara mas adelante cuando el backend tenga lista esta funcionalidad
     },
     registrarUsuario(state,nuevoUsuario){
-      var url = 'http://127.0.0.1:8000/api/v1/User/create';
-      axios.post(url,nuevoUsuario,state.tk)
+      console.log(state.tk);
+      let post ={
+        "foto": null,
+        "nombre": nuevoUsuario.nombre,
+        "carrera": nuevoUsuario.escuela,
+        "rol": nuevoUsuario.rol,
+        "email": nuevoUsuario.correo,
+        "password": nuevoUsuario.contrasena,
+      }
+      var url = 'http://127.0.0.1:8000/api/v1/User';
+      axios.post(url,post,state.config)
         .then((result)=>{
           console.log(result.statusText);
         });
