@@ -7,17 +7,6 @@
             </template>
 
             <v-sheet class="text-center" height="800px" color="white">
-                <!-- <v-container fluid>
-                    <v-row no-gutters>   
-                        <template>
-                            <div class="text-center">
-                                <v-btn class="mt-6"  text color="error" @click="sheet = ! sheet"  >close</v-btn>
-                            </div>
-                        </template>
-                        
-                    </v-row>
-                
-                </v-container> -->
                 <v-btn class="mt-6" text color="red" @click="sheet = !sheet" >cerrar</v-btn>
                 <div class="py-3">Información</div>
             </v-sheet>

@@ -1,6 +1,6 @@
 <template >
-  <v-container fluid>
-      <v-footer dark padless absolute color="primary" min-width="800" >
+  <v-container fluid >
+      <v-footer dark padless absolute color="primary" min-width="720px"  >
     <!-- <v-card class=" flex" flat tile  > -->
       <!-- <v-card-title class="primary"  > -->
         <v-btn color="primary white--text mt-3 mr-2 " depressed   @click="urlUniversidad" >Universidad de Talca</v-btn>

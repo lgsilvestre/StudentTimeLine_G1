@@ -1,14 +1,19 @@
 <template>
   <div class="Administrador">
-
+    <Navegacion/>
+    <AppBarTemporal/>
+    <FooterGlobal/>
+   
   </div>
 </template>
 
 <script>
-export default {
-    name: 'Administrador',
-    components: {
+import Navegacion from '@/components/Administrador/Navegacion.vue';
 
+
+export default {
+    components: {
+      Navegacion,
     },
 }
 </script>

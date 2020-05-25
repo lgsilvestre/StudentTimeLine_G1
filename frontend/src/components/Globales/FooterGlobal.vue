@@ -1,16 +1,13 @@
 <template >
-  <v-footer dark padless fixed color="primary" min-width="800" >
-    <!-- <v-card class=" flex" flat tile  > -->
-      <!-- <v-card-title class="primary"  > -->
+  <v-container  fluid  >
+      <v-footer    padless absolute="" color="primary" min-width="720px"   >
         <v-btn color="primary white--text mt-3 mr-2 " depressed   @click="urlUniversidad" >Universidad de Talca</v-btn>
         <v-btn color="primary white--text mt-3 mr-2 " depressed   @click="urlContacto">Contacto</v-btn>
-        <!-- Boton que muestra informacion sobre el equipo de desarrollo -->
         <NosotrosComponent/>
+        
 
         <v-spacer></v-spacer>
-
-            <v-spacer></v-spacer>
-          
+            <v-app-bar-nav-icon @click="setDrawelAdmin"></v-app-bar-nav-icon>
 
             <v-btn class="xs-2 " small icon fab @click="urlFacebook">
                     <v-icon color="white" >{{ icoFacebook }}</v-icon>
@@ -24,22 +21,18 @@
             <v-btn class="xs-2 ml-10 mr-10" small   icon fab  @click="urlYoutube">     
                 <v-icon color="white"> {{ icoYoutube }} </v-icon>
             </v-btn>
-            
-      <!-- </v-card-title> -->
-
+             
       <v-card-text class=" py-2 white--text text-center secondary">
         {{ new Date().getFullYear() }} — <strong> {{ nombrePag }} </strong>
       </v-card-text>
-    <!-- </v-card> -->
-
-    
-
-  </v-footer>
+    </v-footer>
+  </v-container>
 </template>
 
 
 <script>
 import NosotrosComponent from '@/components/Globales/NosotrosComponent.vue';
+import {mapMutations} from 'vuex';
 export default {
     components:{
         NosotrosComponent
@@ -54,6 +47,8 @@ export default {
         }
     },
     methods:{
+        ...mapMutations(['setDrawelAdmin'])
+        ,
         urlFacebook(){
             window.open("https://www.facebook.com/utalca/", '_blank');
         },
