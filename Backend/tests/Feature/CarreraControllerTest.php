@@ -45,7 +45,15 @@ class CarreraControllerTest extends TestCase
      */
     public function testStore()
     {  
-    
+        $this -> withoutExceptionHandling();
+        //generamos la petición
+        $response= $this->post('api/Carrera',['nombre'=>'ingenieria civil en puteria']);
+      
+        $response->assertOk();
+        $response=$this->get('api/Carrera');
+        $this->assertEquals($response[0]["nombre"], 'ingenieria civil en puteria');
+
+        
     }
 
     /**
