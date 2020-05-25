@@ -12,7 +12,6 @@ import BodyRegistroUsuarios from '@/components/Administrador/RegistroUsuarios/Bo
 import FooterGeneral from '@/components/Globales/FooterGeneral.vue';
 
 export default {
-    name: 'Administrador',
     components: {
       AppBarGlobal,
       BodyRegistroUsuarios,
