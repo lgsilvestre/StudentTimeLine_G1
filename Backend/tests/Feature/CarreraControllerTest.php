@@ -75,6 +75,18 @@ class CarreraControllerTest extends TestCase
      */ 
     public function testDestroy()
     {
+        $this -> withoutExceptionHandling();
 
+        $carrera=Carrera::create([
+            'nombre' => 'Prueba Carrera'
+        ]);
+
+        $response = $this->delete('api/Carrera/'.$carrera->id);
+
+        $response -> assertOk();
+
+        $response = Carrera::onlyTrashed()->where('id', '=', $carrera->id)->get();
+
+        $this->assertNotNull($response->contains('deleted_at', $response[0]->deleted_at)); 
     }
 }
