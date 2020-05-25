@@ -1,42 +1,33 @@
 <template >
-  <v-container fluid >
-      <v-footer dark padless absolute color="primary" min-width="720px"  >
+      <v-footer dark padless absolute color="primary" min-width="720" >
     <!-- <v-card class=" flex" flat tile  > -->
       <!-- <v-card-title class="primary"  > -->
-        <v-btn color="primary white--text mt-3 mr-2 " depressed   @click="urlUniversidad" >Universidad de Talca</v-btn>
-        <v-btn color="primary white--text mt-3 mr-2 " depressed   @click="urlContacto">Contacto</v-btn>
-        <!-- Boton que muestra informacion sobre el equipo de desarrollo -->
-        <NosotrosComponent/>
-
-        <v-spacer></v-spacer>
-
-            <v-spacer></v-spacer>
-          
-
-            <v-btn class="xs-2 " small icon fab @click="urlFacebook">
+         <v-row no-gutters justify-center>
+            <v-col class="d-none d-sm-none d-md-flex" align-self="center" md="4" >
+                <v-btn class="ml-2" color="primary white--text mr-2 " depressed   @click="urlUniversidad" >Universidad de Talca</v-btn>
+                <!-- Boton que muestra informacion sobre el equipo de desarrollo -->
+                <NosotrosComponent/>
+            </v-col>
+            <v-col class="text-center" sm="12" md="4" lg="4" align-self="center">
+                <strong> {{ nombrePag }} —  {{ new Date().getFullYear() }} </strong>         
+            </v-col>
+            <v-col  class="d-none d-sm-none d-md-flex " align-self="center" md="4">
+                <v-spacer></v-spacer>
+                <v-btn class="xs-2 " small icon fab @click="urlFacebook">
                     <v-icon color="white" >{{ icoFacebook }}</v-icon>
-            </v-btn>
-            <v-btn class="xs-2 ml-10" small  icon fab  @click="urlTwitter">
-                <v-icon color="white">{{icoTwitter}}</v-icon>
-            </v-btn>
-            <v-btn class="xs-2 ml-10" small  icon fab  @click="urlInstagram">     
-                <v-icon color="white"> {{ icoInstagram }} </v-icon>
-            </v-btn>
-            <v-btn class="xs-2 ml-10 mr-10" small   icon fab  @click="urlYoutube">     
-                <v-icon color="white"> {{ icoYoutube }} </v-icon>
-            </v-btn>
-            
-      <!-- </v-card-title> -->
-
-      <v-card-text class=" py-2 white--text text-center secondary">
-        {{ new Date().getFullYear() }} — <strong> {{ nombrePag }} </strong>
-      </v-card-text>
-    <!-- </v-card> -->
-
-    
-
+                </v-btn>
+                <v-btn class="xs-2 ml-2" small  icon fab  @click="urlTwitter">
+                    <v-icon color="white">{{icoTwitter}}</v-icon>
+                </v-btn>
+                <v-btn class="xs-2 ml-2" small  icon fab  @click="urlInstagram">     
+                    <v-icon color="white"> {{ icoInstagram }} </v-icon>
+                </v-btn>
+                <v-btn class="xs-2 ml-2 mr-4" small   icon fab  @click="urlYoutube">     
+                    <v-icon color="white"> {{ icoYoutube }} </v-icon>
+                </v-btn>
+            </v-col>
+        </v-row>
   </v-footer>
-  </v-container>
 </template>
 
 
@@ -67,9 +58,6 @@ export default {
         },
         urlYoutube(){
             window.open("https://www.youtube.com/channel/UCoH9MLoWd9f5mFbSBaa_X9Q", '_blank');
-        },
-        urlContacto(){
-            window.open("https://www.utalca.cl/contacto/", '_blank');
         },
         urlUniversidad(){
             window.open("https://www.utalca.cl/universidad/", '_blank');

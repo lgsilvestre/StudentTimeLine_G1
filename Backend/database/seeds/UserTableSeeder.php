@@ -18,7 +18,7 @@ class UserTableSeeder extends Seeder
             'nombre' => 'admin',
             'carrera' => '1',
             'rol' => 'admin', 
-            'foto' => '1',
+            'foto' => null,
             'email' => 'admin@gmail.com',
             'password' => bcrypt('12345678')
         ]);
@@ -28,7 +28,7 @@ class UserTableSeeder extends Seeder
             'nombre' => 'secretaria de escuela',
             'carrera' => '1',
             'rol' => 'secretaria de escuela', 
-            'foto' => '1',
+            'foto' => null,
             'email' => 'secretariadeescuela@gmail.com',
             'password' => bcrypt('12345678')
         ]);
@@ -38,7 +38,7 @@ class UserTableSeeder extends Seeder
             'nombre' => 'profesor',
             'carrera' => '1',
             'rol' => 'profesor', 
-            'foto' => '1',
+            'foto' => null,
             'email' => 'profesor@gmail.com',
             'password' => bcrypt('12345678')
         ]);

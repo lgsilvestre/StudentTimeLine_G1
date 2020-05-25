@@ -21,9 +21,9 @@ use Illuminate\Support\Str;
 $factory->define(User::class, function (Faker $faker) {
     return [
         'nombre' => $faker->name,
-        'carrera' => 1,
+        'carrera' => "Computación",
         'rol' => 'Administrador',
-        'foto' => 123,
+        'foto' => null,
         'email' => $faker->unique()->safeEmail,
         'password' => 'passwordTest',
     ];
