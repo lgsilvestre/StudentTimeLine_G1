@@ -1,34 +1,4 @@
 <template >
-<<<<<<< HEAD:frontend/src/components/Globales/FooterGlobal.vue
-  <v-container  fluid  >
-      <v-footer    padless absolute="" color="primary" min-width="720px"   >
-        <v-btn color="primary white--text mt-3 mr-2 " depressed   @click="urlUniversidad" >Universidad de Talca</v-btn>
-        <v-btn color="primary white--text mt-3 mr-2 " depressed   @click="urlContacto">Contacto</v-btn>
-        <NosotrosComponent/>
-        
-
-        <v-spacer></v-spacer>
-            <v-app-bar-nav-icon @click="setDrawelAdmin"></v-app-bar-nav-icon>
-
-            <v-btn class="xs-2 " small icon fab @click="urlFacebook">
-                    <v-icon color="white" >{{ icoFacebook }}</v-icon>
-            </v-btn>
-            <v-btn class="xs-2 ml-10" small  icon fab  @click="urlTwitter">
-                <v-icon color="white">{{icoTwitter}}</v-icon>
-            </v-btn>
-            <v-btn class="xs-2 ml-10" small  icon fab  @click="urlInstagram">     
-                <v-icon color="white"> {{ icoInstagram }} </v-icon>
-            </v-btn>
-            <v-btn class="xs-2 ml-10 mr-10" small   icon fab  @click="urlYoutube">     
-                <v-icon color="white"> {{ icoYoutube }} </v-icon>
-            </v-btn>
-             
-      <v-card-text class=" py-2 white--text text-center secondary">
-        {{ new Date().getFullYear() }} — <strong> {{ nombrePag }} </strong>
-      </v-card-text>
-    </v-footer>
-  </v-container>
-=======
   <v-footer dark padless fixed color="primary" min-width="720" >
     <!-- <v-card class=" flex" flat tile  > -->
       <!-- <v-card-title class="primary"  > -->
@@ -58,7 +28,6 @@
             </v-col>
         </v-row>
   </v-footer>
->>>>>>> felipe2:frontend/src/components/Globales/FooterGeneral.vue
 </template>
 
 

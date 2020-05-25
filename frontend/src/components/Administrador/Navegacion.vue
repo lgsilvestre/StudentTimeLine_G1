@@ -1,6 +1,6 @@
 <template>
 <v-navigation-drawer app right v-model=drawer  :mini-variant.sync=drawelAdmin permanentt  >
-        <v-list-item class="px-2" @click="verPerfil">
+        <v-list-item class="px-2 py-1" @click="verPerfil">
             <v-list-item-avatar >
                 <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
             </v-list-item-avatar>
@@ -87,7 +87,7 @@
                 </v-list-item>
             </template>
             <v-list>
-                <v-list-item v-for="(item, index) in itemsEstudiantes" :key="index"@click="CrearEscuela" >
+                <v-list-item v-for="(item, index) in itemsEstudiantes" :key="index" @click="CrearEscuela" >
                     <v-list-item-title>{{ item.title }}</v-list-item-title>
                 </v-list-item>
             </v-list>
