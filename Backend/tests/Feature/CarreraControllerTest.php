@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Carrera;
 //Importar Modelo
 
 class CarreraControllerTest extends TestCase
@@ -18,7 +19,23 @@ class CarreraControllerTest extends TestCase
      */
     public function testIndex()
     {
+        $this -> withoutExceptionHandling();
+        //genero datos de pruebas en la bd temporal en memoria.
+        Carrera::create([
+            'nombre' => 'Ingeniería Civil Industrial'
+        ]);
+        Carrera::create([
+            'nombre' => 'Ingeniería Civil en Computación'
+        ]);
 
+        //general la petición
+        $response=$this->get('api/Carrera');
+        //extraigo el objeto en la posición cero del array para sacar la carrera de industrial, asumo que se crean en orden
+        $carreraX= $response[0];
+
+        //por la clave "nombre" saco el valor que contiene en el array asociativo.
+        $this->assertEquals( $carreraX["nombre"],'Ingeniería Civil Industrial');
+       
     }
 
     /**
@@ -27,8 +44,8 @@ class CarreraControllerTest extends TestCase
      * 
      */
     public function testStore()
-    {
-
+    {  
+    
     }
 
     /**
@@ -36,28 +53,28 @@ class CarreraControllerTest extends TestCase
      *
      * 
      */
-    public function testShow()
-    {
+    //public function testShow()
+    //{
 
-    }
-
-    /**
-     * @test
-     *
-     * 
-     */
-    public function testUpdate()
-    {
-
-    }
+    //}
 
     /**
      * @test
      *
      * 
      */
-    public function testDestroy()
-    {
+    //public function testUpdate()
+    //{
 
-    }
+    //}
+
+    /**
+     * @test
+     *
+     * 
+     */
+    //public function testDestroy()
+    //{
+
+    //}
 }
