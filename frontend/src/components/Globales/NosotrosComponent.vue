@@ -3,7 +3,7 @@
         <v-bottom-sheet v-model=" sheet " inset  >  
             <template v-slot:activator="{ on }">
                 
-                <v-btn v-on="on" color="primary white--text mt-3 mr-2 " depressed   >Nosotros</v-btn>
+                <v-btn v-on="on" color="primary white--text" depressed   >Nosotros</v-btn>
             </template>
 
             <v-sheet class="text-center" height="800px" color="white">
