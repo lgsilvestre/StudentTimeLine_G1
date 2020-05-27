@@ -34,6 +34,12 @@ Vue.use(VueRouter)
     name: 'RecuperacionContrasena',
     component: () => import(/* webpackChunkName: "RecuperacionContraseña" */ '@/views/RecuperacionContrasena.vue')
   },
+  {
+    //redireccionamiento 
+    path: '/recuperacionContrasena',
+    name: 'RecuperacionContrasena',
+    component: () => import(/* webpackChunkName: "RecuperacionContraseña" */ '@/views/RecuperacionContrasena.vue')
+  },
   
 ]
 
