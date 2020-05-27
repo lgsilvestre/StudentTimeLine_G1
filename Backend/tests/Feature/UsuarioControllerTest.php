@@ -4,12 +4,14 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+//use Tests\Feature\WithoutMiddleware;
 use Tests\TestCase;
 use App\User;
 
 class UsuarioControllerTest extends TestCase
 {
     use RefreshDatabase;
+    //use WithoutMiddleware;
 
     /**
      * @test
@@ -52,7 +54,7 @@ class UsuarioControllerTest extends TestCase
             'nombre'   => 'Pepito',
             'carrera' => '1',
             'rol' => 'Administrador', 
-            'foto' => '1',
+            'foto' => null,
             'email'=> 'pepito@hotmail.com',
             'password' => 'papa123',
         ]);
@@ -67,7 +69,7 @@ class UsuarioControllerTest extends TestCase
             'nombre'   => 'Pepito',
             'carrera' => '1',
             'rol' => 'Administrador', 
-            'foto' => '1',
+            'foto' => null,
             'email'=> 'pepito@hotmail.com',
             'password' => 'papa123'
         ]);
@@ -107,7 +109,7 @@ class UsuarioControllerTest extends TestCase
 
         #accion, generar una peticion http a la ruta del metodo actualizar
         //$response = $this->get('/');        
-        $peticion= $this->put('/api/user/'.$usuario->id,[
+        $peticion= $this->put('User/'.$usuario->id,[
             'nombre' => 'paulo parraguez diaz',
             'carrera'=>407 ,
             'rol'=> 'administrador',

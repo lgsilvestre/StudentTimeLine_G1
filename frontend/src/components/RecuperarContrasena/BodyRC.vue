@@ -59,7 +59,7 @@ export default {
         let post ={
             "email": email,
         };
-        var url = 'por ver con el backend';
+        var url = 'http://127.0.0.1:8000/api/v1/auth/restartPassword';
         axios.post(url,post).then((result)=>{
             if (result.statusText =='OK') {
                //alerta del envio 

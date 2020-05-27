@@ -1,22 +1,25 @@
 <template>
   <div class="Administrador">
-    <AppBarGlobal/>      
+    <AppBarGlobal/>  
     <BodyRegistroUsuarios/>
-    <FooterGeneral/>
+    <FooterGlobal/>
+    <Navegacion/> 
+    
   </div>
 </template>
 
 <script>
 import AppBarGlobal from '@/components/Globales/AppBarGlobal.vue';
 import BodyRegistroUsuarios from '@/components/Administrador/RegistroUsuarios/BodyRegistroUsuarios.vue';
-import FooterGeneral from '@/components/Globales/FooterGeneral.vue';
-
+import FooterGlobal from '@/components/Globales/FooterGlobal.vue';
+import Navegacion from '@/components/Administrador/Navegacion.vue';
 export default {
-    name: 'Administrador',
     components: {
       AppBarGlobal,
       BodyRegistroUsuarios,
-      FooterGeneral,
+      FooterGlobal,
+      Navegacion,
+      
     },
 }
 </script>

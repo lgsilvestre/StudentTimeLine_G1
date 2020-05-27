@@ -87,6 +87,7 @@
                                     rounded 
                                     block 
                                     color="primary " 
+                                    @click="registrarUsuario(datosUsuario)"
                                 > Registrar
                                 </v-btn>   
                             </v-form>
@@ -102,20 +103,24 @@
 </template>
 
 <script>
+import {mapMutations} from 'vuex';
 export default {
     name: "RegistroUsuarios",
-        data () {
-            return {
-                datosUsuario:[ {nombre:''},{escuela:''},{rol:''},{correo:''},{contrasena:''} ],
-                mostrar: false,     
-                items: ['Ingenieria Civil en Computación', 'Ingenieria Civil Industrial','Ingenieria Civil en Minas', 'Ingenieria Civil en Obras Civiles', 'Ingenieria Civil Mecánica','Ingenieria Civil Mecatrónica', 'Ingenieria Civil Eléctrica' ],
-                roles: ['Administrador', 'Secretaría de Escuela', 'Profesor'],   
-                reglas:[
-                    value => !!value || 'Requerido.',
-                    value => (value && value.length >= 8) || 'Minimo 8 characters',
-                ],
+    data () {
+        return {
+            datosUsuario:[ {nombre:''},{escuela:''},{rol:''},{correo:''},{contrasena:''} ],
+            mostrar: false,     
+            items: ['Ingenieria Civil en Computación', 'Ingenieria Civil Industrial','Ingenieria Civil en Minas', 'Ingenieria Civil en Obras Civiles', 'Ingenieria Civil Mecánica','Ingenieria Civil Mecatrónica', 'Ingenieria Civil Eléctrica' ],
+            roles: ['admin', 'secretaria de Escuela', 'profesor'],   
+            reglas:[
+                value => !!value || 'Requerido.',
+                value => (value && value.length >= 8) || 'Minimo 8 characters',
+            ],
 
-            }
-        },
+        }
+    },
+    methods:{
+        ...mapMutations(['registrarUsuario']),
+    },
 }
 </script>
