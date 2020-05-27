@@ -77,6 +77,10 @@ class CarreraController extends Controller
      */
     public function destroy($id)
     {
-
+        $carrera = Carrera::find($id);
+        if ($carrera != null) {
+            $carrera->delete();
+            return compact('carrera');
+        }
     }
 }
