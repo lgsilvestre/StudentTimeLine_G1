@@ -34,7 +34,10 @@ class CarreraController extends Controller
      */
     public function store(Request $request)
     {
-
+        $carrera = new Carrera();
+        $carrera ->nombre=$request->nombre;
+        $r = $carrera->save();
+        return compact('carrera');
     }
 
     /**
