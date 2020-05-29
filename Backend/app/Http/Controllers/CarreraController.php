@@ -11,9 +11,12 @@ class CarreraController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
+    public function index(){
+    
+        $carreras = Carrera::all();
+        #dd($users);
+        return $carreras;
+        
     }
 
     /**

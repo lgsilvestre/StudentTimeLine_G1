@@ -6,22 +6,21 @@ use App\Images;
 use Illuminate\Support\Facades\Response;
 use Validator;
 use Illuminate\Http\Request;
-use Image;
+use App\Carrera;
+use Image; 
 
 class UsuarioController extends Controller
 {
-    /*
+    
     public function __construct()
     {
         $this->middleware(['permission:create user'], ['only' => ['create', 'store']]);
         $this->middleware(['permission:read user'], ['only' => 'index']);
         $this->middleware(['permission:update user'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete user'], ['only' => 'delete']);
-    }*/
+    }
 
-    /**
-     * Metodo que permite listar todos los usuarios del sistema
-     */
+    #Retorna listado de todos los usuarios
     public function index()
     {
         try{
@@ -34,6 +33,18 @@ class UsuarioController extends Controller
                 'code' => 5,
                 'message' => 'Error al solicitar peticiones a la base de datos'], 401);
         }
+        $users = User::all();
+         
+        foreach ($users as $user) {
+           // $user->carrera_obtencion;
+            # code...
+            $carrera = Carrera::where('id',$user->carrera)->first();
+            $user->nombre_carrera=$carrera->nombre;
+        }
+        #dd($users);
+        //$users1 = User::join('carreras','carreras.id','=','users.carrera')->select("users.*","carreras.nombre as nombre_carrera");
+
+        return $users;
     }
 
     /**
@@ -92,6 +103,30 @@ class UsuarioController extends Controller
                 'code' => 5,
                 'message' => 'Error al solicitar peticiones a la base de datos'], 401);
         }
+       
+
+        $validator = Validator::make($request->all(),[
+            'nombre' => 'required|string',
+            'carrera' => 'required|string',
+            'foto' => 'image|nullable',
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+ 
+        if ($validator->fails())
+        {
+            // It failed
+            return response($validator->messages());
+        }
+    
+        $usuario = User::find($id);
+        $usuario-> nombre = $request->nombre;
+        $usuario-> carrera = $request->carrera;
+        $usuario-> foto = $request->foto;
+        $usuario-> email = $request->email;
+        $usuario-> password =  $request->password;
+        $usuario-> save();//
+        return compact('usuario');//para indicar al frontend que se creo el objeto usuario, con los datos obtenidos del request
     }
 
     /**

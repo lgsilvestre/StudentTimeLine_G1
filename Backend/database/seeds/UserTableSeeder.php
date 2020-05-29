@@ -16,7 +16,7 @@ class UserTableSeeder extends Seeder
     {
         $admin=User::create([
             'nombre' => 'admin',
-            'carrera' => '1',
+            'carrera' => 1,
             'rol' => 'admin', 
             'foto' => null,
             'email' => 'admin@gmail.com',
@@ -26,7 +26,7 @@ class UserTableSeeder extends Seeder
 
         $director=User::create([
             'nombre' => 'secretaria de escuela',
-            'carrera' => '1',
+            'carrera' => 1,
             'rol' => 'secretaria de escuela', 
             'foto' => null,
             'email' => 'secretariadeescuela@gmail.com',
@@ -36,7 +36,7 @@ class UserTableSeeder extends Seeder
 
         $profesor=User::create([
             'nombre' => 'profesor',
-            'carrera' => '1',
+            'carrera' => 1,
             'rol' => 'profesor', 
             'foto' => null,
             'email' => 'profesor@gmail.com',
