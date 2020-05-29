@@ -24,7 +24,9 @@
           </v-btn>      
 
         <!-- Boton que llamará al panel lateral-->
-          <v-btn class="ma-2" fab elevation="3" small dark color="white" @click="setDrawelAdmin" > 
+          <v-btn class="ma-2" fab elevation="3" small dark color="white"
+            @click="setDrawelAdmin"
+          >
             <v-icon color="primary">mdi-format-list-bulleted</v-icon>
           </v-btn>
         </div>
@@ -40,9 +42,9 @@ import {mapMutations} from 'vuex';
     data () {
       return {
       }
-    }, 
-    methods: {
+    },
+    methods:{
       ...mapMutations(['setDrawelAdmin'])
-    }, 
+    }
   }
 </script>
