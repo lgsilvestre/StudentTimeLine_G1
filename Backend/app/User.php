@@ -22,7 +22,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'nombre', 'carrera', 'rol', 'foto', 'email','password',
+        'nombre', 'escuela', 'rol', 'foto', 'email','password',
     ];
 
     /**
@@ -55,8 +55,8 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    public function carrera_obtencion(){
-        return $this-> belongsTo('App\Carrera','carrera');
+    public function escuela_obtencion(){
+        return $this-> belongsTo('App\Escuela','escuela');
 
     }
 }

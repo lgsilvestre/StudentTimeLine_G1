@@ -1,9 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Carrera;
-
-class CarreraTableSeeder extends Seeder
+use App\Escuela;
+class EscuelaTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,31 +12,31 @@ class CarreraTableSeeder extends Seeder
     public function run()
     {
         //Computación, Industrial, Eléctrica, Mecánica, Obras Civiles, Minas, Mecatrónica
-        $icc=Carrera::create([
+        $icc=Escuela::create([
             'nombre' => 'Ingeniería Civil en Computación'
         ]);
 
-        $ici=Carrera::create([
+        $ici=Escuela::create([
             'nombre' => 'Ingeniería Civil Industrial'
         ]);
 
-        $ice=Carrera::create([
+        $ice=Escuela::create([
             'nombre' => 'Ingeniería Civil Eléctrica'
         ]);
 
-        $icm=Carrera::create([
+        $icm=Escuela::create([
             'nombre' => 'Ingeniería Civil Mecánica'
         ]);
 
-        $icoc=Carrera::create([
+        $icoc=Escuela::create([
             'nombre' => 'Ingeniería Civil en Obras Civiles'
         ]);
 
-        $icm=Carrera::create([
+        $icm=Escuela::create([
             'nombre' => 'Ingeniería Civil de Minas'
         ]);
 
-        $icme=Carrera::create([
+        $icme=Escuela::create([
             'nombre' => 'Ingeniería Civil Mecatrónica'
         ]);
     }

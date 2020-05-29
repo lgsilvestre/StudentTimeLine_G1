@@ -1,11 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Carrera;
 use Illuminate\Http\Request;
+use App\Escuela;
 
-class CarreraController extends Controller
+class EscuelaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +13,9 @@ class CarreraController extends Controller
      */
     public function index(){
     
-        $carreras = Carrera::all();
+        $escuelas = Escuela::all();
         #dd($users);
-        return $carreras;
+        return $escuelas;
         
     }
 
@@ -38,16 +37,19 @@ class CarreraController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $escuela = new Escuela();
+        $escuela ->nombre=$request->nombre;
+        $r = $escuela->save();
+        return compact('escuela');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Carrera  $carrera
+     * @param  \App\Escuela  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Carrera $carrera)
+    public function show($id)
     {
         //
     }
@@ -55,34 +57,36 @@ class CarreraController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Carrera  $carrera
+     * @param  \App\Escuela  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Carrera $carrera)
+    public function edit($id)
     {
         //
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Carrera  $carrera
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Carrera $carrera)
+    public function update(Request $request, $id)
     {
-        //
+        $escuela = Escuela::find($id);
+        if ($escuela != null) {
+            $escuela-> nombre = $request->nombre;
+            $escuela-> save();
+            return compact('escuela');
+        }
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  \App\Carrera  $carrera
-     * @return \Illuminate\Http\Response
      */
-    public function destroy(Carrera $carrera)
+    public function destroy($id)
     {
-        //
+        $escuela = Escuela::find($id);
+        if ($escuela != null) {
+            $escuela->delete();
+            return compact('escuela');
+        }
     }
 }

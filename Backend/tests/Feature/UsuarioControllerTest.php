@@ -32,7 +32,7 @@ class UsuarioControllerTest extends TestCase
         #No puse todos los atributos del usuario
         $this->assertDatabaseHas('users', [
             'nombre' => $user->nombre,
-            'carrera' => $user->carrera,
+            'escuela' => $user->escuela,
             'email' => $user->email,
             'password' => $user->password
         ]);
@@ -52,7 +52,7 @@ class UsuarioControllerTest extends TestCase
 
         $response = $this->post('User/', [
             'nombre'   => 'Pepito',
-            'carrera' => '1',
+            'escuela' => '1',
             'rol' => 'Administrador', 
             'foto' => null,
             'email'=> 'pepito@hotmail.com',
@@ -67,7 +67,7 @@ class UsuarioControllerTest extends TestCase
 
         $this->assertDatabaseHas('users', [
             'nombre'   => 'Pepito',
-            'carrera' => '1',
+            'escuela' => '1',
             'rol' => 'Administrador', 
             'foto' => null,
             'email'=> 'pepito@hotmail.com',
@@ -111,7 +111,7 @@ class UsuarioControllerTest extends TestCase
         //$response = $this->get('/');        
         $peticion= $this->put('User/'.$usuario->id,[
             'nombre' => 'paulo parraguez diaz',
-            'carrera'=>407 ,
+            'escuela'=>407 ,
             'rol'=> 'administrador',
             'foto' => 1,
             'email' => 'p.parraguez.diaz@hotmail.cl',
@@ -126,7 +126,7 @@ class UsuarioControllerTest extends TestCase
         #comprobar que la informacion guardada coincide con la del json
         $usuario =$usuario->fresh();
         $this->assertEquals($usuario->nombre,'paulo parraguez diaz');
-        $this->assertEquals($usuario->carrera,407);
+        $this->assertEquals($usuario->escuela,407);
         $this->assertEquals($usuario->rol,'administrador');
         $this->assertEquals($usuario->foto,1);
         $this->assertEquals($usuario->email,'p.parraguez.diaz@hotmail.cl');
