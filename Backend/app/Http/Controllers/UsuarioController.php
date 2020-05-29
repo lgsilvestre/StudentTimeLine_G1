@@ -6,11 +6,12 @@ use App\Images;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Request;
 use Validator;
-use Image;
+use Image; 
+use App\Carrera;
 
 class UsuarioController extends Controller
 {
-    
+    /** 
     public function __construct()
     {
         $this->middleware(['permission:create user'], ['only' => ['create', 'store']]);
@@ -18,12 +19,25 @@ class UsuarioController extends Controller
         $this->middleware(['permission:update user'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete user'], ['only' => 'delete']);
     }
-
+*/
     #Retorna listado de todos los usuarios
+
+    #aqui tendremos atados para mostrar la carrerra.
+    #hay que cambiar los validate, por int si es que no se han hecho
+
     public function index()
     {
         $users = User::all();
+         
+        foreach ($users as $user) {
+           // $user->carrera_obtencion;
+            # code...
+            $carrera = Carrera::where('id',$user->carrera)->first();
+            $user->nombre_carrera=$carrera->nombre;
+        }
         #dd($users);
+        //$users1 = User::join('carreras','carreras.id','=','users.carrera')->select("users.*","carreras.nombre as nombre_carrera");
+
         return $users;
     }
 

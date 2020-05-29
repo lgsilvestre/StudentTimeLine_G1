@@ -15,6 +15,13 @@ class Carrera extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre',
+        'nombre'
     ];
+    protected $table='carreras';
+    
+    public function usuarios (){
+        return $this-> hasMany('App\User','carrera');
+
+    }
+
 }
