@@ -6,7 +6,7 @@ use App\Images;
 use Illuminate\Support\Facades\Response;
 use Validator;
 use Illuminate\Http\Request;
-use App\Carrera;
+use App\Escuela;
 use Image; 
 
 class UsuarioController extends Controller
@@ -25,6 +25,10 @@ class UsuarioController extends Controller
     {
         try{
             $users = User::all();
+            foreach ($users as $user) {
+                 $escuela = Escuela::where('id',$user->escuela)->first();
+                 $user->nombre_escuela=$escuela->nombre;
+             }
             return $users;
         //este catch permite responder directamente que problemas en la peticion SQL
         } catch(\Illuminate\Database\QueryException $ex){ 
@@ -33,18 +37,6 @@ class UsuarioController extends Controller
                 'code' => 5,
                 'message' => 'Error al solicitar peticiones a la base de datos'], 401);
         }
-        $users = User::all();
-         
-        foreach ($users as $user) {
-           // $user->carrera_obtencion;
-            # code...
-            $carrera = Carrera::where('id',$user->carrera)->first();
-            $user->nombre_carrera=$carrera->nombre;
-        }
-        #dd($users);
-        //$users1 = User::join('carreras','carreras.id','=','users.carrera')->select("users.*","carreras.nombre as nombre_carrera");
-
-        return $users;
     }
 
     /**
@@ -54,10 +46,11 @@ class UsuarioController extends Controller
     {
         //Se puede modificar el rol?
         //Deberia
-        $credentials = $request->only('nombre', 'carrera', 'foto', 'email', 'password');
+        $credentials = $request->only('nombre', 'escuela', 'rol', 'foto', 'email', 'password');
         $validator = Validator::make($credentials, [
             'nombre' => ['string', 'nullable'],
-            'carrera' => ['integer', 'nullable'],
+            'escuela' => ['numeric', 'nullable'],
+            'rol' => ['string', 'nullable'],
             'foto' => ['image','mimes:jpeg,png,jpg,gif,svg','max:2048','nullable'],
             'email' => ['email', 'nullable'],
             'password' => ['string', 'nullable']
@@ -75,10 +68,14 @@ class UsuarioController extends Controller
             //esto espesificamente evita tener errores de modificaciones en la base de datos por elementos no nules
             $usuario = User::find($id);
             if($request->nombre!=null){
-                $usuario-> nombre = $request->nombre;
+                $usuario->nombre = $request->nombre;
             }
-            if($request->carrera!=null){
-                $usuario-> carrera = $request->carrera;
+            if($request->escuela!=null){
+                $usuario->escuela = $request->escuela;
+            }
+            if($request->rol!=null){
+                $usuario->rol = $request->rol;
+                $usuario->assignRole($request->rol);
             }
             if($request->foto!=null){
                 if($request->hasfile('foto')){
@@ -89,10 +86,10 @@ class UsuarioController extends Controller
                 }
             }
             if($request->email!=null){
-                $usuario-> email = $request->email;
+                $usuario->email = $request->email;
             }
             if($request->password!=null){
-                $usuario-> password =  bcrypt($request->password);
+                $usuario->password =  bcrypt($request->password);
             }            
             $usuario-> save();//
             return compact('usuario');//para indicar al frontend que se creo el objeto usuario, con los datos obtenidos del request
@@ -103,30 +100,6 @@ class UsuarioController extends Controller
                 'code' => 5,
                 'message' => 'Error al solicitar peticiones a la base de datos'], 401);
         }
-       
-
-        $validator = Validator::make($request->all(),[
-            'nombre' => 'required|string',
-            'carrera' => 'required|string',
-            'foto' => 'image|nullable',
-            'email' => 'required|email',
-            'password' => 'required'
-        ]);
- 
-        if ($validator->fails())
-        {
-            // It failed
-            return response($validator->messages());
-        }
-    
-        $usuario = User::find($id);
-        $usuario-> nombre = $request->nombre;
-        $usuario-> carrera = $request->carrera;
-        $usuario-> foto = $request->foto;
-        $usuario-> email = $request->email;
-        $usuario-> password =  $request->password;
-        $usuario-> save();//
-        return compact('usuario');//para indicar al frontend que se creo el objeto usuario, con los datos obtenidos del request
     }
 
     /**
@@ -155,7 +128,7 @@ class UsuarioController extends Controller
         //tambien verifica que vengan como por ejemplo el email y el password
         $validator = Validator::make($request->all(), [
             'nombre' => ['required','string'],
-            'carrera' => ['required', 'integer'], //Cambiar lo de la foreign key dps
+            'escuela' => ['required', 'numeric'], //Cambiar lo de la foreign key dps
             'rol' => ['required','string'], 
             'foto' => ['image','mimes:jpeg,png,jpg,gif,svg','max:2048','nullable'],
             'email'=> ['required','email'],
@@ -173,19 +146,16 @@ class UsuarioController extends Controller
         try{
             $user = new User();
             $user ->nombre=$request->nombre;
-            $user ->carrera=$request->carrera;
+            $user ->escuela=$request->escuela;
             $user ->rol=$request->rol;
             $user ->email=$request->email;
             $user ->password=bcrypt($request->password);
-            if($request->hasfile('foto'))
-            {
+            if($request->hasfile('foto')){
                 $imagen = $request->file('foto');
                 $nombreImagen = time () . '.' . $imagen->getClientOriginalExtension();
                 Image::make($imagen)->resize(400,400)->save( public_path('/uploads/imagenes/' . $nombreImagen));
                 $user->foto=$nombreImagen;
-            }
-            else
-            {
+            }else{
                 $user ->foto=null;
             }
             $r = $user->save();
@@ -198,9 +168,7 @@ class UsuarioController extends Controller
                 'success' => false,
                 'code' => 5,
                 'message' => 'Error al solicitar peticiones a la base de datos'], 401);
-        }
-        //catch que se encarga en responder que paso en la sentencia sql
- 
+        } 
     }
     
     /**
@@ -211,8 +179,13 @@ class UsuarioController extends Controller
         try{
             $user = User::find($id);
             $user->delete();
+            if($user==null){
+                return response()->json([
+                    'success' => false,
+                    'code' => 5,
+                    'message' => 'No se encontro el elemento en la base de datos'], 401);
+            }
             return compact('user');
-            
         //catch que se encarga en responder que paso en la sentencia sql
         } catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
