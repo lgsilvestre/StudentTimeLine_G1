@@ -1,9 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Carrera;
 use Illuminate\Http\Request;
+use App\Carrera;
 
 class CarreraController extends Controller
 {
@@ -35,7 +34,10 @@ class CarreraController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $carrera = new Carrera();
+        $carrera ->nombre=$request->nombre;
+        $r = $carrera->save();
+        return compact('carrera');
     }
 
     /**
@@ -62,24 +64,26 @@ class CarreraController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Carrera  $carrera
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Carrera $carrera)
+    public function update(Request $request, $id)
     {
-        //
+        $carrera = Carrera::find($id);
+        if ($carrera != null) {
+            $carrera-> nombre = $request->nombre;
+            $carrera-> save();
+            return compact('carrera');
+        }
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  \App\Carrera  $carrera
-     * @return \Illuminate\Http\Response
      */
-    public function destroy(Carrera $carrera)
+    public function destroy($id)
     {
-        //
+        $carrera = Carrera::find($id);
+        if ($carrera != null) {
+            $carrera->delete();
+            return compact('carrera');
+        }
     }
 }
