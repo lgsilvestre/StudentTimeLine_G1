@@ -18,7 +18,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1'], function () {
-    Route::resource('User', 'UsuarioController');
+    Route::resource('usuario', 'UsuarioController');
+    Route::resource('escuela', 'EscuelaController');
 });
 
 Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
