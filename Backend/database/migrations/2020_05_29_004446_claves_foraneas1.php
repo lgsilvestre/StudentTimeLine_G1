@@ -6,8 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class ClavesForaneas1 extends Migration
 {
-    /**
-     * Run the migrations.
+    /* Run the migrations.
      *
      * @return void
      */
@@ -15,13 +14,12 @@ class ClavesForaneas1 extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
-            $table->bigInteger('carrera')->unsigned();
-            $table->foreign('carrera')->references('id')->on('carreras');
+            $table->bigInteger('escuela')->unsigned();
+            $table->foreign('escuela')->references('id')->on('escuelas');
         });
     }
 
-    /**
-     * Reverse the migrations.
+    /* Reverse the migrations.
      *
      * @return void
      */

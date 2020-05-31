@@ -6,9 +6,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Request;
 use Tests\TestCase;
-use App\Carrera;
+use App\Escuela;
 
-class CarreraControllerTest extends TestCase
+class EscuelaControllerTest extends TestCase
 {
     use RefreshDatabase;
     
@@ -21,20 +21,20 @@ class CarreraControllerTest extends TestCase
     {
         $this -> withoutExceptionHandling();
         //genero datos de pruebas en la bd temporal en memoria.
-        Carrera::create([
+        Escuela::create([
             'nombre' => 'Ingeniería Civil Industrial'
         ]);
-        Carrera::create([
+        Escuela::create([
             'nombre' => 'Ingeniería Civil en Computación'
         ]);
 
         //general la petición
-        $response=$this->get('api/Carrera');
-        //extraigo el objeto en la posición cero del array para sacar la carrera de industrial, asumo que se crean en orden
-        $carreraX= $response[0];
+        $response=$this->get('api/Escuela');
+        //extraigo el objeto en la posición cero del array para sacar la Escuela de industrial, asumo que se crean en orden
+        $escuelaX= $response[0];
 
         //por la clave "nombre" saco el valor que contiene en el array asociativo.
-        $this->assertEquals( $carreraX["nombre"],'Ingeniería Civil Industrial');
+        $this->assertEquals( $escuelaX["nombre"],'Ingeniería Civil Industrial');
        
     }
 
@@ -47,10 +47,10 @@ class CarreraControllerTest extends TestCase
     {  
         $this -> withoutExceptionHandling();
         //generamos la petición
-        $response= $this->post('api/Carrera',['nombre'=>'ingenieria civil en puteria']);
+        $response= $this->post('api/Escuela',['nombre'=>'ingenieria civil en puteria']);
       
         $response->assertOk();
-        $response=$this->get('api/Carrera');
+        $response=$this->get('api/Escuela');
         $this->assertEquals($response[0]["nombre"], 'ingenieria civil en puteria');
 
         
@@ -75,19 +75,19 @@ class CarreraControllerTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $carrera=Carrera::create([
-            'nombre' => 'Prueba Carrera'
+        $escuela=Escuela::create([
+            'nombre' => 'Prueba Escuela'
         ]);
 
-        $this -> assertCount(1,Carrera::all());
+        $this -> assertCount(1,Escuela::all());
 
-        $response = $this->put('api/Carrera/'.$carrera->id,[
+        $response = $this->put('api/Escuela/'.$escuela->id,[
             'nombre'   => 'Cambio Prueba'
         ]);
 
         $response->assertOK();
 
-        $this->assertDatabaseHas('carreras', [
+        $this->assertDatabaseHas('escuelas', [
             'nombre' => 'Cambio Prueba'
         ]);
     }
@@ -101,15 +101,15 @@ class CarreraControllerTest extends TestCase
     {
         $this -> withoutExceptionHandling();
 
-        $carrera=Carrera::create([
-            'nombre' => 'Prueba Carrera'
+        $escuela=Escuela::create([
+            'nombre' => 'Prueba Escuela'
         ]);
 
-        $response = $this->delete('api/Carrera/'.$carrera->id);
+        $response = $this->delete('api/Escuela/'.$escuela->id);
 
         $response -> assertOk();
 
-        $response = Carrera::onlyTrashed()->where('id', '=', $carrera->id)->get();
+        $response = Escuela::onlyTrashed()->where('id', '=', $escuela->id)->get();
 
         $this->assertNotNull($response->contains('deleted_at', $response[0]->deleted_at)); 
     }
