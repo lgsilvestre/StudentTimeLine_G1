@@ -11,7 +11,7 @@ use Image;
 
 class UsuarioController extends Controller
 {
-  /** 
+  
     public function __construct()
     {
         $this->middleware(['permission:create user'], ['only' => ['create', 'store']]);
