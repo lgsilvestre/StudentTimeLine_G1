@@ -5,27 +5,40 @@
             <v-row >
                 <v-col cols="12">
                     <v-row align="center" justify="center" style="display: flex;flex-direction: column;height:75vh; ">
+
                         <v-container >
                              <v-row
                                 class="mb-6"
                                 justify="center"
                                 no-gutters
                                 >
-                                <v-col lg="3" >
-                                    <h3 class="primary--text pt-10 ">Recuperar su contraseña en SGDA</h3>
-                                    <v-text-field 
-                                    class="pt-5 "
-                                        v-model="email"
-                                        label="Correo"
-                                        outlined
-                                        prepend-inner-icon="mdi-account-circle"
-                                    ></v-text-field>
-                                   
-                                    <v-btn rounded block color="primary " 
-                                    @click="recuperarContrasena"
-                                    >
-                                    Recuperar contraseña
-                                    </v-btn>
+                                <v-col cols="12" sm="12" md="3" >
+                                    <v-card elevation="1" shaped>
+                                        <v-card-title
+                                        class="headline primary text--center"
+                                        primary-title
+                                        >
+                                        <h5 class="white--text ">Recuperar su contraseña </h5>
+                                        </v-card-title>
+                                        <v-container class="px-8">
+                                            <v-text-field 
+                                            class="pt-5 "
+                                                v-model="email"
+                                                label="Correo"
+                                                color="secondary"
+                                                outlined
+                                                prepend-inner-icon="mdi-account-circle"
+                                            ></v-text-field>
+                                        
+                                            <v-btn rounded block color="primary " class=""
+                                            @click="recuperarContrasena"
+                                            >
+                                            Recuperar contraseña
+                                            </v-btn>  
+                                        </v-container>
+                                    </v-card>
+
+                                    
                                 </v-col>
                                 
                             </v-row>
