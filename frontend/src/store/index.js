@@ -12,6 +12,12 @@ export default new Vuex.Store({
     RCstatus:null,
     tk:null,
     drawelAdmin: false,
+
+    numProfesores: 70,
+    numObservaciones: 69,
+    numCarreras: 7,
+    numEstudiantes: 1234,
+
     config:{
       headers:{
         Authorization: ''
