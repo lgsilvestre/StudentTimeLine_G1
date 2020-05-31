@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 import es from 'vuetify/es5/locale/es';
+import '@fortawesome/fontawesome-free/css/all.css'
 
 Vue.use(Vuetify);
 
@@ -12,8 +13,8 @@ export default new Vuetify({
       },
     themes: {
       light: {
-        primary: '#ee44aa',
-        secondary: '#424242',
+        primary: '#26ADAD',
+        secondary: '#04cccc',
         accent: '#82B1FF',
         error: '#FF5252',
         info: '#2196F3',
@@ -25,5 +26,8 @@ export default new Vuetify({
     lang: {
       locales: { es },
       current: 'es',
+    },
+    icons: {
+      iconfont: 'fa',
     },
 });
