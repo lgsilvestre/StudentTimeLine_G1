@@ -11,7 +11,7 @@ use Image;
 
 class UsuarioController extends Controller
 {
-    
+  /** 
     public function __construct()
     {
         $this->middleware(['permission:create user'], ['only' => ['create', 'store']]);
@@ -19,16 +19,17 @@ class UsuarioController extends Controller
         $this->middleware(['permission:update user'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete user'], ['only' => 'delete']);
     }
-
+*/  
     #Retorna listado de todos los usuarios
     public function index()
     {
         try{
+
             $users = User::all();
+            $escuelas=Escuela::orderBy('id','asc')->get();
             foreach ($users as $user) {
-                 $escuela = Escuela::where('id',$user->escuela)->first();
-                 $user->nombre_escuela=$escuela->nombre;
-             }
+                $user->nombre_carrera= $escuelas[$user->escuela-1]->nombre;
+            }
             return $users;
         //este catch permite responder directamente que problemas en la peticion SQL
         } catch(\Illuminate\Database\QueryException $ex){ 
