@@ -5,23 +5,23 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Escuela extends Model
+class Estudiante extends Model
 {
     use SoftDeletes; 
+
     
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
+
     protected $fillable = [
-        'nombre','cod_carrera'
+        'matricula', 'rut', 'nombre_completo', 'correo', 'anho_ingreso','situacion_academica','porcentaje_avance','creditos_aprobados','escuela'
     ];
-    protected $table='escuelas';
-    
-    public function usuarios (){
-        return $this-> hasMany('App\User','escuela');
 
-    }
 
+
+ 
+   
 }
