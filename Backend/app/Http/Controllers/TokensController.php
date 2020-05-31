@@ -8,7 +8,6 @@ use App\Mail\Correo;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Database\QueryException;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
@@ -37,20 +36,26 @@ class TokensController extends Controller
             ], 422);
         }
 
-        $token = JWTAuth::attempt($credentials);
-
-        if ($token) {
-
-            return response()->json([
-                'token' => $token,
-                'user' => User::where('email', $credentials['email'])->get()->first()
-            ], 200);
-        } else {
+        try{
+            $token = JWTAuth::attempt($credentials);
+            if ($token) {
+                return response()->json([
+                    'token' => $token,
+                    'user' => User::where('email', $credentials['email'])->get()->first()
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'code' => 2,
+                    'message' => 'Error en las credenciales',
+                    'errors' => $validator->errors()], 401);
+            }
+        //este catch permite responder directamente que problemas en la peticion SQL
+        } catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
                 'success' => false,
-                'code' => 2,
-                'message' => 'Error en las credenciales',
-                'errors' => $validator->errors()], 401);
+                'code' => 3,
+                'message' => 'Error al solicitar peticiones a la base de datos'], 401);
         }
     }
 
@@ -65,13 +70,19 @@ class TokensController extends Controller
         } catch (TokenExpiredException $ex) {
             // We were unable to refresh the token, our user needs to login again
             return response()->json([
-                'code' => 3, 'success' => false, 'message' => 'Need to login again, please (expired)!'
+                'code' => 3, 'success' => false, 'message' => 'Necesita iniciar secion otra vez, porfavor (Expirado)!'
             ]);
         } catch (TokenBlacklistedException $ex) {
             // Blacklisted token
             return response()->json([
-                'code' => 4, 'success' => false, 'message' => 'Need to login again, please (blacklisted)!'
+                'code' => 4, 'success' => false, 'message' => 'Necesita iniciar secion otra vez, porfavor (Lista negra)!'
             ], 422);
+        //este catch permite responder directamente que problemas en la peticion SQL
+        } catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 5,
+                'message' => 'Error al solicitar peticiones a la base de datos'], 401);
         }
 
     }
@@ -86,10 +97,17 @@ class TokensController extends Controller
             return response()->json([
                 'code' => 5, 'success' => true, 'message' => "Has cerrado la sesión con exito"
             ], 200);
+        //este catch permite responder directamente que problemas en la peticion de Token
         } catch (JWTException $e) {
             return response()->json([
                 'code' => 6, 'success' => false, 'message' => 'No se a podido cerrar la sesión, por favor volver a intentar.'
             ], 422);
+        //este catch permite responder directamente que problemas en la peticion SQL
+        } catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 5,
+                'message' => 'Error al solicitar peticiones a la base de datos'], 401);
         }
     }
 
@@ -99,7 +117,6 @@ class TokensController extends Controller
         $validator = Validator::make($credentials, [
             'email' => 'required|email',
         ]);
-
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
@@ -113,11 +130,15 @@ class TokensController extends Controller
         //$receivers = Receiver::pluck('email');
         //Mail::to("xebaelvemgador@gmail.com")->send(new EmergencyCallReceived());
 
-        
-        Mail::send('mails.test', [], function ($mail) {
-            $mail->from('sdiUtalca@gmail.com', 'Sistema de gestion de ayudantes');
-            $mail->to('sdiUtalca@gmail.com', 'ayuda')->subject('Test');
-        });
+        try{
+            \Mail::send('mails.test', [], function ($mail) {
+                $mail->from('sdiUtalca@gmail.com', 'Sistema de gestion de ayudantes');
+                $mail->to('sdiUtalca@gmail.com', 'ayuda')->subject('Test');
+            });
+         //este catch permite responder directamente que problemas en la peticion MAIL
+        }catch(\Exception $e){
+             return response()->json(['Confirmacion' => $e], 500);
+        }
         return response()->json(['Confirmacion' => 'Se a mandado el correo exitosamente'], 200);
        
         /* 

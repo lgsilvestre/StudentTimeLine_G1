@@ -1,17 +1,19 @@
 <template >
-      <v-footer dark padless absolute color="primary" min-width="720" >
+      <v-container class="pa-md-7" fluid >
+          <v-footer  dark  absolute  color="primary" min-width="720"  >
     <!-- <v-card class=" flex" flat tile  > -->
       <!-- <v-card-title class="primary"  > -->
-         <v-row no-gutters justify-center>
-            <v-col class="d-none d-sm-none d-md-flex" align-self="center" md="4" >
-                <v-btn class="ml-2" color="primary white--text mr-2 " depressed   @click="urlUniversidad" >Universidad de Talca</v-btn>
+         <v-row no-gutters justify-center >
+            <v-col  class="d-none d-sm-none d-md-flex " align-self="center" md="4" >
+                <v-btn class="ml-2" color="primary white--text mr-2 " depressed 
+                  @click="urlUniversidad" >Universidad de Talca</v-btn>
                 <!-- Boton que muestra informacion sobre el equipo de desarrollo -->
                 <NosotrosComponent/>
             </v-col>
-            <v-col class="text-center" sm="12" md="4" lg="4" align-self="center">
+            <v-col class="text-center " sm="12" md="4" lg="4" align-self="center">
                 <strong> {{ nombrePag }} —  {{ new Date().getFullYear() }} </strong>         
             </v-col>
-            <v-col  class="d-none d-sm-none d-md-flex " align-self="center" md="4">
+            <v-col  class="d-none d-sm-none d-md-flex  " align-self="center" md="4">
                 <v-spacer></v-spacer>
                 <v-btn class="xs-2 " small icon fab @click="urlFacebook">
                     <v-icon color="white" >{{ icoFacebook }}</v-icon>
@@ -28,6 +30,7 @@
             </v-col>
         </v-row>
   </v-footer>
+      </v-container>
 </template>
 
 

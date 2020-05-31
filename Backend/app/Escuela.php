@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Carrera extends Model
+class Escuela extends Model
 {
     use SoftDeletes; 
     
@@ -15,6 +15,13 @@ class Carrera extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre',
+        'nombre'
     ];
+    protected $table='escuelas';
+    
+    public function usuarios (){
+        return $this-> hasMany('App\User','escuela');
+
+    }
+
 }
