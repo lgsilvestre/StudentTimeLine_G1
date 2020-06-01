@@ -6,7 +6,7 @@
 
         <v-container fluid justify-center >
             <!-- Cards de Datos -->
-            <v-row v-resize="onResize" align="center" justify="center">
+            <v-row  align="center" justify="center">
                 <!-- Card para Datos Profesores -->
                 <v-col >
                 <v-hover v-slot:default="{ hover }">
@@ -28,7 +28,7 @@
                             class="d-flex transition-fast-in-fast-out black darken-2 v-card--reveal display-2 white--text "
                             style="height: 100%;"
                         >
-                            70 Profesores
+                        {{numProfesores}} Profesores                           
                         </div>
                         </v-expand-transition>
                         
@@ -58,7 +58,7 @@
                         class="d-flex transition-fast-in-fast-out black darken-2 v-card--reveal display-2 white--text "
                         style="height: 100%;"
                         >
-                        69 Observaciones
+                        {{numObservaciones}} Observaciones
                         </div>
                     </v-expand-transition>
                 </v-img>
@@ -88,7 +88,7 @@
                         class="d-flex transition-fast-in-fast-out black darken-2 v-card--reveal display-2 white--text "
                         style="height: 100%;"
                         >
-                        7 Carreras
+                        {{numCarreras}} Carreras
                         </div>
                     </v-expand-transition>
                 </v-img>
@@ -117,7 +117,7 @@
                         class="d-flex transition-fast-in-fast-out black darken-2 v-card--reveal display-2 white--text "
                         style="height: 100%;"
                         >
-                        1234 Estudiantes
+                        {{numEstudiantes}} Estudiantes
                         </div>
                         </v-expand-transition>
                     </v-img>
@@ -131,6 +131,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
     name: 'Cuerpo',
     
@@ -141,7 +142,10 @@ export default {
         
     },
     computed:{
-
+        ...mapState(['numProfesores']), 
+        ...mapState(['numObservaciones']),
+        ...mapState(['numCarreras']),
+        ...mapState(['numEstudiantes']),
     },
 
 }

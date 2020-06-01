@@ -15,6 +15,12 @@ export default new Vuex.Store({
     admin: false,
     profesor: false,
     secretariaEscuela: false,
+
+    numProfesores: 70,
+    numObservaciones: 69,
+    numCarreras: 7,
+    numEstudiantes: 1234,
+
     config:{
       headers:{
         Authorization: ''
