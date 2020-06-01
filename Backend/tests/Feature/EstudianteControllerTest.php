@@ -52,7 +52,41 @@ class EstudianteControllerTest extends TestCase
      */
     public function testStore()
     {         
-        
+        $this -> withoutExceptionHandling();
+
+        Escuela::create([
+            'nombre' => 'Ingeniería Civil en Computación',
+            'cod_carrera' => 407,
+        ]);
+
+        $this -> assertCount(1,Escuela::all());
+
+        $response= $this->post('api/Estudiante',[
+            'matricula' => 2016407023,
+            'rut' => 99999999,
+            'nombre_completo' => 'Javiera Mendez Osorio', 
+            'correo' => 'jaavi.mendez8@gmail.com',
+            'anho_ingreso' => 2016,
+            'situacion_academica' =>'regular',
+            'porcentaje_avance' => '70', 
+            'creditos_aprobados' => '250',
+            'escuela' => 1,
+        ]);
+      
+        $response->assertOk();
+        $this -> assertCount(1,Estudiante::all());
+
+        $this->assertDatabaseHas('estudiantes', [
+            'matricula' => 2016407023,
+            'rut' => 99999999,
+            'nombre_completo' => 'Javiera Mendez Osorio', 
+            'correo' => 'jaavi.mendez8@gmail.com',
+            'anho_ingreso' => 2016,
+            'situacion_academica' =>'regular',
+            'porcentaje_avance' => '70', 
+            'creditos_aprobados' => '250',
+            'escuela' => 1
+        ]);
     }
 
     /**
