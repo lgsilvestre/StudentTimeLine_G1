@@ -61,15 +61,15 @@ export default new Vuex.Store({
         //esta funcionalidad se agregara mas adelante cuando el backend tenga lista esta funcionalidad
       },
       
-      registrarUsuario(state,datosUsuario){
+      registrarUsuario(state,nuevoUsuario){
         console.log(state.tk);
         let post ={
           "foto": null,
-          "nombre": datosUsuario.nombre,
-          "carrera": datosUsuario.escuela,
-          "rol": datosUsuario.rol,
-          "email": datosUsuario.correo,
-          "password": datosUsuario.contrasena,
+          "nombre": nuevoUsuario.nombre,
+          "carrera": nuevoUsuario.escuela,
+          "rol": nuevoUsuario.rol,
+          "email": nuevoUsuario.correo,
+          "password": nuevoUsuario.contrasena,
         }
         var url = 'http://127.0.0.1:8000/api/v1/User';
         console.log(state.config);
@@ -78,15 +78,15 @@ export default new Vuex.Store({
             console.log(result.statusText);
           });
       },
-      updateDatosUsuarioPerfil(state,nuevoUsuario){
+      updateDatosUsuarioPerfil(state,datosUsuario){
         console.log(state.tk);
         let put ={
-          "nombre": nuevoUsuario.nombre,
+          "nombre": datosUsuario.nombre,
           "escuela": null,
           "rol": null,
           "foto": null,
-          "email": nuevoUsuario.correo,
-          "password": nuevoUsuario.contrasena,
+          "email": datosUsuario.correo,
+          "password": datosUsuario.contrasena,
         }
         var url = 'http://127.0.0.1:8000/api/v1/usuario/'+state.usuario.data.user.id;
         console.log(state.config);
