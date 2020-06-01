@@ -1,13 +1,12 @@
 <template >
-  <v-footer dark padless fixed color="primary" min-width="720" >
-    <!-- <v-card class=" flex" flat tile  > -->
-      <!-- <v-card-title class="primary"  > -->
+  <v-footer dark padless absolute color="primary" min-width="720" >
         <v-row no-gutters justify-center>
             <v-col class="d-none d-sm-none d-md-flex" align-self="center" md="4" >
                 <v-btn class="ml-2" color="primary white--text" depressed   @click="urlUniversidad" >Universidad de Talca</v-btn>
                 <!-- Boton que muestra informacion sobre el equipo de desarrollo -->
-                <NosotrosComponent/>
+                <NosotrosComponent/> 
             </v-col>
+            
             <v-col class="text-center" sm="12" md="4" lg="4" align-self="center">
                 <strong> {{ nombrePag }} —  {{ new Date().getFullYear() }} </strong>         
             </v-col>
@@ -33,7 +32,6 @@
 
 <script>
 import NosotrosComponent from '@/components/Globales/NosotrosComponent.vue';
-import {mapMutations} from 'vuex';
 export default {
     components:{
         NosotrosComponent
@@ -48,8 +46,6 @@ export default {
         }
     },
     methods:{
-        ...mapMutations(['setDrawelAdmin'])
-        ,
         urlFacebook(){
             window.open("https://www.facebook.com/utalca/", '_blank');
         },
