@@ -2,7 +2,7 @@
   <div class="SecretariaEscuela">
     <AppBarGlobal/>  
     <FooterGlobal/>
-        <Navegacion/>
+    <Navegacion/>
     
   </div>
 </template>
