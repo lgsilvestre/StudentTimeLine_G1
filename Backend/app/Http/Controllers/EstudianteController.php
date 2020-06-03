@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Estudiante;
+use App\Escuela;
 use Illuminate\Http\Request;
 
 class EstudianteController extends Controller
@@ -14,7 +14,7 @@ class EstudianteController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -35,7 +35,18 @@ class EstudianteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $estudiante = new Estudiante();
+        $estudiante -> matricula=$request->matricula;
+        $estudiante -> rut=$request->rut;
+        $estudiante -> nombre_completo=$request->nombre_completo;
+        $estudiante -> correo=$request->correo;
+        $estudiante -> anho_ingreso=$request->anho_ingreso;
+        $estudiante -> situacion_academica=$request->situacion_academica;
+        $estudiante -> porcentaje_avance=$request->porcentaje_avance;
+        $estudiante -> creditos_aprobados=$request->creditos_aprobados;
+        $estudiante -> escuela=$request->escuela;
+        $r = $estudiante->save();
+        return compact('estudiante');
     }
 
     /**
