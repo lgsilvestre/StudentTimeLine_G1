@@ -14,21 +14,19 @@ class CreateEstudiantesTable extends Migration
     public function up()
     {
         Schema::create('estudiantes', function (Blueprint $table) {
-            $table->integer('matricula')->primary();
+            $table->id();
+            $table->integer('matricula')->unique();
             $table->string('rut')->unique();
-            $table->string('nombre_completo')->nullable(false); //nullable(false) no admite valores null
+            $table->string('nombre_completo'); //nullable(false) no admite valores null
             $table->string('correo')->unique();
-            $table->string('anho_ingreso')->nullable(false);
-            $table->string('situacion_academica')->nullable(false);
-            $table->integer('porcentaje_avance')->nullable(false);
-            $table->integer('creditos_aprobados')->nullable(false);
+            $table->integer('anho_ingreso');
+            $table->string('situacion_academica');
+            $table->integer('porcentaje_avance');
+            $table->integer('creditos_aprobados');
             $table->softDeletes();
             $table->timestamps();
-            
-            $table->bigInteger('escuela')->unsigned()->nullable(false);
+            $table->bigInteger('escuela')->unsigned();
             $table->foreign('escuela')->references('id')->on('escuelas');
-           
-
         });
     }
 
