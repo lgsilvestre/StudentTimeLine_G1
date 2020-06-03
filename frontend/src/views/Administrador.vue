@@ -1,7 +1,7 @@
 <template>
   <div class="Administrador">
     <AppBarGlobal/>  
-    <BodyRegistroUsuarios/>
+    <BodyListaUsuarios/>
     <FooterGlobal/>
     <Navegacion/> 
     
@@ -10,13 +10,13 @@
 
 <script>
 import AppBarGlobal from '@/components/Globales/AppBarGlobal.vue';
-import BodyRegistroUsuarios from '@/components/Administrador/RegistroUsuarios/BodyRegistroUsuarios.vue';
+import BodyListaUsuarios from '@/components/Globales/BodyListaUsuarios.vue';
 import FooterGlobal from '@/components/Globales/FooterGlobal.vue';
 import Navegacion from '@/components/Administrador/Navegacion.vue';
 export default {
     components: {
       AppBarGlobal,
-      BodyRegistroUsuarios,
+      BodyListaUsuarios,
       FooterGlobal,
       Navegacion,
       
