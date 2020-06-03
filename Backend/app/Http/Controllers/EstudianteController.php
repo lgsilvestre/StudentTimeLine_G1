@@ -83,9 +83,19 @@ class EstudianteController extends Controller
      * @param  \App\Estudiante  $estudiante
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Estudiante $estudiante)
+    public function update(Request $request, $id)
     {
-        //
+
+        $estudiante = Estudiante::find($id);
+
+        $estudiante->nombre_completo = $request->nombre_completo;
+        $estudiante->situacion_academica = $request->situacion_academica;
+        $estudiante->porcentaje_avance = $request->porcentaje_avance;
+        $estudiante->creditos_aprobados = $request->creditos_aprobados;
+        $estudiante->escuela = $request->escuela;
+        $estudiante->save();
+        //Estudiante::update(estudiantes set nombre_completo =$estudiante->nombre_completo, situacion_academica = $estudiante->situacion_academica, porcentaje_avance = 100, creditos_aprobados = ?, estudiantes.updated_at = 2020-06-01 00:31:56 where matricula is $matricula);
+        return compact('estudiante');
     }
 
     /**
