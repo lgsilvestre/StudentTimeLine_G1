@@ -14,7 +14,12 @@ class EstudianteController extends Controller
      */
     public function index()
     {
-
+        $estudiantes = Estudiante::all();
+        $escuelas=Escuela::orderBy('id','asc')->get();
+        foreach ($estudiantes as $estudiante) {
+            $estudiante-> escuela = $escuelas[$estudiante->escuela-1]->nombre;
+        }
+        return $estudiantes;
     }
 
     /**
