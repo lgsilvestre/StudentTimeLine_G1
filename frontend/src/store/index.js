@@ -26,6 +26,8 @@ export default new Vuex.Store({
         Authorization: ''
       }
     },
+
+    dessertsEscuelas: [],
   },
   
   mutations: {
@@ -45,8 +47,6 @@ export default new Vuex.Store({
                   //redireccionamiento hacia el usuario administrador
                   state.admin=true;
                   router.push({ path: '/administrador' });
-                  
-                  
               } else {
                   if (state.usuario.user.rol == "secretaria de escuela") {
                       //redireccionamiento hacia el usuario secretaria de escuela
@@ -105,6 +105,18 @@ export default new Vuex.Store({
         state.drawelAdmin = !state.drawelAdmin;
         console.log('pucha');
       },
+
+      obtenerEscuelas(state){
+        var url = 'http://127.0.0.1:8000/api/v1/escuela';
+        axios.get(url,state.config)
+          .then((result)=>{
+            for (let index = 0; index < result.data.length; index++) {
+              const element = result.data[index];
+              console.log(element);
+            }
+          }
+        );
+      }
   },
     
   actions: {
