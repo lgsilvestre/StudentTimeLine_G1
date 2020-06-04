@@ -27,11 +27,10 @@ export default new Vuex.Store({
       }
     },
 
-    dessertsEscuelas: [],
   },
   
   mutations: {
-      login(state, lista) { //funcion de login
+      login(state, lista,methods) { //funcion de login
           console.log(lista.email);
           console.log(lista.pass);
           let post = {
@@ -45,6 +44,7 @@ export default new Vuex.Store({
               state.config.headers.Authorization = state.tk;
               if (state.usuario.user.rol == "admin") {
                   //redireccionamiento hacia el usuario administrador
+                  
                   state.admin=true;
                   router.push({ path: '/administrador' });
               } else {
@@ -66,6 +66,7 @@ export default new Vuex.Store({
       unLogin(state){
         //esta funcionalidad se agregara mas adelante cuando el backend tenga lista esta funcionalidad
       },
+      
       
       registrarUsuario(state,nuevoUsuario){
         console.log(state.tk);
@@ -105,20 +106,9 @@ export default new Vuex.Store({
         state.drawelAdmin = !state.drawelAdmin;
         console.log('pucha');
       },
-
-      obtenerEscuelas(state){
-        var url = 'http://127.0.0.1:8000/api/v1/escuela';
-        axios.get(url,state.config)
-          .then((result)=>{
-            for (let index = 0; index < result.data.length; index++) {
-              const element = result.data[index];
-              console.log(element);
-            }
-          }
-        );
-      }
+     
   },
-    
+
   actions: {
   },
   modules: {

@@ -40,6 +40,7 @@
                                 <v-form>
                                   <v-container class="px-10 pt-10">
                                       <v-text-field 
+                                          v-model="escuela.nombre"
                                           label="Nombre de la escuela"
                                           outlined
                                           color="secondary"
@@ -47,6 +48,7 @@
                                           
                                       ></v-text-field>
                                       <v-text-field 
+                                          v-model="escuela.cod"
                                           label="Codigo de carrera"
                                           outlined
                                           color="secondary"
@@ -54,10 +56,10 @@
                                       ></v-text-field>
                                   </v-container>
                                   <v-container class="px-10" style="text-align:right;">
-                                    <v-btn rounded color="red" @click="dialog = false">
+                                    <v-btn rounded color="red" @click="resetCreacionEscuela">
                                       <h4 class="white--text">Cancelar</h4>
                                     </v-btn>
-                                    <v-btn rounded color="primary" class="ml-2" @click="dialog = false">
+                                    <v-btn rounded color="primary" class="ml-2" @click="crearEscuela" >
                                       <h4 class="white--text">Guardar</h4>
                                     </v-btn>
                                   </v-container>
@@ -71,7 +73,7 @@
     
                 <v-data-table
                     :headers="headers"
-                    :items="dessertsEscuelas"
+                    :items="desserts"
                     class="elevation-1 "
                 >
                     <template v-slot:item.actions="{ item }">
@@ -104,8 +106,10 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
+import axios from 'axios'
 
   export default {
+
     data: () => ({
       dialog: false,
       headers: [
@@ -114,11 +118,16 @@ import { mapState, mapMutations } from 'vuex'
         { text: 'Codigo carrera', value: 'cod_car',sortable: false, },
         { text: 'Opciones', value: 'actions', sortable: false },
       ],
+      desserts:[],
+      dessertsAux:[],
+
+      escuela:[{nombre:''},{cod:''}],
+      escuelaEditar:[{nombre:''},{cod:''}],
 
     }),
 
     computed: {
-      ...mapState(['dessertsEscuelas'])
+   
     },
 
     watch: {
@@ -126,23 +135,81 @@ import { mapState, mapMutations } from 'vuex'
     },
 
     created () {
-      this.obtenerEscuelas()
+      this.obtenerEscuelas();
     },
-    
-    methods: {
-      ...mapMutations(['obtenerEscuelas']),
- 
-      updatearBD(){
 
+    methods: {
+      //...mapMutations(['crearEscuela']),
+      obtenerEscuelas(){
+        this.dessertsAux = [];
+        var url = 'http://127.0.0.1:8000/api/v1/escuela';
+        axios.get(url,this.$store.state.config)
+          .then((result)=>{
+            for (let index = 0; index < result.data.length; index++) {
+              const element = result.data[index];
+              let escuela = {
+                id: element.id,
+                nombre: element.nombre,
+                cod_car: '',
+              };
+              //console.log(escuela);
+              this.dessertsAux[index]=escuela;
+            }
+            this.desserts = this.dessertsAux;
+          }
+        );
+      },
+
+      crearEscuela(){
+        this.dessertsAux = [];
+        var url = 'http://127.0.0.1:8000/api/v1/escuela';
+        let post ={
+          "nombre": this.escuela.nombre,
+        }
+        axios.post(url,post,this.$store.state.config)
+        .then((result)=>{
+          console.log(result.statusText);
+          if (result.statusText=='OK') {
+            this.obtenerEscuelas(); 
+            
+            this.resetCreacionEscuela();
+          }
+        });
       },
 
       editarEscuela(item) {
-
+        var url = 'http://127.0.0.1:8000/api/v1/escuela/'+item.id;
+        let put ={
+          "nombre": this.escuelaEditar.nombre,
+        }
+        axios.put(url,put,this.$store.state.config)
+        .then((result)=>{
+          if (result.statusText=='OK') {
+            this.obtenerEscuelas(); 
+            this.resetEditarEscuela();
+          }
+        });
       },
 
       borrarEscuela (item) {
-
+        var url = 'http://127.0.0.1:8000/api/v1/escuela/'+item.id;
+        axios.delete(url,this.$store.state.config)
+        .then((result)=>{
+          if (result.statusText=='OK') {
+            this.obtenerEscuelas(); 
+          }
+        });
       },
+
+      resetCreacionEscuela(){
+        this.dialog = false;
+        this.escuela.nombre='';
+        this.escuela.cod='';
+      },
+      
+      resetEditarEscuela(){
+
+      }
     },
   }
 </script>
