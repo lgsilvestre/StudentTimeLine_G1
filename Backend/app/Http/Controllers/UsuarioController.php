@@ -11,7 +11,9 @@ use Image;
 
 class UsuarioController extends Controller
 {
-  /** 
+    /**
+     * Metodo que se encarga de bloquear las rutas del controlador Usuario
+     */
     public function __construct()
     {
         $this->middleware(['permission:create user'], ['only' => ['create', 'store']]);
@@ -19,7 +21,7 @@ class UsuarioController extends Controller
         $this->middleware(['permission:update user'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete user'], ['only' => 'delete']);
     }
-*/  
+  
     #Retorna listado de todos los usuarios
     public function index()
     {
