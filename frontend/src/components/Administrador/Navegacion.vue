@@ -29,21 +29,14 @@
 
         <v-menu open-on-hover offset-x left>
             <template v-slot:activator="{ on }">
-                <v-list-item  v-on="on" >
+                <v-list-item  v-on="on"  to="/administrador/usuario/crearUsuario">
                     <v-list-item-icon>
                         <v-icon color="white">fas fa-users</v-icon>
                     </v-list-item-icon>
                     <v-list-item-title class="white--text" style="font-size: 120%;text-shadow: #555 2px 2px 3px;"> <strong>Usuario</strong></v-list-item-title>
                 </v-list-item>
             </template>
-            <v-list>
-                <v-list-item v-for="(item, index) in itemsUsuario" :key="index" @click="CrearEscuela">
-                    <v-list-item-icon>
-                        <v-icon >{{ item.icon }}</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>{{ item.title }}</v-list-item-title>
-                </v-list-item>
-            </v-list>
+            
         </v-menu>
 
         <v-menu open-on-hover offset-x left>

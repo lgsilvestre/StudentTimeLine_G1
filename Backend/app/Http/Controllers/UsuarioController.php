@@ -132,7 +132,7 @@ class UsuarioController extends Controller
         $validator = Validator::make($request->all(), [
             'nombre' => ['required','string'],
             'escuela' => ['required', 'numeric'], //Cambiar lo de la foreign key dps
-            'rol' => ['required','string'], 
+            'role' => ['required','string'], 
             'foto' => ['image','mimes:jpeg,png,jpg,gif,svg','max:2048','nullable'],
             'email'=> ['required','email'],
             'password' => ['required' , 'string']
@@ -150,7 +150,7 @@ class UsuarioController extends Controller
             $user = new User();
             $user ->nombre=$request->nombre;
             $user ->escuela=$request->escuela;
-            $user ->rol=$request->rol;
+            $user ->rol=$request->role;
             $user ->email=$request->email;
             $user ->password=bcrypt($request->password);
             if($request->hasfile('foto')){

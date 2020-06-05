@@ -74,21 +74,42 @@
 
 </template>
 <script>
-import {mapMutations} from 'vuex';
-// import axios from 'axios'
+import { mapState, mapMutations } from 'vuex'
+import axios from 'axios'
 export default {
+    
     data() {
         return {
             modificarUsuario :false,
             usuarios: null
         }
     },
+    
     computed:{
     
     },
     methods: {
-        ...mapMutations(['listarUsuario','listarModificarUsuario']),
-     
+          editarUsuario(item) {
+        // var url = 'http://127.0.0.1:8000/api/v1/escuela/'+item.id;
+        // let put ={
+        //   "nombre": this.escuelaEditar.nombre,
+        // }
+        // axios.put(url,put,this.$store.state.config)
+        // .then((result)=>{
+        //   if (result.statusText=='OK') {
+        //     this.obtenerEscuelas(); 
+        //     this.resetEditarEscuela();
+        //   } 
+        // });
+      },
+      resetCreacionEscuela(){
+        this.usuario.nombre='';
+        this.usuario.rol='';
+        this.usuario.foto=null ;
+        this.usuario.correo='';
+        this.usuario.contraseña='';
+ 
+      },
 
             
         

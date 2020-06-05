@@ -19,7 +19,7 @@ class UserController extends Controller
                 return response()->json(['error' => 'invalid_credentials'], 400);
             }
         } catch (JWTException $e) {
-            return response()->json(['error' => 'could_not_create_token'], 500);
+            return response()->json(['error' => 'could_not_create_token'], 501);
         }
         return response()->json(compact('token'));
     }

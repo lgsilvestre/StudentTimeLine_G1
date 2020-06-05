@@ -137,7 +137,7 @@ class TokensController extends Controller
             });
          //este catch permite responder directamente que problemas en la peticion MAIL
         }catch(\Exception $e){
-             return response()->json(['Confirmacion' => $e], 500);
+             return response()->json(['Confirmacion' => $e], 502);
         }
         return response()->json(['Confirmacion' => 'Se a mandado el correo exitosamente'], 200);
        
