@@ -23,9 +23,14 @@
             <v-list-item-title>Escuela</v-list-item-title>
         </v-list-item>
             
-        
+        <v-list-item  v-on="on" to="/administrador/usuarios" >
+            <v-list-item-icon>
+                <v-icon>fas fa-users</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Usuarios</v-list-item-title>
+        </v-list-item>
 
-        <v-menu open-on-hover offset-x left>
+        <!-- <v-menu open-on-hover offset-x left>
             <template v-slot:activator="{ on }">
                 <v-list-item  v-on="on" >
                     <v-list-item-icon>
@@ -42,7 +47,7 @@
                     <v-list-item-title>{{ item.title }}</v-list-item-title>
                 </v-list-item>
             </v-list>
-        </v-menu>
+        </v-menu> -->
 
         <v-menu open-on-hover offset-x left>
             <template v-slot:activator="{ on }">

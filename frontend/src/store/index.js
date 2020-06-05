@@ -69,17 +69,26 @@ export default new Vuex.Store({
       
       
       registrarUsuario(state,nuevoUsuario){
-        console.log(state.tk);
+        var aux;
+        if(nuevoUsuario.role=="Administrador"){
+          aux="admin"
+        };   
+        if(nuevoUsuario.role=="Secretaría de Escuela"){
+          aux="secretaria de escuela"
+        }; 
+        if(nuevoUsuario.role=="Profesor"){
+          aux="profesor"
+        };
         let post ={
           "foto": null,
           "nombre": nuevoUsuario.nombre,
-          "carrera": nuevoUsuario.escuela,
-          "rol": nuevoUsuario.rol,
+          "escuela": nuevoUsuario.escuela,
+          "role": aux,  
           "email": nuevoUsuario.correo,
           "password": nuevoUsuario.contrasena,
         }
-        var url = 'http://127.0.0.1:8000/api/v1/User';
-        console.log(state.config);
+        var url = 'http://127.0.0.1:8000/api/v1/usuario';
+        console.log(post);
         axios.post(url,post,state.config)
           .then((result)=>{
             console.log(result.statusText);
@@ -90,7 +99,7 @@ export default new Vuex.Store({
         let put ={
           "nombre": datosUsuario.nombre,
           "escuela": null,
-          "rol": null,
+          "role": null,
           "foto": null,
           "email": datosUsuario.correo,
           "password": datosUsuario.contrasena,
