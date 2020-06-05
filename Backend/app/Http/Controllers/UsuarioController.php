@@ -47,11 +47,11 @@ class UsuarioController extends Controller
     {
         //Se puede modificar el rol?
         //Deberia
-        $credentials = $request->only('nombre', 'escuela', 'rol', 'foto', 'email', 'password');
+        $credentials = $request->only('nombre', 'escuela', 'role', 'foto', 'email', 'password');
         $validator = Validator::make($credentials, [
             'nombre' => ['string', 'nullable'],
             'escuela' => ['numeric', 'nullable'],
-            'rol' => ['string', 'nullable'],
+            'role' => ['string', 'nullable'],
             'foto' => ['image','mimes:jpeg,png,jpg,gif,svg','max:2048','nullable'],
             'email' => ['email', 'nullable'],
             'password' => ['string', 'nullable']
@@ -74,9 +74,9 @@ class UsuarioController extends Controller
             if($request->escuela!=null){
                 $usuario->escuela = $request->escuela;
             }
-            if($request->rol!=null){
-                $usuario->rol = $request->rol;
-                $usuario->assignRole($request->rol);
+            if($request->role!=null){
+                $usuario->rol = $request->role;
+                $usuario->assignRole($request->role);
             }
             if($request->foto!=null){
                 if($request->hasfile('foto')){
@@ -130,7 +130,7 @@ class UsuarioController extends Controller
         $validator = Validator::make($request->all(), [
             'nombre' => ['required','string'],
             'escuela' => ['required', 'numeric'], //Cambiar lo de la foreign key dps
-            'rol' => ['required','string'], 
+            'role' => ['required','string'], 
             'foto' => ['image','mimes:jpeg,png,jpg,gif,svg','max:2048','nullable'],
             'email'=> ['required','email'],
             'password' => ['required' , 'string']
@@ -148,7 +148,7 @@ class UsuarioController extends Controller
             $user = new User();
             $user ->nombre=$request->nombre;
             $user ->escuela=$request->escuela;
-            $user ->rol=$request->rol;
+            $user ->rol=$request->role;
             $user ->email=$request->email;
             $user ->password=bcrypt($request->password);
             if($request->hasfile('foto')){
@@ -160,7 +160,7 @@ class UsuarioController extends Controller
                 $user ->foto=null;
             }
             $r = $user->save();
-            $user->assignRole($request->rol);
+            $user->assignRole($request->role);
             return compact('user');
 
         //este catch permite responder directamente que problemas en la peticion SQL
