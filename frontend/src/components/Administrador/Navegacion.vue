@@ -1,12 +1,14 @@
 <template>
 <v-navigation-drawer app right v-model=drawer  :mini-variant.sync=drawelAdmin permanentt 
-        hide-overlay>
+        hide-overlay
+        src="@/assets/Globales/background-panel-02.jpg"
+        >
         <v-list-item class="px-2" @click="verPerfil">
             <v-list-item-avatar >
                 <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
             </v-list-item-avatar>
 
-        <v-list-item-title>John Leider</v-list-item-title>
+        <v-list-item-title class="white--text" style="font-size: 120%;text-shadow: #555 2px 2px 3px;">John Leider</v-list-item-title>
 
         </v-list-item>
 
@@ -18,44 +20,31 @@
             
         <v-list-item  v-on="on" to="/administrador/escuela" >
             <v-list-item-icon>
-                <v-icon>fas fa-school</v-icon>
+                <v-icon color="white">fas fa-school</v-icon>
             </v-list-item-icon>
-            <v-list-item-title>Escuela</v-list-item-title>
+            <v-list-item-title class="white--text" style="font-size: 120%;text-shadow: #555 2px 2px 3px;"> <strong>Escuela</strong></v-list-item-title>
         </v-list-item>
             
-        <v-list-item  v-on="on" to="/administrador/usuarios" >
-            <v-list-item-icon>
-                <v-icon>fas fa-users</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Usuarios</v-list-item-title>
-        </v-list-item>
+        
 
-        <!-- <v-menu open-on-hover offset-x left>
-            <template v-slot:activator="{ on }">
-                <v-list-item  v-on="on" >
-                    <v-list-item-icon>
-                        <v-icon>fas fa-users</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>Usuario</v-list-item-title>
-                </v-list-item>
-            </template>
-            <v-list>
-                <v-list-item v-for="(item, index) in itemsUsuario" :key="index" @click="CrearEscuela">
-                    <v-list-item-icon>
-                        <v-icon>{{ item.icon }}</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>{{ item.title }}</v-list-item-title>
-                </v-list-item>
-            </v-list>
-        </v-menu> -->
+
+            
+            <v-list-item  v-on="on" to="/administrador/usuarios">
+                <v-list-item-icon>
+                    <v-icon color="white">fas fa-users</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title class="white--text" style="font-size: 120%;text-shadow: #555 2px 2px 3px;"> <strong>Usuario</strong></v-list-item-title>
+            </v-list-item>
+            
+   
 
         <v-menu open-on-hover offset-x left>
             <template v-slot:activator="{ on }">
                 <v-list-item  v-on="on" >
                     <v-list-item-icon>
-                        <v-icon>fab fa-accusoft</v-icon>
+                        <v-icon color="white">fab fa-accusoft</v-icon>
                     </v-list-item-icon>
-                    <v-list-item-title>Curso</v-list-item-title>
+                    <v-list-item-title class="white--text" style="font-size: 120%;text-shadow: #555 2px 2px 3px;"> <strong>Curso</strong></v-list-item-title>
                 </v-list-item>
             </template>
             <v-list>
@@ -73,9 +62,9 @@
             <template v-slot:activator="{ on }">
                 <v-list-item  v-on="on" >
                     <v-list-item-icon>
-                        <v-icon>fas fa-chalkboard-teacher</v-icon>
+                        <v-icon color="white">fas fa-chalkboard-teacher</v-icon>
                     </v-list-item-icon>
-                    <v-list-item-title>Profesor</v-list-item-title>
+                    <v-list-item-title class="white--text" style="font-size: 120%;text-shadow: #555 2px 2px 3px;"> <strong>Profesor</strong></v-list-item-title>
                 </v-list-item>
             </template>
             <v-list>
@@ -92,9 +81,9 @@
             <template v-slot:activator="{ on }">
                 <v-list-item  v-on="on" >
                     <v-list-item-icon>
-                        <v-icon>fas fa-user-graduate</v-icon>
+                        <v-icon color="white">fas fa-user-graduate</v-icon>
                     </v-list-item-icon>
-                    <v-list-item-title>Estudiante</v-list-item-title>
+                    <v-list-item-title class="white--text" style="font-size: 120%;text-shadow: #555 2px 2px 3px;"> <strong>Estudiantes</strong></v-list-item-title>
                 </v-list-item>
             </template>
             <v-list>
@@ -111,15 +100,15 @@
             <template v-slot:activator="{ on }">
                 <v-list-item  v-on="on" to="/administrador/usuario/crearUsuario" >
                     <v-list-item-icon>
-                        <v-icon>fas fa-archway</v-icon>
+                        <v-icon color="white">fas fa-archway</v-icon>
                     </v-list-item-icon>
-                    <v-list-item-title>Observaciones</v-list-item-title>
+                    <v-list-item-title class="white--text" style="font-size: 120%;text-shadow: #555 2px 2px 3px;"> <strong>Observaciones</strong></v-list-item-title>
                 </v-list-item>
             </template>
             <v-list>
                 <v-list-item v-for="(item, index) in itemsObservaciones" :key="index" @click="CrearEscuela">
                     <v-list-item-icon>
-                        <v-icon> {{ item.icon }} </v-icon>
+                        <v-icon color="white"> {{ item.icon }} </v-icon>
                     </v-list-item-icon>
                     <v-list-item-title>{{ item.title }}</v-list-item-title>
                 </v-list-item>
@@ -128,11 +117,11 @@
 
         <v-menu open-on-hover  offset-x left>
             <template v-slot:activator="{ on }">
-                <v-list-item  v-on="on" to="/administrador/escuela/crearEscuela">
+                <v-list-item  v-on="on" >
                     <v-list-item-icon>
-                        <v-icon>fas fa-envelope</v-icon>
+                        <v-icon color="white">fas fa-envelope</v-icon>
                     </v-list-item-icon>
-                    <v-list-item-title>Contactar</v-list-item-title>
+                    <v-list-item-title class="white--text" style="font-size: 120%;text-shadow: #555 2px 2px 3px;"> <strong>Contactar</strong></v-list-item-title>
                 </v-list-item>
             </template>
             <v-list>
