@@ -14,24 +14,16 @@
 
 
     <v-list style=" margine-right: 0; margine-left:0;"  > 
-        <v-menu open-on-hover  offset-x left>
-            <template v-slot:activator="{ on }">
-                <v-list-item  v-on="on" >
-                    <v-list-item-icon>
-                        <v-icon>fas fa-school</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>Escuela</v-list-item-title>
-                </v-list-item>
-            </template>
-            <v-list>
-                <v-list-item v-for="(item, index) in itemsEscuela" :key="index"  @click="CrearEscuela">
-                    <v-list-item-icon>
-                        <v-icon> {{ item.icon }} </v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>{{ item.title }}</v-list-item-title>
-                </v-list-item>
-            </v-list>
-        </v-menu>
+        
+            
+        <v-list-item  v-on="on" to="/administrador/escuela" >
+            <v-list-item-icon>
+                <v-icon>fas fa-school</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Escuela</v-list-item-title>
+        </v-list-item>
+            
+        
 
         <v-menu open-on-hover offset-x left>
             <template v-slot:activator="{ on }">
@@ -101,7 +93,7 @@
                 </v-list-item>
             </template>
             <v-list>
-                <v-list-item v-for="(item, index) in itemsEstudiantes" :key="index"@click="CrearEscuela" >
+                <v-list-item v-for="(item, index) in itemsEstudiantes" :key="index" @click="CrearEscuela" >
                     <v-list-item-icon>
                         <v-icon> {{ item.icon }} </v-icon>
                     </v-list-item-icon>
@@ -112,7 +104,7 @@
 
         <v-menu open-on-hover  offset-x left>
             <template v-slot:activator="{ on }">
-                <v-list-item  v-on="on" >
+                <v-list-item  v-on="on" to="/administrador/usuario/crearUsuario" >
                     <v-list-item-icon>
                         <v-icon>fas fa-archway</v-icon>
                     </v-list-item-icon>
@@ -131,7 +123,7 @@
 
         <v-menu open-on-hover  offset-x left>
             <template v-slot:activator="{ on }">
-                <v-list-item  v-on="on" >
+                <v-list-item  v-on="on" to="/administrador/escuela/crearEscuela">
                     <v-list-item-icon>
                         <v-icon>fas fa-envelope</v-icon>
                     </v-list-item-icon>

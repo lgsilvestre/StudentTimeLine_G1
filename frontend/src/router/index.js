@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Inicio from '../views/Inicio.vue'
+import store from '../store';
 
 Vue.use(VueRouter)
 
   const routes = [
+  
   {
     path: '/',
     name: 'Inicio',
@@ -14,20 +16,38 @@ Vue.use(VueRouter)
     //Enrutamiento de la vista del administrador
     path: '/administrador',
     name: 'Administrador',
-    component: () => import(/* webpackChunkName: "Administrador" */ '@/views/Administrador.vue')
+    component: () => import(/* webpackChunkName: "Administrador" */ '@/views/Administrador.vue'),
+    meta: {
+      requiresAuth: true
+    },
+    children:[
+      {
+        //Enrutamiento de la vista del administrador
+        path: 'escuela',
+        name: 'Escuela',
+        component: () => import(/* webpackChunkName: "Administrador" */ '@/components/Administrador/BodyEscuelas.vue'/* ruta exacta por definir dado que no esta aun creada*/),
+        meta: {
+          admin: true
+        },
+      },
+      {
+        //Enrutamiento de la vista del administrador
+        path: 'usuario/crearUsuario',
+        name: 'crearUsuario',
+        component: () => import(/* webpackChunkName: "Administrador" */ '@/components/Administrador/RegistroUsuarios/BodyRegistroUsuarios.vue'),
+        meta: {
+          admin: true
+        },
+      },
+    ]
   },
   //enrutamiento de las subrutas del administrador
+    
     {
       //Enrutamiento de la vista del administrador
-      path: '/administrador/escuela/crearEscuela',
-      name: 'crearEscuela',
-      component: () => import(/* webpackChunkName: "Administrador" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
-    },
-    {
-      //Enrutamiento de la vista del administrador
-      path: '/administrador/escuela/listarEscuela',
+      path: '/administrador/escuelas',
       name: 'listarEscuela',
-      component: () => import(/* webpackChunkName: "Administrador" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
+      component: () => import(/* webpackChunkName: "Administrador" */ '@/components/Administrador/BodyEscuelas.vue'/* ruta exacta por definir dado que no esta aun creada*/)
     },
     {
       //Enrutamiento de la vista del administrador
@@ -41,12 +61,7 @@ Vue.use(VueRouter)
       name: 'deshabilitarEscuela',
       component: () => import(/* webpackChunkName: "Administrador" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
     },
-    {
-      //Enrutamiento de la vista del administrador
-      path: '/administrador/usuario/crearUsuario',
-      name: 'crearUsuario',
-      component: () => import(/* webpackChunkName: "Administrador" */ '@/components/Administrador/RegistroUsuarios/BodyRegistroUsuarios.vue')
-    },
+    
     {
       //Enrutamiento de la vista del administrador
       path: '/administrador/usuario/listarUsuarios',
@@ -246,10 +261,40 @@ Vue.use(VueRouter)
   
 ]
 
+
+
 const router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
     routes
-})
+});
+
+router.beforeEach((to,from, next) =>{
+  if (to.meta.requiresAuth) {
+    if (store.state.admin) {
+      next();
+    } else {
+      next({
+        name:'Inicio'
+      });
+    }
+  } else{
+    if (to.meta.admin) {
+      if (store.state.admin) {
+        console.log('holaaa');
+        next();
+      } else {
+        console.log('holaaa2');
+        next({
+          name:'Inicio'
+        });
+      }
+    } else{
+      console.log('holaaa3');
+      next();
+    };
+  };
+  
+});
 
 export default router

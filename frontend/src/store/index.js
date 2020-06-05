@@ -26,10 +26,11 @@ export default new Vuex.Store({
         Authorization: ''
       }
     },
+
   },
   
   mutations: {
-      login(state, lista) { //funcion de login
+      login(state, lista,methods) { //funcion de login
           console.log(lista.email);
           console.log(lista.pass);
           let post = {
@@ -43,10 +44,9 @@ export default new Vuex.Store({
               state.config.headers.Authorization = state.tk;
               if (state.usuario.user.rol == "admin") {
                   //redireccionamiento hacia el usuario administrador
+                  
                   state.admin=true;
                   router.push({ path: '/administrador' });
-                  
-                  
               } else {
                   if (state.usuario.user.rol == "secretaria de escuela") {
                       //redireccionamiento hacia el usuario secretaria de escuela
@@ -66,6 +66,7 @@ export default new Vuex.Store({
       unLogin(state){
         //esta funcionalidad se agregara mas adelante cuando el backend tenga lista esta funcionalidad
       },
+      
       
       registrarUsuario(state,nuevoUsuario){
         console.log(state.tk);
@@ -105,8 +106,9 @@ export default new Vuex.Store({
         state.drawelAdmin = !state.drawelAdmin;
         console.log('pucha');
       },
+     
   },
-    
+
   actions: {
   },
   modules: {
