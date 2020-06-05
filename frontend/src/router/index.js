@@ -32,6 +32,15 @@ Vue.use(VueRouter)
       },
       {
         //Enrutamiento de la vista del administrador
+        path: 'usuarios',
+        name: 'Usuarios',
+        component: () => import(/* webpackChunkName: "Administrador" */ '@/components/Administrador/BodyListaUsuarios.vue'/* ruta exacta por definir dado que no esta aun creada*/),
+        meta: {
+          admin: true
+        },
+      },
+      {
+        //Enrutamiento de la vista del administrador
         path: 'usuario/crearUsuario',
         name: 'crearUsuario',
         component: () => import(/* webpackChunkName: "Administrador" */ '@/components/Administrador/RegistroUsuarios/BodyRegistroUsuarios.vue'),
@@ -66,7 +75,7 @@ Vue.use(VueRouter)
       //Enrutamiento de la vista del administrador
       path: '/administrador/usuario/listarUsuarios',
       name: 'listarUsuario',
-      component: () => import(/* webpackChunkName: "Administrador" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
+      component: () => import(/* webpackChunkName: "Administrador" */ '@/components/Administrador/BodyListaUsuarios.vue'/* ruta exacta por definir dado que no esta aun creada*/)
     },
     {
       //Enrutamiento de la vista del administrador
