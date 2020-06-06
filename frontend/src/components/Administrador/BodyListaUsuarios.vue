@@ -34,7 +34,7 @@
                         left
                         v-on="on"
                         >
-                            <v-icon class="mx-2" color="red">fas fa-plus</v-icon>
+                            <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
                         </v-btn>
                     </template>
                     <v-card
@@ -116,7 +116,7 @@
                                 ></v-file-input>   
 
                                 <v-container class="px-10" style="text-align:right;">
-                                    <v-btn rounded color="red" @click="resetRegistrarUsuario">
+                                    <v-btn rounded color="warning" @click="resetRegistrarUsuario">
                                       <h4 class="white--text">Cancelar</h4>
                                     </v-btn>
                                     <v-btn rounded color="primary" class="ml-2" @click="registrarUsuario(datosUsuario)" >

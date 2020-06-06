@@ -5,158 +5,56 @@
     right
     premanent    
     :mini-variant.sync=drawelAdmin  
-    src="@/assets/Globales/background-panel-04.jpg"
+    src="@/assets/Globales/background-panel-02.jpg"
     >
     <!-- Mis recomendaciones de fondo (?)  1, 2, 4, 7, 9,  -->  
-
 
     <!-- Lista general del navigation drawer -->
         <!-- Seccion de Mi Perfil -->
         <v-list >
-            <v-list-item @click="verPerfil">
+            <v-list-item @click="verPerfil" class="px-2 difuminado">
                 <!-- Imagen o Avatar -->
                 <v-list-item-avatar>
                     <v-img src="http://www.ingenieria.utalca.cl/Repositorio/PNsAYcfZiO2QfjGDQMIyjMOAomsLch/Ruth%20Garrido.jpg"></v-img>
                 </v-list-item-avatar>    
                 <!-- Nombre del Usuario -->
-                <v-list-item-title> Secretaria de Escuela</v-list-item-title>                       
+                <v-list-item-title class="white--text letra"><strong>Sria. de Escuela</strong></v-list-item-title>                       
             </v-list-item>
 
-            <v-divider class="my-1"></v-divider>
-
-            <!-- Menus del Navigation Drawer -->
-
-            <!-- Menu de Operaciones Profesor -->
-           <!--  <v-menu            
-            offset-y
-            >
-                <template v-slot:activator="{ on }">
-                    <v-list-item v-on="on" >
-                        <v-list-item-icon>
-                            <v-icon color="red">fas fa-chalkboard-teacher</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title class="subtitle">Profesores</v-list-item-title>                            
-                    </v-list-item>
-                </template> -->
-
-                <!-- Lista que se despliega del menu (opciones relacionadas con profesor) -->
-               <!--  <v-list>
-                    <v-list-item
-                        v-for="opcion in profesores"
-                        :key=opcion
-                        @click="opcion"
-                    >
-                        <v-list-item-title> {{opcion}} </v-list-item-title>
-                    </v-list-item>                                        
-                </v-list>
-            </v-menu>  -->
-
-            <!-- Menu de Operaciones Cursos -->
-            <!-- <v-menu
-            absolute
-            offset-y
-            >    
-                <template v-slot:activator="{ on }" >
-                    <v-list-item v-on="on">
-                        <v-list-item-icon>
-                            <v-icon color="white">fab fa-accusoft</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title >Cursos</v-list-item-title>                            
-                    </v-list-item>
-                </template> -->
-                <!-- Lista que se despliega del menu (opciones relacionadas con cursos) -->
-                <!-- <v-list>
-                    <v-list-item
-                        v-for="opcion in cursos"
-                        :key=opcion
-                        @click="opcion"
-                    >
-                        <v-list-item-title> {{opcion}} </v-list-item-title>
-                    </v-list-item>                                        
-                </v-list>
-            </v-menu> -->
-
-            <!-- Menu de Operaciones Estudiantes -->
-            <!-- <v-menu
-            absolute
-            offset-y
-            >    
-                <template v-slot:activator="{ on }">
-                    <v-list-item v-on="on">
-                        <v-list-item-icon>
-                            <v-icon color="white">fas fa-user-graduate</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title>Estudiantes</v-list-item-title>                            
-                    </v-list-item>
-                </template> -->
-                <!-- Lista que se despliega del menu (opciones relacionadas con estudiantes) -->
-                <!-- <v-list>
-                    <v-list-item
-                        v-for="opcion in estudiantes"
-                        :key=opcion
-                        @click="opcion"
-                    >
-                        <v-list-item-title> {{opcion}} </v-list-item-title>
-                    </v-list-item>                                        
-                </v-list>
-            </v-menu> -->
-
-            <!-- Menu de Operaciones Observaciones -->
-            <!-- <v-menu
-            offset-y
-            >    
-                <template v-slot:activator="{ on }">
-                    <v-list-item v-on="on">
-                        <v-list-item-icon>
-                            <v-icon color="white">fas fa-archway</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title>Observaciones</v-list-item-title>                            
-                    </v-list-item>
-                </template> -->
-                <!-- Lista que se despliega del menu (opciones relacionadas con observaciones) -->
-                <!-- <v-list>
-                    <v-list-item
-                        v-for="opcion in observaciones"
-                        :key=opcion
-                        @click="opcion"
-                    >
-                        <v-list-item-title > {{opcion}} </v-list-item-title>
-                    </v-list-item>                                        
-                </v-list>
-            </v-menu>        -->
-            <v-list-item @click="profesores" >
+            <v-divider></v-divider>
+            <v-list-item @click="profesores" class="difuminado">
                 <v-list-item-icon>
-                    <v-icon color="black">fas fa-chalkboard-teacher</v-icon>
+                    <v-icon color="white">fas fa-chalkboard-teacher</v-icon>
                 </v-list-item-icon>
-                <v-list-item-title>Profesores</v-list-item-title>                            
+                <v-list-item-title class="white--text letra"><strong>Profesores</strong></v-list-item-title>                            
             </v-list-item>
 
-            <v-list-item @click="cursos" >
-                <v-list-item-icon>
-                    <v-icon color="black">fab fa-accusoft</v-icon>
+            <v-list-item @click="cursos" class="difuminado">
+                <v-list-item-icon >
+                    <v-icon color="white">fab fa-accusoft</v-icon>
                 </v-list-item-icon>
-                <v-list-item-title>Cursos</v-list-item-title>                            
+                <v-list-item-title class="white--text letra"><strong>Cursos</strong></v-list-item-title>                            
             </v-list-item>
 
-            <v-list-item @click="estudiantes" >
-                <v-list-item-icon>
-                    <v-icon color="black">fas fa-user-graduate</v-icon>
+            <v-list-item @click="estudiantes" class="difuminado">
+                <v-list-item-icon >
+                    <v-icon color="white">fas fa-user-graduate</v-icon>
                 </v-list-item-icon>
-                <v-list-item-title>Estudiantes</v-list-item-title>                            
+                <v-list-item-title class="white--text letra"><strong>Estudiantes</strong></v-list-item-title>                            
             </v-list-item>
 
-            <v-list-item @click="observaciones" >
-                <v-list-item-icon>
-                    <v-icon color="black">fas fa-archway</v-icon>
+            <v-list-item @click="observaciones" class="difuminado">
+                <v-list-item-icon >
+                    <v-icon color="white">fas fa-archway</v-icon>
                 </v-list-item-icon>
-                <v-list-item-title>Observaciones</v-list-item-title>                            
+                <v-list-item-title class="white--text letra"><strong>Observaciones</strong></v-list-item-title>                            
             </v-list-item>
 
-            <v-list-item @click="contactar" >
+            <v-list-item @click="contactar" class="difuminado">
                 <v-list-item-icon>
-                    <v-icon color="black">fas fa-envelope</v-icon>
+                    <v-icon color="white">fas fa-envelope</v-icon>
                 </v-list-item-icon>
-                <v-list-item-title>Contactar</v-list-item-title>                            
+                <v-list-item-title class="white--text letra" ><strong>Contactar</strong></v-list-item-title>                            
             </v-list-item>
                      
         </v-list>
@@ -195,3 +93,12 @@ export default {
     },
 }
 </script>
+
+<style scoped>
+    .difuminado{
+        text-shadow: #555 2px 2px 3px;
+    }
+    .letra{
+        font-size: 125%;
+    }
+</style>

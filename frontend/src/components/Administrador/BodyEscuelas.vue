@@ -27,7 +27,7 @@
                               left
                               v-on="on"
                               >
-                                  <v-icon class="mx-2" color="red">fas fa-plus</v-icon>
+                                  <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
                               </v-btn>
                           </template>
                           <v-card elevation="1" shaped>
@@ -55,11 +55,11 @@
                                           prepend-inner-icon="fas fa-hashtag"
                                       ></v-text-field>
                                   </v-container>
-                                  <v-container class="px-10" style="text-align:right;">
-                                    <v-btn rounded color="red" @click="resetCreacionEscuela">
+                                  <v-container class="px-10 pb-5" style="text-align:right;">
+                                    <v-btn rounded color="warning" @click="resetCreacionEscuela">
                                       <h4 class="white--text">Cancelar</h4>
                                     </v-btn>
-                                    <v-btn rounded color="primary" class="ml-2" @click="crearEscuela" >
+                                    <v-btn rounded color="secondary" class="ml-2" @click="crearEscuela" >
                                       <h4 class="white--text">Guardar</h4>
                                     </v-btn>
                                   </v-container>
@@ -98,7 +98,6 @@
                 <v-dialog v-model="dialogModificar" persistent max-width="500px">
                       <v-card
                           class="mx-auto"
-                          max-width="800"
                           shaped
                       >
                           <v-card-title
@@ -128,10 +127,10 @@
                                 >
                                 </v-text-field>                                
                                 <v-container class="px-10" style="text-align:right;">
-                                    <v-btn rounded color="red" @click="dialogModificar = false">
+                                    <v-btn rounded color="warning" @click="dialogModificar = false">
                                       <h4 class="white--text">Cancelar</h4>
                                     </v-btn>
-                                    <v-btn rounded color="primary" class="ml-2" @click="editarEscuela(escuelaEditar)">
+                                    <v-btn rounded color="secondary" class="ml-2" @click="editarEscuela(escuelaEditar)">
                                       <h4 class="white--text">Modificar</h4>
                                     </v-btn>
                                 </v-container>  
@@ -158,10 +157,10 @@
 
                           <v-card-text class="px-12 mt-3" >                                     
                             <v-container class="px-10" style="text-align:right;">
-                                <v-btn rounded color="red" @click="dialogEliminar = false">
+                                <v-btn rounded color="warning" @click="dialogEliminar = false">
                                   <h4 class="white--text">Cancelar</h4>
                                 </v-btn>
-                                <v-btn rounded color="primary" class="ml-2" @click="borrarEscuela(escuelaEliminar)">
+                                <v-btn rounded color="secondary" class="ml-2" @click="borrarEscuela(escuelaEliminar)">
                                   <h4 class="white--text">Eliminar</h4>
                                 </v-btn>
                               </v-container>  
