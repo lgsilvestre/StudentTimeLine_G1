@@ -43,12 +43,11 @@
                         shaped
                     >
                         <v-card-title
-                              class="headline primary text--center"
-                              primary-title
-                              >
-                              <h5 class="white--text ">Registrar Usuario</h5>
-                              </v-card-title>
-
+                        class="headline primary text--center"
+                        primary-title
+                        >
+                            <h5 class="white--text ">Registrar Usuario</h5>
+                        </v-card-title>
                         <v-card-text class="px-12 mt-10" >
                             <v-form 
                             ref="form"
@@ -114,15 +113,14 @@
                                     prepend-inner-icon="mdi-camera"
                                     prepend-icon=""
                                 ></v-file-input>   
-
                                 <v-container class="px-10" style="text-align:right;">
                                     <v-btn rounded color="warning" @click="resetRegistrarUsuario">
-                                      <h4 class="white--text">Cancelar</h4>
+                                        <h4 class="white--text">Cancelar</h4>
                                     </v-btn>
                                     <v-btn rounded color="primary" class="ml-2" @click="registrarUsuario(datosUsuario)" >
-                                      <h4 class="white--text">Registrar</h4>
+                                        <h4 class="white--text">Registrar</h4>
                                     </v-btn>
-                                  </v-container>  
+                                </v-container>  
                             </v-form>
                         </v-card-text>
                     </v-card>
@@ -140,19 +138,23 @@
         >            
             <template v-slot:item.opciones="{ item }">
                 <!-- boton para modificar usuario seleccionado -->
-                <v-icon     
-                    class="mx-1 justify-center"           
+                <v-btn color="white" fab small depressed class="mr-2 py-2">
+                    <v-icon     
+                    color="primary"         
                     @click="modificarUsuario(item)"
-                >
-                fas fa-edit
-                </v-icon>
+                    >
+                    fas fa-edit
+                    </v-icon>
+                </v-btn>
                 <!-- boton para eliminar usuario seleccionado -->
-                <v-icon
-                    class="mx-1 justify-center"            
+                <v-btn color="white" fab small depressed class="mr-2 py-2">
+                    <v-icon
+                    color="warning"         
                     @click="eliminarUsuario(item)"
-                >
-                fas fa-trash-alt
-                </v-icon>
+                    >
+                    fas fa-trash-alt
+                    </v-icon>
+                </v-btn>
             </template>
         </v-data-table>
     </v-card>
@@ -205,7 +207,7 @@ export default {
 
     },
     created () {      
-      this.obtenerEscuelas();
+        this.obtenerEscuelas();
     },
     methods: {
         ...mapMutations(['registrarUsuario']),
@@ -224,12 +226,12 @@ export default {
         this.datosUsuario.contrasena='';
         this.datosUsuario.imagen='';
         this.$refs.form.resetValidation();
-      },
+        },
 
-      obtenerEscuelas(){
-            this.listaEscuelaAux = [];
-            var url = 'http://127.0.0.1:8000/api/v1/escuela';
-            axios.get(url,this.$store.state.config)
+        obtenerEscuelas(){
+        this.listaEscuelaAux = [];
+        var url = 'http://127.0.0.1:8000/api/v1/escuela';
+        axios.get(url,this.$store.state.config)
             .then((result)=>{
                 for (let index = 0; index < result.data.length; index++) {
                 const element = result.data[index];
@@ -241,9 +243,8 @@ export default {
                 this.listaEscuelaAux[index]=escuela;
                 }
                 this.listaEscuela = this.listaEscuelaAux;
-            }
-            );
-      },
+            });
+        },
     }
 }
 </script>

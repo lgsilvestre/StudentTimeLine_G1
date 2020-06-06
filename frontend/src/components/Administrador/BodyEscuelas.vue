@@ -10,14 +10,12 @@
                     width="100%"
                     height="180px"
                     src="@/assets/Globales/fondo.jpg"
-                    
                   >
                     <v-card-title class="white--text" style="font-size: 200%;text-shadow: #555 2px 2px 3px;"> 
                         <v-icon class="px-3" color="white" size="30">fas fa-school</v-icon>
                         <strong> Escuelas</strong>
                         <v-spacer>
                         </v-spacer>
-                        
                         <v-dialog v-model="dialog" persistent max-width="500px">
                           <template v-slot:activator="{ on }">
                               <v-btn
@@ -65,106 +63,101 @@
                                   </v-container>
                               </v-form> 
                           </v-card>
-                        
                         </v-dialog>
                     </v-card-title>
                   </v-img>
-
-    
                 <v-data-table
-                    :headers="headers"
-                    :items="desserts"
-                    class="elevation-1 "
+                :headers="headers"
+                :items="desserts"
+                class="elevation-1 "
                 >
-                    <template v-slot:item.actions="{ item }">
-                    <v-icon  
-                    medium
-                    class="mr-2 py-2"
-                    @click="ModificarEscuela(item)"
-                    
-                    >
-                    fas fa-edit
-                    </v-icon>
-                    <v-icon
-                    medium
-                    @click="EliminarEscuela(item)"
-                    class="px-2 py-2"
-                    >
-                    fas fa-trash-alt
-                    </v-icon>
-                    </template>                                                         
-                </v-data-table>
-
-                <v-dialog v-model="dialogModificar" persistent max-width="500px">
-                      <v-card
-                          class="mx-auto"
-                          shaped
+                  <template v-slot:item.actions="{ item }">
+                    <v-btn color="white" fab small depressed class="mr-2 py-2">
+                      <v-icon  
+                      color="primary"
+                      @click="ModificarEscuela(item)"
                       >
-                          <v-card-title
-                              class="headline primary text--center"
-                              primary-title
-                              >
-                              <h5 class="white--text ">Modificar Escuela</h5>
-                              </v-card-title>
-                          <v-card-text class="px-12 mt-3" >
-                              <v-form 
-                              ref="form"
-                              >
-                                <v-text-field
-                                    class="mx-2 mt-5"
-                                    v-model="escuelaEditar.nombre"
-                                    label="Nombre de Escuela"
-                                    outlined
-                                    prepend-inner-icon="fas fa-scroll"
-                                >
-                                </v-text-field>                                  
-                                <v-text-field
-                                    class="mx-2"
-                                    v-model="escuelaEditar.cod_car"
-                                    label="Codigo Carrera"                                      
-                                    outlined
-                                    prepend-inner-icon="fas fa-hashtag"
-                                >
-                                </v-text-field>                                
-                                <v-container class="px-10" style="text-align:right;">
-                                    <v-btn rounded color="warning" @click="dialogModificar = false">
-                                      <h4 class="white--text">Cancelar</h4>
-                                    </v-btn>
-                                    <v-btn rounded color="secondary" class="ml-2" @click="editarEscuela(escuelaEditar)">
-                                      <h4 class="white--text">Modificar</h4>
-                                    </v-btn>
-                                </v-container>  
-                              </v-form>
-                          </v-card-text>
-                      </v-card>
+                      fas fa-edit
+                      </v-icon>
+                    </v-btn>
+                    <v-btn color="white" fab small depressed class="mr-2 py-2">
+                      <v-icon
+                      color="warning"
+                      @click="EliminarEscuela(item)"
+                      >
+                      fas fa-trash-alt
+                      </v-icon>
+                    </v-btn>
+                  </template>                                                         
+                </v-data-table>
+                <v-dialog v-model="dialogModificar" persistent max-width="500px">
+                  <v-card
+                  class="mx-auto"
+                  shaped
+                  >
+                    <v-card-title
+                    class="headline primary text--center"
+                    primary-title
+                    >
+                      <h5 class="white--text ">Modificar Escuela</h5>
+                    </v-card-title>
+                      <v-card-text class="px-12 mt-3" >
+                          <v-form 
+                          ref="form"
+                          >
+                            <v-text-field
+                                class="mx-2 mt-5"
+                                v-model="escuelaEditar.nombre"
+                                label="Nombre de Escuela"
+                                outlined
+                                prepend-inner-icon="fas fa-scroll"
+                            >
+                            </v-text-field>                                  
+                            <v-text-field
+                            class="mx-2"
+                            v-model="escuelaEditar.cod_car"
+                            label="Codigo Carrera"                                      
+                            outlined
+                            prepend-inner-icon="fas fa-hashtag"
+                            >
+                            </v-text-field>                                
+                            <v-container class="px-10" style="text-align:right;">
+                                <v-btn rounded color="warning" @click="dialogModificar = false">
+                                  <h4 class="white--text">Cancelar</h4>
+                                </v-btn>
+                                <v-btn rounded color="secondary" class="ml-2" @click="editarEscuela(escuelaEditar)">
+                                  <h4 class="white--text">Modificar</h4>
+                                </v-btn>
+                            </v-container>  
+                          </v-form>
+                      </v-card-text>
+                  </v-card>
                   </v-dialog>
                   <v-dialog v-model="dialogEliminar" persistent max-width="500px">
                       <v-card
-                          class="mx-auto"
-                          max-width="800"
-                          shaped
+                      class="mx-auto"
+                      max-width="800"
+                      shaped
                       >
-                          <v-card-title
-                              class="headline primary text--center"
-                              primary-title
-                              >
-                              <h5 class="white--text ">Eliminar Escuela</h5>
-                              </v-card-title>
-
-                          <v-card-title class="text-justify" style="font-size: 110%;">Esta seguro que desea eliminar la siguiente Escuela?</v-card-title>
-                          <v-card-text>Nombre Escuela: {{ escuelaEliminar.nombre }}</v-card-text>
-                          <v-card-text>Codigo Carrera: {{ escuelaEliminar.cod }}</v-card-text>
-
-                          <v-card-text class="px-12 mt-3" >                                     
-                            <v-container class="px-10" style="text-align:right;">
-                                <v-btn rounded color="warning" @click="dialogEliminar = false">
-                                  <h4 class="white--text">Cancelar</h4>
-                                </v-btn>
-                                <v-btn rounded color="secondary" class="ml-2" @click="borrarEscuela(escuelaEliminar)">
-                                  <h4 class="white--text">Eliminar</h4>
-                                </v-btn>
-                              </v-container>  
-                          </v-card-text>
+                        <v-card-title
+                        class="headline primary text--center"
+                        primary-title
+                        >
+                          <h5 class="white--text ">Eliminar Escuela</h5>
+                        </v-card-title>
+                        <v-card-title class="text-justify" style="font-size: 110%;">Esta seguro que desea eliminar la siguiente Escuela?</v-card-title>
+                        <v-card-text>Nombre Escuela: {{ escuelaEliminar.nombre }}</v-card-text>
+                        <v-card-text>Codigo Carrera: {{ escuelaEliminar.cod }}</v-card-text>
+                        <v-card-text class="px-12 mt-3" >                                     
+                          <v-container class="px-10" style="text-align:right;">
+                              <v-btn rounded color="warning" @click="dialogEliminar = false">
+                                <h4 class="white--text">Cancelar</h4>
+                              </v-btn>
+                              <v-btn rounded color="secondary" class="ml-2" @click="borrarEscuela(escuelaEliminar)">
+                                <h4 class="white--text">Eliminar</h4>
+                              </v-btn>
+                            </v-container>  
+                        </v-card-text>
                       </v-card>
                   </v-dialog> 
               </v-card>
@@ -176,11 +169,9 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
-import axios from 'axios'
-
+  import { mapState, mapMutations } from 'vuex'
+  import axios from 'axios'
   export default {
-
     data: () => ({
       dialog: false,
       dialogModificar: false,
@@ -193,28 +184,18 @@ import axios from 'axios'
       ],
       desserts:[],
       dessertsAux:[],
-
       escuela:[{nombre:''},{cod:''}],
       escuelaEditar:[{id:''},{nombre:''},{cod:''}],
       escuelaEliminar:[{nombre:''},{cod:''}],
-
     }),
-
     computed: {
-   
     },
-
     watch: {
- 
     },
-
     created () {
       this.obtenerEscuelas();
     },
-
     methods: {
-      //...mapMutations(['crearEscuela']),
-
       ModificarEscuela(item){
         console.log(item.id);
         this.escuelaEditar.id = item.id;
@@ -242,14 +223,12 @@ import axios from 'axios'
                 nombre: element.nombre,
                 cod_car: '',
               };
-              //console.log(escuela);
               this.dessertsAux[index]=escuela;
             }
             this.desserts = this.dessertsAux;
           }
         );
       },
-
       crearEscuela(){
         this.dessertsAux = [];
         var url = 'http://127.0.0.1:8000/api/v1/escuela';
@@ -266,7 +245,6 @@ import axios from 'axios'
           }
         });
       },
-
       editarEscuela(item) {
         var url = 'http://127.0.0.1:8000/api/v1/escuela/'+item.id;
         let put ={
@@ -282,7 +260,6 @@ import axios from 'axios'
           }
         });
       },
-
       borrarEscuela (item) {
         var url = 'http://127.0.0.1:8000/api/v1/escuela/'+item.id;
         axios.delete(url,this.$store.state.config)
@@ -293,16 +270,13 @@ import axios from 'axios'
           }
         });
       },
-
       resetCreacionEscuela(){
         this.dialog = false;
         this.escuela.nombre='';
         this.escuela.cod='';
       },
-      
       resetEditarEscuela(){
-
-      }
+      },
     },
   }
 </script>

@@ -17,23 +17,19 @@
             </v-list-item-icon>
             <v-list-item-title class="white--text letra" ><strong>Escuela</strong></v-list-item-title>
         </v-list-item>
-
             <v-list-item  v-on="on" to="/administrador/usuarios" class="difuminado">
                 <v-list-item-icon>
                     <v-icon color="white">fas fa-users</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title class="white--text letra" > <strong>Usuario</strong></v-list-item-title>
             </v-list-item>
-            
-   
-
         <v-menu open-on-hover offset-x left>
             <template v-slot:activator="{ on }">
                 <v-list-item  v-on="on" class="difuminado">
                     <v-list-item-icon>
                         <v-icon color="white">fab fa-accusoft</v-icon>
                     </v-list-item-icon>
-                    <v-list-item-title class="white--text letra" > <strong>Curso</strong></v-list-item-title>
+                    <v-list-item-title class="white--text letra" ><strong>Curso</strong></v-list-item-title>
                 </v-list-item>
             </template>
             <v-list>
@@ -126,9 +122,9 @@
     </v-list>
     <template v-slot:append >
         <div >
-          <v-btn block  @click="cerrarSesion">Cerrar sesión</v-btn>
+            <v-btn block  @click="cerrarSesion">Cerrar sesión</v-btn>
         </div>
-      </template>
+    </template>
     
     </v-navigation-drawer>
 </template>
@@ -144,16 +140,16 @@ export default {
             drawer: true,
             on: '',
             itemsUsuario: [
-          { title: 'Crear usuario', icon: 'fas fa-plus-circle' },
-          { title: 'Listar Usuario', icon: 'fas fa-list' },
-          { title: 'Modificar usuario', icon: 'fas fa-users' },
-          { title: 'Eliminar usuario', icon: 'fas fa-users' }
+            { title: 'Crear usuario', icon: 'fas fa-plus-circle' },
+            { title: 'Listar Usuario', icon: 'fas fa-list' },
+            { title: 'Modificar usuario', icon: 'fas fa-users' },
+            { title: 'Eliminar usuario', icon: 'fas fa-users' }
 
         ],
         itemsEscuela:[
             {title:'Crear escuela', icon:'fas fa-plus-circle'},
             {title:'Listar escuela', icon:'fas fa-list'},
-           { title:'habilitar escuela', icon:'fas fa-school'},
+            { title:'habilitar escuela', icon:'fas fa-school'},
             {title:'Deshabilitar escuela', icon:'fas fa-school'}
             ],
         itemsCurso: [
