@@ -4,7 +4,7 @@
                 <v-col cols="2" >
                 </v-col>
                 <v-col  cols="3" >
-                   <v-card elevation="1" shaped> 
+                   <v-card elevation="1"  min-width="350px" color=""> 
                         <v-card-title
                         class="headline primary text--center"
                         primary-title>
@@ -19,11 +19,11 @@
                         </v-container >
                         <v-divider></v-divider>
                         <v-container fluid class="px-5 text-left">
-                            <p class="font-weight-black">Nombre:</p>
-                            <p class="font-weight-black">Cargo:</p>
-                            <p class="font-weight-black">Carrera:</p>
-                            <p class="font-weight-black">Correo:</p>
-                            
+                            <p class="font-weight-black">Nombre: {{ datosUsuario.nombre }} </p>
+                            <p class="font-weight-black">Rol: {{ datosUsuario.rol}}</p>
+                            <p class="font-weight-black">Escuela:  {{datosUsuario.escuela  }}</p>
+                            <p class="font-weight-black">Correo: {{ datosUsuario.email }}</p>
+
                         </v-container>
 
                     </v-card>
@@ -32,57 +32,67 @@
                 <v-col cols="1"></v-col>
                 <v-col cols="4" >
                     <v-card elevation="1" shaped>
-                        <v-card-title
-                            class="headline primary text--center"
-                            primary-title
-                            >
-                            <h5 class="white--text ">Editar perfil</h5>
+                    <v-card-title  class="headline primary text--center" primary-title > 
+                        <h5 class="white--text ">Modificar Usuario</h5>
                             </v-card-title>
-                            <v-form>
-                                <v-container class="px-10 pt-10">
-                                    <v-text-field 
-                                        label="Nombre"
+                                <v-form @submit.prevent="modificarUsuario" class=" px-10 pt-8 "  >
+                                        <v-text-field v-model="datosUsuarioModificar.nombre" label="Nombre de usuario" outlined
+                                          color="secondary"
+                                          :rules="[() => !!datosUsuario.nombre ]"
+                                          prepend-inner-icon="mdi-account"
+                                        ></v-text-field>
+
+                                        <v-select  v-model="datosUsuarioModificar.escuela"
+                                        :items="listaEscuela"
+                                        item-text="nombre"
+                                        item-value="id"
+                                        label="Escuela"
                                         outlined
-                                        color="secondary"
-                                        prepend-inner-icon="mdi-account-circle"
-                                    ></v-text-field>
-                                    <v-text-field 
-                                        label="Correo"
+                                        prepend-inner-icon="mdi-school"
+                                        ></v-select>
+
+                                        <v-select v-model="datosUsuarioModificar.role"
+                                        label="Rol" 
+                                        :items="roles"
                                         outlined
+                                        prepend-inner-icon="mdi-account-tie"
+                                        ></v-select>
+                                      <v-file-input  accept="image/png, image/jpeg, image/bmp" 
+                                        label="Seleccione una imagen"
                                         color="secondary"
-                                        prepend-inner-icon="mdi-email"
-                                    ></v-text-field>
-                                    <v-text-field 
-                                        :prepend-inner-icon="mostrar ? 'mdi-eye' : 'mdi-eye-off'"
+                                        outlined
+                                        prepend-icon=""   
+                                        prepend-inner-icon="mdi-camera"
+                                        v-model="datosUsuarioModificar.imagen">
+                                        </v-file-input>
+
+                                      <v-text-field 
+                                          v-model="datosUsuarioModificar.correo"
+                                          label="Correo Electronico"
+                                          outlined
+                                          color="secondary"
+                                          prepend-inner-icon="mdi-email"
+                                      ></v-text-field>
+
+                                      <v-text-field v-model="datosUsuarioModificar.contrasena" label="Contraseña "
+                                        :prepend-inner-icon= "mostrar ? 'mdi-eye' : 'mdi-eye-off'"
                                         :type="mostrar ? 'text' : 'password'"
-                                        label="Contraseña"
-                                        color="secondary"
                                         outlined
-                                        @click:prepend-inner= "mostrar = !mostrar"
-                                    ></v-text-field>
+                                        color="secondary"
+                                        hint="Al menos 8 caracteres"
+                                        @click:prepend-inner="mostrar = !mostrar"
+                                      ></v-text-field>
 
-                                      <v-file-input 
-                                      accept="image/png, image/jpeg, image/bmp" 
-                                      label="Seleccione una imagen"
-                                      color="secondary"
-                                    outlined
-                                    prepend-icon=""
-                                        
-                                    prepend-inner-icon="mdi-camera"></v-file-input>
+                                      <div style="text-align:right;">
+                                          
+                                                <v-btn rounded color="primary" class="mb-4 ml-2"    type="submit">
+                                                    <h4 class="white--text">Modificar</h4>
+                                                </v-btn>
+                                      </div>
+                              </v-form> 
 
-                                    
-                                </v-container>
-                                <v-container class="px-10">
-                                    <v-btn rounded large block color="primary" 
-                                        :loading="verificandoLogin"
-                                        >
-                                        <h4 class="white--text">Modificar Perfil</h4>
-                                    </v-btn>
-                                </v-container>
-                            </v-form> 
-                        
-                            
-                    </v-card>
+
+                          </v-card>
 
                 </v-col>
                 <v-col cols="2">
@@ -92,14 +102,151 @@
 </template>
 
 <script>
+import { mapState,mapMutations } from 'vuex'
+import axios from 'axios'
 export default {
-    data: () => ({
-        nombre:'',
-        email:'',
-        contraseña:'',
-        mostrar: false,
+    data() {
+        return {
 
-      
-    }),
+            mostrar: false, 
+            datosUsuarioModificar:[ {nombre:''},{escuela:''},{role:''},{correo:''},{contrasena:''} ,{imagen:''}],
+            datosUsuario:[], 
+            datosUsuarioAux:[],
+            // miUsuario: null, 
+            listaEscuela:[
+                { text: 'ID',align: 'start',value: 'id',sortable: false},
+                { text: 'Nombre', value: 'nombre',sortable: false, },                
+            ],            
+            listaEscuelaAux:[],
+            roles: ['Administrador', 'Secretaría de Escuela', 'Profesor'],   
+            reglas:[
+                value => !!value || 'Requerido.',
+                value => (value && value.length >= 8) || 'Minimo 8 characters',
+            ],
+            reglasEmail: [
+                v => !!v || 'E-mail is required',
+                v => /.+@utalca.cl/.test(v) || 'E-mail must be valid',
+            ],
+
+            // ==================================
+            // variables para la modificacion de usuario
+            listaUsuarios:[],
+            listaUsuariosAux:[],
+        }
+    },
+    computed:{
+        ...mapState(['usuario']),
+       
+    },
+     created() {
+         
+         this.obtenerEscuelas();
+        this.obtenerUsuario();
+     },
+    methods:{
+        obtenerUsuario(){
+            // idUsuario=  this.$store.state.usuario.user.id;
+            // console.log(this.$store.state.usuario.user)
+            
+            var url =`http://127.0.0.1:8000/api/v1/usuario/${this.$store.state.usuario.user.id}`;
+            axios.get(url,this.$store.state.config)
+            .then((result)=>{
+            if (result.statusText=='OK') {
+                this.datosUsuarioAux=result.data;
+                if (this.datosUsuarioAux == "admin") {
+                    this.datosUsuarioAux.role= this.roles[0];
+                };
+                if (this.datosUsuarioAux.rol  == "secretaria de escuela") {
+                    this.datosUsuarioAux.rol= this.roles[1];
+                };
+                if (this.datosUsuarioAux.rol  == "profesor") {
+                    this.datosUsuarioAux.role= this.roles[1];
+                };
+                this.listaEscuela.forEach(element => {
+                    if(element.id == this.datosUsuarioAux.escuela){
+                        this.datosUsuarioAux.escuela = element.nombre;
+                    }
+                    
+                });
+
+                this.datosUsuario = this.datosUsuarioAux           
+            }
+            }).catch((err)=>{
+                console.log(err)
+            });
+        },
+
+        obtenerEscuelas(){
+            this.listaEscuelaAux = [];
+            var url = 'http://127.0.0.1:8000/api/v1/escuela';
+            axios.get(url,this.$store.state.config)
+            .then((result)=>{
+                for (let index = 0; index < result.data.length; index++) {
+                    const element = result.data[index];
+                    let escuela = {
+                        id: element.id,
+                        nombre: element.nombre,
+                    };
+                    // console.log(escuela);
+                    this.listaEscuelaAux[index]=escuela;
+                    }
+                    this.listaEscuela = this.listaEscuelaAux;
+                    // console.log(this.listaEscuela )
+                }
+                );
+      },
+
+      modificarUsuario(){
+            console.log('modificar usuario')
+             console.log(this.datosUsuarioModificar)
+            var aux;
+            if ( this.datosUsuarioModificar.role == "Administrador") {
+                aux = "admin"
+            };
+            if ( this.datosUsuarioModificar.role == "Secretaría de Escuela") {
+                aux = "secretaria de escuela"
+            };
+            if ( this.datosUsuarioModificar.role == "Profesor") {
+                aux = "profesor"
+            };
+
+            var url =`http://127.0.0.1:8000/api/v1/usuario/${this.datosUsuario.id}`;
+            let put ={
+                "nombre": this.datosUsuarioModificar.nombre,
+                "escuela": this.datosUsuarioModificar.escuela,
+                "rol": aux,
+                "foto": null,
+                "email":this.datosUsuarioModificar.correo,
+                "password": this.datosUsuarioModificar.contraseña,
+            }
+
+            console.log(put);
+            axios.put(url,put,this.$store.state.config)
+            .then((result)=>{
+            if (result.statusText=='OK') {
+                //  console.log(result.data)
+                 this.obtenerUsuario();
+                this.resetModificacionUsuario();
+            }
+            }).catch((err)=>{
+                console.log(err)
+            });
+        },
+        resetModificacionUsuario(){
+            this.datosUsuarioModificar.nombre='';
+            this.datosUsuarioModificar.escuela='';
+            this.datosUsuarioModificar.role='';
+            this.datosUsuarioModificar.correo='';
+            this.datosUsuarioModificar.contrasena='';
+            this.datosUsuarioModificar.imagen=null;
+            
+         }
+    
+        
+    
+
+    }
+
+
 }
 </script>

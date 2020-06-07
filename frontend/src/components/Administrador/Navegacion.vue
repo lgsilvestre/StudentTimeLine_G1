@@ -3,12 +3,12 @@
         hide-overlay
         src="@/assets/Globales/background-panel-02.jpg"
         >
-        <v-list-item class="px-2" @click="verPerfil">
+        <v-list-item class="px-2" v-on="on" to="/administrador/perfil">
             <v-list-item-avatar >
                 <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
             </v-list-item-avatar>
 
-        <v-list-item-title class="white--text" style="font-size: 120%;text-shadow: #555 2px 2px 3px;">John Leider</v-list-item-title>
+        <v-list-item-title class="white--text" style="font-size: 120%;text-shadow: #555 2px 2px 3px;">{{ datosUsuario.nombre }}</v-list-item-title>
 
         </v-list-item>
 
@@ -160,11 +160,14 @@
 
 
 <script>
-import {mapState} from 'vuex';
+import { mapState,mapMutations } from 'vuex'
+import axios from 'axios'
 export default {
     name:'Navegacion',
     data() {
         return {
+            datosUsuario:[], 
+            datosUsuarioAux:[],
             drawer: true,
             on: '',
             itemsUsuario: [
@@ -225,7 +228,27 @@ export default {
     icons:{
         iconfont: (['mdiSvg', 'mdi','mdiSvg' , 'md' , 'fa' ,'fa4' ,'faSvg'])
     },
+    created() {
+         
+        this.obtenerUsuario();
+     },
     methods: {
+        obtenerUsuario(){
+            // idUsuario=  this.$store.state.usuario.user.id;
+            // console.log(this.$store.state.usuario.user)
+            
+            var url =`http://127.0.0.1:8000/api/v1/usuario/${this.$store.state.usuario.user.id}`;
+            axios.get(url,this.$store.state.config)
+            .then((result)=>{
+            if (result.statusText=='OK') {
+                this.datosUsuarioAux=result.data; 
+                this.datosUsuario = this.datosUsuarioAux           
+            }
+            }).catch((err)=>{
+                console.log(err)
+            });
+        },
+
         CrearEscuela(){
             console.log('crear Escuela')
         },

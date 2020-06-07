@@ -5,6 +5,7 @@ import router from '@/router'
 Vue.use(Vuex)
 
 
+
 export default new Vuex.Store({
     state: {
         status: '',
@@ -28,77 +29,24 @@ export default new Vuex.Store({
     },
 
     mutations: {
-        // listarUsuario(state) {
-        //     // console.log(state.prueba)
-        //     var url = 'http://127.0.0.1:8000/api/v1/usuario';
-        //     axios.get(url, state.config).then(res => {
-        //         this.Usuarios = res.data
-        //         console.log(res.data)
-        //     })
-        // },
-
-                      }
-                  }
-              }
-          });
-      },
-      unLogin(state){
-        //esta funcionalidad se agregara mas adelante cuando el backend tenga lista esta funcionalidad
-      },
-      
-      
-      registrarUsuario(state,nuevoUsuario){
-        var aux;
-        if(nuevoUsuario.role=="Administrador"){
-          aux="admin"
-        };   
-        if(nuevoUsuario.role=="Secretaría de Escuela"){
-          aux="secretaria de escuela"
-        }; 
-        if(nuevoUsuario.role=="Profesor"){
-          aux="profesor"
-        };
-        let post ={
-          "foto": null,
-          "nombre": nuevoUsuario.nombre,
-          "escuela": nuevoUsuario.escuela,
-          "role": aux,  
-          "email": nuevoUsuario.correo,
-          "password": nuevoUsuario.contrasena,
-        }
-        var url = 'http://127.0.0.1:8000/api/v1/usuario';
-        console.log(post);
-        axios.post(url,post,state.config)
-          .then((result)=>{
-            console.log(result.statusText);
-          });
-      },
-      updateDatosUsuarioPerfil(state,datosUsuario){
-        console.log(state.tk);
-        let put ={
-          "nombre": datosUsuario.nombre,
-          "escuela": null,
-          "role": null,
-          "foto": null,
-          "email": datosUsuario.correo,
-          "password": datosUsuario.contrasena,
-        }
-        var url = 'http://127.0.0.1:8000/api/v1/usuario/'+state.usuario.data.user.id;
-        console.log(state.config);
-        axios.put(url,put,state.config)
-          .then((result)=>{
-            console.log(result.statusText);
-          });
-      },
-      setDrawelAdmin(state) {
-        state.drawelAdmin = !state.drawelAdmin;
-        console.log('pucha');
-      },
-     
-  },
-
+        login(state, lista) { //funcion de login
+            console.log(lista.email);
+            console.log(lista.pass);
+            let post = {
+                "email": lista.email,
+                "password": lista.pass,
+            };
+            var url = 'http://127.0.0.1:8000/api/v1/auth/login';
+            axios.post(url, post).then((result) => {
+                state.usuario = result.data;
+                state.tk = 'Bearer ' + state.usuario.token;
+                state.config.headers.Authorization = state.tk;
+                if (state.usuario.user.rol == "admin") {
+                    //redireccionamiento hacia el usuario administrador
                     state.admin = true;
                     router.push({ path: '/administrador' });
+
+
                 } else {
                     if (state.usuario.user.rol == "secretaria de escuela") {
                         //redireccionamiento hacia el usuario secretaria de escuela
@@ -119,19 +67,30 @@ export default new Vuex.Store({
             //esta funcionalidad se agregara mas adelante cuando el backend tenga lista esta funcionalidad
         },
 
-
         registrarUsuario(state, nuevoUsuario) {
             console.log(state.tk);
+            var aux;
+            if (nuevoUsuario.role == "Administrador") {
+                aux = "admin"
+            };
+            if (nuevoUsuario.role == "Secretaría de Escuela") {
+                aux = "secretaria de escuela"
+            };
+            if (nuevoUsuario.role == "Profesor") {
+                aux = "profesor"
+            };
             let post = {
                 "foto": null,
                 "nombre": nuevoUsuario.nombre,
-                "carrera": nuevoUsuario.escuela,
-                "rol": nuevoUsuario.rol,
+                "escuela": nuevoUsuario.escuela,
+                "role": aux,
                 "email": nuevoUsuario.correo,
                 "password": nuevoUsuario.contrasena,
             }
-            var url = 'http://127.0.0.1:8000/api/v1/User';
-            console.log(state.config);
+            var url = 'http://127.0.0.1:8000/api/v1/usuario';
+            // console.log(state.config);
+            console.log(url)
+            console.log(post)
             axios.post(url, post, state.config)
                 .then((result) => {
                     console.log(result.statusText);
@@ -139,7 +98,6 @@ export default new Vuex.Store({
         },
         updateDatosUsuarioPerfil(state, datosUsuario) {
             console.log(state.tk);
-            console.log(datosUsuario);
             let put = {
                 "nombre": datosUsuario.nombre,
                 "escuela": null,
@@ -159,7 +117,6 @@ export default new Vuex.Store({
             state.drawelAdmin = !state.drawelAdmin;
             console.log('pucha');
         },
-
     },
 
     actions: {},
