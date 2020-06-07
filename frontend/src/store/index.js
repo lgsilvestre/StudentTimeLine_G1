@@ -68,49 +68,53 @@ export default new Vuex.Store({
       },
       
       
-      registrarUsuario(state,nuevoUsuario){
+      registrarUsuario(state, nuevoUsuario) {
+        console.log(state.tk);
         var aux;
-        if(nuevoUsuario.role=="Administrador"){
-          aux="admin"
-        };   
-        if(nuevoUsuario.role=="Secretaría de Escuela"){
-          aux="secretaria de escuela"
-        }; 
-        if(nuevoUsuario.role=="Profesor"){
-          aux="profesor"
+        if (nuevoUsuario.role == "Administrador") {
+            aux = "admin"
         };
-        let post ={
-          "foto": null,
-          "nombre": nuevoUsuario.nombre,
-          "escuela": nuevoUsuario.escuela,
-          "role": aux,  
-          "email": nuevoUsuario.correo,
-          "password": nuevoUsuario.contrasena,
+        if (nuevoUsuario.role == "Secretaría de Escuela") {
+            aux = "secretaria de escuela"
+        };
+        if (nuevoUsuario.role == "Profesor") {
+            aux = "profesor"
+        };
+        let post = {
+            "foto": null,
+            "nombre": nuevoUsuario.nombre,
+            "escuela": nuevoUsuario.escuela,
+            "role": aux,
+            "email": nuevoUsuario.correo,
+            "password": nuevoUsuario.contrasena,
         }
         var url = 'http://127.0.0.1:8000/api/v1/usuario';
-        console.log(post);
-        axios.post(url,post,state.config)
-          .then((result)=>{
-            console.log(result.statusText);
-          });
-      },
-      updateDatosUsuarioPerfil(state,datosUsuario){
+        // console.log(state.config);
+        console.log(url)
+        console.log(post)
+        axios.post(url, post, state.config)
+            .then((result) => {
+                console.log(result.statusText);
+            });
+    },
+    updateDatosUsuarioPerfil(state, datosUsuario) {
         console.log(state.tk);
-        let put ={
-          "nombre": datosUsuario.nombre,
-          "escuela": null,
-          "role": null,
-          "foto": null,
-          "email": datosUsuario.correo,
-          "password": datosUsuario.contrasena,
+        let put = {
+            "nombre": datosUsuario.nombre,
+            "escuela": null,
+            "rol": null,
+            "foto": null,
+            "email": datosUsuario.correo,
+            "password": datosUsuario.contrasena,
         }
-        var url = 'http://127.0.0.1:8000/api/v1/usuario/'+state.usuario.data.user.id;
+        var url = 'http://127.0.0.1:8000/api/v1/usuario/' + state.usuario.data.user.id;
         console.log(state.config);
-        axios.put(url,put,state.config)
-          .then((result)=>{
-            console.log(result.statusText);
-          });
-      },
+        axios.put(url, put, state.config)
+            .then((result) => {
+                console.log(result.statusText);
+            });
+    },
+      
       setDrawelAdmin(state) {
         state.drawelAdmin = !state.drawelAdmin;
         console.log('pucha');

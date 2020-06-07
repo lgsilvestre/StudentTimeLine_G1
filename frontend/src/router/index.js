@@ -48,6 +48,16 @@ Vue.use(VueRouter)
           admin: true
         },
       },
+      {
+        //Enrutamiento de la vista del administrador
+        path: 'perfil',
+        name: 'perfilAdministrador',
+        component: () =>
+            import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/BodyGlobal.vue'),
+        meta: {
+            admin: true
+        },
+      },
     ]
   },
   //enrutamiento de las subrutas del administrador

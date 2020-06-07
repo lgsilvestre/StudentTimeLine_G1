@@ -3,7 +3,7 @@
     hide-overlay
     src="@/assets/Globales/background-panel-02.jpg"
     >
-    <v-list-item class="px-2 py-1 difuminado" @click="verPerfil">
+    <v-list-item class="px-2 py-1 difuminado" to="/administrador/perfil">
         <v-list-item-avatar >
             <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
         </v-list-item-avatar>

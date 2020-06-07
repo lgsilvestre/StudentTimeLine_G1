@@ -124,7 +124,103 @@
                             </v-form>
                         </v-card-text>
                     </v-card>
-                </v-dialog>                
+                </v-dialog> 
+                 <v-dialog v-model="modUsuarioActivo" persistent max-width="500px">
+                <v-card elevation="1" shaped>
+                    <v-card-title  class="headline primary text--center" primary-title > 
+                        <h5 class="white--text ">Modificar Usuario</h5>
+                            </v-card-title>
+                                <v-form @submit.prevent="modificarUsuario" class=" px-10 pt-8 "  >
+                                        <v-text-field v-model="datosUsuario.nombre" label="Nombre de usuario" outlined
+                                          color="secondary"
+                                          :rules="[() => !!datosUsuario.nombre ||'Requerido']"
+                                          prepend-inner-icon="mdi-account"
+                                        ></v-text-field>
+
+                                        <v-select  v-model="datosUsuario.escuela"
+                                        :items="listaEscuela"
+                                        item-text="nombre"
+                                        item-value="id"
+                                        label="Escuela"
+                                        outlined
+                                        :rules="[() => !!datosUsuario.escuela ||'Requerido']"
+                                        prepend-inner-icon="mdi-school"
+                                        ></v-select>
+
+                                        <v-select v-model="datosUsuario.role"
+                                        label="Rol" 
+                                        :items="roles"
+                                        :rules="[() => !!datosUsuario.role ||'Requerido']"
+                                        outlined
+                                        prepend-inner-icon="mdi-account-tie"
+                                        ></v-select>
+                                      <v-file-input  accept="image/png, image/jpeg, image/bmp" 
+                                        label="Seleccione una imagen"
+                                        color="secondary"
+                                        outlined
+                                        prepend-icon=""   
+                                        prepend-inner-icon="mdi-camera"
+                                        v-model="datosUsuario.imagen">
+                                        </v-file-input>
+
+                                      <v-text-field 
+                                          v-model="datosUsuario.correo"
+                                          label="Correo Electronico"
+                                          :rules="reglasEmail"
+                                          outlined
+                                          color="secondary"
+                                          prepend-inner-icon="mdi-email"
+                                      ></v-text-field>
+
+                                      <v-text-field v-model="datosUsuario.contrasena" label="Contraseña "
+                                        :prepend-inner-icon= "mostrar ? 'mdi-eye' : 'mdi-eye-off'"
+                                        :type="mostrar ? 'text' : 'password'"
+                                        outlined
+                                        color="secondary"
+                                        hint="Al menos 8 caracteres"
+                                        @click:prepend-inner="mostrar = !mostrar"
+                                      ></v-text-field>
+
+                                      <div style="text-align:right;">
+                                          <v-btn rounded color="red"   class="mb-4 "  @click="resetModificacionUsuario">  
+                                                    <h4 class="white--text">Cancelar</h4>
+                                            </v-btn>
+                                                <v-btn rounded color="primary" class="mb-4 ml-2"    type="submit">
+                                                    <h4 class="white--text">Modificar</h4>
+                                                </v-btn>
+                                      </div>
+                              </v-form> 
+
+
+                          </v-card>
+                        
+                        </v-dialog>
+
+                        <v-dialog v-model="dialogEliminar" persistent max-width="450px">
+                            <v-card class="mx-auto" max-width="450"  >
+                                <v-card-title
+                                    class="headline primary text--center"
+                                    primary-title
+                                    >
+                                    <h5 class="white--text ">Eliminar Usuario</h5>
+                                    </v-card-title> 
+                                    <!-- <v-container fluid class=" text-left"> -->
+                                    <v-card-title class="text-justify" style="font-size: 100%;">Esta seguro que desea eliminar el siguiente Usuario?</v-card-title>
+                                    <v-card-text>Nombre : {{ this.datosUsuario.nombre }}</v-card-text>
+                                    <v-card-text>Rol : {{ this.datosUsuario.role }}</v-card-text>
+                                    <v-card-text>Email : {{ this.datosUsuario.correo }}</v-card-text>
+                                    <!-- </v-container > -->
+                                    <div style="text-align:right;">
+                                        <v-btn rounded color="red" class=" mb-4 "  @click="dialogEliminar = false">
+                                            <h4 class="white--text">Cancelar</h4>
+                                        </v-btn>
+                                        <v-btn rounded color="primary"   class=" mb-4 ml-2 mr-2" @click="eliminarUsuario()">
+                                            <h4 class="white--text">Eliminar</h4>
+                                        </v-btn>
+                                    </div> 
+                            </v-card>
+                        </v-dialog> 
+               
             </v-card-title>                                                                                   
         </v-img>
 
@@ -132,7 +228,7 @@
         <!-- propiedades tablas -->
         <v-data-table        
             :headers="columnas"
-            :items="datosAlumnos"
+            :items="listaUsuarios"
             :search="search"
             :items-per-page="10"            
         >            
@@ -141,7 +237,7 @@
                 <v-btn color="white" fab small depressed class="mr-2 py-2">
                     <v-icon     
                     color="primary"         
-                    @click="modificarUsuario(item)"
+                    @click="MostrarPanelModificar(item)"
                     >
                     fas fa-edit
                     </v-icon>
@@ -150,7 +246,7 @@
                 <v-btn color="white" fab small depressed class="mr-2 py-2">
                     <v-icon
                     color="warning"         
-                    @click="eliminarUsuario(item)"
+                    @click="EliminarUsuario(item)"
                     >
                     fas fa-trash-alt
                     </v-icon>
@@ -193,20 +289,27 @@ export default {
                 {text:'Correo', value:'correo'},
                 {text:'Opciones', value:'opciones'},
             ],
-            datosAlumnos:[
+            // ==================================
+            // variables para la modificacion de usuario
+            listaUsuarios:[],
+            listaUsuariosAux:[],
+            modUsuarioActivo: false,
+            dialogEliminar: false,
+            // datosAlumnos:[
 
-                /* Datos de prueba */
-                {nombre: 'pinky', escuela: 'Ingenieria Civil en Computacion', role: 'admin', correo: 'mpizarro16@utalca.cl'},
-                {nombre: 'pinky', escuela: 'Ingenieria Civil en Computacion', role: 'admin', correo: 'mpizarro16@utalca.cl'},
-                {nombre: 'pinky', escuela: 'Ingenieria Civil en Computacion', role: 'admin', correo: 'mpizarro16@utalca.cl'},
-                {nombre: 'pinky', escuela: 'Ingenieria Civil en Computacion', role: 'admin', correo: 'mpizarro16@utalca.cl'},
-                {nombre: 'pinky', escuela: 'Ingenieria Civil en Computacion', role: 'admin', correo: 'mpizarro16@utalca.cl'},
-                {nombre: 'pinky', escuela: 'Ingenieria Civil en Computacion', role: 'admin', correo: 'mpizarro16@utalca.cl'},
-            ],
+            //     /* Datos de prueba */
+            //     {nombre: 'pinky', escuela: 'Ingenieria Civil en Computacion', role: 'admin', correo: 'mpizarro16@utalca.cl'},
+            //     {nombre: 'pinky', escuela: 'Ingenieria Civil en Computacion', role: 'admin', correo: 'mpizarro16@utalca.cl'},
+            //     {nombre: 'pinky', escuela: 'Ingenieria Civil en Computacion', role: 'admin', correo: 'mpizarro16@utalca.cl'},
+            //     {nombre: 'pinky', escuela: 'Ingenieria Civil en Computacion', role: 'admin', correo: 'mpizarro16@utalca.cl'},
+            //     {nombre: 'pinky', escuela: 'Ingenieria Civil en Computacion', role: 'admin', correo: 'mpizarro16@utalca.cl'},
+            //     {nombre: 'pinky', escuela: 'Ingenieria Civil en Computacion', role: 'admin', correo: 'mpizarro16@utalca.cl'},
+            // ],
         }
 
     },
     created () {      
+        this.obtenerUsuarios();
         this.obtenerEscuelas();
     },
     methods: {
@@ -218,20 +321,20 @@ export default {
             };
         },
         resetRegistrarUsuario(){
-        this.dialog = false;
-        this.datosUsuario.nombre='';
-        this.datosUsuario.escuela='';
-        this.datosUsuario.role='';
-        this.datosUsuario.correo='';
-        this.datosUsuario.contrasena='';
-        this.datosUsuario.imagen='';
-        this.$refs.form.resetValidation();
-        },
+            this.dialog = false;
+            this.datosUsuario.nombre='';
+            this.datosUsuario.escuela='';
+            this.datosUsuario.role='';
+            this.datosUsuario.correo='';
+            this.datosUsuario.contrasena='';
+            this.datosUsuario.imagen=null;
+            // this.$refs.form.resetValidation();
+      },
 
-        obtenerEscuelas(){
-        this.listaEscuelaAux = [];
-        var url = 'http://127.0.0.1:8000/api/v1/escuela';
-        axios.get(url,this.$store.state.config)
+      obtenerEscuelas(){
+            this.listaEscuelaAux = [];
+            var url = 'http://127.0.0.1:8000/api/v1/escuela';
+            axios.get(url,this.$store.state.config)
             .then((result)=>{
                 for (let index = 0; index < result.data.length; index++) {
                 const element = result.data[index];
@@ -243,8 +346,146 @@ export default {
                 this.listaEscuelaAux[index]=escuela;
                 }
                 this.listaEscuela = this.listaEscuelaAux;
-            });
+            }
+            );
+      },
+      /**
+       * Obtiene una lista de todos los usuarios registrados en la base de datos.
+       * Desde el bakend no envian: contraseña y (rol) aun esta por definir.
+       */
+       obtenerUsuarios(){
+            this.listaUsuariosAux = [];
+            var url = 'http://127.0.0.1:8000/api/v1/usuario';
+            axios.get(url,this.$store.state.config)
+            .then((result)=>{
+                for (let index = 0; index < result.data.length; index++) {
+                    const element = result.data[index];
+                    let usuario = {
+                        id: element.id,
+                        nombre: element.nombre,
+                        role: element.rol,
+                        imagen: element.imegen,
+                        correo: element.email,
+                        escuela: element.escuela,
+                    };
+                    this.listaUsuariosAux[index]=usuario;
+                }
+                this.listaUsuarios = this.listaUsuariosAux;
+            }
+            );
         },
+        /**
+       * Abre el panel para modificar los datos de usuario, 
+       * este panel no tendra registrado la contraseña, ni tampoco el rol,
+       * este ultimo debido a que (admin, profesor, secretaria de escuela) son diferentes a los que mostramos,
+       * para solucionar este problema, se deferan definir nuevamente los roles.
+       */
+        MostrarPanelModificar(item){
+            this.modUsuarioActivo = true;
+            this.datosUsuario.id= item.id;
+            this.datosUsuario.nombre= item.nombre;
+            this.datosUsuario.escuela= item.escuela;
+            this.datosUsuario.imagen= item.imagen;
+            this.datosUsuario.correo= item.correo;
+            this.datosUsuario.contrasena= item.contrasena;
+            if (item.role == "admin") {
+                this.datosUsuario.role= this.roles[0];
+            };
+            if (item.role  == "secretaria de escuela") {
+                this.datosUsuario.role= this.roles[1];
+            };
+            if (item.role  == "profesor") {
+                this.datosUsuario.role= this.roles[1];
+            };
+        },
+
+        resetModificacionUsuario(){
+            this.modUsuarioActivo = false;
+            this.datosUsuario.nombre='';
+            this.datosUsuario.escuela='';
+            this.datosUsuario.role='';
+            this.datosUsuario.correo='';
+            this.datosUsuario.contrasena='';
+            this.datosUsuario.imagen=null;
+            
+        },
+        modificarUsuario(){
+            console.log('modificar usuario')
+            console.log(this.datosUsuario)
+            var aux;
+            if ( this.datosUsuario.role == "Administrador") {
+                aux = "admin"
+            };
+            if ( this.datosUsuario.role == "Secretaría de Escuela") {
+                aux = "secretaria de escuela"
+            };
+            if ( this.datosUsuario.role == "Profesor") {
+                aux = "profesor"
+            };
+
+            var url =`http://127.0.0.1:8000/api/v1/usuario/${this.datosUsuario.id}`;
+            let put ={
+                "nombre": this.datosUsuario.nombre,
+                "escuela": this.datosUsuario.escuela,
+                "role": aux,
+                "foto": null,
+                "email":this.datosUsuario.correo,
+                "password": this.datosUsuario.contraseña,
+            }
+
+            console.log(put);
+            axios.put(url,put,this.$store.state.config)
+            .then((result)=>{
+            if (result.statusText=='OK') {
+                //  console.log(result.data)
+                 this.obtenerUsuarios(); 
+                 this.resetModificacionUsuario();
+            }
+            }).catch((err)=>{
+                console.log(err)
+            });
+
+        },
+        resetEliminarUsuario(){
+            this.dialogEliminar = false;
+            this.datosUsuario.nombre='';
+            this.datosUsuario.escuela='';
+            this.datosUsuario.role='';
+            this.datosUsuario.correo='';
+            this.datosUsuario.contrasena='';
+            this.datosUsuario.imagen=null;
+        },
+
+        eliminarUsuario(){
+            var url = 'http://127.0.0.1:8000/api/v1/usuario/'+this.datosUsuario.id;
+                axios.delete(url,this.$store.state.config)
+                .then((result)=>{
+                if (result.statusText=='OK') {
+                    this.obtenerUsuarios();
+                    this.resetEliminarUsuario(); 
+                }
+                });
+            
+        },
+        EliminarUsuario(item){
+            // console.log(item.id);
+            this.datosUsuario.id= item.id;
+            this.datosUsuario.nombre= item.nombre;
+            this.datosUsuario.escuela= item.escuela;
+            this.datosUsuario.imagen= item.imagen;
+            this.datosUsuario.correo= item.correo;
+            this.datosUsuario.contrasena= item.contrasena;
+            if (item.role == "admin") {
+                this.datosUsuario.role= this.roles[0];
+            };
+            if (item.role  == "secretaria de escuela") {
+                this.datosUsuario.role= this.roles[1];
+            };
+            if (item.role  == "profesor") {
+                 this.datosUsuario.role= this.roles[1];
+            };
+            this.dialogEliminar = true;
+      },
     }
 }
 </script>
