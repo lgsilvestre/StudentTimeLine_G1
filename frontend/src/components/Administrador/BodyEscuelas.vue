@@ -101,12 +101,11 @@
                     >
                       <h5 class="white--text ">Modificar Escuela</h5>
                     </v-card-title>
-                      <v-card-text class="px-12 mt-3" >
                           <v-form 
                           ref="form"
                           >
+                          <v-container class="px-10 pt-10">
                             <v-text-field
-                                class="mx-2 mt-5"
                                 v-model="escuelaEditar.nombre"
                                 label="Nombre de Escuela"
                                 outlined
@@ -114,14 +113,15 @@
                             >
                             </v-text-field>                                  
                             <v-text-field
-                            class="mx-2"
-                            v-model="escuelaEditar.cod_car"
-                            label="Codigo Carrera"                                      
-                            outlined
-                            prepend-inner-icon="fas fa-hashtag"
+                              v-model="escuelaEditar.cod_car"
+                              label="Codigo Carrera"                                      
+                              outlined
+                              prepend-inner-icon="fas fa-hashtag"
                             >
-                            </v-text-field>                                
-                            <v-container class="px-10" style="text-align:right;">
+                            </v-text-field>   
+                          </v-container>         
+
+                            <v-container class="px-10 pb-5" style="text-align:right;">
                                 <v-btn rounded color="warning" @click="dialogModificar = false">
                                   <h4 class="white--text">Cancelar</h4>
                                 </v-btn>
@@ -130,14 +130,12 @@
                                 </v-btn>
                             </v-container>  
                           </v-form>
-                      </v-card-text>
                   </v-card>
                   </v-dialog>
                   <v-dialog v-model="dialogEliminar" persistent max-width="500px">
                       <v-card
                       class="mx-auto"
                       max-width="800"
-                      shaped
                       >
                         <v-card-title
                         class="headline primary text--center"
@@ -148,12 +146,13 @@
                         <v-card-title class="text-justify" style="font-size: 110%;">Esta seguro que desea eliminar la siguiente Escuela?</v-card-title>
                         <v-card-text>Nombre Escuela: {{ escuelaEliminar.nombre }}</v-card-text>
                         <v-card-text>Codigo Carrera: {{ escuelaEliminar.cod }}</v-card-text>
-                        <v-card-text class="px-12 mt-3" >                                     
-                          <v-container class="px-10" style="text-align:right;">
+                        <v-card-text class="px-12 mt-3" >     
+
+                        <v-container class="px-10" style="text-align:right;">
                               <v-btn rounded color="warning" @click="dialogEliminar = false">
                                 <h4 class="white--text">Cancelar</h4>
                               </v-btn>
-                              <v-btn rounded color="secondary" class="ml-2" @click="borrarEscuela(escuelaEliminar)">
+                              <v-btn rounded color="secondary" class="ml-2 mr-n12" @click="borrarEscuela(escuelaEliminar)">
                                 <h4 class="white--text">Eliminar</h4>
                               </v-btn>
                             </v-container>  
