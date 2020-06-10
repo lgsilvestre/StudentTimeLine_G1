@@ -14,8 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::resource('Estudiante', 'EstudianteController' );
-
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -31,5 +29,6 @@ Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
     Route::post('/auth/refresh', 'TokensController@refreshToken');
     Route::get('/auth/logout', 'TokensController@logoutToken');
     Route::post('/auth/restartPassword', 'TokensController@restartPassword');
+    Route::resource('estudiante', 'EstudianteController' );
 });
 
