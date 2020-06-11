@@ -27,7 +27,7 @@
                                                 label="Correo"
                                                 color="secondary"
                                                 outlined
-                                                prepend-inner-icon="mdi-account-circle"
+                                                prepend-inner-icon="mdi-email"
                                             ></v-text-field>
                                         
                                             <v-btn rounded block color="primary " class=""

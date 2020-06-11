@@ -113,7 +113,7 @@
 
     </v-list>
     <template v-slot:append >
-        <v-list-item class=" difuminado" style="background-color: #FF6B6B" @click="">
+        <v-list-item class=" difuminado" style="background-color: #FF6B6B" @click="unLogin">
             <v-list-item-icon >
                 <v-icon color="white" style="font-size: 125%">fas fa-power-off</v-icon>
             </v-list-item-icon>
@@ -127,7 +127,7 @@
 
 
 <script>
-import {mapState} from 'vuex';
+import {mapState, mapMutations} from 'vuex';
 export default {
     name:'Navegacion',
     data() {
@@ -182,6 +182,7 @@ export default {
         iconfont: (['mdiSvg', 'mdi','mdiSvg' , 'md' , 'fa' ,'fa4' ,'faSvg'])
     },
     methods: {
+        ...mapMutations(['unLogin']),
         CrearEscuela(){
             console.log('crear Escuela')
         },
