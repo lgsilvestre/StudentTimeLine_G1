@@ -11,7 +11,9 @@ use Image;
 
 class UsuarioController extends Controller
 {
-  
+    /**
+     * Metodo que se encarga de bloquear las rutas del controlador Usuario
+     */
     public function __construct()
     {
         $this->middleware(['permission:create user'], ['only' => ['create', 'store']]);
@@ -19,7 +21,7 @@ class UsuarioController extends Controller
         $this->middleware(['permission:update user'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete user'], ['only' => 'delete']);
     }
-*/  
+  
     #Retorna listado de todos los usuarios
     public function index()
     {
@@ -38,6 +40,17 @@ class UsuarioController extends Controller
                 'code' => 5,
                 'message' => 'Error al solicitar peticiones a la base de datos'], 401);
         }
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit($id)
+    {
+        return response()->json([
+            'success' => false,
+            'code' => 5,
+            'message' => 'Este metodo no se encuentra implementado, por favor utilizar otro'], 401);
     }
 
     /**
@@ -68,6 +81,12 @@ class UsuarioController extends Controller
             // las siguientes validaciones es por el motivo que el administrador puede modificar todos o uno de los elementos
             //esto espesificamente evita tener errores de modificaciones en la base de datos por elementos no nules
             $usuario = User::find($id);
+            if($usuario==null){
+                return response()->json([
+                    'success' => false,
+                    'code' => 2,
+                    'message' => 'El usuario con el id '.$id.' no existe'], 401);
+            }
             if($request->nombre!=null){
                 $usuario->nombre = $request->nombre;
             }
@@ -110,6 +129,12 @@ class UsuarioController extends Controller
     {
         try{
             $user = User::findOrFail($id);
+            if($user==null){
+                return response()->json([
+                    'success' => false,
+                    'code' => 1,
+                    'message' => 'No existe ninguna usuario con esa id'], 401);
+            }
             return $user;
         //este catch permite responder directamente que problemas en la peticion SQL
         } catch(\Illuminate\Database\QueryException $ex){ 
@@ -179,13 +204,13 @@ class UsuarioController extends Controller
     {
         try{
             $user = User::find($id);
-            $user->delete();
             if($user==null){
                 return response()->json([
                     'success' => false,
-                    'code' => 5,
-                    'message' => 'No se encontro el elemento en la base de datos'], 401);
+                    'code' => 2,
+                    'message' => 'El usuario con el id '.$id.' no existe'], 401);
             }
+            $user->delete();
             return compact('user');
         //catch que se encarga en responder que paso en la sentencia sql
         } catch(\Illuminate\Database\QueryException $ex){ 
