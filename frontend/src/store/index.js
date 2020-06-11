@@ -50,10 +50,12 @@ export default new Vuex.Store({
               } else {
                   if (state.usuario.user.rol == "secretaria de escuela") {
                       //redireccionamiento hacia el usuario secretaria de escuela
+                      state.secretariaEscuela=true;
                       router.push({ path: '/secretariaEscuela' });
                   } else {
                       if (state.usuario.user.rol == "profesor") {
                           //redireccionamiento hacia el usuario profesor
+                          state.profesor=true;
                           router.push({ path: '/profesor' });
                       } else {
                           //alerta a usuarios que no estan registrados, esto se solucionara la proxima semana

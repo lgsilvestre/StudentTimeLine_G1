@@ -12,7 +12,7 @@
     <!-- Lista general del navigation drawer -->
         <!-- Seccion de Mi Perfil -->
         <v-list >
-            <v-list-item @click="verPerfil" class="px-2 difuminado">
+            <v-list-item class="px-2 difuminado" to="/secretariaEscuela/perfil">
                 <!-- Imagen o Avatar -->
                 <v-list-item-avatar>
                     <v-img src="http://www.ingenieria.utalca.cl/Repositorio/PNsAYcfZiO2QfjGDQMIyjMOAomsLch/Ruth%20Garrido.jpg"></v-img>
@@ -22,7 +22,7 @@
             </v-list-item>
 
             <v-divider></v-divider>
-            <v-list-item @click="profesores" class="difuminado">
+            <v-list-item @click="profesores" class="difuminado"  >
                 <v-list-item-icon>
                     <v-icon color="white">fas fa-chalkboard-teacher</v-icon>
                 </v-list-item-icon>
@@ -36,7 +36,7 @@
                 <v-list-item-title class="white--text letra"><strong>Cursos</strong></v-list-item-title>                            
             </v-list-item>
 
-            <v-list-item @click="estudiantes" class="difuminado">
+            <v-list-item @click="estudiantes" class="difuminado" to="/secretariaEscuela/estudiantes">
                 <v-list-item-icon >
                     <v-icon color="white">fas fa-user-graduate</v-icon>
                 </v-list-item-icon>
@@ -60,10 +60,13 @@
         </v-list>
 
         <template v-slot:append >
-        <div >
-          <v-btn block color="primary   " @click="cerrarSesion">Cerrar sesión</v-btn>
-        </div>
-      </template>        
+        <v-list-item class=" difuminado" style="background-color: #FF6B6B" @click="">
+            <v-list-item-icon >
+                <v-icon color="white" style="font-size: 125%">fas fa-power-off</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title class="white--text letra" ><strong>Cerrar sesion</strong></v-list-item-title>
+        </v-list-item>
+        </template>       
 
     </v-navigation-drawer>
 </template>
