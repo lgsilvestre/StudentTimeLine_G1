@@ -34,7 +34,7 @@
                                 
                             </v-col>
                             <v-col  md="3" class="align-self-end" style="text-align:right;">
-                                <v-dialog v-model="dialog"  max-width="500px">
+                                <v-dialog v-model="dialogAgregarEstudiante" persistent max-width="500px">
                                     <template v-slot:activator="{ on }">
                                         <v-btn
                                         fab
@@ -53,10 +53,133 @@
                                         primary-title
                                         >
                                         <h5 class="white--text ">Agregar estudiantes</h5>
+                                        <v-spacer></v-spacer>
+                                        <v-btn
+                                            v-if="botonesAgregarEstudiantes==false"
+                                            color="primary"
+                                            elevation="0"
+                                            rounded
+                                            dense
+                                            @click="volverAgregarEstudiantes"
+                                        > 
+                                            Volver <i class="fas fa-undo-alt pl-2"></i>
+                                        </v-btn>
+                                        <v-btn
+                                            v-if="botonesAgregarEstudiantes"
+                                            color="primary"
+                                            elevation="0"
+                                            small
+                                            fab
+                                            @click="dialogAgregarEstudiante = ! dialogAgregarEstudiante"
+                                        > 
+                                            <v-icon color="warning">fas fa-times</v-icon>
+                                        </v-btn>
                                         </v-card-title>
                                         <v-form>
-                                            <v-container class="px-10">
-                                                <h2>agregando estudiantes</h2>
+                                            <v-container  v-if="botonesAgregarEstudiantes">
+                                                <v-row >
+                                                    <v-col sm="6">
+                                                        <v-btn 
+                                                        x-large
+                                                        block
+                                                        color="secondary"
+                                                        @click="mostrarAgregarEstudiantesUnico" >
+                                                            <v-icon class="pr-2">
+                                                                fas fa-user-graduate
+                                                            </v-icon>
+                                                            <h4>Individual</h4>
+                                                        </v-btn>
+                                                    </v-col>
+                                                    <v-col sm="6">
+                                                        <v-btn 
+                                                        x-large
+                                                        block
+                                                        color="secondary"
+                                                        @click="mostrarAgregarEstudiantesImportar" >
+                                                            <v-icon class="pr-2">
+                                                                fas fa-file-upload
+                                                            </v-icon>
+                                                            <h4>Importar xls</h4>
+                                                        </v-btn>
+                                                    </v-col>
+                                                </v-row>
+
+                                            </v-container>
+                                            <v-container v-if="containerAgregarEstudianteUnico">
+                                                <v-form  class=" px-10 pt-8 "  >
+                                                    <v-text-field  label="Matricula" outlined
+                                                    color="secondary"
+                                                    prepend-inner-icon="fas fa-graduation-cap"
+                                                    ></v-text-field>
+
+                                                    <v-text-field  label="Rut" outlined
+                                                    color="secondary"
+                                                    prepend-inner-icon="fas fa-address-card"
+                                                    ></v-text-field>
+
+                                                    <v-text-field  label="Nombre completo" outlined
+                                                    color="secondary"
+                                                    prepend-inner-icon="mdi-account"
+                                                    ></v-text-field>
+
+                                                    <v-text-field 
+                                                        label="Correo Electronico"
+                                                        outlined
+                                                        color="secondary"
+                                                        prepend-inner-icon="mdi-email"
+                                                    ></v-text-field>
+
+                                                    <v-text-field  label="Año ingreso" outlined
+                                                    color="secondary"
+                                                    prepend-inner-icon="fas fa-hashtag"
+                                                    ></v-text-field>
+
+                                                    <v-text-field  label="Situacion academica" outlined
+                                                    color="secondary"
+                                                    prepend-inner-icon="fas fa-address-book"
+                                                    ></v-text-field>
+
+                                                    <v-select  
+                                                    :items="listaEscuela"
+                                                    item-text="nombre"
+                                                    item-value="id"
+                                                    label="Escuela"
+                                                    outlined
+                                                    prepend-inner-icon="fas fa-book"
+                                                    ></v-select>
+                                                    <div style="text-align:right;" class="mb-1">
+                                                        <v-btn rounded color="warning" 
+                                                        @click="volverYcerrarAgregarEstudiantes"
+                                                        >
+                                                            <h4 class="white--text">Cancelar</h4>
+                                                        </v-btn>
+                                                        <v-btn rounded color="secondary" class="ml-2"   >
+                                                            <h4 class="white--text">Aceptar</h4>
+                                                        </v-btn>
+                                                    </div>
+                                                </v-form> 
+                                            </v-container>
+                                            <v-container v-if="containerAgregarEstudianteImportar" class="px-10">
+                                                <v-file-input  
+                                                class="pt-5"
+                                                label="Seleccione un archivo"
+                                                color="secondary"
+                                                outlined
+                                                prepend-icon=""   
+                                                prepend-inner-icon="fas fa-file-excel"
+                                                >
+                                                </v-file-input>
+                                                <div style="text-align:right;" class="mb-1">
+                                                    <v-btn rounded color="warning" 
+                                                    
+                                                    @click="volverYcerrarAgregarEstudiantes"
+                                                    >
+                                                        <h4 class="white--text">Cancelar</h4>
+                                                    </v-btn>
+                                                    <v-btn rounded color="secondary" class="ml-2"   >
+                                                        <h4 class="white--text">Aceptar</h4>
+                                                    </v-btn>
+                                                </div>
                                             </v-container>
                                             
                                         </v-form> 
@@ -83,9 +206,9 @@
                                         <h5 class="white--text ">Exportar estudiantes</h5>
                                         </v-card-title>
                                         <v-form>
-                                            <v-container class="px-10 ">
-                                                <h2>exportando estudiantes</h2>
-                                            </v-container>
+                                            
+                                            <h1> exportar</h1>
+                                            
                                         </v-form> 
                                     </v-card>
                                 </v-dialog>
@@ -107,10 +230,8 @@
                         fas fa-edit
                         </v-icon>
                     </v-btn>
-                    
                     </template>                                                         
                 </v-data-table>
-                    
                 </v-card>
             </v-col>
             <v-col cols="12" md="1">
@@ -128,6 +249,7 @@
         dialog: false,
         dialogModificar: false,
         dialogEliminar: false,
+        dialogAgregarEstudiante: false,
         headers: [
             { text: 'Matricula',align: 'start',value: 'matricula',sortable: true},
             { text: 'Rut', value: 'rut',sortable: true, },
@@ -139,6 +261,9 @@
             { text: 'Opciones', value: 'actions', sortable: false },
         ],
         buscar: '',
+        botonesAgregarEstudiantes: true,
+        containerAgregarEstudianteUnico:false,
+        containerAgregarEstudianteImportar:false,
         desserts:[
             {
                 matricula: '2000407026',
@@ -278,6 +403,7 @@
             
         ],
         dessertsAux:[],
+        listaEscuelaAux:[],
     }),
     computed: {
         ...mapState(['admin','secretariaEscuela'])
@@ -285,12 +411,51 @@
     watch: {
     },
     created () {
-        
+
+        this.obtenerEscuelas();
     },
     methods: {
         nada(item){
             
-        }
+        },
+        volverAgregarEstudiantes(){
+            this.botonesAgregarEstudiantes= true;
+            this.containerAgregarEstudianteUnico= false;
+            this.containerAgregarEstudianteImportar=false;
+            
+        },
+        volverYcerrarAgregarEstudiantes(){
+            this.dialogAgregarEstudiante = ! this.dialogAgregarEstudiante;
+            this.botonesAgregarEstudiantes= true;
+            this.containerAgregarEstudianteUnico= false;
+            this.containerAgregarEstudianteImportar=false;
+        },
+        mostrarAgregarEstudiantesUnico(){
+            this.botonesAgregarEstudiantes= false;
+            this.containerAgregarEstudianteUnico= true;
+        },
+        mostrarAgregarEstudiantesImportar(){
+            this.botonesAgregarEstudiantes= false;
+            this.containerAgregarEstudianteImportar= true;
+        },
+        obtenerEscuelas(){
+            this.listaEscuelaAux = [];
+            var url = 'http://127.0.0.1:8000/api/v1/escuela';
+            axios.get(url,this.$store.state.config)
+            .then((result)=>{
+                for (let index = 0; index < result.data.length; index++) {
+                const element = result.data[index];
+                let escuela = {
+                    id: element.id,
+                    nombre: element.nombre,
+                };
+                // console.log(escuela);
+                this.listaEscuelaAux[index]=escuela;
+                }
+                this.listaEscuela = this.listaEscuelaAux;
+            }
+            );
+        },
     },
 }
 </script>
