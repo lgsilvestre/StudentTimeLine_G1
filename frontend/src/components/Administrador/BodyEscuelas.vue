@@ -1,7 +1,8 @@
 <template>
   <v-container>
       <v-row >
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="3"  
+          align-self="end">
           </v-col>
           <v-col cols="12" md="6">
               <v-card>
@@ -162,8 +163,57 @@
               </v-card>
           </v-col>
           <v-col cols="12" md="3">
+            
           </v-col>          
       </v-row>
+      <v-snackbar
+        v-model="alertError"
+        :timeout=delay
+        bottom
+        color="warning"
+        left
+        class="mb-1 pb-12 pr-0 mr-0"
+      >
+        <div>
+          <v-icon color="white" class="mr-2">
+            fas fa-exclamation-triangle
+          </v-icon>
+          <strong>{{textoError}} </strong>
+        </div>
+        <v-btn
+            color="white"
+            elevation="0"
+            x-small
+            fab
+            @click="alertError = ! alertError"
+        > 
+            <v-icon color="warning">fas fa-times</v-icon>
+        </v-btn>
+      </v-snackbar>
+      <v-snackbar
+        v-model="alertAcept"
+        :timeout=delay
+        bottom
+        color="secondary"
+        left
+        class="mb-1 pb-12 pr-0 mr-0"
+      >
+        <div>
+          <v-icon color="white" class="mr-2">
+            fas fa-check-circle
+          </v-icon>
+          <strong>{{textoAcept}}</strong>
+        </div>
+        <v-btn
+          color="white"
+          elevation="0"
+          x-small
+          fab
+          @click="alertAcept = ! alertAcept"
+        > 
+            <v-icon color="secondary">fas fa-times</v-icon>
+        </v-btn>
+      </v-snackbar>
   </v-container>
 </template>
 
@@ -175,6 +225,12 @@
       dialog: false,
       dialogModificar: false,
       dialogEliminar: false,
+      alertError: false,
+      textoError: '',
+      alertAcept: false,
+      textoAcept: '',
+      delay: 2000,
+      cargar: null,
       headers: [
         { text: 'ID',align: 'start',value: 'id',sortable: false},
         { text: 'Nombre', value: 'nombre',sortable: false, },
@@ -186,6 +242,8 @@
       escuela:[{nombre:''},{cod:''}],
       escuelaEditar:[{id:''},{nombre:''},{cod:''}],
       escuelaEliminar:[{nombre:''},{cod:''}],
+      reglasCrearEscuela: [],
+      
     }),
     computed: {
     },
@@ -194,6 +252,7 @@
     created () {
       this.obtenerEscuelas();
     },
+
     methods: {
       ModificarEscuela(item){
         console.log(item.id);
@@ -226,7 +285,12 @@
             }
             this.desserts = this.dessertsAux;
           }
-        );
+        )
+        .catch((error) => {
+          console.log(error);
+          this.alertError = true;
+          this.textoError = 'Error al cargar los datos, intentelo más tarde'
+        })
       },
       crearEscuela(){
         this.dessertsAux = [];
@@ -239,10 +303,18 @@
           console.log(result.statusText);
           if (result.statusText=='OK') {
             this.obtenerEscuelas(); 
-            
             this.resetCreacionEscuela();
+            this.alertAcept = true;
+            this.textoAcept = 'La escuela se creó correctamente'
           }
-        });
+        })
+        .catch((error) => {
+          console.log(error);
+          this.resetCreacionEscuela();
+          this.alertError = true;
+          this.textoError = 'Error al crear escuela, intentelo más tarde'
+        })
+
       },
       editarEscuela(item) {
         var url = 'http://127.0.0.1:8000/api/v1/escuela/'+item.id;
@@ -254,10 +326,18 @@
           if (result.statusText=='OK') {
             this.obtenerEscuelas(); 
             this.resetEditarEscuela();
-            console.log("funciono");
             this.dialogModificar=false;
+            this.alertAcept = true;
+            this.textoAcept = 'La escuela se modificó correctamente'
           }
-        });
+        })
+        .catch((error) => {
+          console.log(error);
+          this.resetEditarEscuela();
+          this.dialogModificar=false;
+          this.alertError = true;
+          this.textoError = 'Error al modificar escuela, intentelo más tarde'
+        })
       },
       borrarEscuela (item) {
         var url = 'http://127.0.0.1:8000/api/v1/escuela/'+item.id;
@@ -266,16 +346,30 @@
           if (result.statusText=='OK') {
             this.obtenerEscuelas(); 
             this.dialogEliminar=false;
+            this.alertAcept = true;
+            this.textoAcept = 'La escuela se borró correctamente'
           }
-        });
+        })
+        .catch((error) => {
+          this.dialogEliminar=false;
+          this.alertError = true;
+          this.textoError = 'Error al borrar escuela, intentelo más tarde'
+        })
       },
       resetCreacionEscuela(){
         this.dialog = false;
         this.escuela.nombre='';
         this.escuela.cod='';
+        //this.alert = false;
       },
       resetEditarEscuela(){
       },
+      
+    },
+    watch:{
+
     },
   }
+
+  
 </script>

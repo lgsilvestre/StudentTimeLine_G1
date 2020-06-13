@@ -61,17 +61,17 @@
                 </v-list-item>
             </v-list>
         </v-menu>
-        <v-menu open-on-hover offset-x left>
-            <template v-slot:activator="{ on }">
+        
+            
                 <v-list-item  v-on="on" class="difuminado" to="/administrador/estudiantes">
                     <v-list-item-icon >
                         <v-icon color="white">fas fa-user-graduate</v-icon>
                     </v-list-item-icon>
                     <v-list-item-title class="white--text letra" ><strong>Estudiantes</strong></v-list-item-title>
                 </v-list-item>
-            </template>
             
-        </v-menu>
+            
+        
 
         <v-menu open-on-hover  offset-x left>
             <template v-slot:activator="{ on }">
