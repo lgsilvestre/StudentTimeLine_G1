@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Escuela;
 use Image; 
 
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UsuarioController extends Controller
 {
@@ -39,7 +40,7 @@ class UsuarioController extends Controller
                 'success' => true,
                 'code' => 100,
                 'message' => "La operacion se a realizado con exito",
-                'data' => $users
+                'data' => ['usuarios'=>$users]
             ], 200);
         //----- Mecanismos anticaidas y reporte de errores -----
         //este catch permite responder directamente que problemas en la peticion SQL
@@ -48,7 +49,7 @@ class UsuarioController extends Controller
                 'success' => false,
                 'code' => 101,
                 'message' => 'Error al solicitar peticion a la base de datos',
-                'data' => $ex
+                'data' => ['error'=>$ex]
             ], 409);
         }
     }
@@ -64,7 +65,7 @@ class UsuarioController extends Controller
             'success' => false,
             'code' => 201,
             'message' => 'el cliente debe usar un protocolo distinto',
-            'data' => 'El el protocolo se llama store'
+            'data' => ['error'=>'El el protocolo se llama store']
         ], 426 );
     }
 
@@ -91,7 +92,7 @@ class UsuarioController extends Controller
                 'success' => false,
                 'code' => 301,
                 'message' => 'Error en datos ingresados',
-                'data' => $validator->errors()
+                'data' => ['error'=>$validator->errors()]
             ], 422);
         }
         try{
@@ -115,7 +116,7 @@ class UsuarioController extends Controller
                 'success' => true,
                 'code' => 300,
                 'message' => "Operacion realizada con exito",
-                'data' => $user
+                'data' => ['usuario'=>$user]
             ], 200);
         //----- Mecanismos anticaidas y reporte de errores -----
         //este catch permite responder directamente que problemas en la peticion SQL
@@ -124,7 +125,7 @@ class UsuarioController extends Controller
                 'success' => false,
                 'code' => 302,
                 'message' => "Error en la base de datos",
-                'data' => $ex
+                'data' => ['error'=>$ex]
             ], 409  );
         }
     }
@@ -141,7 +142,7 @@ class UsuarioController extends Controller
             'success' => false,
             'code' => 401,
             'message' => 'Este recurso está bloqueado',
-            'data' => 'El el protocolo se llama index'
+            'data' => ['error'=>'El el protocolo se llama index']
         ], 423 );
     }
 
@@ -157,7 +158,7 @@ class UsuarioController extends Controller
             'success' => false,
             'code' => 501,
             'message' => 'el cliente debe usar un protocolo distinto',
-            'data' => 'El el protocolo se llama store'
+            'data' => ['error'=>'El el protocolo se llama store']
         ], 426 );
     }
 
@@ -184,7 +185,7 @@ class UsuarioController extends Controller
                 'success' => false,
                 'code' => 601,
                 'message' => 'Error en datos ingresados',
-                'data' => $validator->errors()
+                'data' =>['error'=> $validator->errors()]
             ], 422);
         }
         try{
@@ -214,19 +215,36 @@ class UsuarioController extends Controller
             if($request->password!=null){
                 $usuario->password =  bcrypt($request->password);
             }
-            if($request->escuela!=null){
-                $usuario->escuela = $request->escuela;
+            //OBTENEMOS LA CREDENCIALES DEL USUARIO QUE MANDO LA SOLICITUD
+            $credenciales = JWTAuth::parseToken()->authenticate();
+            //Si el usuario que solicita la informacion es un administrador
+            if($credenciales->rol == "admin"){
+                if($request->escuela!=null){
+                    $usuario->escuela = $request->escuela;
+                }
+                if($request->rol!=null){
+                    $usuario->rol = $request->rol;
+                    $usuario->assignRole($request->rol);
+                }
             }
-            if($request->rol!=null){
-                $usuario->rol = $request->rol;
-                $usuario->assignRole($request->rol);
+            //Usuario secretaria de escuela o profesor
+            if($credenciales->rol == "secretaria de escuela" || $credenciales->rol == "profesor"){
+                if($request->escuela!=null || $request->rol!=null){
+                    $credenciales = JWTAuth::invalidate($credenciales);
+                    return response()->json([
+                        'success' => false,
+                        'code' => 603,
+                        'message' => "No tienes los permisos necesarios para realizar esta operacion",
+                        'data' => ['error'=>"Intento modificar 2 variables que con ese permiso seria imposible, se elimino el token"]
+                    ], 403);
+                }
             }
             $usuario->save();
             return response()->json([
                 'success' => true,
                 'code' => 600,
                 'message' => "Operacion realizada con exito",
-                'data' => $usuario
+                'data' => ['usuario'=>$usuario]
             ], 200);
         //Mecanismos anticaidas y reporte de errores
         //este catch permite responder directamente que problemas en la peticion SQL
@@ -235,7 +253,7 @@ class UsuarioController extends Controller
                 'success' => false,
                 'code' => 604,
                 'message' => "Error en la base de datos",
-                'data' => $ex
+                'data' => ['error'=>$ex]
             ], 409 );
         }
     }
@@ -263,7 +281,7 @@ class UsuarioController extends Controller
                 'success' => true,
                 'code' => 700,
                 'message' => "Operacion realizada con exito",
-                'data' => $user
+                'data' => ['usuario'=>$user]
             ], 200);
         //----- Mecanismos anticaidas y reporte de errores -----
         //catch que se encarga en responder que paso en la sentencia sql
@@ -272,7 +290,7 @@ class UsuarioController extends Controller
                 'success' => false,
                 'code' => 702,
                 'message' => "Error en la base de datos",
-                'data' => $ex
+                'data' => ['error'=>$ex]
             ], 409 );
         }
     }

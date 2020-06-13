@@ -23,14 +23,14 @@ class EstudianteController extends Controller
                 'success' => true,
                 'code' => 100,
                 'message' => "La operacion se a realizado con exito",
-                'data' => $estudiantes
+                'data' => ['estudiantes'=>$estudiantes]
             ], 200);
         } catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
                 'success' => false,
                 'code' => 101,
                 'message' => 'Error al solicitar peticion a la base de datos',
-                'data' => $ex
+                'data' => ['error'=>$ex]
             ], 409);
         }
     }
@@ -46,7 +46,7 @@ class EstudianteController extends Controller
             'success' => false,
             'code' => 201,
             'message' => 'el cliente debe usar un protocolo distinto',
-            'data' => 'El el protocolo se llama store'
+            'data' => ['error'=>'El el protocolo se llama store']
         ], 426 );
     }
 
@@ -73,14 +73,14 @@ class EstudianteController extends Controller
                 'success' => true,
                 'code' => 300,
                 'message' => "Operacion realizada con exito",
-                'data' => $estudiante
+                'data' => ['estudiante'=>$estudiante]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
                 'success' => false,
                 'code' => 302,
                 'message' => "Error en la base de datos",
-                'data' => $ex
+                'data' => ['error'=>$ex]
             ], 409  );
         }
     }
@@ -97,7 +97,7 @@ class EstudianteController extends Controller
             'success' => false,
             'code' => 401,
             'message' => 'Este recurso está bloqueado',
-            'data' => 'El el protocolo se llama index'
+            'data' => ['error'=>'El el protocolo se llama index']
         ], 423 );
     }
 
@@ -113,7 +113,7 @@ class EstudianteController extends Controller
             'success' => false,
             'code' => 501,
             'message' => 'el cliente debe usar un protocolo distinto',
-            'data' => 'El el protocolo se llama store'
+            'data' => ['error'=>'El el protocolo se llama store']
         ], 426);
     }
 
@@ -137,14 +137,14 @@ class EstudianteController extends Controller
                 'success' => true,
                 'code' => 600,
                 'message' => "Operacion realizada con exito",
-                'data' => $estudiante
+                'data' => ['estudiante'=>$estudiante]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
                 'success' => false,
                 'code' => 604,
                 'message' => "Error en la base de datos",
-                'data' => $ex
+                'data' => ['error'=>$ex]
             ], 409 );
         }
     }
@@ -163,14 +163,14 @@ class EstudianteController extends Controller
                 'success' => true,
                 'code' => 700,
                 'message' => "Operacion realizada con exito",
-                'data' => $estudiante
+                'data' => ['estudiante'=>$estudiante]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
                 'success' => false,
                 'code' => 702,
                 'message' => "Error en la base de datos",
-                'data' => $ex
+                'data' => ['error'=>$ex]
             ], 409 );
         }
     }

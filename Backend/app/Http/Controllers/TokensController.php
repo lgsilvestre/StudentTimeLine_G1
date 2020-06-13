@@ -32,7 +32,7 @@ class TokensController extends Controller
                 'success' => false,
                 'code' => 2,
                 'message' => 'Error en las credenciales',
-                'data' => $validator->errors()
+                'data' => ['error'=>$validator->errors()]
             ], 422);
         }
         try{
@@ -43,14 +43,14 @@ class TokensController extends Controller
                     'code' => 1,
                     'message' => 'Operacion realizada con exito',
                     'data' => ['token'=>$token,
-                               'user' =>User::where('email', $credentials['email'])->get()->first()],
+                               'usuario' =>User::where('email', $credentials['email'])->get()->first()],
                 ], 200);
             } else {
                 return response()->json([
                     'success' => false,
                     'code' => 3,
                     'message' => 'Error en las credenciales',
-                    'data' => $validator->errors()
+                    'data' => ['error'=>$validator->errors()]
                 ], 401);
             }
         //este catch permite responder directamente que problemas en la peticion SQL
@@ -59,7 +59,7 @@ class TokensController extends Controller
                 'success' => false,
                 'code' => 4,
                 'message' => 'Error al solicitar peticiones a la base de datos',
-                'data' => $ex
+                'data' => ['error'=>$ex]
             ], 409);
         }
     }
@@ -99,7 +99,7 @@ class TokensController extends Controller
                 'success' => false,
                 'code' => 4,
                 'message' => 'Error al solicitar peticiones a la base de datos',
-                'data' => $ex
+                'data' => ['error'=>$ex]
             ], 409);
         }
 
@@ -134,7 +134,7 @@ class TokensController extends Controller
                 'success' => false,
                 'code' => 3,
                 'message' => 'Error al solicitar peticiones a la base de datos',
-                'data' => $ex
+                'data' => ['error'=>$ex]
             ], 409);
         }
     }
@@ -152,7 +152,7 @@ class TokensController extends Controller
                 'success' => false,
                 'code' => 2,
                 'message' => 'Error en el tipo de dato',
-                'data' => $validator->errors()
+                'data' => ['error'=>$validator->errors()]
             ], 422);
         }
         //$user = User::where('emails.email', $credentials['email'])->get()->first(); 
