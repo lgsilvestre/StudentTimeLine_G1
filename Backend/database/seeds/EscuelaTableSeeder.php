@@ -47,5 +47,10 @@ class EscuelaTableSeeder extends Seeder
             'nombre' => 'Ingeniería Civil Mecatrónica',
             'cod_carrera' => 413
         ]);
+
+        $rm=Escuela::create([
+            'nombre' => 'Ramos Comunes',
+            'cod_carrera' => 000
+        ]);
     }
 }
