@@ -1,8 +1,8 @@
 <template>
   <div class="SecretariaEscuela">
     <AppBarGlobal/>  
-    <FooterGlobal/>
     <router-view></router-view>
+    <FooterGlobal/>
     <Navegacion/>
     
   </div>

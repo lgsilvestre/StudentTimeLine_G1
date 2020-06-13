@@ -185,7 +185,7 @@
                                         </v-form> 
                                     </v-card>
                                 </v-dialog>
-                                <v-dialog  max-width="500px">
+                                <v-dialog v-model="dialogExportar" persistent max-width="600px">
                                     <template v-slot:activator="{ on}" >
                                         <v-btn
                                         fab
@@ -203,13 +203,89 @@
                                         class="headline primary text--center"
                                         primary-title
                                         >
-                                        <h5 class="white--text ">Exportar estudiantes</h5>
+                                        <h5 class="white--text ">Ingrese el periodo de datos que desea exportar:</h5>
                                         </v-card-title>
-                                        <v-form>
+                                        <v-container class="pt-0">
+                                            <v-row class="justify-right px-5">
+                                                <v-col cols="1"> 
+                                                    <v-radio-group column class="pt-0 mt-0">
+                                                        <v-radio
+                                                            class="pb-2 mt-3"
+                                                            color="secondary"
+                                                            @mousedown="todosLosAnhos"                                                        
+                                                        >
+                                                        </v-radio>
+                                                        <v-radio
+                                                            class="pb-2 mt-6"
+                                                            color="warning"
+                                                            @mousedown="unAnho" 
+                                                        ></v-radio>
+                                                        <v-radio
+                                                            class="pb-2 mt-6"
+                                                            color="accent"
+                                                            @mousedown="rangoAnhos" 
+                                                        ></v-radio>
+                                                    </v-radio-group>
+                                                </v-col>
+                                                <v-col cols="5" class="mt-3">
+                                                    <h4 class="mb-10">Todos los años </h4>
+                                                    <h4 class="mb-10">Ingrese el año a exportar :</h4>
+                                                    <h4 >Ingrese el rango de años  :</h4>
                                             
-                                            <h1> exportar</h1>
+                                                </v-col>
+                                                <v-col cols="6">
+                                                    <v-row class="mt-12 pt-5 mb-0 pb-0">
+                                                        <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
+                                                            <v-text-field
+                                                            v-model="anhov1"
+                                                            dense
+                                                            outlined
+                                                            color="secondary"
+                                                            :disabled="unAnhoVariable"
+                                                            :rules="rules"
+                                                            type="number"
+                                                            ></v-text-field>
+                                                        </v-col>
+                                                    </v-row>
+                                                    <v-row class="mt-0 pt-0 mb-0 pb-0">
+                                                        <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
+                                                            <v-text-field
+                                                            v-model="anhov2"
+                                                            dense
+                                                            outlined
+                                                            color="secondary"
+                                                            :disabled="rangoAnhosVariable"
+                                                            :rules="rules"
+                                                            type="number"
+                                                            ></v-text-field>
+                                                        </v-col>
+                                                        <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
+                                                            <v-text-field
+                                                            v-model="anhov3"
+                                                            dense
+                                                            color="secondary"
+                                                            :disabled="rangoAnhosVariable"
+                                                            :rules="rules"
+                                                            outlined
+                                                            type="number"
+                                                            ></v-text-field>
+                                                        </v-col>
+                                                    </v-row>
+                                                    
+                                                </v-col>
+                                            </v-row>
+                                            <div style="text-align:right;" class="mb-2 mr-5">
+                                                <v-btn rounded color="warning" 
+                                                @click="resetYCerrarExportar"
+                                                >
+                                                    <h4 class="white--text">Cancelar</h4>
+                                                </v-btn>
+                                                <v-btn rounded color="secondary" class="ml-2"   >
+                                                    <h4 class="white--text">Aceptar</h4>
+                                                </v-btn>
+                                            </div>
+                                        </v-container>
                                             
-                                        </v-form> 
                                     </v-card>
                                 </v-dialog>
                             </v-col>
@@ -250,6 +326,7 @@
         dialogModificar: false,
         dialogEliminar: false,
         dialogAgregarEstudiante: false,
+
         headers: [
             { text: 'Matricula',align: 'start',value: 'matricula',sortable: true},
             { text: 'Rut', value: 'rut',sortable: true, },
@@ -400,10 +477,60 @@
                 situacion_academica:'REGULAR',
                 escuela:'INGENIERIA CIVIL EN COMPUTACIÓN',
             },
+            {
+                matricula: '2000407026',
+                rut: '13352079',
+                nombre_completo:'BUSTAMANTE GONZÁLEZ RODRIGO ARTURO',
+                correo:'robustamante@utalca.cl',
+                anho_ingreso:'2000',
+                situacion_academica:'REGULAR',
+                escuela:'INGENIERIA CIVIL EN COMPUTACIÓN',
+            },
+            {
+                matricula: '2000407026',
+                rut: '13352079',
+                nombre_completo:'BUSTAMANTE GONZÁLEZ RODRIGO ARTURO',
+                correo:'robustamante@utalca.cl',
+                anho_ingreso:'2000',
+                situacion_academica:'REGULAR',
+                escuela:'INGENIERIA CIVIL EN COMPUTACIÓN',
+            },
+            {
+                matricula: '2000407026',
+                rut: '13352079',
+                nombre_completo:'BUSTAMANTE GONZÁLEZ RODRIGO ARTURO',
+                correo:'robustamante@utalca.cl',
+                anho_ingreso:'2000',
+                situacion_academica:'REGULAR',
+                escuela:'INGENIERIA CIVIL EN COMPUTACIÓN',
+            },
+            {
+                matricula: '2000407026',
+                rut: '13352079',
+                nombre_completo:'BUSTAMANTE GONZÁLEZ RODRIGO ARTURO',
+                correo:'robustamante@utalca.cl',
+                anho_ingreso:'2000',
+                situacion_academica:'REGULAR',
+                escuela:'INGENIERIA CIVIL EN COMPUTACIÓN',
+            },
             
         ],
         dessertsAux:[],
         listaEscuelaAux:[],
+        todosLosAnhosVariable: true,
+        unAnhoVariable: true,
+        rangoAnhosVariable: true,
+        anhov1: new Date().getFullYear(),
+        anhov2: new Date().getFullYear(),
+        anhov3: new Date().getFullYear(),
+        dialogExportar: false,
+        rules: [
+        value => !!value || 'Requerido',
+        value => value <= new Date().getFullYear()|| 'El año no debe ser mayor al actual',
+        value => value >= 1981 || 'El año no debe ser menor a 1981',
+        ]
+        
+
     }),
     computed: {
         ...mapState(['admin','secretariaEscuela'])
@@ -456,6 +583,37 @@
             }
             );
         },
+        todosLosAnhos(){
+            this.todosLosAnhosVariable= false;
+            this.unAnhoVariable= true;
+            this.rangoAnhosVariable= true;
+            this.anhov1= new Date().getFullYear();
+            this.anhov2= new Date().getFullYear();
+            this.anhov3= new Date().getFullYear();
+            
+        },
+        unAnho(){
+            this.todosLosAnhosVariable= true;
+            this.unAnhoVariable= false;
+            this.rangoAnhosVariable= true;
+            this.anhov2= new Date().getFullYear();
+            this.anhov3= new Date().getFullYear();
+            
+        },
+        rangoAnhos(){
+            this.todosLosAnhosVariable= true;
+            this.unAnhoVariable= true;
+            this.rangoAnhosVariable=false;
+            this.anhov1= new Date().getFullYear();
+            
+        },
+        resetYCerrarExportar(){
+            this.dialogExportar = false;
+            this.anhov1= new Date().getFullYear();
+            this.anhov2= new Date().getFullYear();
+            this.anhov3= new Date().getFullYear();
+        },
+
     },
 }
 </script>
