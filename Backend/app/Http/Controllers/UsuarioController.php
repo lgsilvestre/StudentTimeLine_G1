@@ -231,6 +231,7 @@ class UsuarioController extends Controller
             if($credenciales->rol == "secretaria de escuela" || $credenciales->rol == "profesor"){
                 if($request->escuela!=null || $request->rol!=null){
                     $credenciales = JWTAuth::invalidate($credenciales);
+                    //mandar correo por intento de haking
                     return response()->json([
                         'success' => false,
                         'code' => 603,
