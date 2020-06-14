@@ -1,6 +1,6 @@
 <template>
-<v-navigation-drawer app right v-model=drawer  :mini-variant.sync=drawelAdmin permanentt 
-    hide-overlay
+<v-navigation-drawer app right v-model=drawers.drawer  :mini-variant=drawers.miniVarianteAdm  
+   permanent
     src="@/assets/Globales/background-panel-02.jpg"
     >
     <v-list-item class="px-2 py-1 difuminado" to="/administrador/perfil">
@@ -175,7 +175,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['drawelAdmin']),
+        ...mapState(['drawers']),
 
     },
     icons:{

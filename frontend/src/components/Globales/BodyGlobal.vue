@@ -1,9 +1,39 @@
 <template>
     <v-container  fluid >
         <v-row   class="align-center justify-center" >
-                <v-col cols="2" >
+            <!-- Alertas -->
+            <v-snackbar v-model="alertaCorrecto" :timeout="timeout"  bottom
+            color="success"
+            left
+            class="mb-1 pb-12 pr-0 mr-0">
+            <div>
+                <strong>{{aletaText}}</strong>
+            </div>
+                <v-btn color="white" elevation="0" x-small fab
+                @click="alertaCorrecto = !alertaCorrecto"
+                > 
+                    <v-icon color="secondary">fas fa-times</v-icon>
+                </v-btn>
+            </v-snackbar>
+
+            <v-snackbar v-model="alertaError" :timeout="timeout"  bottom
+            color="warning"
+            left
+            class="mb-1 pb-12 pr-0 mr-0">
+            <div>
+                <strong>{{aletaText}}</strong>
+            </div>
+                <v-btn color="white" elevation="0" x-small fab
+                @click="alertaError = !alertaError"
+                > 
+                    <v-icon color="secondary">fas fa-times</v-icon>
+                </v-btn>
+            </v-snackbar>
+
+
+            <v-col cols="12" md="1">
                 </v-col>
-                <v-col  cols="3" >
+                <v-col  cols="12" md="3">
                    <v-card elevation="1"  min-width="350px" color=""> 
                         <v-card-title
                         class="headline primary text--center"
@@ -14,7 +44,7 @@
                             <v-avatar size="100">
                                 <img
                                     src="https://randomuser.me/api/portraits/men/85.jpg"
-                                >
+                                > 
                             </v-avatar>
                         </v-container >
                         <v-divider></v-divider>
@@ -29,17 +59,18 @@
                     </v-card>
 
                 </v-col>
-                <v-col cols="1"></v-col>
-                <v-col cols="4" >
+                <v-col cols="12" md="2"></v-col>
+                <v-col cols="12" md="4">
                     <v-card elevation="1" shaped>
                     <v-card-title  class="headline primary text--center" primary-title > 
                         <h5 class="white--text ">Modificar Usuario</h5>
                             </v-card-title>
-                                <v-form @submit.prevent="modificarUsuario" class=" px-10 pt-8 "  >
+                                <v-form  @submit.prevent="modificarUsuario" class=" px-8 pt-4 "  >
                                         <v-text-field v-model="datosUsuarioModificar.nombre" label="Nombre de usuario" outlined
                                           color="secondary"
                                           :rules="[() => !!datosUsuario.nombre ]"
                                           prepend-inner-icon="mdi-account"
+                                          
                                         ></v-text-field>
 
                                         <v-select  v-model="datosUsuarioModificar.escuela"
@@ -49,6 +80,7 @@
                                         label="Escuela"
                                         outlined
                                         prepend-inner-icon="mdi-school"
+                                        v-show="datosUsuario.rol == 'admin' "
                                         ></v-select>
 
                                         <v-select v-model="datosUsuarioModificar.role"
@@ -56,6 +88,7 @@
                                         :items="roles"
                                         outlined
                                         prepend-inner-icon="mdi-account-tie"
+                                        v-show="datosUsuario.rol == 'admin' "
                                         ></v-select>
                                       <v-file-input  accept="image/png, image/jpeg, image/bmp" 
                                         label="Seleccione una imagen"
@@ -72,6 +105,8 @@
                                           outlined
                                           color="secondary"
                                           prepend-inner-icon="mdi-email"
+                                        hint="ejemplo@utalca.cl"
+                                          
                                       ></v-text-field>
 
                                       <v-text-field v-model="datosUsuarioModificar.contrasena" label="Contraseña "
@@ -95,18 +130,25 @@
                           </v-card>
 
                 </v-col>
-                <v-col cols="2">
+                <v-col cols="12" md="2">
                 </v-col>
             </v-row>
-      </v-container>  
+      </v-container> 
+    
+   
 </template>
 
 <script>
 import { mapState,mapMutations } from 'vuex'
 import axios from 'axios'
+
 export default {
     data() {
         return {
+            alertaCorrecto: false,
+            alertaError: false,
+            aletaText: '',
+            timeout: 4000,
 
             mostrar: false, 
             datosUsuarioModificar:[ {nombre:''},{escuela:''},{role:''},{correo:''},{contrasena:''} ,{imagen:''}],
@@ -119,15 +161,6 @@ export default {
             ],            
             listaEscuelaAux:[],
             roles: ['Administrador', 'Secretaría de Escuela', 'Profesor'],   
-            reglas:[
-                value => !!value || 'Requerido.',
-                value => (value && value.length >= 8) || 'Minimo 8 characters',
-            ],
-            reglasEmail: [
-                v => !!v || 'E-mail is required',
-                v => /.+@utalca.cl/.test(v) || 'E-mail must be valid',
-            ],
-
             // ==================================
             // variables para la modificacion de usuario
             listaUsuarios:[],
@@ -135,19 +168,15 @@ export default {
         }
     },
     computed:{
-        ...mapState(['usuario']),
-       
+        ...mapState(['usuario']),   
     },
      created() {
          
-         this.obtenerEscuelas();
+        this.obtenerEscuelas();
         this.obtenerUsuario();
      },
     methods:{
         obtenerUsuario(){
-            // idUsuario=  this.$store.state.usuario.user.id;
-            // console.log(this.$store.state.usuario.user)
-            
             var url =`http://127.0.0.1:8000/api/v1/usuario/${this.$store.state.usuario.user.id}`;
             axios.get(url,this.$store.state.config)
             .then((result)=>{
@@ -166,7 +195,6 @@ export default {
                     if(element.id == this.datosUsuarioAux.escuela){
                         this.datosUsuarioAux.escuela = element.nombre;
                     }
-                    
                 });
 
                 this.datosUsuario = this.datosUsuarioAux           
@@ -187,51 +215,64 @@ export default {
                         id: element.id,
                         nombre: element.nombre,
                     };
-                    // console.log(escuela);
                     this.listaEscuelaAux[index]=escuela;
                     }
                     this.listaEscuela = this.listaEscuelaAux;
-                    // console.log(this.listaEscuela )
                 }
                 );
       },
 
       modificarUsuario(){
-            console.log('modificar usuario')
-             console.log(this.datosUsuarioModificar)
-            var aux;
-            if ( this.datosUsuarioModificar.role == "Administrador") {
-                aux = "admin"
-            };
-            if ( this.datosUsuarioModificar.role == "Secretaría de Escuela") {
-                aux = "secretaria de escuela"
-            };
-            if ( this.datosUsuarioModificar.role == "Profesor") {
-                aux = "profesor"
-            };
+            var correo =  this.datosUsuarioModificar.correo;
+            var contrasena  =  this.datosUsuarioModificar.contrasena;
+            // validamos que el correo puede ser null o segun la regla establecida
+            if( /.+@utalca.cl/.test(correo) || correo == null || correo == ''){
+                if( contrasena =='' || contrasena.length >= 8 ){
+                    var aux;
+                    if ( this.datosUsuarioModificar.role == "Administrador") {
+                        aux = "admin"
+                    };
+                    if ( this.datosUsuarioModificar.role == "Secretaría de Escuela") {
+                        aux = "secretaria de escuela"
+                    };
+                    if ( this.datosUsuarioModificar.role == "Profesor") {
+                        aux = "profesor"
+                    };
+                    var url =`http://127.0.0.1:8000/api/v1/usuario/${this.datosUsuario.id}`;
+                    let put ={
+                        "nombre": this.datosUsuarioModificar.nombre,
+                        "escuela": this.datosUsuarioModificar.escuela,
+                        "role": aux,
+                        "foto": null,
+                        "email":correo,
+                        "password": contrasena,
+                    }
+                    axios.put(url,put,this.$store.state.config)
+                    .then((result)=>{
+                    if (result.statusText=='OK') {
+                         this.obtenerUsuario();
+                        this.resetModificacionUsuario();
+                        this.alertaCorrecto = true;
+                         this.aletaText='La modificación fue exitosa.';
+                        console.log('se modifico correctamente')
+                    }
+                    }).catch((err)=>{
+                        console.log(err);
+                        this.resetModificacionUsuario();
+                    });
+                }else{
+                    this.alertaError= true;
+                   this.aletaText='La contraseña es incorrecta.';
 
-            var url =`http://127.0.0.1:8000/api/v1/usuario/${this.datosUsuario.id}`;
-            let put ={
-                "nombre": this.datosUsuarioModificar.nombre,
-                "escuela": this.datosUsuarioModificar.escuela,
-                "rol": aux,
-                "foto": null,
-                "email":this.datosUsuarioModificar.correo,
-                "password": this.datosUsuarioModificar.contraseña,
+                }
+                // this.resetModificacionUsuario();
+            }else{
+                console.log('el correo es invalido00000'+correo)
+                this.alertaError = true;
+                this.aletaText='el correo es invalido.';
             }
 
-            console.log(put);
-            axios.put(url,put,this.$store.state.config)
-            .then((result)=>{
-            if (result.statusText=='OK') {
-                //  console.log(result.data)
-                 this.obtenerUsuario();
-                this.resetModificacionUsuario();
-            }
-            }).catch((err)=>{
-                console.log(err)
-            });
-        },
+    },
         resetModificacionUsuario(){
             this.datosUsuarioModificar.nombre='';
             this.datosUsuarioModificar.escuela='';
@@ -239,14 +280,11 @@ export default {
             this.datosUsuarioModificar.correo='';
             this.datosUsuarioModificar.contrasena='';
             this.datosUsuarioModificar.imagen=null;
+            this.alertaCorrecto =false;
+            this.alertaError =false;
+            this.aletaText =''
             
-         }
-    
-        
-    
-
+         },
     }
-
-
 }
 </script>

@@ -7,11 +7,16 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        status:'',
+        status: '',
         usuario: null,
-        RCstatus:null,
-        tk:null,
-        drawelAdmin: false,
+        RCstatus: null,
+        tk: null,
+        // pongan aca las variables para todos los drawer
+        drawers: {
+            drawer: true,
+            miniVarianteAdm: false,
+
+        },
         admin: false,
         profesor: false,
         secretariaEscuela: false,
@@ -21,10 +26,10 @@ export default new Vuex.Store({
         numCarreras: 7,
         numEstudiantes: 1234,
 
-        config:{
-        headers:{
-            Authorization: ''
-        }
+        config: {
+            headers: {
+                Authorization: ''
+            }
         },
 
     },
@@ -135,8 +140,8 @@ export default new Vuex.Store({
                 });
         },
         setDrawelAdmin(state) {
-            state.drawelAdmin = !state.drawelAdmin;
-            console.log('pucha');
+            state.drawers.miniVarianteAdm = !state.drawers.miniVarianteAdm;
+            // console.log('pucha : ' + state.drawelAdmin);
         },
     },
     methods:{
