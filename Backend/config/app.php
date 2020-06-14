@@ -177,7 +177,11 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        //Para importar la imagen (Ya no lo ocupo)
         Intervention\Image\ImageServiceProvider::class,
+        //Para usar Excel
+        Maatwebsite\Excel\ExcelServiceProvider::class,
+
     ],
 
     /*
@@ -233,6 +237,8 @@ return [
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class, 
         'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
         'Image'     => Intervention\Image\Facades\Image::class,
+        //Para usar Excel
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
 ];

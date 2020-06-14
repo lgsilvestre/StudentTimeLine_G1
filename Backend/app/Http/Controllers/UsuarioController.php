@@ -11,7 +11,9 @@ use Image;
 
 class UsuarioController extends Controller
 {
-  /** 
+    /**
+     * Metodo que se encarga de bloquear las rutas del controlador Usuario
+     */
     public function __construct()
     {
         $this->middleware(['permission:create user'], ['only' => ['create', 'store']]);
@@ -19,7 +21,7 @@ class UsuarioController extends Controller
         $this->middleware(['permission:update user'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete user'], ['only' => 'delete']);
     }
-*/  
+  
     #Retorna listado de todos los usuarios
     public function index()
     {
@@ -30,6 +32,7 @@ class UsuarioController extends Controller
             foreach ($users as $user) {
                 $user->nombre_carrera= $escuelas[$user->escuela-1]->nombre;
             }
+            
             return $users;
         //este catch permite responder directamente que problemas en la peticion SQL
         } catch(\Illuminate\Database\QueryException $ex){ 
@@ -38,6 +41,17 @@ class UsuarioController extends Controller
                 'code' => 5,
                 'message' => 'Error al solicitar peticiones a la base de datos'], 401);
         }
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit($id)
+    {
+        return response()->json([
+            'success' => false,
+            'code' => 5,
+            'message' => 'Este metodo no se encuentra implementado, por favor utilizar otro'], 401);
     }
 
     /**
@@ -68,6 +82,12 @@ class UsuarioController extends Controller
             // las siguientes validaciones es por el motivo que el administrador puede modificar todos o uno de los elementos
             //esto espesificamente evita tener errores de modificaciones en la base de datos por elementos no nules
             $usuario = User::find($id);
+            if($usuario==null){
+                return response()->json([
+                    'success' => false,
+                    'code' => 2,
+                    'message' => 'El usuario con el id '.$id.' no existe'], 401);
+            }
             if($request->nombre!=null){
                 $usuario->nombre = $request->nombre;
             }
@@ -80,10 +100,8 @@ class UsuarioController extends Controller
             }
             if($request->foto!=null){
                 if($request->hasfile('foto')){
-                    $imagen = $request->file('foto');
-                    $nombreImagen = time () . '.' . $imagen->getClientOriginalExtension();
-                    Image::make($imagen)->resize(400,400)->save( public_path('/uploads/imagenes/' . $nombreImagen));
-                    $usuario->foto=$nombreImagen;
+                    $imagen = base64_encode(file_get_contents($request->file('foto')));
+                    $usuario -> foto = $imagen;
                 }
             }
             if($request->email!=null){
@@ -92,7 +110,7 @@ class UsuarioController extends Controller
             if($request->password!=null){
                 $usuario->password =  bcrypt($request->password);
             }            
-            $usuario-> save();//
+            $usuario -> save();//
             return compact('usuario');//para indicar al frontend que se creo el objeto usuario, con los datos obtenidos del request
         //este catch permite responder directamente que problemas en la peticion SQL
         } catch(\Illuminate\Database\QueryException $ex){ 
@@ -110,7 +128,15 @@ class UsuarioController extends Controller
     {
         try{
             $user = User::findOrFail($id);
-            return $user;
+            //$user->foto = base64_decode($user["foto"]); //Lo uso para decodificar la imagen y poder verla en postman
+            if($user==null){
+                return response()->json([
+                    'success' => false,
+                    'code' => 1,
+                    'message' => 'No existe ninguna usuario con esa id'], 401);
+            }
+        //return response($user->foto)->header('Content-Type', 'image/png'); //El front tendrá que decodificar la imagen
+        return $user;
         //este catch permite responder directamente que problemas en la peticion SQL
         } catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
@@ -131,7 +157,7 @@ class UsuarioController extends Controller
             'nombre' => ['required','string'],
             'escuela' => ['required', 'numeric'], //Cambiar lo de la foreign key dps
             'role' => ['required','string'], 
-            'foto' => ['image','mimes:jpeg,png,jpg,gif,svg','max:2048','nullable'],
+            'foto' => ['image','mimes:jpeg,png,jpg,gif,svg','nullable'],
             'email'=> ['required','email'],
             'password' => ['required' , 'string']
         ]);
@@ -152,12 +178,18 @@ class UsuarioController extends Controller
             $user ->email=$request->email;
             $user ->password=bcrypt($request->password);
             if($request->hasfile('foto')){
+                //Sirve para almacenar la imagen del usuario de manera local
+                /*
                 $imagen = $request->file('foto');
                 $nombreImagen = time () . '.' . $imagen->getClientOriginalExtension();
                 Image::make($imagen)->resize(400,400)->save( public_path('/uploads/imagenes/' . $nombreImagen));
-                $user->foto=$nombreImagen;
+                $user->foto=$nombreImagen;*/
+
+                //Ahora se guarda en la BD
+                $imagen = base64_encode(file_get_contents($request->file('foto')));
+                $user -> foto = $imagen;
             }else{
-                $user ->foto=null;
+                $user-> foto = null;
             }
             $r = $user->save();
             $user->assignRole($request->role);
@@ -179,13 +211,13 @@ class UsuarioController extends Controller
     {
         try{
             $user = User::find($id);
-            $user->delete();
             if($user==null){
                 return response()->json([
                     'success' => false,
-                    'code' => 5,
-                    'message' => 'No se encontro el elemento en la base de datos'], 401);
+                    'code' => 2,
+                    'message' => 'El usuario con el id '.$id.' no existe'], 401);
             }
+            $user->delete();
             return compact('user');
         //catch que se encarga en responder que paso en la sentencia sql
         } catch(\Illuminate\Database\QueryException $ex){ 
