@@ -252,7 +252,7 @@
       reglasCodigoCarrera: [
         value => !!value || 'Requerido',
         value => value  >= 3000 || 'El valor debe ser mayor a 3000',
-        value => value  <= 3999 || 'El valor debe ser menor a 3000',
+        value => value  <= 3999 || 'El valor debe ser menor a 3999',
       ],
 
     }),
@@ -299,7 +299,7 @@
         .catch((error) => {
           console.log(error);
           this.alertError = true;
-          this.textoError = 'Error al cargar los datos, intentelo más tarde'
+          this.textoError = 'Error al cargar los datos, intente más tarde'
         })
       },
       crearEscuela(){
@@ -322,7 +322,7 @@
           console.log(error);
           this.resetCreacionEscuela();
           this.alertError = true;
-          this.textoError = 'Error al crear escuela, intentelo más tarde'
+          this.textoError = 'Error al crear escuela, intente más tarde'
         })
 
       },
@@ -346,7 +346,7 @@
           this.resetEditarEscuela();
           this.dialogModificar=false;
           this.alertError = true;
-          this.textoError = 'Error al modificar escuela, intentelo más tarde'
+          this.textoError = 'Error al modificar escuela, intente más tarde'
         })
       },
       borrarEscuela (item) {
@@ -363,7 +363,7 @@
         .catch((error) => {
           this.dialogEliminar=false;
           this.alertError = true;
-          this.textoError = 'Error al borrar escuela, intentelo más tarde'
+          this.textoError = 'Error al borrar escuela, intente más tarde'
         })
       },
       resetCreacionEscuela(){

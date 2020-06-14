@@ -107,11 +107,11 @@
                                         prepend-inner-icon="mdi-camera"
                                         prepend-icon=""
                                     ></v-file-input>   
-                                    <v-container class="px-10" style="text-align:right;">
+                                    <v-container  style="text-align:right;">
                                         <v-btn rounded color="warning" @click="resetRegistrarUsuario()">
                                             <h4 class="white--text">Cancelar</h4>
                                         </v-btn>
-                                        <v-btn rounded color="primary" class="ml-2" @click="registrarUsuario()" >
+                                        <v-btn rounded color="secondary" class="ml-2 mr'5" @click="registrarUsuario()" >
                                             <h4 class="white--text">Registrar</h4>
                                         </v-btn>
                                     </v-container>  
@@ -181,7 +181,7 @@
                                     <v-btn rounded color="red"   class="mb-4 "  @click="resetModificacionUsuario">  
                                         <h4 class="white--text">Cancelar</h4>
                                     </v-btn>
-                                    <v-btn rounded color="primary" class="mb-4 ml-2"    type="submit">
+                                    <v-btn rounded color="secondary" class="mb-4 ml-2"    type="submit">
                                         <h4 class="white--text">Modificar</h4>
                                     </v-btn>
                                 </div>
@@ -204,10 +204,10 @@
                                 <v-card-text>Email : {{ this.datosUsuario.correo }}</v-card-text>
                                 <!-- </v-container > -->
                                 <div style="text-align:right;">
-                                    <v-btn rounded color="red" class=" mb-4 "  @click="dialogEliminar = false">
+                                    <v-btn rounded color="warning" class=" mb-4 "  @click="dialogEliminar = false">
                                         <h4 class="white--text">Cancelar</h4>
                                     </v-btn>
-                                    <v-btn rounded color="primary"   class=" mb-4 ml-2 mr-2" @click="eliminarUsuario()">
+                                    <v-btn rounded color="secondary"   class=" mb-4 ml-2 mr-5" @click="eliminarUsuario()">
                                         <h4 class="white--text">Eliminar</h4>
                                     </v-btn>
                                 </div> 
@@ -256,7 +256,7 @@
             bottom
             color= "warning"
             left
-            class="pb-9"                      
+            class="pb-12"                      
         >
             <v-icon     
                 color="white"   
@@ -286,7 +286,7 @@
             bottom
             color= "secondary"
             left
-            class="pb-9"                      
+            class="pb-12"                      
         >
             <v-icon  
                 class="mr-3"   
@@ -359,6 +359,7 @@ export default {
             listaUsuariosAux:[],
             modUsuarioActivo: false,
             dialogEliminar: false,
+            
         }
     },
     created () {   
@@ -406,7 +407,7 @@ export default {
             ).catch((err)=>{
                 console.log(err)
                 this.alertaError = true;
-                this.textoAlertas = "Hubo un error al cargar los datos, intente mas tarde."
+                this.textoAlertas = "Error al cargar los datos, intente mas tarde."
             });
         },
         /**
@@ -441,7 +442,7 @@ export default {
             ).catch((err)=>{
                 console.log(err)
                 this.alertaError = true;
-                this.textoAlertas = "Hubo un error al cargar los datos, intente mas tarde."
+                this.textoAlertas = "Error al cargar los datos, intente mas tarde."
             });
         },
 
@@ -479,7 +480,7 @@ export default {
             }).catch((err)=>{
                 console.log(err)
                 this.alertaError = true;
-                this.textoAlertas = "Hubo un error al modificar el Usuario, intente mas tarde."
+                this.textoAlertas = "Error al modificar el usuario, intente mas tarde."
                 this.resetRegistrarUsuario()
             });
         },
@@ -554,14 +555,14 @@ export default {
             if (result.statusText=='OK') {
                 //  console.log(result.data)
                 this.alertaExito = true;
-                this.textoAlertas = "Se modificó el Usuario con exito."
+                this.textoAlertas = "Se modificó el usuario con exito."
                 this.obtenerUsuarios(); 
                 this.resetModificacionUsuario();
             }
             }).catch((err)=>{
                 console.log(err)
                 this.alertaError = true;
-                this.textoAlertas = "Hubo un error al modificar el Usuario, intente mas tarde."
+                this.textoAlertas = "Error al modificar el usuario, intente mas tarde."
             });
 
         },
@@ -583,12 +584,12 @@ export default {
                     this.obtenerUsuarios();
                     this.resetEliminarUsuario(); 
                     this.alertaExito = true;
-                    this.textoAlertas = "Se Elimino el Usuario con Exito del Sistema"
+                    this.textoAlertas = "Se elimino el usuario con exito "
                 }
                 }).catch((err)=>{
                 console.log(err)
                 this.alertaError = true;
-                this.textoAlertas = "Hubo un error al eliminar el Usuario, intente mas tarde."
+                this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
             });
             
         },
