@@ -11,20 +11,8 @@
             >                    
             <v-card-title class="white--text" style="font-size: 200%;text-shadow: #555 2px 2px 3px;">     
                 <v-icon class="mx-3" color="white">fas fa-users</v-icon>    
-
-                <!-- Titulo -->
                 <strong> Lista Usuarios </strong>
-
                 <v-spacer></v-spacer>
-
-                <!-- <v-btn  
-                fab
-                color="white"
-                @click="registrarUsuario()"
-                >
-                    <v-icon color="red">fas fa-plus</v-icon>
-                </v-btn>  -->
-
                 <v-dialog v-model="dialog" persistent max-width="500px">
                     <template v-slot:activator="{ on }">
                         <v-btn
@@ -225,6 +213,20 @@
         </v-img>
 
 
+        <!-- alerta de prueba -->
+        <v-alert
+            v-model="alert"
+            border="left"
+            close-text="Close Alert"
+            color="deep-purple accent-4"
+            dark
+            dismissible
+            elevation="24"
+            
+            >
+            Aenean imperdiet. Quisque id odio. Cras dapibus. Pellentesque ut neque. Cras dapibus.
+            </v-alert>
+
         <!-- propiedades tablas -->
         <v-data-table        
             :headers="columnas"
@@ -264,6 +266,7 @@ export default {
     data() {
         name: 'listaEstudiantes'
         return{
+            alert: false,
             dialog: false,
             mostrar: false, 
             datosUsuario:[ {nombre:''},{escuela:''},{role:''},{correo:''},{contrasena:''} ,{imagen:''}],  
@@ -295,16 +298,6 @@ export default {
             listaUsuariosAux:[],
             modUsuarioActivo: false,
             dialogEliminar: false,
-            // datosAlumnos:[
-
-            //     /* Datos de prueba */
-            //     {nombre: 'pinky', escuela: 'Ingenieria Civil en Computacion', role: 'admin', correo: 'mpizarro16@utalca.cl'},
-            //     {nombre: 'pinky', escuela: 'Ingenieria Civil en Computacion', role: 'admin', correo: 'mpizarro16@utalca.cl'},
-            //     {nombre: 'pinky', escuela: 'Ingenieria Civil en Computacion', role: 'admin', correo: 'mpizarro16@utalca.cl'},
-            //     {nombre: 'pinky', escuela: 'Ingenieria Civil en Computacion', role: 'admin', correo: 'mpizarro16@utalca.cl'},
-            //     {nombre: 'pinky', escuela: 'Ingenieria Civil en Computacion', role: 'admin', correo: 'mpizarro16@utalca.cl'},
-            //     {nombre: 'pinky', escuela: 'Ingenieria Civil en Computacion', role: 'admin', correo: 'mpizarro16@utalca.cl'},
-            // ],
         }
 
     },
@@ -440,6 +433,7 @@ export default {
                 //  console.log(result.data)
                  this.obtenerUsuarios(); 
                  this.resetModificacionUsuario();
+                 this.alert= true;
             }
             }).catch((err)=>{
                 console.log(err)
