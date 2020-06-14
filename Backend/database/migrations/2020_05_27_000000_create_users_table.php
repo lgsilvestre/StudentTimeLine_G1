@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('nombre',64);#('name', MAX) VARCHAR
             $table->string('rol');
-            $table->string('foto')->nullable();
+            //$table->string('foto')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
@@ -28,6 +28,8 @@ class CreateUsersTable extends Migration
             //referenciando a la carrera
             
         });
+        DB::statement("ALTER TABLE users ADD foto MEDIUMBLOB");
+        DB::statement("ALTER TABLE users CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci");
     }
 
     /**

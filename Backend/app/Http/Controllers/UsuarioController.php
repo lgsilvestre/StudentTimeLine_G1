@@ -32,6 +32,7 @@ class UsuarioController extends Controller
             foreach ($users as $user) {
                 $user->nombre_carrera= $escuelas[$user->escuela-1]->nombre;
             }
+            
             return $users;
         //este catch permite responder directamente que problemas en la peticion SQL
         } catch(\Illuminate\Database\QueryException $ex){ 
@@ -65,7 +66,7 @@ class UsuarioController extends Controller
             'nombre' => ['string', 'nullable'],
             'escuela' => ['numeric', 'nullable'],
             'rol' => ['string', 'nullable'],
-            'foto' => ['image','mimes:jpeg,png,jpg,gif,svg','max:2048','nullable'],
+            'foto' => ['image','mimes:jpeg,png,jpg,gif,svg','nullable'],
             'email' => ['email', 'nullable'],
             'password' => ['string', 'nullable']
         ]);
@@ -99,10 +100,8 @@ class UsuarioController extends Controller
             }
             if($request->foto!=null){
                 if($request->hasfile('foto')){
-                    $imagen = $request->file('foto');
-                    $nombreImagen = time () . '.' . $imagen->getClientOriginalExtension();
-                    Image::make($imagen)->resize(400,400)->save( public_path('/uploads/imagenes/' . $nombreImagen));
-                    $usuario->foto=$nombreImagen;
+                    $imagen = base64_encode(file_get_contents($request->file('foto')));
+                    $usuario -> foto = $imagen;
                 }
             }
             if($request->email!=null){
@@ -111,7 +110,7 @@ class UsuarioController extends Controller
             if($request->password!=null){
                 $usuario->password =  bcrypt($request->password);
             }            
-            $usuario-> save();//
+            $usuario -> save();//
             return compact('usuario');//para indicar al frontend que se creo el objeto usuario, con los datos obtenidos del request
         //este catch permite responder directamente que problemas en la peticion SQL
         } catch(\Illuminate\Database\QueryException $ex){ 
@@ -129,13 +128,15 @@ class UsuarioController extends Controller
     {
         try{
             $user = User::findOrFail($id);
+            //$user->foto = base64_decode($user["foto"]); //Lo uso para decodificar la imagen y poder verla en postman
             if($user==null){
                 return response()->json([
                     'success' => false,
                     'code' => 1,
                     'message' => 'No existe ninguna usuario con esa id'], 401);
             }
-            return $user;
+        //return response($user->foto)->header('Content-Type', 'image/png'); //El front tendrá que decodificar la imagen
+        return $user;
         //este catch permite responder directamente que problemas en la peticion SQL
         } catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
@@ -156,7 +157,7 @@ class UsuarioController extends Controller
             'nombre' => ['required','string'],
             'escuela' => ['required', 'numeric'], //Cambiar lo de la foreign key dps
             'rol' => ['required','string'], 
-            'foto' => ['image','mimes:jpeg,png,jpg,gif,svg','max:2048','nullable'],
+            'foto' => ['image','mimes:jpeg,png,jpg,gif,svg','nullable'],
             'email'=> ['required','email'],
             'password' => ['required' , 'string']
         ]);
@@ -177,12 +178,18 @@ class UsuarioController extends Controller
             $user ->email=$request->email;
             $user ->password=bcrypt($request->password);
             if($request->hasfile('foto')){
+                //Sirve para almacenar la imagen del usuario de manera local
+                /*
                 $imagen = $request->file('foto');
                 $nombreImagen = time () . '.' . $imagen->getClientOriginalExtension();
                 Image::make($imagen)->resize(400,400)->save( public_path('/uploads/imagenes/' . $nombreImagen));
-                $user->foto=$nombreImagen;
+                $user->foto=$nombreImagen;*/
+
+                //Ahora se guarda en la BD
+                $imagen = base64_encode(file_get_contents($request->file('foto')));
+                $user -> foto = $imagen;
             }else{
-                $user ->foto=null;
+                $user-> foto = null;
             }
             $r = $user->save();
             $user->assignRole($request->rol);
