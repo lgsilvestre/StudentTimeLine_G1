@@ -138,12 +138,34 @@ class UsuarioController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id){
-        return response()->json([
-            'success' => false,
-            'code' => 401,
-            'message' => 'Este recurso está bloqueado',
-            'data' => ['error'=>'El el protocolo se llama index']
-        ], 423 );
+        try{
+            $user = User::findOrFail($id);
+            //$img = base64_decode($user["foto"]);
+            //$user->foto = base64_decode($user["foto"]);
+            if($user==null){
+                return response()->json([
+                    'success' => false,
+                    'code' => 601,
+                    'message' => 'No existe ninguna usuario con esa id',
+                    'data' => null
+                ], 409);
+            }
+            //return response($user->foto)->header('Content-Type', 'image/png');
+            return response()->json([
+                'success' => true,
+                'code' => 600,
+                'message' => "La operacion se a realizado con exito",
+                'data' => ['usuario'=>$user]
+            ], 200);
+        //este catch permite responder directamente que problemas en la peticion SQL
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 602,
+                'message' => "Error en la base de datos",
+                'data' => ['error'=>$ex]
+            ], 409 );
+        }
     }
 
     /**
