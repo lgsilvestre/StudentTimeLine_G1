@@ -248,7 +248,9 @@
                                                         </v-col>
                                                     </v-row>
                                                     <v-row class="mt-0 pt-0 mb-0 pb-0">
+                                                        
                                                         <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
+                                                            
                                                             <v-text-field
                                                             v-model="anhov2"
                                                             dense
@@ -274,13 +276,21 @@
                                                     
                                                 </v-col>
                                             </v-row>
+                                            <v-alert 
+                                            v-model="alertaErrorRangoAnhos"
+                                            
+                                            dismissible
+                                            type="error">
+                                            El año de inicio no puede ser mayor al del final
+                                            </v-alert>
                                             <div style="text-align:right;" class="mb-2 mr-5">
                                                 <v-btn rounded color="warning" 
                                                 @click="resetYCerrarExportar"
                                                 >
                                                     <h4 class="white--text">Cancelar</h4>
                                                 </v-btn>
-                                                <v-btn rounded color="secondary" class="ml-2"   >
+                                                <v-btn rounded color="secondary" class="ml-2"  
+                                                @click="exportarEstudiantes" >
                                                     <h4 class="white--text">Aceptar</h4>
                                                 </v-btn>
                                             </div>
@@ -523,6 +533,7 @@
         anhov1: new Date().getFullYear(),
         anhov2: new Date().getFullYear(),
         anhov3: new Date().getFullYear(),
+        alertaErrorRangoAnhos: false,
         dialogExportar: false,
         rules: [
         value => !!value || 'Requerido',
@@ -537,11 +548,13 @@
     },
     watch: {
     },
+
     created () {
 
         this.obtenerEscuelas();
     },
     methods: {
+
         nada(item){
             
         },
@@ -612,6 +625,12 @@
             this.anhov1= new Date().getFullYear();
             this.anhov2= new Date().getFullYear();
             this.anhov3= new Date().getFullYear();
+        },
+        exportarEstudiantes(){
+            if (this.anhov2 > this.anhov3) {
+                this.alertaErrorRangoAnhos = true;
+                console.log('rango mal');
+            }
         },
 
     },
