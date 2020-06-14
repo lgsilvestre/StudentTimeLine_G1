@@ -32,3 +32,6 @@ Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
     Route::resource('estudiante', 'EstudianteController' );
 });
 
+Route::get('/importar_excel', 'ImportarExcelController@index');
+Route::post('/importar_excel/importar', 'ImportarExcelController@importar');
+
