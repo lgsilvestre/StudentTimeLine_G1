@@ -28,7 +28,8 @@ class UsuarioController extends Controller
         try{
 
             $users = User::all();
-            $escuelas=Escuela::orderBy('id','asc')->get();
+            $escuelas=Escuela::withTrashed()->orderBy('id','asc')->get();
+            //$escuelas=Escuela::orderBy('id','asc')->get();
             foreach ($users as $user) {
                 $user->nombre_carrera= $escuelas[$user->escuela-1]->nombre;
             }

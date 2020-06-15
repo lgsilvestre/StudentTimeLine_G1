@@ -178,7 +178,7 @@
                                 ></v-text-field>
 
                                 <div style="text-align:right;">
-                                    <v-btn rounded color="red"   class="mb-4 "  @click="resetModificacionUsuario">  
+                                    <v-btn rounded color="warning"   class="mb-4 "  @click="resetModificacionUsuario">  
                                         <h4 class="white--text">Cancelar</h4>
                                     </v-btn>
                                     <v-btn rounded color="secondary" class="mb-4 ml-2"    type="submit">
@@ -420,6 +420,8 @@ export default {
             var url = 'http://127.0.0.1:8000/api/v1/usuario';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
+                console.log(result);
+                console.log(result.data);
                 for (let index = 0; index < result.data.length; index++) {
                     const element = result.data[index];
                     let usuario = {
@@ -428,13 +430,9 @@ export default {
                         role: element.rol,
                         imagen: element.imagen,
                         correo: element.email,   
-                        escuela: element.escuela,
+                        escuela: element.nombre_carrera,
                     };
-                    for(var numEscuela = 0; numEscuela < this.listaEscuela.length; numEscuela++){                        
-                        if(usuario.escuela == this.listaEscuela[numEscuela].id){                                                   
-                            usuario.escuela = this.listaEscuela[numEscuela].nombre;
-                        }
-                    };                    
+                                       
                     this.listaUsuariosAux[index]=usuario;
                 }
                 this.listaUsuarios = this.listaUsuariosAux;
@@ -472,7 +470,8 @@ export default {
             
             axios.post(url, post, this.$store.state.config)
             .then((result) => {
-                console.log(result.statusText);
+                console.log(result);
+                console.log(result.data);
                 this.alertaExito = true;
                 this.textoAlertas = "Se creó el usuario con exito."
                 this.resetRegistrarUsuario()

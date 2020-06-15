@@ -99,7 +99,7 @@
                                                             <v-icon class="pr-2">
                                                                 fas fa-file-upload
                                                             </v-icon>
-                                                            <h4>Importar xls</h4>
+                                                            <h4>Importar xlsx</h4>
                                                         </v-btn>
                                                     </v-col>
                                                 </v-row>
@@ -107,39 +107,51 @@
                                             </v-container>
                                             <v-container v-if="containerAgregarEstudianteUnico">
                                                 <v-form  class=" px-10 pt-8 "  >
-                                                    <v-text-field  label="Matricula" outlined
+                                                    <v-text-field  
+                                                    v-model="estudianteImportar.matricula"
+                                                    label="Matricula" outlined
                                                     color="secondary"
                                                     prepend-inner-icon="fas fa-graduation-cap"
                                                     ></v-text-field>
 
-                                                    <v-text-field  label="Rut" outlined
+                                                    <v-text-field  
+                                                    v-model="estudianteImportar.rut"
+                                                    label="Rut" outlined
                                                     color="secondary"
                                                     prepend-inner-icon="fas fa-address-card"
                                                     ></v-text-field>
 
-                                                    <v-text-field  label="Nombre completo" outlined
+                                                    <v-text-field  
+                                                    v-model="estudianteImportar.nombre_completo"
+                                                    label="Nombre completo" outlined
                                                     color="secondary"
                                                     prepend-inner-icon="mdi-account"
                                                     ></v-text-field>
 
                                                     <v-text-field 
-                                                        label="Correo Electronico"
-                                                        outlined
-                                                        color="secondary"
-                                                        prepend-inner-icon="mdi-email"
+                                                    v-model="estudianteImportar.correo"
+                                                    label="Correo Electronico"
+                                                    outlined
+                                                    color="secondary"
+                                                    prepend-inner-icon="mdi-email"
                                                     ></v-text-field>
 
-                                                    <v-text-field  label="Año ingreso" outlined
+                                                    <v-text-field  
+                                                    v-model="estudianteImportar.anho_ingreso"
+                                                    label="Año ingreso" outlined
                                                     color="secondary"
                                                     prepend-inner-icon="fas fa-hashtag"
                                                     ></v-text-field>
 
-                                                    <v-text-field  label="Situacion academica" outlined
+                                                    <v-text-field  
+                                                    v-model="estudianteImportar.situacion_academica"
+                                                    label="Situacion academica" outlined
                                                     color="secondary"
                                                     prepend-inner-icon="fas fa-address-book"
                                                     ></v-text-field>
 
-                                                    <v-select  
+                                                    <v-select 
+                                                    v-model="estudianteImportar.escuela" 
                                                     :items="listaEscuela"
                                                     item-text="nombre"
                                                     item-value="id"
@@ -153,7 +165,9 @@
                                                         >
                                                             <h4 class="white--text">Cancelar</h4>
                                                         </v-btn>
-                                                        <v-btn rounded color="secondary" class="ml-2"   >
+                                                        <v-btn 
+                                                        @click="agregarEstudiantesUnico"
+                                                        rounded color="secondary" class="ml-2"   >
                                                             <h4 class="white--text">Aceptar</h4>
                                                         </v-btn>
                                                     </div>
@@ -161,6 +175,7 @@
                                             </v-container>
                                             <v-container v-if="containerAgregarEstudianteImportar" class="px-10">
                                                 <v-file-input  
+                                                v-model="file" 
                                                 class="pt-5"
                                                 label="Seleccione un archivo"
                                                 color="secondary"
@@ -176,7 +191,8 @@
                                                     >
                                                         <h4 class="white--text">Cancelar</h4>
                                                     </v-btn>
-                                                    <v-btn rounded color="secondary" class="ml-2"   >
+                                                    <v-btn rounded color="secondary" class="ml-2"   
+                                                    @click="agregarEstudiantesImportar">
                                                         <h4 class="white--text">Aceptar</h4>
                                                     </v-btn>
                                                 </div>
@@ -539,7 +555,19 @@
         value => !!value || 'Requerido',
         value => value <= new Date().getFullYear()|| 'El año no debe ser mayor al actual',
         value => value >= 1981 || 'El año no debe ser menor a 1981',
-        ]
+        ],
+        //archivo
+        file: null,
+        //estudiante
+        estudianteImportar: {
+            matricula:'',
+            rut:'',
+            nombre_completo:'',
+            correo:'',
+            anho_ingreso:'',
+            situacion_academica:'',
+            escuela:'',
+        },    
         
 
     }),
@@ -573,6 +601,42 @@
         mostrarAgregarEstudiantesUnico(){
             this.botonesAgregarEstudiantes= false;
             this.containerAgregarEstudianteUnico= true;
+        },
+        agregarEstudiantesImportar(){
+            console.log(this.file);
+            var url = 'http://127.0.0.1:8000/api/importar_excel/importar';
+            axios.post(url,this.file, this.$store.state.config)
+            .then((result)=>{
+                if (result.statusText == 'OK') {
+                    console.log('se cargo el archivo mierda')
+                }
+            })
+            .catch((err)=>{
+            console.log(err)
+            })
+        },
+        agregarEstudiantesUnico() {
+            var url = 'http://127.0.0.1:8000/api/v1/estudiante';
+            let post = {
+                "matricula": this.estudianteImportar.matricula,
+                "rut": this.estudianteImportar.rut,
+                "nombre_completo": this.estudianteImportar.nombre_completo,
+                "correo": this.estudianteImportar.correo,
+                "anho_ingreso": this.estudianteImportar.anho_ingreso,
+                "situacion_academica": this.estudianteImportar.situacion_academica,
+                "porcentaje_avance":null,
+                "creditos_aprobados":null,
+                "escuela": this.estudianteImportar.escuela,
+            };
+            axios.post(url,post,this.$store.state.config)
+            .then((result)=>{
+                if (result.statusText == 'OK') {
+                    console.log('se cargo el estudiante mierda mierda')
+                }
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
         },
         mostrarAgregarEstudiantesImportar(){
             this.botonesAgregarEstudiantes= false;
@@ -636,9 +700,3 @@
     },
 }
 </script>
-
-<style scoped>
-
-</style>>
-
-</style>
