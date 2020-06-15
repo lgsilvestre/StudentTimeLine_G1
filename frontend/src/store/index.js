@@ -70,8 +70,8 @@ export default new Vuex.Store({
         },
         unLogin(state){
             //esta funcionalidad se agregara mas adelante cuando el backend tenga lista esta funcionalidad
-            var url = 'http://127.0.0.1:8000/api/v1/escuela/'+state.usuario.user.id;
-            axios.delete(url,state.config)
+            var url = 'http://127.0.0.1:8000/api/v1/auth/logout';
+            axios.get(url,state.config)
             .then((result)=>{
                 console.log(result);
             if (result.statusText=='OK') {
@@ -91,7 +91,6 @@ export default new Vuex.Store({
                 router.push({ path: '/' });
             }
             });
-            
         },
         
         registrarUsuario(state, nuevoUsuario) {

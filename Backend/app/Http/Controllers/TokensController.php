@@ -14,6 +14,7 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Mail\EmergencyCallReceived;
+use \App\Mail\SendMail;
 //use App\Mail\SendMail;
 
 class TokensController extends Controller
@@ -111,57 +112,53 @@ class TokensController extends Controller
         }
     }
 
+    /**
+     * Metodo que se encarga en recuperar la contraseña
+     */
     public function restartPassword(Request $request){
         $credentials = $request->only('email');
-
         $validator = Validator::make($credentials, [
             'email' => 'required|email',
         ]);
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
-                'code' => 1,
+                'code' => 2,
                 'message' => 'Error en el tipo de dato',
-                'errors' => $validator->errors()
+                'data' => ['error'=>$validator->errors()]
             ], 422);
         }
-        
-        //$user = User::where('emails.email', $credentials['email'])->get()->first(); 
-        //$receivers = Receiver::pluck('email');
-        //Mail::to("xebaelvemgador@gmail.com")->send(new EmergencyCallReceived());
-
         try{
-            \Mail::send('mails.test', [], function ($mail) {
-                $mail->from('sdiUtalca@gmail.com', 'Sistema de gestion de ayudantes');
-                $mail->to('sdiUtalca@gmail.com', 'ayuda')->subject('Test');
-            });
-         //este catch permite responder directamente que problemas en la peticion MAIL
+            $user = User::where('email', $credentials['email'])->get()->first();
+            if($user==null){
+                return response()->json([
+                    'success' => false,
+                    'code' => 2,
+                    'message' => 'Correo no existe',
+                    'data' => 'El usuario con el correo:'.$credentials['email'].' no existe'
+                ], 401);
+            }
+            $details = [
+                'title' => 'Recuperacion de clave del sistema de gestion de ayudantes',
+                'body' => "Hace poco hemos recibido una solicitud de restablecimiento de la contraseña de su cuenta: ".$user['email']. ' ACA DEBERIA IR EL LINK PARA RECUPERAR LA CLAVE'.'    '. 
+                'Si no ha solicitado la contraseña puede simplemente ignorar este correo electrónico. No se efectuará ningún cambio en su cuenta. Recuerde, su correo y su contraseña le permiten acceder a nuestro sistema.',
+            ];
+            \Mail::to($user['email'])->send(new SendMail($details));
+            return response()->json([
+                'success' => true,
+                'code' => 1,
+                'message' => 'Se a mandado el correo exitosamente',
+                'data' => null
+            ], 200);
         }catch(\Exception $e){
-             return response()->json(['Confirmacion' => $e], 500);
-        }
-        return response()->json(['Confirmacion' => 'Se a mandado el correo exitosamente'], 200);
-       
-        /* 
-        $datos = array(
-            'titulo' => "Recuperacion de clave del sistema de gestion de ayudantes",
-            'contenido' => "Su clave es: ".$user['email'],
-        );
-        Mail::send('notificacion', $datos, function ($mail) {
-            $mail->to('xebaelvemgador@gmail.com')->subject('Test');
-          });
-        */
-
-        /*
-        if($user==null){
-            //aca se manda el mail
-            return response()->json(['Confirmacion' => 'Se a mandado el correo exitosamente'], 200);
-        }else {
             return response()->json([
                 'success' => false,
                 'code' => 2,
-                'message' => 'Error en las credenciales',
-                'errors' => $validator->errors()], 401);
+                'message' => 'Error',
+                'data' => $e
+            ], 502);
         }
-        */
     }
+
+    
 }

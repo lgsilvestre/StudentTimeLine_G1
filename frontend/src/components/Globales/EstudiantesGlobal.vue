@@ -624,10 +624,22 @@
                 "correo": this.estudianteImportar.correo,
                 "anho_ingreso": this.estudianteImportar.anho_ingreso,
                 "situacion_academica": this.estudianteImportar.situacion_academica,
-                "porcentaje_avance":null,
-                "creditos_aprobados":null,
-                "escuela": this.estudianteImportar.escuela,
+                "porcentaje_avance":0,
+                "creditos_aprobados":0,
+                "escuela": 1,
             };
+            let post2 = {
+                "matricula": 2016407072,
+                "rut": "19217234",
+                "nombre_completo": "sebastian ibarra",
+                "correo": "elbrellako1@hotmail.com",
+                "anho_ingreso": 2016,
+                "situacion_academica": "titulado",
+                "porcentaje_avance": 100,
+                "creditos_aprobados": 1,
+                "escuela": 1
+            };
+            console.log(post2);
             axios.post(url,post,this.$store.state.config)
             .then((result)=>{
                 if (result.statusText == 'OK') {
