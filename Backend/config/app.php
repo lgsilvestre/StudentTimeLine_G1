@@ -161,7 +161,10 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-
+        //El siguiente comando es para importar la configuracion del permiso
+        Spatie\Permission\PermissionServiceProvider::class,
+        //El siguiente comando es para importar la configuracion del JWT
+        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -174,6 +177,10 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        //Para importar la imagen (Ya no lo ocupo)
+        Intervention\Image\ImageServiceProvider::class,
+        //Para usar Excel
+        Maatwebsite\Excel\ExcelServiceProvider::class,
 
     ],
 
@@ -226,7 +233,12 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
+        //Importando JWT
+        'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class, 
+        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
+        'Image'     => Intervention\Image\Facades\Image::class,
+        //Para usar Excel
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
 ];
