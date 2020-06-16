@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Imports\EstudiantesImport;
 use Excel;
+use App\Estudiante;
 use DB; //Operaciones de DB
 
 class ImportarExcelController extends Controller
@@ -15,16 +16,44 @@ class ImportarExcelController extends Controller
     }
 
     function importar(Request $request){
-        
-        $this->validate($request, [
-            'select_file' => 'required|mimes:xls,xlsx'
-        ]);
-           
-        $data = Excel::import(new EstudiantesImport, request()->file('select_file'));
+        if ($request->hasfile('file')) 
+        {
+            $this->validate($request, [
+                'file' => 'required|mimes:xls,xlsx'
+            ]);
 
-        return dd('Estudiantes importados exitosamente.');
-        //return back()->with('success', 'Estudiantes importados exitosamente.');
+            //Log::info($request->file('file'));
+            $path = $request->file('file');
+            $data = Excel::toArray(new EstudiantesImport, $path);
+
+            foreach ($data[0] as $key => $row)
+            {
+                //dump($row);
+                    
+                $insert_data[] = array(
+                    'matricula'  => $row[0],
+                    'rut'  => $row[1],
+                    'nombre_completo'  => $row[2],
+                    'correo'  => $row[3],
+                    'anho_ingreso'  => $row[4],
+                    'situacion_academica'  => $row[5],
+                    'porcentaje_avance'  => $row[6],
+                    'creditos_aprobados'  => $row[7],
+                    'escuela'  => $row[8],
+                );
+                //dump($insert_data);
+            }
+
+            if(!empty($insert_data))
+            {
+                DB::table('estudiantes')->insert($insert_data);
+            }
+            return response()->json($data,200);
+            //return back()->with('success', 'Estudiantes importados exitosamente.');
+        }
     }
-
+        
 }
+
+
 
