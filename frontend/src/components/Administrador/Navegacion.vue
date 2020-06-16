@@ -1,5 +1,5 @@
 <template>
-<v-navigation-drawer app right v-model=drawers.drawer  :mini-variant=drawers.miniVarianteAdm  
+<v-navigation-drawer app right v-model="drawers.drawer"  :mini-variant="drawers.miniVarianteAdm"  
    permanent
     src="@/assets/Globales/background-panel-02.jpg"
     >

@@ -1,10 +1,10 @@
 <template>
     <v-navigation-drawer
     app
-    v-model="drawer"
+    v-model="drawers.drawer"
     right
     premanent    
-    :mini-variant.sync=drawelAdmin  
+    :mini-variant.sync="drawers.miniVarianteAdm" 
     src="@/assets/Globales/background-panel-02.jpg"
     >
     <!-- Mis recomendaciones de fondo (?)  1, 2, 4, 7, 9,  -->  
@@ -84,7 +84,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['drawelAdmin']),
+        ...mapState(['drawers']),
     },
     methods: {
         ...mapMutations(['unLogin']),

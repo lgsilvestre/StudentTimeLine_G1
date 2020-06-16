@@ -1,5 +1,5 @@
 <template>
-<v-navigation-drawer app right v-model=drawer  :mini-variant.sync=drawelAdmin permanentt  
+<v-navigation-drawer app right v-model="drawers.drawer"  :mini-variant.sync="drawers.miniVarianteAdm"  permanent 
     src="@/assets/Globales/background-panel-02.jpg"
 >
         <v-list-item class="px-2 py-1 difuminado" to="/profesor/perfil">
@@ -131,7 +131,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['drawelAdmin']),
+        ...mapState(['drawers']),
     },
     icons:{
         iconfont: (['mdiSvg', 'mdi','mdiSvg' , 'md' , 'fa' ,'fa4' ,'faSvg'])
