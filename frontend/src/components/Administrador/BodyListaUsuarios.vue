@@ -221,6 +221,7 @@
                 :headers="columnas"
                 :items="listaUsuarios"
                 :search="search"
+                :loading="cargando"
                 :items-per-page="10"            
             >            
                 <template v-slot:item.opciones="{ item }">
@@ -359,6 +360,7 @@ export default {
             listaUsuariosAux:[],
             modUsuarioActivo: false,
             dialogEliminar: false,
+            cargando: true,
             
         }
     },
@@ -415,6 +417,7 @@ export default {
          * Desde el bakend no envian: contraseña y (rol) aun esta por definir.
          */
         obtenerUsuarios(){
+            this.cargando = true;
             this.listaUsuariosAux = [];
             var aux;
             var url = 'http://127.0.0.1:8000/api/v1/usuario';
@@ -431,15 +434,16 @@ export default {
                         imagen: element.imagen,
                         correo: element.email,   
                         escuela: element.nombre_carrera,
-                    };
-                                       
+                    };            
                     this.listaUsuariosAux[index]=usuario;
                 }
+                this.cargando = false;
                 this.listaUsuarios = this.listaUsuariosAux;
             }
             ).catch((err)=>{
                 console.log(err)
                 this.alertaError = true;
+                this.cargando = false;
                 this.textoAlertas = "Error al cargar los datos, intente mas tarde."
             });
         },
