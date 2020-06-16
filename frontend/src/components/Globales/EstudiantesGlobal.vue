@@ -174,8 +174,11 @@
                                                 </v-form> 
                                             </v-container>
                                             <v-container v-if="containerAgregarEstudianteImportar" class="px-10">
-                                                <v-file-input  
-                                                v-model="file" 
+                                                <v-file-input 
+                                                id="file" 
+                                                v-model="file"
+                                                ref="file" 
+                                                type="file"
                                                 class="pt-5"
                                                 label="Seleccione un archivo"
                                                 color="secondary"
@@ -319,7 +322,7 @@
                     </v-img>
                 <v-data-table
                 :headers="headers"
-                :items="desserts"
+                :items="listaEstudiantes"
                 :search="buscar"
                 class="elevation-1 "
                 >
@@ -541,6 +544,8 @@
             },
             
         ],
+        listaEstudiantes:[],
+        listaEstudiantesAux:[],
         dessertsAux:[],
         listaEscuelaAux:[],
         todosLosAnhosVariable: true,
@@ -558,6 +563,7 @@
         ],
         //archivo
         file: null,
+        import_file: '',
         //estudiante
         estudianteImportar: {
             matricula:'',
@@ -576,13 +582,19 @@
     },
     watch: {
     },
-
+    beforeMount(){
+        this.obtenerEstudiantes();
+    },
+    //beforeCreate(){
+        //this.obtenerEstudiantes();
+    //},
     created () {
-
         this.obtenerEscuelas();
     },
     methods: {
-
+        onFileChange(e) {
+            this.import_file = e.target.files[0];
+        },
         nada(item){
             
         },
@@ -603,16 +615,45 @@
             this.containerAgregarEstudianteUnico= true;
         },
         agregarEstudiantesImportar(){
-            console.log(this.file);
+            let formData = new FormData();
+            formData.append('file',this.file);
             var url = 'http://127.0.0.1:8000/api/importar_excel/importar';
-            axios.post(url,this.file, this.$store.state.config)
+            axios.post(url,formData)
             .then((result)=>{
                 if (result.statusText == 'OK') {
-                    console.log('se cargo el archivo mierda')
+                    this.resetImportarEstudiantes();
+                    this.obtenerEstudiantes();
                 }
             })
             .catch((err)=>{
-            console.log(err)
+                console.log(err)
+            })
+        },
+        obtenerEstudiantes(){
+            this.listaEstudiantes = [];
+            var url = 'http://127.0.0.1:8000/api/v1/estudiante';
+            axios.get(url,this.$store.state.config)
+            .then((result)=>{
+                if (result.statusText == 'OK') {
+                    for (let index = 0; index < result.data.length; index++) {
+                    const element = result.data[index];
+                    let estudiante = {
+                        matricula: element.matricula,
+                        rut: element.rut,
+                        nombre_completo: element.nombre_completo,
+                        correo: element.correo,
+                        anho_ingreso: element.anho_ingreso,
+                        situacion_academica: element.situacion_academica,
+                        escuela: element.escuela,
+                    };
+                    this.listaEstudiantesAux[index]=estudiante;
+                    }
+                    this.listaEstudiantes = this.listaEstudiantesAux;
+                    console.log(this.listaEstudiantesAux);
+                }
+            })
+            .catch((err)=>{
+                console.log(err)
             })
         },
         agregarEstudiantesUnico() {
@@ -628,22 +669,12 @@
                 "creditos_aprobados":0,
                 "escuela": 1,
             };
-            let post2 = {
-                "matricula": 2016407072,
-                "rut": "19217234",
-                "nombre_completo": "sebastian ibarra",
-                "correo": "elbrellako1@hotmail.com",
-                "anho_ingreso": 2016,
-                "situacion_academica": "titulado",
-                "porcentaje_avance": 100,
-                "creditos_aprobados": 1,
-                "escuela": 1
-            };
+            
             console.log(post2);
             axios.post(url,post,this.$store.state.config)
             .then((result)=>{
                 if (result.statusText == 'OK') {
-                    console.log('se cargo el estudiante mierda mierda')
+                    console.log('se cargo el estudiante')
                 }
             })
             .catch((err)=>{
@@ -707,6 +738,10 @@
                 this.alertaErrorRangoAnhos = true;
                 console.log('rango mal');
             }
+        },
+        resetImportarEstudiantes(){
+            this.file = null;
+            this.dialogAgregarEstudiante= false;
         },
 
     },
