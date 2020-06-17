@@ -227,7 +227,7 @@ export default {
             var contrasena  =  this.datosUsuarioModificar.contrasena;
             // validamos que el correo puede ser null o segun la regla establecida
             if( /.+@utalca.cl/.test(correo) || correo == null || correo == ''){
-                if( contrasena =='' || contrasena.length >= 8 ){
+                if( contrasena == null|| contrasena =='' || contrasena.length >= 8){
                     var aux;
                     if ( this.datosUsuarioModificar.role == "Administrador") {
                         aux = "admin"

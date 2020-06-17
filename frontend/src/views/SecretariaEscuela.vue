@@ -1,6 +1,7 @@
 <template>
   <div class="SecretariaEscuela">
     <AppBarGlobal/>  
+    <router-view></router-view>
     <FooterGlobal/>
     <Navegacion/>
     

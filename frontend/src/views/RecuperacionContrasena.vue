@@ -1,6 +1,5 @@
 <template>
     <div class="RecuperacionContrasena">
-
         <AppBarRC/>
         <BodyRC/>
         <FooterGlobal/>

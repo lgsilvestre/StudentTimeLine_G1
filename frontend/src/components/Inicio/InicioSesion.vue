@@ -32,8 +32,7 @@
                         </v-container>
                         
                     </v-col>
-                    <v-col class="d-none d-sm-none d-md-block " md="1">
-                           
+                    <v-col class="d-none d-sm-none d-md-block " md="1"> 
                     </v-col>
                     <v-col  sm="12" md="6" lg="4" >
                         <v-card elevation="1" shaped>
@@ -49,7 +48,7 @@
                                         label="Correo"
                                         outlined
                                         color="secondary"
-                                        prepend-inner-icon="mdi-account-circle"
+                                        prepend-inner-icon="mdi-email"
                                     ></v-text-field>
                                     <v-text-field v-model="lista.pass"
                                         :prepend-inner-icon="mostrar ? 'mdi-eye' : 'mdi-eye-off'"
@@ -67,8 +66,6 @@
                                             ¿Olvidaste tu contraseña?
                                         </v-breadcrumbs-item>
                                     </v-breadcrumbs>
-                                </v-container>
-                                <v-container class="px-10">
                                     <v-btn rounded large block color="primary" 
                                         :loading="verificandoLogin"
                                         @click="login(lista)"
@@ -77,6 +74,7 @@
                                         <h4 class="white--text">Iniciar Sesión</h4>
                                     </v-btn>
                                 </v-container>
+                                
                             </v-form> 
                         </v-card>
                         

@@ -1,5 +1,5 @@
 <template>
-<v-navigation-drawer app right v-model=drawers.drawer  :mini-variant=drawers.miniVarianteAdm  
+<v-navigation-drawer app right v-model="drawers.drawer"  :mini-variant="drawers.miniVarianteAdm"  
    permanent
     src="@/assets/Globales/background-panel-02.jpg"
     >
@@ -61,25 +61,17 @@
                 </v-list-item>
             </v-list>
         </v-menu>
-
-        <v-menu open-on-hover offset-x left>
-            <template v-slot:activator="{ on }">
-                <v-list-item  v-on="on" class="difuminado">
+        
+            
+                <v-list-item  v-on="on" class="difuminado" to="/administrador/estudiantes">
                     <v-list-item-icon >
                         <v-icon color="white">fas fa-user-graduate</v-icon>
                     </v-list-item-icon>
                     <v-list-item-title class="white--text letra" ><strong>Estudiantes</strong></v-list-item-title>
                 </v-list-item>
-            </template>
-            <v-list>
-                <v-list-item v-for="(item, index) in itemsEstudiantes" :key="index" @click="CrearEscuela" >
-                    <v-list-item-icon>
-                        <v-icon> {{ item.icon }} </v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>{{ item.title }}</v-list-item-title>
-                </v-list-item>
-            </v-list>
-        </v-menu>
+            
+            
+        
 
         <v-menu open-on-hover  offset-x left>
             <template v-slot:activator="{ on }">
@@ -121,9 +113,12 @@
 
     </v-list>
     <template v-slot:append >
-        <div >
-            <v-btn block  @click="cerrarSesion">Cerrar sesión</v-btn>
-        </div>
+        <v-list-item class=" difuminado" style="background-color: #FF6B6B" @click="unLogin">
+            <v-list-item-icon >
+                <v-icon color="white" style="font-size: 125%">fas fa-power-off</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title class="white--text letra" ><strong>Cerrar sesion</strong></v-list-item-title>
+        </v-list-item>
     </template>
     
     </v-navigation-drawer>
@@ -132,7 +127,7 @@
 
 
 <script>
-import {mapState} from 'vuex';
+import {mapState, mapMutations} from 'vuex';
 export default {
     name:'Navegacion',
     data() {
@@ -187,6 +182,7 @@ export default {
         iconfont: (['mdiSvg', 'mdi','mdiSvg' , 'md' , 'fa' ,'fa4' ,'faSvg'])
     },
     methods: {
+        ...mapMutations(['unLogin']),
         CrearEscuela(){
             console.log('crear Escuela')
         },

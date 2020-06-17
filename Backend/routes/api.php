@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -27,6 +28,11 @@ Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
     Route::post('/auth/login', 'TokensController@login');
     Route::post('/auth/refresh', 'TokensController@refreshToken');
     Route::get('/auth/logout', 'TokensController@logoutToken');
+    Route::resource('estudiante', 'EstudianteController' );
     Route::post('/auth/restartPassword', 'TokensController@restartPassword');
 });
+
+Route::get('send-mail','MailSend@mailsend');
+Route::get('/importar_excel', 'ImportarExcelController@index');
+Route::post('/importar_excel/importar', 'ImportarExcelController@importar');
 

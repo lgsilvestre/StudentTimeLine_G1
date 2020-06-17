@@ -2,9 +2,9 @@
   <div class="Profesor">
     <AppBarGlobal/>  
     <NavegacionProfesor/> 
-    <v-content>
-      <router-view></router-view>
-    </v-content>
+    
+    <router-view></router-view>
+    
     <FooterGlobal/>
   </div>
 </template>
