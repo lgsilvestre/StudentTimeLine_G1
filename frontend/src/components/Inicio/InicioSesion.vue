@@ -67,7 +67,7 @@
                                         </v-breadcrumbs-item>
                                     </v-breadcrumbs>
                                     <v-btn rounded large block color="primary" 
-                                        :loading="verificandoLogin"
+                                        :loading="cargaLogin"
                                         @click="login(lista)"
                                         >
                                         <!--@click="cargar = 'verificandoLogin'"-->
@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import {mapMutations} from 'vuex';
+import {mapMutations, mapState} from 'vuex';
 export default {
     name: 'InicioSesion',
 
@@ -112,6 +112,9 @@ export default {
         ],
         lista: [{email:''},{pass:''}], 
       }
+    },
+    computed:{
+        ...mapState(['cargaLogin']),
     },
     methods:{
         ...mapMutations(['login']),
