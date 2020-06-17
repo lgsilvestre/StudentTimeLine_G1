@@ -223,15 +223,17 @@ export default {
       },
 
       modificarUsuario(){
-            var correo =  this.datosUsuarioModificar.correo;
-            var contrasena  =  this.datosUsuarioModificar.contrasena;
+            var correo = '';
+            correo= this.datosUsuarioModificar.correo;
+            var contrasena  =  '';
+            contrasena = this.datosUsuarioModificar.contrasena;
             // validamos que el correo puede ser null o segun la regla establecida
             if( /.+@utalca.cl/.test(correo) || correo == null || correo == ''){
-                if( contrasena == null|| contrasena =='' || contrasena.length >= 8){
+                if(contrasena == null || contrasena =='' || contrasena.length >= 8 ){
                     var aux;
                     if ( this.datosUsuarioModificar.role == "Administrador") {
                         aux = "admin"
-                    };
+                    }; 
                     if ( this.datosUsuarioModificar.role == "Secretaría de Escuela") {
                         aux = "secretaria de escuela"
                     };
