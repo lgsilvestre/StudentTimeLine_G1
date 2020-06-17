@@ -2,7 +2,7 @@
 <v-navigation-drawer app right v-model="drawers.drawer"  :mini-variant.sync="drawers.miniVarianteAdm"  permanent 
     src="@/assets/Globales/background-panel-02.jpg"
 >
-        <v-list-item class="px-2 py-1 difuminado" to="/profesor/perfil">
+        <v-list-item class="px-2 py-1 difuminado" active-class="activacion" to="/profesor/perfil">
             <v-list-item-avatar >
                 <v-img src="@/assets/Profesor/unnamed.png"></v-img>
             </v-list-item-avatar>
@@ -12,7 +12,7 @@
         <v-list > 
             <v-menu open-on-hover offset-x left>
                 <template v-slot:activator="{ on }">
-                    <v-list-item  v-on="on" class="difuminado" to="/profesor/estudiantes"> 
+                    <v-list-item  v-on="on" class="difuminado" active-class="activacion" to="/profesor/estudiantes"> 
                         <v-list-item-icon>
                             <v-icon color="white">fas fa-user-graduate</v-icon>
                         </v-list-item-icon>
@@ -30,7 +30,7 @@
             </v-menu>
             <v-menu open-on-hover offset-x left>
                 <template v-slot:activator="{ on }">
-                    <v-list-item  v-on="on" class="difuminado">
+                    <v-list-item  v-on="on" class="difuminado" active-class="activacion">
                         <v-list-item-icon>
                             <v-icon color="white" >fas fa-archway</v-icon>
                         </v-list-item-icon>
@@ -66,7 +66,7 @@
             </v-menu>
             <v-menu open-on-hover offset-x left>
                 <template v-slot:activator="{ on }">
-                    <v-list-item  v-on="on" class="difuminado">
+                    <v-list-item  v-on="on" class="difuminado" active-class="activacion">
                         <v-list-item-icon>
                             <v-icon color="white">fab fa-accusoft</v-icon>
                         </v-list-item-icon>
@@ -84,7 +84,7 @@
             </v-menu>
             <v-menu open-on-hover  offset-x left>
                 <template v-slot:activator="{ on }">
-                    <v-list-item  v-on="on" class="difuminado">
+                    <v-list-item  v-on="on" class="difuminado" active-class="activacion">
                         <v-list-item-icon>
                             <v-icon color="white">fas fa-envelope</v-icon>
                         </v-list-item-icon>
@@ -157,5 +157,9 @@ export default {
     }
     .letra{
         font-size: 125%;
+    }
+    .activacion {
+        color:#fff;
+        background-color: rgba(0,0,0,0.6);
     }
 </style>

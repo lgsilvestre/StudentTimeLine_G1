@@ -12,7 +12,7 @@
     <!-- Lista general del navigation drawer -->
         <!-- Seccion de Mi Perfil -->
         <v-list >
-            <v-list-item class="px-2 difuminado" to="/secretariaEscuela/perfil">
+            <v-list-item class="px-2 difuminado" active-class="activacion" to="/secretariaEscuela/perfil">
                 <!-- Imagen o Avatar -->
                 <v-list-item-avatar>
                     <v-img src="http://www.ingenieria.utalca.cl/Repositorio/PNsAYcfZiO2QfjGDQMIyjMOAomsLch/Ruth%20Garrido.jpg"></v-img>
@@ -22,35 +22,35 @@
             </v-list-item>
 
             <v-divider></v-divider>
-            <v-list-item @click="profesores" class="difuminado"  >
+            <v-list-item @click="profesores" class="difuminado" active-class="activacion" >
                 <v-list-item-icon>
                     <v-icon color="white">fas fa-chalkboard-teacher</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title class="white--text letra"><strong>Profesores</strong></v-list-item-title>                            
             </v-list-item>
 
-            <v-list-item @click="cursos" class="difuminado">
+            <v-list-item @click="cursos" class="difuminado" active-class="activacion">
                 <v-list-item-icon >
                     <v-icon color="white">fab fa-accusoft</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title class="white--text letra"><strong>Cursos</strong></v-list-item-title>                            
             </v-list-item>
 
-            <v-list-item @click="estudiantes" class="difuminado" to="/secretariaEscuela/estudiantes">
+            <v-list-item @click="estudiantes" class="difuminado" active-class="activacion" to="/secretariaEscuela/estudiantes">
                 <v-list-item-icon >
                     <v-icon color="white">fas fa-user-graduate</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title class="white--text letra"><strong>Estudiantes</strong></v-list-item-title>                            
             </v-list-item>
 
-            <v-list-item @click="observaciones" class="difuminado">
+            <v-list-item @click="observaciones" class="difuminado" active-class="activacion">
                 <v-list-item-icon >
                     <v-icon color="white">fas fa-archway</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title class="white--text letra"><strong>Observaciones</strong></v-list-item-title>                            
             </v-list-item>
 
-            <v-list-item @click="contactar" class="difuminado">
+            <v-list-item @click="contactar" class="difuminado" active-class="activacion">
                 <v-list-item-icon>
                     <v-icon color="white">fas fa-envelope</v-icon>
                 </v-list-item-icon>
@@ -104,5 +104,9 @@ export default {
     }
     .letra{
         font-size: 125%;
+    }
+    .activacion {
+        color:#fff;
+        background-color: rgba(0,0,0,0.6);
     }
 </style>
