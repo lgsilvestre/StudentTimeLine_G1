@@ -28,7 +28,11 @@ Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
     Route::post('/auth/login', 'TokensController@login');
     Route::post('/auth/refresh', 'TokensController@refreshToken');
     Route::get('/auth/logout', 'TokensController@logoutToken');
-    Route::post('/auth/restartPassword', 'TokensController@restartPassword');
     Route::resource('estudiante', 'EstudianteController' );
+    Route::post('/auth/restartPassword', 'TokensController@restartPassword');
 });
+
+Route::get('send-mail','MailSend@mailsend');
+Route::get('/importar_excel', 'ImportarExcelController@index');
+Route::post('/importar_excel/importar', 'ImportarExcelController@importar');
 

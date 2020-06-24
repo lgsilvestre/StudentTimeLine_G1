@@ -32,7 +32,8 @@ class UsuarioController extends Controller
     public function index(){
         try{
             $users = User::all();
-            $escuelas=Escuela::orderBy('id','asc')->get();
+            $escuelas=Escuela::withTrashed()->orderBy('id','asc')->get();
+            //$escuelas=Escuela::orderBy('id','asc')->get();
             foreach ($users as $user) {
                 $user->nombre_carrera= $escuelas[$user->escuela-1]->nombre;
             }
@@ -197,7 +198,7 @@ class UsuarioController extends Controller
         $validator = Validator::make($credentials, [
             'nombre' => ['string', 'nullable'],
             'escuela' => ['numeric', 'nullable'],
-            'rol' => ['string', 'nullable'],
+            'role' => ['string', 'nullable'],
             'foto' => ['image','mimes:jpeg,png,jpg,gif,svg','max:2048','nullable'],
             'email' => ['email', 'nullable'],
             'password' => ['string', 'nullable']
@@ -225,10 +226,8 @@ class UsuarioController extends Controller
             }
             if($request->foto!=null){
                 if($request->hasfile('foto')){
-                    $imagen = $request->file('foto');
-                    $nombreImagen = time () . '.' . $imagen->getClientOriginalExtension();
-                    Image::make($imagen)->resize(400,400)->save( public_path('/uploads/imagenes/' . $nombreImagen));
-                    $usuario->foto=$nombreImagen;
+                    $imagen = base64_encode(file_get_contents($request->file('foto')));
+                    $usuario -> foto = $imagen;
                 }
             }
             if($request->email!=null){

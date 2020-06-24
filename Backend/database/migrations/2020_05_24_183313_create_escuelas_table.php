@@ -15,7 +15,7 @@ class CreateEscuelasTable extends Migration
         Schema::create('escuelas', function (Blueprint $table) {
             $table->id();
             $table->string('nombre',64);
-            $table->integer('cod_carrera')->unique();
+            $table->integer('cod_carrera')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

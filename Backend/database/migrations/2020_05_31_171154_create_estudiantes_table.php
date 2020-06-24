@@ -23,10 +23,10 @@ class CreateEstudiantesTable extends Migration
             $table->string('situacion_academica');
             $table->integer('porcentaje_avance');
             $table->integer('creditos_aprobados');
-            $table->softDeletes();
-            $table->timestamps();
             $table->bigInteger('escuela')->unsigned();
             $table->foreign('escuela')->references('id')->on('escuelas');
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
