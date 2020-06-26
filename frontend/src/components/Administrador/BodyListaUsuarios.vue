@@ -326,7 +326,7 @@ export default {
             alertaError: false,
             alertaExito: false,
             textoAlertas: '',
-            timeout: 4000,
+            timeout: 6000,
             /*  ----------- */
 
             dialog: false,

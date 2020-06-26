@@ -15,8 +15,8 @@ export default new Vuex.Store({
         drawers: {
             drawer: true,
             miniVarianteAdm: false,
-
         },
+        drawerProfesor: false,
         admin: false,
         profesor: false,
         secretariaEscuela: false,
@@ -27,12 +27,10 @@ export default new Vuex.Store({
         numEstudiantes: 1234,
 
         config: {
-            headers
-            : {
+            headers: {
                 Authorization: ''
             }
         },
-
         cargaLogin: false,
 
     },
@@ -145,13 +143,11 @@ export default new Vuex.Store({
                     console.log(result.statusText);
                 });
         },
-        setDrawelAdmin(state) {
-            state.drawers.miniVarianteAdm = !state.drawers.miniVarianteAdm;
-            // console.log('pucha : ' + state.drawelAdmin);
-        },
     },
     methods:{
-
+        hola(){
+            console.log('hola po olvidona');
+        }
     },
     actions: {
     },
