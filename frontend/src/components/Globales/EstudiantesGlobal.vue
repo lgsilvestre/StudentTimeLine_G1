@@ -324,6 +324,7 @@
                 :headers="headers"
                 :items="listaEstudiantes"
                 :search="buscar"
+                :loading="cargando"
                 class="elevation-1 "
                 >
                     <template v-slot:item.actions="{ item }">
@@ -573,7 +574,8 @@
             anho_ingreso:'',
             situacion_academica:'',
             escuela:'',
-        },    
+        },
+        cargando: true,    
         
 
     }),
@@ -630,6 +632,7 @@
             })
         },
         obtenerEstudiantes(){
+            this.cargando = true;
             this.listaEstudiantes = [];
             var url = 'http://127.0.0.1:8000/api/v1/estudiante';
             axios.get(url,this.$store.state.config)
@@ -648,16 +651,25 @@
                     };
                     this.listaEstudiantesAux[index]=estudiante;
                     }
+                    this.cargando = false;
                     this.listaEstudiantes = this.listaEstudiantesAux;
-                    console.log(this.listaEstudiantesAux);
                 }
             })
             .catch((err)=>{
+                this.cargando = false;
                 console.log(err)
             })
         },
         agregarEstudiantesUnico() {
             var url = 'http://127.0.0.1:8000/api/v1/estudiante';
+            var escuelaAux = 1;
+            for (let index = 0; index < this.listaEscuela.length; index++) {
+                const element = this.listaEscuela[index];
+                if (element.nombre == this.estudianteImportar.escuela) {
+                    escuelaAux = element.id;
+                    break;
+                }
+            }
             let post = {
                 "matricula": this.estudianteImportar.matricula,
                 "rut": this.estudianteImportar.rut,
@@ -669,8 +681,7 @@
                 "creditos_aprobados":0,
                 "escuela": 1,
             };
-            
-            console.log(post2);
+
             axios.post(url,post,this.$store.state.config)
             .then((result)=>{
                 if (result.statusText == 'OK') {

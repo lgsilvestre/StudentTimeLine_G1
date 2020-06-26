@@ -70,6 +70,7 @@
                 <v-data-table
                 :headers="headers"
                 :items="desserts"
+                :loading="cargando"
                 class="elevation-1 "
                 >
                   <template v-slot:item.actions="{ item }">
@@ -234,6 +235,7 @@
       textoAcept: '',
       delay: 2000,
       cargar: null,
+      cargando: true,
       headers: [
         { text: 'ID',align: 'start',value: 'id',sortable: false},
         { text: 'Nombre', value: 'nombre',sortable: false, },
@@ -280,6 +282,7 @@
         this.dialogEliminar = true;
       },
       obtenerEscuelas(){
+        this.cargando =true;
         this.dessertsAux = [];
         var url = 'http://127.0.0.1:8000/api/v1/escuela';
         axios.get(url,this.$store.state.config)
@@ -293,12 +296,14 @@
               };
               this.dessertsAux[index]=escuela;
             }
+            this.cargando =false;
             this.desserts = this.dessertsAux;
           }
         )
         .catch((error) => {
           console.log(error);
           this.alertError = true;
+          this.cargando = false;
           this.textoError = 'Error al cargar los datos, intente más tarde'
         })
       },

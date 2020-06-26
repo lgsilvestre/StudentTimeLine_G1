@@ -25,8 +25,8 @@
 
         <!-- Boton que llamará al panel lateral-->
           <v-btn class="ma-2" fab elevation="3" small dark color="white"
-            @click="setDrawelAdmin"
-          >
+            @click="drawel"
+            >
             <v-icon color="primary">mdi-format-list-bulleted</v-icon>
           </v-btn>
         </div>
@@ -41,10 +41,22 @@ import {mapMutations} from 'vuex';
     },
     data () {
       return {
+
       }
     },
     methods:{
-      ...mapMutations(['setDrawelAdmin'])
+      drawel(){
+        //console.log(this.$vuetify.breakpoint.name );
+        if(this.$vuetify.breakpoint.name == 'sm' || this.$vuetify.breakpoint.name == 'xs'){
+            this.$store.state.drawers.drawer = !this.$store.state.drawers.drawer;
+            this.$store.state.drawers.miniVarianteAdm = false;
+        }
+        else{
+            this.$store.state.drawers.drawer = true;
+            this.$store.state.drawers.miniVarianteAdm = !this.$store.state.drawers.miniVarianteAdm;
+            this.$store.state.drawerProfesor = !this.$store.state.drawerProfesor;
+        }
+      },
     }
   }
 </script>

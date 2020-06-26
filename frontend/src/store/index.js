@@ -15,8 +15,8 @@ export default new Vuex.Store({
         drawers: {
             drawer: true,
             miniVarianteAdm: false,
-
         },
+        drawerProfesor: false,
         admin: false,
         profesor: false,
         secretariaEscuela: false,
@@ -31,11 +31,13 @@ export default new Vuex.Store({
                 Authorization: ''
             }
         },
+        cargaLogin: false,
 
     },
   
     mutations: {
         login(state, lista,methods) { //funcion de login
+        state.cargaLogin= true;
         let post = {
             "email": lista.email,
             "password": lista.pass,
@@ -49,16 +51,19 @@ export default new Vuex.Store({
                 //redireccionamiento hacia el usuario administrador
                 
                 state.admin=true;
+                state.cargaLogin=false;
                 router.push({ path: '/administrador' });
             } else {
                 if (state.usuario.user.rol == "secretaria de escuela") {
                     //redireccionamiento hacia el usuario secretaria de escuela
                     state.secretariaEscuela=true;
+                    state.cargaLogin=false;
                     router.push({ path: '/secretariaEscuela' });
                 } else {
                     if (state.usuario.user.rol == "profesor") {
                         //redireccionamiento hacia el usuario profesor
                         state.profesor=true;
+                        state.cargaLogin=false;
                         router.push({ path: '/profesor' });
                     } else {
                         //alerta a usuarios que no estan registrados, esto se solucionara la proxima semana
@@ -138,13 +143,11 @@ export default new Vuex.Store({
                     console.log(result.statusText);
                 });
         },
-        setDrawelAdmin(state) {
-            state.drawers.miniVarianteAdm = !state.drawers.miniVarianteAdm;
-            // console.log('pucha : ' + state.drawelAdmin);
-        },
     },
     methods:{
-
+        hola(){
+            console.log('hola po olvidona');
+        }
     },
     actions: {
     },
