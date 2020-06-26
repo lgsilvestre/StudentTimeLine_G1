@@ -19,96 +19,124 @@ use \App\Mail\SendMail;
 
 class TokensController extends Controller
 {
-    public function login(Request $request)
-    {
+    /**
+     * Metodo que permite iniciar sesion
+     */
+    public function login(Request $request){
         $credentials = $request->only('email', 'password');
-
         $validator = Validator::make($credentials, [
             'email' => 'required|email',
             'password' => 'required'
         ]);
-
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
-                'code' => 1,
+                'code' => 2,
                 'message' => 'Error en las credenciales',
-                'errors' => $validator->errors()
+                'data' => ['error'=>$validator->errors()]
             ], 422);
         }
-
         try{
             $token = JWTAuth::attempt($credentials);
             if ($token) {
                 return response()->json([
-                    'token' => $token,
-                    'user' => User::where('email', $credentials['email'])->get()->first()
+                    'success' => true,
+                    'code' => 1,
+                    'message' => 'Operacion realizada con exito',
+                    'data' => ['token'=>$token,
+                               'usuario' =>User::where('email', $credentials['email'])->get()->first()],
                 ], 200);
             } else {
                 return response()->json([
                     'success' => false,
-                    'code' => 2,
+                    'code' => 3,
                     'message' => 'Error en las credenciales',
-                    'errors' => $validator->errors()], 401);
+                    'data' => ['error'=>$validator->errors()]
+                ], 401);
             }
         //este catch permite responder directamente que problemas en la peticion SQL
         } catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
                 'success' => false,
-                'code' => 3,
-                'message' => 'Error al solicitar peticiones a la base de datos'], 401);
+                'code' => 4,
+                'message' => 'Error al solicitar peticiones a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
         }
     }
 
-    public function refreshToken()
-    {
-
+    /**
+     * Metodo que permite refrescar un token
+     */
+    public function refreshToken(){
         $token = JWTAuth::getToken();
-
         try {
             $token = JWTAuth::refresh($token);
-            return response()->json(['success' => true, 'token' => $token], 200);
+            return response()->json([
+                'success' => true,
+                'code' => 1,
+                'message' => 'Operacion realizada con exito',
+                'data' => ['token'=>$token],
+            ], 200);
         } catch (TokenExpiredException $ex) {
             // We were unable to refresh the token, our user needs to login again
             return response()->json([
-                'code' => 3, 'success' => false, 'message' => 'Necesita iniciar secion otra vez, porfavor (Expirado)!'
-            ]);
+                'success' => false,
+                'code' => 2,
+                'message' => 'Necesita iniciar secion otra vez, porfavor (Expirado)!',
+                'data' => null
+            ], 422);
         } catch (TokenBlacklistedException $ex) {
             // Blacklisted token
             return response()->json([
-                'code' => 4, 'success' => false, 'message' => 'Necesita iniciar secion otra vez, porfavor (Lista negra)!'
+                'success' => false,
+                'code' => 3,
+                'message' => 'Necesita iniciar secion otra vez, porfavor (Lista negra)!',
+                'data' => null
             ], 422);
         //este catch permite responder directamente que problemas en la peticion SQL
         } catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
                 'success' => false,
-                'code' => 5,
-                'message' => 'Error al solicitar peticiones a la base de datos'], 401);
+                'code' => 4,
+                'message' => 'Error al solicitar peticiones a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
         }
 
     }
 
+    /**
+     * Metodo que permite cerrar sesion
+     */
     public function logoutToken()
     {
         //  $this->validate($request, ['token' => 'required']);
         $token = JWTAuth::getToken();
-
         try {
             $token = JWTAuth::invalidate($token);
             return response()->json([
-                'code' => 5, 'success' => true, 'message' => "Has cerrado la sesión con exito"
+                'success' => true,
+                'code' => 1,
+                'message' => "Has cerrado la sesión con exito",
+                'data' => null
             ], 200);
         //este catch permite responder directamente que problemas en la peticion de Token
         } catch (JWTException $e) {
             return response()->json([
-                'code' => 6, 'success' => false, 'message' => 'No se a podido cerrar la sesión, por favor volver a intentar.'
+                'success' => false,
+                'code' => 2,
+                'message' => "No se a podido cerrar la sesión, por favor volver a intentar",
+                'data' => null
             ], 422);
         //este catch permite responder directamente que problemas en la peticion SQL
         } catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
                 'success' => false,
-                'code' => 5,
-                'message' => 'Error al solicitar peticiones a la base de datos'], 401);
+                'code' => 3,
+                'message' => 'Error al solicitar peticiones a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
         }
     }
 

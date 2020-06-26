@@ -20,38 +20,48 @@ class EscuelaController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
+     * Metodo que se encarga de listar a todos escuelas
+     * Errores code inician 100
      * @return \Illuminate\Http\Response
      */
     public function index(){
         try{
             $escuelas = Escuela::all();
-            #dd($users);
-            return $escuelas;
-            //este catch permite responder directamente que problemas en la peticion SQL
+            return response()->json([
+                'success' => true,
+                'code' => 100,
+                'message' => "La operacion se a realizado con exito",
+                'data' => ['escuelas'=>$escuelas]
+            ], 200);
         } catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
                 'success' => false,
-                'code' => 5,
-                'message' => 'Error al solicitar peticiones a la base de datos'], 401);
+                'code' => 101,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
         }
         
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
+     * Metodo que no sirve deberia redireccionar cuando funciona dentro de laravel
+     * Este metodo esta inactivo asi que se manda un error correspondiente
+     * Errores code inician 200
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
+    public function create(){
+        return response()->json([
+            'success' => false,
+            'code' => 201,
+            'message' => 'el cliente debe usar un protocolo distinto',
+            'data' => ['error'=>'El el protocolo se llama store']
+        ], 426 );
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
+     * Metodo que se encarga de crear una escuela
+     * Errores code inician 300
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
@@ -59,82 +69,81 @@ class EscuelaController extends Controller
     {
         $credentials = $request->only('nombre');
         $validator = Validator::make($credentials, [
-            'nombre' => ['string', 'nullable'],
+            'cod_carrera' => ['number'],
+            'nombre' => ['string'],
         ]);
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
-                'code' => 1,
+                'code' => 301,
                 'message' => 'Error en datos ingresados',
-                'errors' => $validator->errors()
+                'data' => ['error'=>$validator->errors()]
             ], 422);
         }
         try{
             $escuela = new Escuela();
-            if($request->nombre!=null){
-                $escuela-> nombre = $request->nombre;
-            }else{
-                return response()->json([
-                    'success' => false,
-                    'code' => 5,
-                    'message' => 'El dato escuela no se modifico porque el nombre viene vacio'], 401);
-            }
-            $r = $escuela->save();
-            return compact('escuela');
-        } catch(\Illuminate\Database\QueryException $ex){ 
+            $escuela->nombre = $request->nombre;
+            $escuela->cod_carrera = $request->cod_carrera;
+            $escuela = $escuela->save();
+            return response()->json([
+                'success' => true,
+                'code' => 300,
+                'message' => "Operacion realizada con exito",
+                'data' => ['escuela'=>$escuela]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
                 'success' => false,
-                'code' => 5,
-                'message' => 'Error al solicitar peticiones a la base de datos'], 401);
+                'code' => 302,
+                'message' => "Error en la base de datos",
+                'data' => ['error'=>$ex]
+            ], 409);
         }
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Escuela  $id
+     * Metodo que no sirve deberia redireccionar cuando funciona dentro de laravel
+     * Este metodo esta inactivo asi que se manda un error correspondiente
+     * Errores code inician 400
+     * @param  \App\Estudiante  $estudiante
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        try{
-            $escuela = Escuela::findOrFail($id);
-            if($escuela==null){
-                return response()->json([
-                    'success' => false,
-                    'code' => 1,
-                    'message' => 'No existe ninguna escuela con esa id'], 401);
-            }
-            return $escuela;
-        //este catch permite responder directamente que problemas en la peticion SQL
-        } catch(\Illuminate\Database\QueryException $ex){ 
-            return response()->json([
-                'success' => false,
-                'code' => 5,
-                'message' => 'Error al solicitar peticiones a la base de datos'], 401);
-        }
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Escuela  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
+    public function show($id){
         return response()->json([
             'success' => false,
-            'code' => 5,
-            'message' => 'Este metodo no se encuentra implementado, por favor utilizar otro'], 401);
+            'code' => 401,
+            'message' => 'Este recurso está bloqueado',
+            'data' => ['error'=>'El el protocolo se llama index']
+        ], 423);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Metodo que no sirve deberia redireccionar cuando funciona dentro de laravel
+     * Este metodo esta inactivo asi que se manda un error correspondiente
+     * Errores code inician 500
+     * @param  \App\Estudiante  $estudiante
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id){
+        return response()->json([
+            'success' => false,
+            'code' => 501,
+            'message' => 'el cliente debe usar un protocolo distinto',
+            'data' => ['error'=>'El el protocolo se llama store']
+        ], 426);
+    }
+
+    /**
+     * Metodo que se encarga de modificar una escuela
+     * Errores code inician 600
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Estudiante  $estudiante
+     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id){
         $credentials = $request->only('nombre');
         $validator = Validator::make($credentials, [
+            'cod_carrera' => ['number', 'nullable'],
             'nombre' => ['string', 'nullable'],
         ]);
         if ($validator->fails()) {
@@ -142,7 +151,7 @@ class EscuelaController extends Controller
                 'success' => false,
                 'code' => 1,
                 'message' => 'Error en datos ingresados',
-                'errors' => $validator->errors()
+                'data' => ['error'=>$validator->errors()]
             ], 422);
         }
         try{
@@ -150,48 +159,67 @@ class EscuelaController extends Controller
             if ($escuela == null) {
                 return response()->json([
                     'success' => false,
-                    'code' => 5,
-                    'message' => 'La escuela con el id '.$id.' no existe'], 401);
+                    'code' => 602,
+                    'message' => 'La escuela con el id '.$id.' no existe',
+                    'data' => null
+                ], 409);
             }
             if($request->nombre!=null){
-                $escuela-> nombre = $request->nombre;
-            }else{
-                return response()->json([
-                    'success' => false,
-                    'code' => 5,
-                    'message' => 'El dato escuela no se modifico porque el nombre viene vacio'], 401);
+                $escuela->nombre = $request->nombre;
+            }
+            if($request->cod_carrera!=null){
+                $escuela->cod_carrera = $request->cod_carrera;
             }
             $escuela-> save();
-            return compact('escuela');
-        } catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => true,
+                'code' => 600,
+                'message' => "Operacion realizada con exito",
+                'data' => ['escuela'=>$escuela]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
                 'success' => false,
-                'code' => 5,
-                'message' => 'Error al solicitar peticiones a la base de datos'], 401);
+                'code' => 604,
+                'message' => "Error en la base de datos",
+                'data' => ['error'=>$ex]
+            ], 409 );
         }
         
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Metodo que se encarga de eliminar una escuela
+     * Errores code inician 700
+     * @param  \App\Estudiante  $estudiante
+     * @return \Illuminate\Http\Response
      */
     public function destroy($id){
         try{
             $escuela = Escuela::find($id);
-            if ($escuela != null) {
+            if ($escuela == null) {
                 $escuela->delete();
-                return compact('escuela');
-            }else{
                 return response()->json([
                     'success' => false,
-                    'code' => 2,
-                    'message' => 'La escuela con el id '.$id.' no existe'], 401);
+                    'code' => 701,
+                    'message' => 'El escuela con el id '.$id.' no existe',
+                    'data' => null
+                ], 409 );
+            }else{
+                return response()->json([
+                    'success' => true,
+                    'code' => 700,
+                    'message' => "Operacion realizada con exito",
+                    'data' =>['escuela'=> $escuela]
+                ], 200);
             }
-        } catch(\Illuminate\Database\QueryException $ex){ 
+        }catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
                 'success' => false,
-                'code' => 5,
-                'message' => 'Error al solicitar peticiones a la base de datos'], 401);
+                'code' => 702,
+                'message' => "Error en la base de datos",
+                'data' => ['error'=>$ex]
+            ], 409 );
         }
     }
 }
