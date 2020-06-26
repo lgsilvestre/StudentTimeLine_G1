@@ -31,9 +31,31 @@ class UsuarioController extends Controller
      */
     public function index(){
         try{
-            $users = User::all();
-            $escuelas=Escuela::withTrashed()->orderBy('id','asc')->get();
-            //$escuelas=Escuela::orderBy('id','asc')->get();
+            $credenciales = JWTAuth::parseToken()->authenticate();
+            if($credenciales->rol=="admin"){
+                $users = User::all();
+                $escuelas=Escuela::withTrashed()->orderBy('id','asc')->get();
+            }else if($credenciales->rol=="secretaria de escuela"){
+                $users = User::Where('rol', '=' , 'profesor')->where(function ($query ) use ($credenciales){
+                    $query->where('escuela', '=' , $credenciales->escuela)
+                          ->orWhere('escuelaAux', '=' , $credenciales->escuelaAux);
+                })->get();
+                $escuelas=Escuela::withTrashed()->orderBy('id','asc')->get();
+            }else if($credenciales->rol=="profesor"){
+                return response()->json([
+                    'success' => false,
+                    'code' => 101,
+                    'message' => 'No tiene los permisos necesarios para realizar esta operacion',
+                    'data' => ['error'=>'No deberia llegar aca']
+                ], 403);
+            }else{
+                return response()->json([
+                    'success' => false,
+                    'code' => 101,
+                    'message' => 'Error que no deberia pasar en index',
+                    'data' => ['error'=>'al momento de buscar el rol del solicitante no lo encuentra']
+                ], 409);
+            }
             foreach ($users as $user) {
                 $user->nombre_carrera= $escuelas[$user->escuela-1]->nombre;
             }
@@ -82,6 +104,7 @@ class UsuarioController extends Controller
         $validator = Validator::make($request->all(), [
             'nombre' => ['required','string'],
             'escuela' => ['required', 'numeric'], //Cambiar lo de la foreign key dps
+            'escuelaAux' => ['required', 'numeric', 'nullable'], //Cambiar lo de la foreign key dps
             'rol' => ['required','string'], 
             'foto' => ['image','mimes:jpeg,png,jpg,gif,svg','max:2048','nullable'],
             'email'=> ['required','email'],
@@ -100,6 +123,7 @@ class UsuarioController extends Controller
             $user = new User();
             $user ->nombre=$request->nombre;
             $user ->escuela=$request->escuela;
+            $user ->escuelaAux=$request->escuelaAux;
             $user ->rol=$request->rol;
             $user->assignRole($request->rol);
             $user ->email=$request->email;
@@ -139,14 +163,28 @@ class UsuarioController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id){
+        return response()->json([
+            'success' => false,
+            'code' => 401,
+            'message' => 'el cliente debe usar un protocolo distinto',
+            'data' => ['error'=>'El el protocolo se llama store']
+        ], 426 );
+    }
+
+    /**
+     * Metodo que permite mostrar los datos de un usuario para luego modificar
+     * Este metodo se utiliza principalmente por un profesor para ver sus datos antes de eliminarlo, de igual manera para el administrador y secretaria de escuela
+     * Errores code inician 500
+     * @param  \App\Estudiante  $estudiante
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id){
         try{
             $user = User::findOrFail($id);
-            //$img = base64_decode($user["foto"]);
-            //$user->foto = base64_decode($user["foto"]);
             if($user==null){
                 return response()->json([
                     'success' => false,
-                    'code' => 601,
+                    'code' => 501,
                     'message' => 'No existe ninguna usuario con esa id',
                     'data' => null
                 ], 409);
@@ -154,7 +192,7 @@ class UsuarioController extends Controller
             //return response($user->foto)->header('Content-Type', 'image/png');
             return response()->json([
                 'success' => true,
-                'code' => 600,
+                'code' => 500,
                 'message' => "La operacion se a realizado con exito",
                 'data' => ['usuario'=>$user]
             ], 200);
@@ -162,27 +200,11 @@ class UsuarioController extends Controller
         }catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
                 'success' => false,
-                'code' => 602,
+                'code' => 502,
                 'message' => "Error en la base de datos",
                 'data' => ['error'=>$ex]
             ], 409 );
         }
-    }
-
-    /**
-     * Metodo que no sirve deberia redireccionar cuando funciona dentro de laravel
-     * Este metodo esta inactivo asi que se manda un error correspondiente
-     * Errores code inician 500
-     * @param  \App\Estudiante  $estudiante
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id){
-        return response()->json([
-            'success' => false,
-            'code' => 501,
-            'message' => 'el cliente debe usar un protocolo distinto',
-            'data' => ['error'=>'El el protocolo se llama store']
-        ], 426 );
     }
 
     /**
@@ -198,6 +220,7 @@ class UsuarioController extends Controller
         $validator = Validator::make($credentials, [
             'nombre' => ['string', 'nullable'],
             'escuela' => ['numeric', 'nullable'],
+            'escuelaAux' => ['numeric', 'nullable'],
             'role' => ['string', 'nullable'],
             'foto' => ['image','mimes:jpeg,png,jpg,gif,svg','max:2048','nullable'],
             'email' => ['email', 'nullable'],
@@ -243,6 +266,9 @@ class UsuarioController extends Controller
                 if($request->escuela!=null){
                     $usuario->escuela = $request->escuela;
                 }
+                if($request->escuelaAux!=null){
+                    $usuario->escuelaAux = $request->escuelaAux;
+                }
                 if($request->rol!=null){
                     $usuario->rol = $request->rol;
                     $usuario->assignRole($request->rol);
@@ -250,14 +276,14 @@ class UsuarioController extends Controller
             }
             //Usuario secretaria de escuela o profesor
             if($credenciales->rol == "secretaria de escuela" || $credenciales->rol == "profesor"){
-                if($request->escuela!=null || $request->rol!=null){
+                if($request->escuela!=null || $request->rol!=null || $request->escuelaAux!=null){
                     $credenciales = JWTAuth::invalidate($credenciales);
                     //mandar correo por intento de haking
                     return response()->json([
                         'success' => false,
                         'code' => 603,
                         'message' => "No tienes los permisos necesarios para realizar esta operacion",
-                        'data' => ['error'=>"Intento modificar 2 variables que con ese permiso seria imposible, se elimino el token"]
+                        'data' => ['error'=>"Intento modificar 3 variables que con ese permiso seria imposible, se elimino el token"]
                     ], 403);
                 }
             }

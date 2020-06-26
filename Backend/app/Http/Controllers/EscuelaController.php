@@ -69,8 +69,8 @@ class EscuelaController extends Controller
     {
         $credentials = $request->only('nombre');
         $validator = Validator::make($credentials, [
-            'nombre' => ['string'],
             'cod_carrera' => ['number'],
+            'nombre' => ['string'],
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -143,8 +143,8 @@ class EscuelaController extends Controller
     public function update(Request $request, $id){
         $credentials = $request->only('nombre');
         $validator = Validator::make($credentials, [
-            'nombre' => ['string', 'nullable'],
             'cod_carrera' => ['number', 'nullable'],
+            'nombre' => ['string', 'nullable'],
         ]);
         if ($validator->fails()) {
             return response()->json([

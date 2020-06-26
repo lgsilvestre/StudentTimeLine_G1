@@ -35,6 +35,17 @@ class UserTableSeeder extends Seeder
         $director->assignRole('secretaria de escuela');
 
         $director=User::create([
+            'nombre' => 'secretaria de escuela 2',
+            'escuela' => 3,
+            'escuelaAux' => 8,
+            'rol' => 'secretaria de escuela', 
+            'foto' => null,
+            'email' => 'secretariadeescuela2@gmail.com',
+            'password' => bcrypt('12345678')
+        ]);
+        $director->assignRole('secretaria de escuela');
+
+        $director=User::create([
             'nombre' => 'test de doble escuela',
             'escuela' => 1,
             'escuelaAux' => 8,
