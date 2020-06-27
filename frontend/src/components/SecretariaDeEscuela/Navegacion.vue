@@ -1,11 +1,6 @@
 <template>
-    <v-navigation-drawer
-    app
-    v-model="drawers.drawer"
-    right
-    premanent    
-    :mini-variant.sync="drawers.miniVarianteAdm" 
-    src="@/assets/Globales/background-panel-02.jpg"
+    <v-navigation-drawer app right v-model="drawers.drawer" :mini-variant="drawers.miniVarianteAdm"  :permanent="$vuetify.breakpoint.mdAndUp" :temporary="$vuetify.breakpoint.smAndDown"
+        src="@/assets/Globales/background-panel-02.jpg"
     >
     <!-- Mis recomendaciones de fondo (?)  1, 2, 4, 7, 9,  -->  
 
