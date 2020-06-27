@@ -681,8 +681,7 @@
                 "creditos_aprobados":0,
                 "escuela": 1,
             };
-            
-            console.log(post2);
+
             axios.post(url,post,this.$store.state.config)
             .then((result)=>{
                 if (result.statusText == 'OK') {

@@ -8,107 +8,170 @@ use Illuminate\Http\Request;
 class EstudianteController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
+     * Metodo que se encarga de listar a todos estudiantes
+     * Errores code inician 100
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $estudiantes = Estudiante::all();
-        $escuelas=Escuela::orderBy('id','asc')->get();
-        foreach ($estudiantes as $estudiante) {
-            $estudiante-> escuela = $escuelas[$estudiante->escuela-1]->nombre;
+    public function index(){
+        try{
+            $estudiantes = Estudiante::all();
+            $escuelas=Escuela::orderBy('id','asc')->get();
+            foreach ($estudiantes as $estudiante) {
+                $estudiante->escuela=$escuelas[$estudiante->escuela-1]->nombre;
+            }
+            return response()->json([
+                'success' => true,
+                'code' => 100,
+                'message' => "La operacion se a realizado con exito",
+                'data' => ['estudiantes'=>$estudiantes]
+            ], 200);
+        } catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 101,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
         }
-        return $estudiantes;
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
+     * Metodo que no sirve deberia redireccionar cuando funciona dentro de laravel
+     * Este metodo esta inactivo asi que se manda un error correspondiente
+     * Errores code inician 200
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
+    public function create(){
+        return response()->json([
+            'success' => false,
+            'code' => 201,
+            'message' => 'el cliente debe usar un protocolo distinto',
+            'data' => ['error'=>'El el protocolo se llama store']
+        ], 426 );
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
+     * Metodo que se encarga en crear un estudiante
+     * Errores code inician 300
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        $estudiante = new Estudiante();
-        $estudiante -> matricula=$request->matricula;
-        $estudiante -> rut=$request->rut;
-        $estudiante -> nombre_completo=$request->nombre_completo;
-        $estudiante -> correo=$request->correo;
-        $estudiante -> anho_ingreso=$request->anho_ingreso;
-        $estudiante -> situacion_academica=$request->situacion_academica;
-        $estudiante -> porcentaje_avance=$request->porcentaje_avance;
-        $estudiante -> creditos_aprobados=$request->creditos_aprobados;
-        $estudiante -> escuela=$request->escuela;
-        $r = $estudiante->save();
-        return compact('estudiante');
+    public function store(Request $request){
+        try{
+            $estudiante = new Estudiante();
+            $estudiante -> matricula=$request->matricula;
+            $estudiante -> rut=$request->rut;
+            $estudiante -> nombre_completo=$request->nombre_completo;
+            $estudiante -> correo=$request->correo;
+            $estudiante -> anho_ingreso=$request->anho_ingreso;
+            $estudiante -> situacion_academica=$request->situacion_academica;
+            $estudiante -> porcentaje_avance=$request->porcentaje_avance;
+            $estudiante -> creditos_aprobados=$request->creditos_aprobados;
+            $estudiante -> escuela=$request->escuela;
+            $estudiante = $estudiante->save();
+            return response()->json([
+                'success' => true,
+                'code' => 300,
+                'message' => "Operacion realizada con exito",
+                'data' => ['estudiante'=>$estudiante]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 302,
+                'message' => "Error en la base de datos",
+                'data' => ['error'=>$ex]
+            ], 409  );
+        }
     }
 
     /**
-     * Display the specified resource.
-     *
+     * Metodo que no sirve deberia redireccionar cuando funciona dentro de laravel
+     * Este metodo esta inactivo asi que se manda un error correspondiente
+     * Errores code inician 400
      * @param  \App\Estudiante  $estudiante
      * @return \Illuminate\Http\Response
      */
-    public function show(Estudiante $estudiante)
-    {
-        //
+    public function show(Estudiante $estudiante){
+        return response()->json([
+            'success' => false,
+            'code' => 401,
+            'message' => 'Este recurso está bloqueado',
+            'data' => ['error'=>'El el protocolo se llama index']
+        ], 423 );
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
+     * Metodo que no sirve deberia redireccionar cuando funciona dentro de laravel
+     * Este metodo esta inactivo asi que se manda un error correspondiente
+     * Errores code inician 500
      * @param  \App\Estudiante  $estudiante
      * @return \Illuminate\Http\Response
      */
-    public function edit(Estudiante $estudiante)
-    {
-        //
+    public function edit(Estudiante $estudiante){
+        return response()->json([
+            'success' => false,
+            'code' => 501,
+            'message' => 'el cliente debe usar un protocolo distinto',
+            'data' => ['error'=>'El el protocolo se llama store']
+        ], 426);
     }
 
     /**
-     * Update the specified resource in storage.
-     *
+     * Metodo que se encarga de modificar un estudiante
+     * Errores code inician 600
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Estudiante  $estudiante
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-
-        $estudiante = Estudiante::find($id);
-
-        $estudiante->nombre_completo = $request->nombre_completo;
-        $estudiante->situacion_academica = $request->situacion_academica;
-        $estudiante->porcentaje_avance = $request->porcentaje_avance;
-        $estudiante->creditos_aprobados = $request->creditos_aprobados;
-        $estudiante->escuela = $request->escuela;
-        $estudiante->save();
-        //Estudiante::update(estudiantes set nombre_completo =$estudiante->nombre_completo, situacion_academica = $estudiante->situacion_academica, porcentaje_avance = 100, creditos_aprobados = ?, estudiantes.updated_at = 2020-06-01 00:31:56 where matricula is $matricula);
-        return compact('estudiante');
+    public function update(Request $request, $id){
+        try{
+            $estudiante = Estudiante::find($id);
+            $estudiante->nombre_completo = $request->nombre_completo;
+            $estudiante->situacion_academica = $request->situacion_academica;
+            $estudiante->porcentaje_avance = $request->porcentaje_avance;
+            $estudiante->creditos_aprobados = $request->creditos_aprobados;
+            $estudiante->escuela = $request->escuela;
+            $estudiante->save();
+            return response()->json([
+                'success' => true,
+                'code' => 600,
+                'message' => "Operacion realizada con exito",
+                'data' => ['estudiante'=>$estudiante]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 604,
+                'message' => "Error en la base de datos",
+                'data' => ['error'=>$ex]
+            ], 409 );
+        }
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
+     * Metodo que se encarga de eliminar un estudiante
+     * Errores code inician 700
      * @param  \App\Estudiante  $estudiante
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        $estudiante = Estudiante::find($id);
-        $estudiante->delete();
-
-        return response()->json(['se borro con exito a '.$estudiante->nombre_completo]);
+    public function destroy($id){
+        try{
+            $estudiante = Estudiante::find($id);
+            $estudiante->delete();
+            return response()->json([
+                'success' => true,
+                'code' => 700,
+                'message' => "Operacion realizada con exito",
+                'data' => ['estudiante'=>$estudiante]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 702,
+                'message' => "Error en la base de datos",
+                'data' => ['error'=>$ex]
+            ], 409 );
+        }
     }
 }
