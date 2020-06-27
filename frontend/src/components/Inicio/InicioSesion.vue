@@ -1,5 +1,5 @@
 <template>
-  <div class="InicioSesion">
+    <div class="InicioSesion">
         <v-dialog
         width="70%"
         transition="scroll-y-reverse-transition" origin="bottom "
@@ -11,7 +11,6 @@
                 <v-icon large >mdi-account-circle</v-icon>
             </v-btn>
         </template>
-
         <v-card color="fondo">
             <v-container fluid>
                 <v-row no-gutters class="align-center justify-center" >
@@ -66,6 +65,12 @@
                                             ¿Olvidaste tu contraseña?
                                         </v-breadcrumbs-item>
                                     </v-breadcrumbs>
+                                    <v-alert 
+                                    v-model="verificacionLogin"
+                                    dismissible
+                                    type="error">
+                                        {{mensajeErrorLogin}}
+                                    </v-alert>
                                     <v-btn rounded large block color="primary" 
                                         :loading="cargaLogin"
                                         @click="login(lista)"
@@ -84,50 +89,37 @@
                     </v-col>
                     
                 </v-row>
-            
             </v-container>
         </v-card>
         </v-dialog>
-  </div>
+    </div>
 </template>
 
 <script>
 import {mapMutations, mapState} from 'vuex';
 export default {
     name: 'InicioSesion',
-
     data () {
-        
-      return {
-        sheet: false,
-        mostrar: false,
-        cargar: null,
-        verificandoLogin: false,
-        items: [
-            {
-            text: '¿Olvidaste tu contraseña?',
-            disabled: false,
-            to: '/recuperacionContrasena',
-            },
-        ],
-        lista: [{email:''},{pass:''}], 
-      }
+        return {
+            sheet: false,
+            mostrar: false,
+            cargar: null,
+            verificandoLogin: false,
+            items: [
+                {
+                text: '¿Olvidaste tu contraseña?',
+                disabled: false,
+                to: '/recuperacionContrasena',
+                },
+            ],
+            lista: [{email:''},{pass:''}], 
+        }
     },
     computed:{
-        ...mapState(['cargaLogin']),
+        ...mapState(['cargaLogin','verificacionLogin','mensajeErrorLogin']),
     },
     methods:{
         ...mapMutations(['login']),
-    },
-
-    watch: {
-      cargar () {
-        //login(lista)
-        const l = this.cargar
-        this[l] = !this[l]
-        setTimeout(() => (this[l] = false), 3000)
-        this.cargar = null
-      },
     },
 }
 </script>
