@@ -21,7 +21,6 @@ class EstudianteTableSeeder extends Seeder
             'porcentaje_avance' => 70, 
             'creditos_aprobados' => 250,
             'escuela' => 1
-
         ]);
 
         Estudiante::create([
@@ -34,7 +33,6 @@ class EstudianteTableSeeder extends Seeder
             'porcentaje_avance' => 75,
             'creditos_aprobados' => 300,
             'escuela' => 1
-
         ]);
 
     }

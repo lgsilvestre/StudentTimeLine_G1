@@ -13,39 +13,50 @@ class EscuelaTableSeeder extends Seeder
     {
         //Computación, Industrial, Eléctrica, Mecánica, Obras Civiles, Minas, Mecatrónica
         $icc=Escuela::create([
-            'nombre' => 'Ingeniería Civil en Computación',
-            'cod_carrera' => 407
+            'nombre' => 'Escuela de Computación',
+            'cod_escuela' => 407
 
         ]);
 
         $ici=Escuela::create([
-            'nombre' => 'Ingeniería Civil Industrial',
-            'cod_carrera' => 408
+            'nombre' => 'Escuela de Industrial',
+            'cod_escuela' => 408
         ]);
 
         $ice=Escuela::create([
-            'nombre' => 'Ingeniería Civil Eléctrica',
-            'cod_carrera' => 409
+            'nombre' => 'Escuela de Eléctrica',
+            'cod_escuela' => 409
         ]);
 
         $icm=Escuela::create([
-            'nombre' => 'Ingeniería Civil Mecánica',
-            'cod_carrera' => 410
+            'nombre' => 'Escuela de Mecánica',
+            'cod_escuela' => 410
         ]);
 
         $icoc=Escuela::create([
-            'nombre' => 'Ingeniería Civil en Obras Civiles',
-            'cod_carrera' => 411
+            'nombre' => 'Escuela de Obras Civiles',
+            'cod_escuela' => 411
         ]);
 
         $icm=Escuela::create([
-            'nombre' => 'Ingeniería Civil de Minas',
-            'cod_carrera' => 412
+            'nombre' => 'Escuela de Minas',
+            'cod_escuela' => 412
         ]);
 
         $icme=Escuela::create([
-            'nombre' => 'Ingeniería Civil Mecatrónica',
-            'cod_carrera' => 413
+            'nombre' => 'Escuela de Mecatrónica',
+            'cod_escuela' => 413
         ]);
+
+        $rc=Escuela::create([
+            'nombre' => 'Ramos Comunes',
+            'cod_escuela' => 000
+        ]);
+
+        $fi=Escuela::create([
+            'nombre' => 'Facultad de ingenieria',
+            'cod_escuela' => 001
+        ]);
+
     }
 }

@@ -25,7 +25,7 @@ class CreateUsersTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            //referenciando a la carrera
+            //referenciando a la escuela
             
         });
         DB::statement("ALTER TABLE users ADD foto MEDIUMBLOB");
