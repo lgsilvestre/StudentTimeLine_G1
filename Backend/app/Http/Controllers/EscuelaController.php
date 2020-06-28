@@ -198,7 +198,6 @@ class EscuelaController extends Controller
         try{
             $escuela = Escuela::find($id);
             if ($escuela == null) {
-                $escuela->delete();
                 return response()->json([
                     'success' => false,
                     'code' => 701,
@@ -206,6 +205,7 @@ class EscuelaController extends Controller
                     'data' => null
                 ], 409 );
             }else{
+                $escuela->delete();
                 return response()->json([
                     'success' => true,
                     'code' => 700,
