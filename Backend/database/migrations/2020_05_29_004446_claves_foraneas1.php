@@ -16,6 +16,8 @@ class ClavesForaneas1 extends Migration
             //
             $table->bigInteger('escuela')->unsigned();
             $table->foreign('escuela')->references('id')->on('escuelas');
+            $table->bigInteger('escuelaAux')->unsigned()->nullable();
+            $table->foreign('escuelaAux')->references('id')->on('escuelas');
         });
     }
 

@@ -6,6 +6,7 @@ use App\Imports\EstudiantesImport;
 use Excel;
 use App\Estudiante;
 use DB; //Operaciones de DB
+use Log;
 
 class ImportarExcelController extends Controller
 {
