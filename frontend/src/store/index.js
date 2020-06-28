@@ -75,28 +75,28 @@ export default new Vuex.Store({
                     state.cargaLogin=false;
                     state.mensajeErrorLogin= 'Error al comunicarse con el servidor, intente más tarde';
                 } else {
-                    if (error.responsive.data.success == false) {
-                        switch (result.data.code) {
+                    if (error.response.data.success == false) {
+                        switch (error.response.data.code) {
                             case 2:
-                                console.log(error.responsive.data.code +' '+ error.responsive.data.message);
-                                console.log(error.responsive.data);
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
                                 state.verificacionLogin= true;
                                 state.cargaLogin=false;
-                                state.mensajeErrorLogin= error.responsive.data.message;
+                                state.mensajeErrorLogin= error.response.data.message;
                                 break;
                             case 3:
-                                console.log(error.responsive.data.code +' '+ error.responsive.data.message);
-                                console.log(error.responsive.data);
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
                                 state.verificacionLogin= true;
                                 state.cargaLogin=false;
-                                state.mensajeErrorLogin= error.responsive.data.message;
+                                state.mensajeErrorLogin= error.response.data.message;
                                 break;
                             case 4:
-                                console.log(error.responsive.data.code +' '+ error.responsive.data.message);
-                                console.log(error.responsive.data);
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
                                 state.verificacionLogin= true;
                                 state.cargaLogin=false;
-                                state.mensajeErrorLogin= error.responsive.data.message;
+                                state.mensajeErrorLogin= error.response.data.message;
                                 break;
                             default:
                                 break;
