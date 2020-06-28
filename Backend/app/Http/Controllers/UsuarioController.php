@@ -57,7 +57,7 @@ class UsuarioController extends Controller
                 ], 409);
             }
             foreach ($users as $user) {
-                $user->nombre_carrera= $escuelas[$user->escuela-1]->nombre;
+                $user->nombre_escuela= $escuelas[$user->escuela-1]->nombre;
             }
             return response()->json([
                 'success' => true,
@@ -189,6 +189,8 @@ class UsuarioController extends Controller
                     'data' => null
                 ], 409);
             }
+            $escuelas=Escuela::withTrashed()->orderBy('id','asc')->get();
+            $user->nombre_escuela= $escuelas[$user->escuela-1]->nombre;
             //return response($user->foto)->header('Content-Type', 'image/png');
             return response()->json([
                 'success' => true,
