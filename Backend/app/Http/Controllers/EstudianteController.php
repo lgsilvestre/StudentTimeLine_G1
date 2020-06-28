@@ -1,37 +1,29 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
+use App\Estudiante;
 use App\Escuela;
-use Validator;
+use Illuminate\Http\Request;
 
-class EscuelaController extends Controller
+class EstudianteController extends Controller
 {
-
     /**
-     * Metodo que se encarga de bloquear las rutas del controlador Escuela
-     */
-    public function __construct()
-    {
-        $this->middleware(['permission:create escuela'], ['only' => ['create', 'store']]);
-        $this->middleware(['permission:read escuela'], ['only' => 'index']);
-        $this->middleware(['permission:update escuela'], ['only' => ['edit', 'update']]);
-        $this->middleware(['permission:delete escuela'], ['only' => 'delete']);
-    }
-
-    /**
-     * Metodo que se encarga de listar a todos escuelas
+     * Metodo que se encarga de listar a todos estudiantes
      * Errores code inician 100
      * @return \Illuminate\Http\Response
      */
     public function index(){
         try{
-            $escuelas = Escuela::all();
+            $estudiantes = Estudiante::all();
+            $escuelas=Escuela::orderBy('id','asc')->get();
+            foreach ($estudiantes as $estudiante) {
+                $estudiante->escuela=$escuelas[$estudiante->escuela-1]->nombre;
+            }
             return response()->json([
                 'success' => true,
                 'code' => 100,
                 'message' => "La operacion se a realizado con exito",
-                'data' => ['escuelas'=>$escuelas]
+                'data' => ['estudiantes'=>$estudiantes]
             ], 200);
         } catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
@@ -41,7 +33,6 @@ class EscuelaController extends Controller
                 'data' => ['error'=>$ex]
             ], 409);
         }
-        
     }
 
     /**
@@ -60,36 +51,29 @@ class EscuelaController extends Controller
     }
 
     /**
-     * Metodo que se encarga de crear una escuela
+     * Metodo que se encarga en crear un estudiante
      * Errores code inician 300
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        $credentials = $request->only('nombre');
-        $validator = Validator::make($credentials, [
-            'cod_carrera' => ['number'],
-            'nombre' => ['string'],
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'code' => 301,
-                'message' => 'Error en datos ingresados',
-                'data' => ['error'=>$validator->errors()]
-            ], 422);
-        }
+    public function store(Request $request){
         try{
-            $escuela = new Escuela();
-            $escuela->nombre = $request->nombre;
-            $escuela->cod_carrera = $request->cod_carrera;
-            $escuela = $escuela->save();
+            $estudiante = new Estudiante();
+            $estudiante -> matricula=$request->matricula;
+            $estudiante -> rut=$request->rut;
+            $estudiante -> nombre_completo=$request->nombre_completo;
+            $estudiante -> correo=$request->correo;
+            $estudiante -> anho_ingreso=$request->anho_ingreso;
+            $estudiante -> situacion_academica=$request->situacion_academica;
+            $estudiante -> porcentaje_avance=$request->porcentaje_avance;
+            $estudiante -> creditos_aprobados=$request->creditos_aprobados;
+            $estudiante -> escuela=$request->escuela;
+            $estudiante = $estudiante->save();
             return response()->json([
                 'success' => true,
                 'code' => 300,
                 'message' => "Operacion realizada con exito",
-                'data' => ['escuela'=>$escuela]
+                'data' => ['estudiante'=>$estudiante]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
@@ -97,7 +81,7 @@ class EscuelaController extends Controller
                 'code' => 302,
                 'message' => "Error en la base de datos",
                 'data' => ['error'=>$ex]
-            ], 409);
+            ], 409  );
         }
     }
 
@@ -108,13 +92,13 @@ class EscuelaController extends Controller
      * @param  \App\Estudiante  $estudiante
      * @return \Illuminate\Http\Response
      */
-    public function show($id){
+    public function show(Estudiante $estudiante){
         return response()->json([
             'success' => false,
             'code' => 401,
             'message' => 'Este recurso está bloqueado',
             'data' => ['error'=>'El el protocolo se llama index']
-        ], 423);
+        ], 423 );
     }
 
     /**
@@ -124,7 +108,7 @@ class EscuelaController extends Controller
      * @param  \App\Estudiante  $estudiante
      * @return \Illuminate\Http\Response
      */
-    public function edit($id){
+    public function edit(Estudiante $estudiante){
         return response()->json([
             'success' => false,
             'code' => 501,
@@ -134,48 +118,26 @@ class EscuelaController extends Controller
     }
 
     /**
-     * Metodo que se encarga de modificar una escuela
+     * Metodo que se encarga de modificar un estudiante
      * Errores code inician 600
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Estudiante  $estudiante
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id){
-        $credentials = $request->only('nombre');
-        $validator = Validator::make($credentials, [
-            'cod_carrera' => ['number', 'nullable'],
-            'nombre' => ['string', 'nullable'],
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'code' => 1,
-                'message' => 'Error en datos ingresados',
-                'data' => ['error'=>$validator->errors()]
-            ], 422);
-        }
         try{
-            $escuela = Escuela::find($id);
-            if ($escuela == null) {
-                return response()->json([
-                    'success' => false,
-                    'code' => 602,
-                    'message' => 'La escuela con el id '.$id.' no existe',
-                    'data' => null
-                ], 409);
-            }
-            if($request->nombre!=null){
-                $escuela->nombre = $request->nombre;
-            }
-            if($request->cod_carrera!=null){
-                $escuela->cod_carrera = $request->cod_carrera;
-            }
-            $escuela-> save();
+            $estudiante = Estudiante::find($id);
+            $estudiante->nombre_completo = $request->nombre_completo;
+            $estudiante->situacion_academica = $request->situacion_academica;
+            $estudiante->porcentaje_avance = $request->porcentaje_avance;
+            $estudiante->creditos_aprobados = $request->creditos_aprobados;
+            $estudiante->escuela = $request->escuela;
+            $estudiante->save();
             return response()->json([
                 'success' => true,
                 'code' => 600,
                 'message' => "Operacion realizada con exito",
-                'data' => ['escuela'=>$escuela]
+                'data' => ['estudiante'=>$estudiante]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
@@ -185,34 +147,24 @@ class EscuelaController extends Controller
                 'data' => ['error'=>$ex]
             ], 409 );
         }
-        
     }
 
     /**
-     * Metodo que se encarga de eliminar una escuela
+     * Metodo que se encarga de eliminar un estudiante
      * Errores code inician 700
      * @param  \App\Estudiante  $estudiante
      * @return \Illuminate\Http\Response
      */
     public function destroy($id){
         try{
-            $escuela = Escuela::find($id);
-            if ($escuela == null) {
-                $escuela->delete();
-                return response()->json([
-                    'success' => false,
-                    'code' => 701,
-                    'message' => 'El escuela con el id '.$id.' no existe',
-                    'data' => null
-                ], 409 );
-            }else{
-                return response()->json([
-                    'success' => true,
-                    'code' => 700,
-                    'message' => "Operacion realizada con exito",
-                    'data' =>['escuela'=> $escuela]
-                ], 200);
-            }
+            $estudiante = Estudiante::find($id);
+            $estudiante->delete();
+            return response()->json([
+                'success' => true,
+                'code' => 700,
+                'message' => "Operacion realizada con exito",
+                'data' => ['estudiante'=>$estudiante]
+            ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
                 'success' => false,

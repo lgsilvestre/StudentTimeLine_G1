@@ -107,11 +107,11 @@
                                         prepend-inner-icon="mdi-camera"
                                         prepend-icon=""
                                     ></v-file-input>   
-                                    <v-container class="px-10" style="text-align:right;">
+                                    <v-container  style="text-align:right;">
                                         <v-btn rounded color="warning" @click="resetRegistrarUsuario()">
                                             <h4 class="white--text">Cancelar</h4>
                                         </v-btn>
-                                        <v-btn rounded color="primary" class="ml-2" @click="registrarUsuario()" >
+                                        <v-btn rounded color="secondary" class="ml-2 mr'5" @click="registrarUsuario()" >
                                             <h4 class="white--text">Registrar</h4>
                                         </v-btn>
                                     </v-container>  
@@ -178,10 +178,10 @@
                                 ></v-text-field>
 
                                 <div style="text-align:right;">
-                                    <v-btn rounded color="red"   class="mb-4 "  @click="resetModificacionUsuario">  
+                                    <v-btn rounded color="warning"   class="mb-4 "  @click="resetModificacionUsuario">  
                                         <h4 class="white--text">Cancelar</h4>
                                     </v-btn>
-                                    <v-btn rounded color="primary" class="mb-4 ml-2"    type="submit">
+                                    <v-btn rounded color="secondary" class="mb-4 ml-2"    type="submit">
                                         <h4 class="white--text">Modificar</h4>
                                     </v-btn>
                                 </div>
@@ -204,10 +204,10 @@
                                 <v-card-text>Email : {{ this.datosUsuario.correo }}</v-card-text>
                                 <!-- </v-container > -->
                                 <div style="text-align:right;">
-                                    <v-btn rounded color="red" class=" mb-4 "  @click="dialogEliminar = false">
+                                    <v-btn rounded color="warning" class=" mb-4 "  @click="dialogEliminar = false">
                                         <h4 class="white--text">Cancelar</h4>
                                     </v-btn>
-                                    <v-btn rounded color="primary"   class=" mb-4 ml-2 mr-2" @click="eliminarUsuario()">
+                                    <v-btn rounded color="secondary"   class=" mb-4 ml-2 mr-5" @click="eliminarUsuario()">
                                         <h4 class="white--text">Eliminar</h4>
                                     </v-btn>
                                 </div> 
@@ -221,6 +221,7 @@
                 :headers="columnas"
                 :items="listaUsuarios"
                 :search="search"
+                :loading="cargando"
                 :items-per-page="10"            
             >            
                 <template v-slot:item.opciones="{ item }">
@@ -256,7 +257,7 @@
             bottom
             color= "warning"
             left
-            class="pb-9"                      
+            class="pb-12"                      
         >
             <v-icon     
                 color="white"   
@@ -286,7 +287,7 @@
             bottom
             color= "secondary"
             left
-            class="pb-9"                      
+            class="pb-12"                      
         >
             <v-icon  
                 class="mr-3"   
@@ -325,7 +326,7 @@ export default {
             alertaError: false,
             alertaExito: false,
             textoAlertas: '',
-            timeout: 4000,
+            timeout: 6000,
             /*  ----------- */
 
             dialog: false,
@@ -359,6 +360,8 @@ export default {
             listaUsuariosAux:[],
             modUsuarioActivo: false,
             dialogEliminar: false,
+            cargando: true,
+            
         }
     },
     created () {   
@@ -406,7 +409,7 @@ export default {
             ).catch((err)=>{
                 console.log(err)
                 this.alertaError = true;
-                this.textoAlertas = "Hubo un error al cargar los datos, intente mas tarde."
+                this.textoAlertas = "Error al cargar los datos, intente mas tarde."
             });
         },
         /**
@@ -414,11 +417,14 @@ export default {
          * Desde el bakend no envian: contraseña y (rol) aun esta por definir.
          */
         obtenerUsuarios(){
+            this.cargando = true;
             this.listaUsuariosAux = [];
             var aux;
             var url = 'http://127.0.0.1:8000/api/v1/usuario';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
+                console.log(result);
+                console.log(result.data);
                 for (let index = 0; index < result.data.length; index++) {
                     const element = result.data[index];
                     let usuario = {
@@ -427,21 +433,18 @@ export default {
                         role: element.rol,
                         imagen: element.imagen,
                         correo: element.email,   
-                        escuela: element.escuela,
-                    };
-                    for(var numEscuela = 0; numEscuela < this.listaEscuela.length; numEscuela++){                        
-                        if(usuario.escuela == this.listaEscuela[numEscuela].id){                                                   
-                            usuario.escuela = this.listaEscuela[numEscuela].nombre;
-                        }
-                    };                    
+                        escuela: element.nombre_carrera,
+                    };            
                     this.listaUsuariosAux[index]=usuario;
                 }
+                this.cargando = false;
                 this.listaUsuarios = this.listaUsuariosAux;
             }
             ).catch((err)=>{
                 console.log(err)
                 this.alertaError = true;
-                this.textoAlertas = "Hubo un error al cargar los datos, intente mas tarde."
+                this.cargando = false;
+                this.textoAlertas = "Error al cargar los datos, intente mas tarde."
             });
         },
 
@@ -471,7 +474,8 @@ export default {
             
             axios.post(url, post, this.$store.state.config)
             .then((result) => {
-                console.log(result.statusText);
+                console.log(result);
+                console.log(result.data);
                 this.alertaExito = true;
                 this.textoAlertas = "Se creó el usuario con exito."
                 this.resetRegistrarUsuario()
@@ -479,7 +483,7 @@ export default {
             }).catch((err)=>{
                 console.log(err)
                 this.alertaError = true;
-                this.textoAlertas = "Hubo un error al modificar el Usuario, intente mas tarde."
+                this.textoAlertas = "Error al modificar el usuario, intente mas tarde."
                 this.resetRegistrarUsuario()
             });
         },
@@ -554,14 +558,14 @@ export default {
             if (result.statusText=='OK') {
                 //  console.log(result.data)
                 this.alertaExito = true;
-                this.textoAlertas = "Se modificó el Usuario con exito."
+                this.textoAlertas = "Se modificó el usuario con exito."
                 this.obtenerUsuarios(); 
                 this.resetModificacionUsuario();
             }
             }).catch((err)=>{
                 console.log(err)
                 this.alertaError = true;
-                this.textoAlertas = "Hubo un error al modificar el Usuario, intente mas tarde."
+                this.textoAlertas = "Error al modificar el usuario, intente mas tarde."
             });
 
         },
@@ -583,12 +587,12 @@ export default {
                     this.obtenerUsuarios();
                     this.resetEliminarUsuario(); 
                     this.alertaExito = true;
-                    this.textoAlertas = "Se Elimino el Usuario con Exito del Sistema"
+                    this.textoAlertas = "Se elimino el usuario con exito "
                 }
                 }).catch((err)=>{
                 console.log(err)
                 this.alertaError = true;
-                this.textoAlertas = "Hubo un error al eliminar el Usuario, intente mas tarde."
+                this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
             });
             
         },

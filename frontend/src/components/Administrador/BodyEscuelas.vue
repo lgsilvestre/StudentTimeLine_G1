@@ -1,7 +1,8 @@
 <template>
   <v-container>
       <v-row >
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="3"  
+          align-self="end">
           </v-col>
           <v-col cols="12" md="6">
               <v-card>
@@ -16,7 +17,7 @@
                         <strong> Escuelas</strong>
                         <v-spacer>
                         </v-spacer>
-                        <v-dialog v-model="dialog" persistent max-width="500px">
+                        <v-dialog v-model="dialog" persistent max-width="500px" :key="keyDialog">
                           <template v-slot:activator="{ on }">
                               <v-btn
                               fab
@@ -35,33 +36,33 @@
                               >
                               <h5 class="white--text ">Crear una escuela</h5>
                               </v-card-title>
-                                <v-form>
-                                  <v-container class="px-10 pt-10">
-                                      <v-text-field 
-                                          v-model="escuela.nombre"
-                                          label="Nombre de la escuela"
-                                          outlined
-                                          color="secondary"
-                                          prepend-inner-icon="fas fa-scroll"
-                                          
-                                      ></v-text-field>
-                                      <v-text-field 
-                                          v-model="escuela.cod"
-                                          label="Codigo de carrera"
-                                          outlined
-                                          color="secondary"
-                                          prepend-inner-icon="fas fa-hashtag"
-                                      ></v-text-field>
-                                  </v-container>
-                                  <v-container class="px-10 pb-5" style="text-align:right;">
+                              <v-container class="px-10 mt-5" color="primary">
+                                  <v-text-field 
+                                      v-model="escuela.nombre"
+                                      label="Nombre de la escuela"
+                                      outlined
+                                      :rules="reglasNombreEscuela"
+                                      color="secondary"
+                                      prepend-inner-icon="fas fa-scroll"
+                                  ></v-text-field>
+                                  <v-text-field 
+                                      v-model="escuela.cod"
+                                      label="Codigo de carrera"
+                                      outlined
+                                      :rules="reglasCodigoCarrera"
+                                      color="secondary"
+                                      prepend-inner-icon="fas fa-hashtag"
+                                  >
+                                  </v-text-field>
+                                  <div class="pb-1" style="text-align:right;">
                                     <v-btn rounded color="warning" @click="resetCreacionEscuela">
                                       <h4 class="white--text">Cancelar</h4>
                                     </v-btn>
                                     <v-btn rounded color="secondary" class="ml-2" @click="crearEscuela" >
                                       <h4 class="white--text">Guardar</h4>
                                     </v-btn>
-                                  </v-container>
-                              </v-form> 
+                                  </div>
+                              </v-container>
                           </v-card>
                         </v-dialog>
                     </v-card-title>
@@ -69,6 +70,7 @@
                 <v-data-table
                 :headers="headers"
                 :items="desserts"
+                :loading="cargando"
                 class="elevation-1 "
                 >
                   <template v-slot:item.actions="{ item }">
@@ -90,7 +92,7 @@
                     </v-btn>
                   </template>                                                         
                 </v-data-table>
-                <v-dialog v-model="dialogModificar" persistent max-width="500px">
+                <v-dialog :key="keyDialogModicar" v-model="dialogModificar" persistent max-width="500px">
                   <v-card
                   class="mx-auto"
                   shaped
@@ -108,27 +110,28 @@
                             <v-text-field
                                 v-model="escuelaEditar.nombre"
                                 label="Nombre de Escuela"
+                                :rules="reglasNombreEscuela"
                                 outlined
                                 prepend-inner-icon="fas fa-scroll"
                             >
                             </v-text-field>                                  
                             <v-text-field
-                              v-model="escuelaEditar.cod_car"
-                              label="Codigo Carrera"                                      
+                              v-model="escuelaEditar.cod"
+                              label="Codigo Carrera"
+                              :rules="reglasCodigoCarrera"                                      
                               outlined
                               prepend-inner-icon="fas fa-hashtag"
                             >
-                            </v-text-field>   
-                          </v-container>         
-
-                            <v-container class="px-10 pb-5" style="text-align:right;">
-                                <v-btn rounded color="warning" @click="dialogModificar = false">
+                            </v-text-field> 
+                            <div class=" pb-1" style="text-align:right;">
+                                <v-btn rounded color="warning" @click="resetEditarEscuela">
                                   <h4 class="white--text">Cancelar</h4>
                                 </v-btn>
                                 <v-btn rounded color="secondary" class="ml-2" @click="editarEscuela(escuelaEditar)">
                                   <h4 class="white--text">Modificar</h4>
                                 </v-btn>
-                            </v-container>  
+                            </div>    
+                          </v-container>         
                           </v-form>
                   </v-card>
                   </v-dialog>
@@ -147,7 +150,6 @@
                         <v-card-text>Nombre Escuela: {{ escuelaEliminar.nombre }}</v-card-text>
                         <v-card-text>Codigo Carrera: {{ escuelaEliminar.cod }}</v-card-text>
                         <v-card-text class="px-12 mt-3" >     
-
                         <v-container class="px-10" style="text-align:right;">
                               <v-btn rounded color="warning" @click="dialogEliminar = false">
                                 <h4 class="white--text">Cancelar</h4>
@@ -162,8 +164,57 @@
               </v-card>
           </v-col>
           <v-col cols="12" md="3">
+            
           </v-col>          
       </v-row>
+      <v-snackbar
+        v-model="alertError"
+        :timeout=delay
+        bottom
+        color="warning"
+        left
+        class="mb-1 pb-12 pr-0 mr-0"
+      >
+        <div>
+          <v-icon color="white" class="mr-2">
+            fas fa-exclamation-triangle
+          </v-icon>
+          <strong>{{textoError}} </strong>
+        </div>
+        <v-btn
+            color="white"
+            elevation="0"
+            x-small
+            fab
+            @click="alertError = ! alertError"
+        > 
+            <v-icon color="warning">fas fa-times</v-icon>
+        </v-btn>
+      </v-snackbar>
+      <v-snackbar
+        v-model="alertAcept"
+        :timeout=delay
+        bottom
+        color="secondary"
+        left
+        class="mb-1 pb-12 pr-0 mr-0"
+      >
+        <div>
+          <v-icon color="white" class="mr-2">
+            fas fa-check-circle
+          </v-icon>
+          <strong>{{textoAcept}}</strong>
+        </div>
+        <v-btn
+          color="white"
+          elevation="0"
+          x-small
+          fab
+          @click="alertAcept = ! alertAcept"
+        > 
+            <v-icon color="secondary">fas fa-times</v-icon>
+        </v-btn>
+      </v-snackbar>
   </v-container>
 </template>
 
@@ -173,8 +224,17 @@
   export default {
     data: () => ({
       dialog: false,
+      keyDialog: 1,
       dialogModificar: false,
+      keyDialogModicar: 1,
       dialogEliminar: false,
+      alertError: false,
+      textoError: '',
+      alertAcept: false,
+      textoAcept: '',
+      delay: 4000,
+      cargar: null,
+      cargando: true,
       headers: [
         { text: 'ID',align: 'start',value: 'id',sortable: false},
         { text: 'Nombre', value: 'nombre',sortable: false, },
@@ -186,6 +246,14 @@
       escuela:[{nombre:''},{cod:''}],
       escuelaEditar:[{id:''},{nombre:''},{cod:''}],
       escuelaEliminar:[{nombre:''},{cod:''}],
+      reglasNombreEscuela: [
+        value => !!value || 'Requerido',
+        value => (value || '').length <= 40 || 'Max. 40 caracteres',
+      ],
+      reglasCodigoCarrera: [
+        value => !!value || 'Requerido',
+        value => value  >= 0 || 'El valor debe ser mayor o igual a 0', 
+      ],
     }),
     computed: {
     },
@@ -201,7 +269,6 @@
         this.escuelaEditar.nombre = item.nombre;
         this.escuelaEditar.cod = item.cod_car;
         this.dialogModificar = true;
-        console.log("chao");
       },
       EliminarEscuela(item){
         console.log(item.id);
@@ -211,71 +278,209 @@
         this.dialogEliminar = true;
       },
       obtenerEscuelas(){
+        this.cargando =true;
         this.dessertsAux = [];
         var url = 'http://127.0.0.1:8000/api/v1/escuela';
         axios.get(url,this.$store.state.config)
           .then((result)=>{
-            for (let index = 0; index < result.data.length; index++) {
-              const element = result.data[index];
-              let escuela = {
-                id: element.id,
-                nombre: element.nombre,
-                cod_car: '',
-              };
-              this.dessertsAux[index]=escuela;
+            console.log(result);
+            if (result.data.success == true) {
+              for (let index = 0; index < result.data.data.escuelas.length; index++) {
+                const element = result.data.data.escuelas[index];
+                let escuela = {
+                  id: element.id,
+                  nombre: element.nombre,
+                  cod_car: element.cod_carrera,
+                };
+                this.dessertsAux[index]=escuela;
+              }
+              this.cargando =false;
+              this.desserts = this.dessertsAux;
             }
-            this.desserts = this.dessertsAux;
-          }
-        );
+          })
+          .catch((error) => {
+            console.log(error);
+            if (error.message == 'Network Error') {
+              console.log(error);
+              this.alertError = true;
+              this.cargando = false;
+              this.textoError = 'Error al cargar los datos, intente más tarde'
+            } else {
+              if (error.response.data.success == false) {
+                switch (error.response.data.code) {
+                  case 101:
+                      console.log(error.response.data.code +' '+ error.response.data.message);
+                      console.log(error.response.data);
+                      this.alertError = true;
+                      this.cargando = false;
+                      this.textoError = error.response.data.message;
+                      break;
+                  default:
+                      break;
+                }
+              }
+            } 
+          });
       },
       crearEscuela(){
         this.dessertsAux = [];
         var url = 'http://127.0.0.1:8000/api/v1/escuela';
         let post ={
           "nombre": this.escuela.nombre,
-        }
+          "cod_carrera":this.escuela.cod,
+        };
         axios.post(url,post,this.$store.state.config)
         .then((result)=>{
-          console.log(result.statusText);
-          if (result.statusText=='OK') {
+          if (result.data.success== true) {
             this.obtenerEscuelas(); 
-            
             this.resetCreacionEscuela();
+            this.alertAcept = true;
+            this.textoAcept = 'La escuela se creó correctamente'
           }
+        })
+        .catch((error) => {
+          if (error.message == 'Network Error') {
+            console.log(error);
+            this.resetCreacionEscuela();
+            this.alertError = true;
+            this.textoError = 'Error en la conexion, intente más tarde';
+          } else {
+            if (error.response.data.success == false) {
+              switch (error.response.data.code) {
+                case 301:
+                    console.log(error.response.data.code +' '+ error.response.data.message);
+                    console.log(error.response.data);
+                    this.resetCreacionEscuela();
+                    this.alertError = true;
+                    this.textoError = error.response.data.message;
+                    break;
+                case 302:
+                    console.log(error.response.data.code +' '+ error.response.data.message);
+                    console.log(error.response.data);
+                    this.resetCreacionEscuela();
+                    this.alertError = true;
+                    this.textoError = error.response.data.message;
+                    break;
+                default:
+                    break;
+              }
+            }
+          } 
         });
       },
       editarEscuela(item) {
         var url = 'http://127.0.0.1:8000/api/v1/escuela/'+item.id;
         let put ={
           "nombre": this.escuelaEditar.nombre,
+          "cod_carrera":  this.escuelaEditar.cod,
         }
         axios.put(url,put,this.$store.state.config)
         .then((result)=>{
-          if (result.statusText=='OK') {
+          if (result.data.success == true) {
             this.obtenerEscuelas(); 
             this.resetEditarEscuela();
-            console.log("funciono");
             this.dialogModificar=false;
+            this.alertAcept = true;
+            this.textoAcept = 'La escuela se modificó correctamente'
           }
+        })
+        .catch((error) => {
+          if (error.message == 'Network Error') {
+            console.log(error);
+            this.resetEditarEscuela();
+            this.alertError = true;
+            this.textoError = 'Error en la conexion, intente más tarde';
+          } else {
+            if (error.response.data.success == false) {
+              switch (error.response.data.code) {
+                case 1:
+                    console.log(error.response.data.code +' '+ error.response.data.message);
+                    console.log(error.response.data);
+                    this.resetEditarEscuela();
+                    this.dialogModificar=false;
+                    this.alertError = true;
+                    this.textoError = error.response.data.message;
+                    break;
+                case 602:
+                    console.log(error.response.data.code +' '+ error.response.data.message);
+                    console.log(error.response.data);
+                    this.resetEditarEscuela();
+                    this.dialogModificar=false;
+                    this.alertError = true;
+                    this.textoError = error.response.data.message;
+                    break;
+                case 604:
+                    console.log(error.response.data.code +' '+ error.response.data.message);
+                    console.log(error.response.data);
+                    this.resetEditarEscuela();
+                    this.dialogModificar=false;
+                    this.alertError = true;
+                    this.textoError = error.response.data.message;
+                    break;
+                default:
+                    break;
+              }
+            }
+          } 
         });
       },
       borrarEscuela (item) {
         var url = 'http://127.0.0.1:8000/api/v1/escuela/'+item.id;
         axios.delete(url,this.$store.state.config)
         .then((result)=>{
-          if (result.statusText=='OK') {
+          if (result.data.success == true) {
             this.obtenerEscuelas(); 
             this.dialogEliminar=false;
+            this.alertAcept = true;
+            this.textoAcept = 'La escuela se borró correctamente';
+          }
+        })
+        .catch((error) => {
+          if (error.message == 'Network Error') {
+            console.log(error);
+            this.dialogEliminar=false;
+            this.alertError = true;
+            this.textoError = 'Error al borrar escuela, intente más tarde';
+          } else {
+            if (error.response.data.success == false) {
+              switch (error.response.data.code) {
+                case 701:
+                    console.log(error.response.data.code +' '+ error.response.data.message);
+                    console.log(error.response.data);
+                    this.dialogEliminar = false;
+                    this.alertError = true;
+                    this.textoError = error.response.data.message;
+                    break;
+                case 702:
+                    console.log(error.response.data.code +' '+ error.response.data.message);
+                    console.log(error.response.data);
+                    this.dialogEliminar = false;
+                    this.alertError = true;
+                    this.textoError = error.response.data.message;
+                    break;
+                default:
+                    break;
+              }
+            }
           }
         });
       },
       resetCreacionEscuela(){
         this.dialog = false;
         this.escuela.nombre='';
-        this.escuela.cod='';
+        this.escuela.cod=null;
+        this.keyDialog ++;
       },
       resetEditarEscuela(){
+        this.dialogModificar=false;
+        this.keyDialogModicar ++;
       },
+      
+    },
+    watch:{
+
     },
   }
+
+  
 </script>

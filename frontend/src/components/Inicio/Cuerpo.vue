@@ -142,10 +142,7 @@ export default {
         
     },
     computed:{
-        ...mapState(['numProfesores']), 
-        ...mapState(['numObservaciones']),
-        ...mapState(['numCarreras']),
-        ...mapState(['numEstudiantes']),
+        ...mapState(['numProfesores','numObservaciones','numCarreras','numEstudiantes']), 
     },
 
 }
