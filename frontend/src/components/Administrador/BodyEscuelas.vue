@@ -116,7 +116,7 @@
                             >
                             </v-text-field>                                  
                             <v-text-field
-                              v-model="escuelaEditar.cod_car"
+                              v-model="escuelaEditar.cod"
                               label="Codigo Carrera"
                               :rules="reglasCodigoCarrera"                                      
                               outlined
@@ -150,7 +150,6 @@
                         <v-card-text>Nombre Escuela: {{ escuelaEliminar.nombre }}</v-card-text>
                         <v-card-text>Codigo Carrera: {{ escuelaEliminar.cod }}</v-card-text>
                         <v-card-text class="px-12 mt-3" >     
-
                         <v-container class="px-10" style="text-align:right;">
                               <v-btn rounded color="warning" @click="dialogEliminar = false">
                                 <h4 class="white--text">Cancelar</h4>
@@ -233,7 +232,7 @@
       textoError: '',
       alertAcept: false,
       textoAcept: '',
-      delay: 2000,
+      delay: 4000,
       cargar: null,
       cargando: true,
       headers: [
@@ -253,10 +252,8 @@
       ],
       reglasCodigoCarrera: [
         value => !!value || 'Requerido',
-        value => value  >= 3000 || 'El valor debe ser mayor a 3000',
-        value => value  <= 3999 || 'El valor debe ser menor a 3999',
+        value => value  >= 0 || 'El valor debe ser mayor o igual a 0', 
       ],
-
     }),
     computed: {
     },
@@ -265,7 +262,6 @@
     created () {
       this.obtenerEscuelas();
     },
-
     methods: {
       ModificarEscuela(item){
         console.log(item.id);
@@ -287,36 +283,55 @@
         var url = 'http://127.0.0.1:8000/api/v1/escuela';
         axios.get(url,this.$store.state.config)
           .then((result)=>{
-            for (let index = 0; index < result.data.length; index++) {
-              const element = result.data[index];
-              let escuela = {
-                id: element.id,
-                nombre: element.nombre,
-                cod_car: '',
-              };
-              this.dessertsAux[index]=escuela;
+            console.log(result);
+            if (result.data.success == true) {
+              for (let index = 0; index < result.data.data.escuelas.length; index++) {
+                const element = result.data.data.escuelas[index];
+                let escuela = {
+                  id: element.id,
+                  nombre: element.nombre,
+                  cod_car: element.cod_carrera,
+                };
+                this.dessertsAux[index]=escuela;
+              }
+              this.cargando =false;
+              this.desserts = this.dessertsAux;
             }
-            this.cargando =false;
-            this.desserts = this.dessertsAux;
-          }
-        )
-        .catch((error) => {
-          console.log(error);
-          this.alertError = true;
-          this.cargando = false;
-          this.textoError = 'Error al cargar los datos, intente más tarde'
-        })
+          })
+          .catch((error) => {
+            console.log(error);
+            if (error.message == 'Network Error') {
+              console.log(error);
+              this.alertError = true;
+              this.cargando = false;
+              this.textoError = 'Error al cargar los datos, intente más tarde'
+            } else {
+              if (error.response.data.success == false) {
+                switch (error.response.data.code) {
+                  case 101:
+                      console.log(error.response.data.code +' '+ error.response.data.message);
+                      console.log(error.response.data);
+                      this.alertError = true;
+                      this.cargando = false;
+                      this.textoError = error.response.data.message;
+                      break;
+                  default:
+                      break;
+                }
+              }
+            } 
+          });
       },
       crearEscuela(){
         this.dessertsAux = [];
         var url = 'http://127.0.0.1:8000/api/v1/escuela';
         let post ={
           "nombre": this.escuela.nombre,
-        }
+          "cod_carrera":this.escuela.cod,
+        };
         axios.post(url,post,this.$store.state.config)
         .then((result)=>{
-          console.log(result.statusText);
-          if (result.statusText=='OK') {
+          if (result.data.success== true) {
             this.obtenerEscuelas(); 
             this.resetCreacionEscuela();
             this.alertAcept = true;
@@ -324,21 +339,44 @@
           }
         })
         .catch((error) => {
-          console.log(error);
-          this.resetCreacionEscuela();
-          this.alertError = true;
-          this.textoError = 'Error al crear escuela, intente más tarde'
-        })
-
+          if (error.message == 'Network Error') {
+            console.log(error);
+            this.resetCreacionEscuela();
+            this.alertError = true;
+            this.textoError = 'Error en la conexion, intente más tarde';
+          } else {
+            if (error.response.data.success == false) {
+              switch (error.response.data.code) {
+                case 301:
+                    console.log(error.response.data.code +' '+ error.response.data.message);
+                    console.log(error.response.data);
+                    this.resetCreacionEscuela();
+                    this.alertError = true;
+                    this.textoError = error.response.data.message;
+                    break;
+                case 302:
+                    console.log(error.response.data.code +' '+ error.response.data.message);
+                    console.log(error.response.data);
+                    this.resetCreacionEscuela();
+                    this.alertError = true;
+                    this.textoError = error.response.data.message;
+                    break;
+                default:
+                    break;
+              }
+            }
+          } 
+        });
       },
       editarEscuela(item) {
         var url = 'http://127.0.0.1:8000/api/v1/escuela/'+item.id;
         let put ={
           "nombre": this.escuelaEditar.nombre,
+          "cod_carrera":  this.escuelaEditar.cod,
         }
         axios.put(url,put,this.$store.state.config)
         .then((result)=>{
-          if (result.statusText=='OK') {
+          if (result.data.success == true) {
             this.obtenerEscuelas(); 
             this.resetEditarEscuela();
             this.dialogModificar=false;
@@ -347,29 +385,85 @@
           }
         })
         .catch((error) => {
-          console.log(error);
-          this.resetEditarEscuela();
-          this.dialogModificar=false;
-          this.alertError = true;
-          this.textoError = 'Error al modificar escuela, intente más tarde'
-        })
+          if (error.message == 'Network Error') {
+            console.log(error);
+            this.resetEditarEscuela();
+            this.alertError = true;
+            this.textoError = 'Error en la conexion, intente más tarde';
+          } else {
+            if (error.response.data.success == false) {
+              switch (error.response.data.code) {
+                case 1:
+                    console.log(error.response.data.code +' '+ error.response.data.message);
+                    console.log(error.response.data);
+                    this.resetEditarEscuela();
+                    this.dialogModificar=false;
+                    this.alertError = true;
+                    this.textoError = error.response.data.message;
+                    break;
+                case 602:
+                    console.log(error.response.data.code +' '+ error.response.data.message);
+                    console.log(error.response.data);
+                    this.resetEditarEscuela();
+                    this.dialogModificar=false;
+                    this.alertError = true;
+                    this.textoError = error.response.data.message;
+                    break;
+                case 604:
+                    console.log(error.response.data.code +' '+ error.response.data.message);
+                    console.log(error.response.data);
+                    this.resetEditarEscuela();
+                    this.dialogModificar=false;
+                    this.alertError = true;
+                    this.textoError = error.response.data.message;
+                    break;
+                default:
+                    break;
+              }
+            }
+          } 
+        });
       },
       borrarEscuela (item) {
         var url = 'http://127.0.0.1:8000/api/v1/escuela/'+item.id;
         axios.delete(url,this.$store.state.config)
         .then((result)=>{
-          if (result.statusText=='OK') {
+          if (result.data.success == true) {
             this.obtenerEscuelas(); 
             this.dialogEliminar=false;
             this.alertAcept = true;
-            this.textoAcept = 'La escuela se borró correctamente'
+            this.textoAcept = 'La escuela se borró correctamente';
           }
         })
         .catch((error) => {
-          this.dialogEliminar=false;
-          this.alertError = true;
-          this.textoError = 'Error al borrar escuela, intente más tarde'
-        })
+          if (error.message == 'Network Error') {
+            console.log(error);
+            this.dialogEliminar=false;
+            this.alertError = true;
+            this.textoError = 'Error al borrar escuela, intente más tarde';
+          } else {
+            if (error.response.data.success == false) {
+              switch (error.response.data.code) {
+                case 701:
+                    console.log(error.response.data.code +' '+ error.response.data.message);
+                    console.log(error.response.data);
+                    this.dialogEliminar = false;
+                    this.alertError = true;
+                    this.textoError = error.response.data.message;
+                    break;
+                case 702:
+                    console.log(error.response.data.code +' '+ error.response.data.message);
+                    console.log(error.response.data);
+                    this.dialogEliminar = false;
+                    this.alertError = true;
+                    this.textoError = error.response.data.message;
+                    break;
+                default:
+                    break;
+              }
+            }
+          }
+        });
       },
       resetCreacionEscuela(){
         this.dialog = false;
