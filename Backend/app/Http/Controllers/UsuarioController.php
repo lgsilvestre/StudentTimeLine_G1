@@ -180,7 +180,7 @@ class UsuarioController extends Controller
      */
     public function edit($id){
         try{
-            $user = User::findOrFail($id);
+            $user = User::find($id);
             if($user==null){
                 return response()->json([
                     'success' => false,
