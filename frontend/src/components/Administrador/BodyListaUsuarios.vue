@@ -98,8 +98,8 @@
                                     >
                                     </v-text-field>
                                     <v-file-input
-                                        class="mx-2"
-                                        v-model="datosUsuario.imagen"
+                                        class="mx-2"                                        
+                                        @change="convertirImagen"
                                         chips
                                         solo
                                         label="Fotografia del Usuario"
@@ -151,13 +151,15 @@
                                     outlined
                                     prepend-inner-icon="mdi-account-tie"
                                     ></v-select>
-                                    <v-file-input  accept="image/png, image/jpeg, image/bmp" 
+
+                                <v-file-input  accept="image/png, image/jpeg, image/bmp" 
                                     label="Seleccione una imagen"
                                     color="secondary"
                                     outlined
+                                    @change="convertirImagen"
                                     prepend-icon=""   
                                     prepend-inner-icon="mdi-camera"
-                                    v-model="datosUsuario.imagen">
+                                    >
                                 </v-file-input>
 
                                 <v-text-field 
@@ -332,7 +334,7 @@ export default {
 
             dialog: false,
             mostrar: false, 
-            datosUsuario:[ {nombre:''},{escuela:''},{role:''},{correo:''},{contrasena:''} ,{imagen:''}],  
+            datosUsuario:[ {nombre:''},{escuela:''},{role:''},{correo:''},{contrasena:''} ,{imagen:null}],  
             listaEscuela:[
                 { text: 'ID',align: 'start',value: 'id',sortable: false},
                 { text: 'Nombre', value: 'nombre',sortable: false, },                
@@ -491,7 +493,7 @@ export default {
             console.log("escuela: "+this.datosUsuario.escuela)
             console.log("rol: "+ aux)
             let post = {
-                "foto": null,
+                "foto": this.datosUsuario.imagen,
                 "nombre": this.datosUsuario.nombre,
                 "escuela": this.datosUsuario.escuela,
                 "escuelaAux": this.datosUsuario.escuela,
@@ -533,6 +535,19 @@ export default {
                     }
                 }                
             });
+        },
+
+    // Funcion que convierte la imagen a base64 para poder almacenarla en la base de datos.
+        convertirImagen(e){
+            if(e != null){
+                let image = e;
+                let reader = new FileReader();
+                reader.readAsDataURL(image);
+                reader.onload = e => {                    
+                    console.log("foto :" +e.target.result);
+                    this.datosUsuario.imagen = e.target.result;
+                }
+            }
         },
 
         /**
@@ -594,7 +609,7 @@ export default {
                 "nombre": this.datosUsuario.nombre,
                 "escuela": this.datosUsuario.escuela,
                 "role": aux,
-                "foto": null,
+                "foto": this.datosUsuario.imagen,
                 "email":this.datosUsuario.correo,
                 "password": this.datosUsuario.contraseña,
             }
