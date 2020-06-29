@@ -69,6 +69,14 @@ class EstudianteController extends Controller
             $estudiante -> porcentaje_avance=$request->porcentaje_avance;
             $estudiante -> creditos_aprobados=$request->creditos_aprobados;
             $estudiante -> escuela=$request->escuela;
+
+            if($request->hasfile('foto')){
+                $imagen = base64_encode(file_get_contents($request->file('foto')));
+                $estudiante -> foto = $imagen;
+            }else{
+                $estudiante->foto=null;
+            }
+
             $estudiante = $estudiante->save();
             return response()->json([
                 'success' => true,
@@ -133,6 +141,14 @@ class EstudianteController extends Controller
             $estudiante->porcentaje_avance = $request->porcentaje_avance;
             $estudiante->creditos_aprobados = $request->creditos_aprobados;
             $estudiante->escuela = $request->escuela;
+
+            if($request->hasfile('foto')){
+                $imagen = base64_encode(file_get_contents($request->file('foto')));
+                $estudiante -> foto = $imagen;
+            }else{
+                $estudiante ->foto=null;
+            }
+
             $estudiante->save();
             return response()->json([
                 'success' => true,

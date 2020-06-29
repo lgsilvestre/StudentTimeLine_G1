@@ -18,7 +18,7 @@ class Estudiante extends Model
      */
 
     protected $fillable = [
-        'matricula', 'rut', 'nombre_completo', 'correo', 'anho_ingreso','situacion_academica','porcentaje_avance','creditos_aprobados','escuela'
+        'matricula', 'rut', 'nombre_completo', 'correo', 'anho_ingreso','situacion_academica','porcentaje_avance','creditos_aprobados','escuela', 'foto'
     ];
 
 
