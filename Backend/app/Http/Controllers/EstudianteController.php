@@ -5,6 +5,7 @@ use App\Estudiante;
 use App\Escuela;
 use Illuminate\Http\Request;
 
+
 class EstudianteController extends Controller
 {
     /**
