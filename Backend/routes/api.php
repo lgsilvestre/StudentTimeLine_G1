@@ -38,3 +38,5 @@ Route::post('/importar_excel/importar', 'ImportarExcelController@importar');
 
 Route::get('/exportar_excel/exportar', 'ExportarExcelController@exportar');
 
+Route::resource('curso', 'CursoController');
+
