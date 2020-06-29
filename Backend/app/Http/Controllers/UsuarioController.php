@@ -129,10 +129,8 @@ class UsuarioController extends Controller
             $user ->email=$request->email;
             $user ->password=bcrypt($request->password);
             if($request->hasfile('foto')){
-                $imagen = $request->file('foto');
-                $nombreImagen = time () . '.' . $imagen->getClientOriginalExtension();
-                Image::make($imagen)->resize(400,400)->save( public_path('/uploads/imagenes/' . $nombreImagen));
-                $user->foto=$nombreImagen;
+                $imagen = base64_encode(file_get_contents($request->file('foto')));
+                $usuario -> foto = $imagen;
             }else{
                 $user ->foto=null;
             }

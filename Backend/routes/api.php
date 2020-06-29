@@ -36,3 +36,5 @@ Route::get('send-mail','MailSend@mailsend');
 Route::get('/importar_excel', 'ImportarExcelController@index');
 Route::post('/importar_excel/importar', 'ImportarExcelController@importar');
 
+Route::get('/exportar_excel/exportar', 'ExportarExcelController@exportar');
+
