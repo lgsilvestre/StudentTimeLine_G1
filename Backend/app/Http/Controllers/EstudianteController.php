@@ -58,6 +58,27 @@ class EstudianteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request){
+        $entradas = $request->only('matricula', 'rut', 'nombre_completo', 'correo', 'anho_ingreso', 'situacion_academica', 'porcentaje_avance', 'creditos_aprobados', 'escuela');
+        $validator = Validator::make($entradas, [
+            'matricula' => ['required','string'],
+            'rut' => ['required', 'string'],
+            'nombre_completo' => ['required', 'numeric', 'nullable'],
+            'correo' => ['required','numeric'], 
+            'anho_ingreso' => ['required','numeric'],
+            'situacion_academica' => ['required','string'],
+            'porcentaje_avance' => ['required', 'string'],
+            'creditos_aprobados' => ['required','numeric'], 
+            'escuela' => ['required','numeric']
+        ]);
+        //respuesta cuando falla
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'code' => 301,
+                'message' => 'Error en datos ingresados',
+                'data' => ['error'=>$validator->errors()]
+            ], 422);
+        }
         try{
             $estudiante = new Estudiante();
             $estudiante -> matricula=$request->matricula;
@@ -126,13 +147,48 @@ class EstudianteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id){
+        $entradas = $request->only('nombre_completo', 'situacion_academica', 'porcentaje_avance', 'creditos_aprobados', 'escuela');
+        $validator = Validator::make($entradas, [
+            'nombre_completo' => ['nullable','string'],
+            'situacion_academica' => ['nullable', 'string'], //Cambiar lo de la foreign key dps
+            'porcentaje_avance' => ['nullable', 'numeric', 'nullable'], //Cambiar lo de la foreign key dps
+            'creditos_aprobados' => ['nullable','numeric'], 
+            'escuela' => ['nullable','numeric']
+        ]);
+        //respuesta cuando falla
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'code' => 601,
+                'message' => 'Error en datos ingresados',
+                'data' => ['error'=>$validator->errors()]
+            ], 422);
+        }
         try{
             $estudiante = Estudiante::find($id);
-            $estudiante->nombre_completo = $request->nombre_completo;
-            $estudiante->situacion_academica = $request->situacion_academica;
-            $estudiante->porcentaje_avance = $request->porcentaje_avance;
-            $estudiante->creditos_aprobados = $request->creditos_aprobados;
-            $estudiante->escuela = $request->escuela;
+            if($estudiante==null){
+                return response()->json([
+                    'success' => false,
+                    'code' => 602,
+                    'message' => 'El estudiante con el id '.$id.' no existe',
+                    'data' => null
+                ], 409);
+            }
+            if($request->nombre_completo != null){
+                $estudiante->nombre_completo = $request->nombre_completo;
+            }
+            if($request->situacion_academica != null){
+                $estudiante->situacion_academica = $request->situacion_academica;
+            }
+            if($request->porcentaje_avance != null){
+                $estudiante->porcentaje_avance = $request->porcentaje_avance;
+            }
+            if($request->creditos_aprobados != null){
+                $estudiante->creditos_aprobados = $request->creditos_aprobados;
+            }
+            if($request->escuela != null){
+                $estudiante->escuela = $request->escuela;
+            }
             $estudiante->save();
             return response()->json([
                 'success' => true,
@@ -159,13 +215,23 @@ class EstudianteController extends Controller
     public function destroy($id){
         try{
             $estudiante = Estudiante::find($id);
+            if($estudiante==null){
+                return response()->json([
+                    'success' => false,
+                    'code' => 701,
+                    'message' => 'El estudiante con el id '.$id.' no existe',
+                    'data' => null
+                ], 409 );
+            }
             $estudiante->delete();
             return response()->json([
                 'success' => true,
                 'code' => 700,
                 'message' => "Operacion realizada con exito",
-                'data' => ['estudiante'=>$estudiante]
+                'data' => ['usuario'=>$estudiante]
             ], 200);
+        //----- Mecanismos anticaidas y reporte de errores -----
+        //catch que se encarga en responder que paso en la sentencia sql
         }catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
                 'success' => false,
