@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Curso;
 use Illuminate\Http\Request;
 
+
 class CursoController extends Controller
 {
     /**
@@ -14,17 +15,8 @@ class CursoController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $cursos = Curso::all();
+        return $cursos;
     }
 
     /**
@@ -35,7 +27,15 @@ class CursoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //'nombre','plan','descripcion','escuela'
+        $curso = new Curso();
+        $curso->nombre = $request->nombre;
+        $curso->plan = $request->plan;
+        $curso->descripcion = $request->descripcion;
+        $curso->escuela = $request->escuela;
+        $curso->save();
+
+        return compact('curso');
     }
 
     /**
@@ -44,20 +44,10 @@ class CursoController extends Controller
      * @param  \App\Curso  $curso
      * @return \Illuminate\Http\Response
      */
-    public function show(Curso $curso)
+    public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Curso  $curso
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Curso $curso)
-    {
-        //
+        $curso = Curso::find($id);
+        return compact('curso');
     }
 
     /**
@@ -67,9 +57,15 @@ class CursoController extends Controller
      * @param  \App\Curso  $curso
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Curso $curso)
+    public function update(Request $request, $id)
     {
-        //
+        $curso = Curso::find($id);
+        $curso->nombre = $request->nombre;
+        $curso->plan = $request->plan;
+        $curso->descripcion = $request->descripcion;
+        $curso->escuela = $request->escuela;
+        $curso->save();
+        return compact('curso');
     }
 
     /**
@@ -78,8 +74,11 @@ class CursoController extends Controller
      * @param  \App\Curso  $curso
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Curso $curso)
+    public function destroy($id)
     {
-        //
+        $curso = Curso::find($id);
+        $curso->delete();
+
+        return response()->json(['El curso '.$curso->nombre.' ha sido eliminado con éxito.']);
     }
 }
