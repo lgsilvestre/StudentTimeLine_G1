@@ -58,7 +58,7 @@ class EstudianteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request){
-        $entradas = $request->only('matricula', 'rut', 'nombre_completo', 'correo', 'anho_ingreso', 'situacion_academica', 'porcentaje_avance', 'creditos_aprobados', 'escuela');
+        $entradas = $request->only('matricula', 'rut', 'nombre_completo', 'correo', 'anho_ingreso', 'situacion_academica', 'porcentaje_avance', 'creditos_aprobados', 'escuela', 'foto');
         $validator = Validator::make($entradas, [
             'matricula' => ['required','string'],
             'rut' => ['required', 'string'],
@@ -68,7 +68,8 @@ class EstudianteController extends Controller
             'situacion_academica' => ['required','string'],
             'porcentaje_avance' => ['required', 'string'],
             'creditos_aprobados' => ['required','numeric'], 
-            'escuela' => ['required','numeric']
+            'escuela' => ['required','numeric'],
+            'foto' => ['nullable', 'file']
         ]);
         //respuesta cuando falla
         if ($validator->fails()) {
@@ -90,14 +91,7 @@ class EstudianteController extends Controller
             $estudiante -> porcentaje_avance=$request->porcentaje_avance;
             $estudiante -> creditos_aprobados=$request->creditos_aprobados;
             $estudiante -> escuela=$request->escuela;
-
-            if($request->hasfile('foto')){
-                $imagen = base64_encode(file_get_contents($request->file('foto')));
-                $estudiante -> foto = $imagen;
-            }else{
-                $estudiante->foto=null;
-            }
-
+            $estudiante->foto=$request->foto;
             $estudiante = $estudiante->save();
             return response()->json([
                 'success' => true,
@@ -161,7 +155,8 @@ class EstudianteController extends Controller
             'situacion_academica' => ['nullable', 'string'], //Cambiar lo de la foreign key dps
             'porcentaje_avance' => ['nullable', 'numeric', 'nullable'], //Cambiar lo de la foreign key dps
             'creditos_aprobados' => ['nullable','numeric'], 
-            'escuela' => ['nullable','numeric']
+            'escuela' => ['nullable','numeric'],
+            'foto' => ['nullable', 'file']
         ]);
         //respuesta cuando falla
         if ($validator->fails()) {
@@ -197,11 +192,8 @@ class EstudianteController extends Controller
             if($request->escuela != null){
                 $estudiante->escuela = $request->escuela;
             }
-            if($request->hasfile('foto')){
-                $imagen = base64_encode(file_get_contents($request->file('foto')));
-                $estudiante -> foto = $imagen;
-            }else{
-                $estudiante ->foto=null;
+            if($request->foto!=null){
+                $estudiante ->foto= $request->foto;
             }
             $estudiante->save();
             return response()->json([
