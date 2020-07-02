@@ -14,48 +14,48 @@ class EscuelaTableSeeder extends Seeder
         //Computación, Industrial, Eléctrica, Mecánica, Obras Civiles, Minas, Mecatrónica
         $icc=Escuela::create([
             'nombre' => 'Escuela de Computación',
-            'cod_carrera' => 407
+            'cod_escuela' => 407
 
         ]);
 
         $ici=Escuela::create([
             'nombre' => 'Escuela de Industrial',
-            'cod_carrera' => 408
+            'cod_escuela' => 408
         ]);
 
         $ice=Escuela::create([
             'nombre' => 'Escuela de Eléctrica',
-            'cod_carrera' => 409
+            'cod_escuela' => 409
         ]);
 
         $icm=Escuela::create([
             'nombre' => 'Escuela de Mecánica',
-            'cod_carrera' => 410
+            'cod_escuela' => 410
         ]);
 
         $icoc=Escuela::create([
             'nombre' => 'Escuela de Obras Civiles',
-            'cod_carrera' => 411
+            'cod_escuela' => 411
         ]);
 
         $icm=Escuela::create([
             'nombre' => 'Escuela de Minas',
-            'cod_carrera' => 412
+            'cod_escuela' => 412
         ]);
 
         $icme=Escuela::create([
             'nombre' => 'Escuela de Mecatrónica',
-            'cod_carrera' => 413
+            'cod_escuela' => 413
         ]);
 
         $rc=Escuela::create([
             'nombre' => 'Ramos Comunes',
-            'cod_carrera' => 000
+            'cod_escuela' => 000
         ]);
 
         $fi=Escuela::create([
             'nombre' => 'Facultad de ingenieria',
-            'cod_carrera' => 001
+            'cod_escuela' => 001
         ]);
 
     }

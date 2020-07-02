@@ -12,7 +12,7 @@ class EstudianteTableSeeder extends Seeder
     public function run()
     {
         Estudiante::create([
-            'matricula' => 2016407035,
+            'matricula' => 2000407035,
             'rut' => '192170168',
             'nombre_completo' => 'paulo parraguez diaz', 
             'correo' => 'p.parraguez.diaz@hotmail.cl',
@@ -24,7 +24,7 @@ class EstudianteTableSeeder extends Seeder
         ]);
 
         Estudiante::create([
-            'matricula' => 2016407015,
+            'matricula' => 2000407015,
             'rut' => '192170169',
             'nombre_completo' => 'javiero melendez melendez', 
             'correo' => 'jmelendez@gmail.com',
