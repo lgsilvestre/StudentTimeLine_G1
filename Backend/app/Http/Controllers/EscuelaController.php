@@ -67,10 +67,10 @@ class EscuelaController extends Controller
      */
     public function store(Request $request)
     {
-        $credentials = $request->only('nombre');
+        $credentials = $request->only('cod_escuela', 'nombre');
         $validator = Validator::make($credentials, [
-            'cod_carrera' => ['number'],
-            'nombre' => ['string'],
+            'cod_escuela' => ['required', 'number'],
+            'nombre' => [' required', 'string'],
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -83,7 +83,7 @@ class EscuelaController extends Controller
         try{
             $escuela = new Escuela();
             $escuela->nombre = $request->nombre;
-            $escuela->cod_carrera = $request->cod_carrera;
+            $escuela->cod_escuela = $request->cod_escuela;
             $escuela = $escuela->save();
             return response()->json([
                 'success' => true,
@@ -141,9 +141,9 @@ class EscuelaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id){
-        $credentials = $request->only('nombre');
+        $credentials = $request->only('cod_escuela', 'nombre');
         $validator = Validator::make($credentials, [
-            'cod_carrera' => ['number', 'nullable'],
+            'cod_escuela' => ['number', 'nullable'],
             'nombre' => ['string', 'nullable'],
         ]);
         if ($validator->fails()) {
@@ -167,8 +167,8 @@ class EscuelaController extends Controller
             if($request->nombre!=null){
                 $escuela->nombre = $request->nombre;
             }
-            if($request->cod_carrera!=null){
-                $escuela->cod_carrera = $request->cod_carrera;
+            if($request->cod_escuela!=null){
+                $escuela->cod_escuela = $request->cod_escuela;
             }
             $escuela-> save();
             return response()->json([
@@ -198,7 +198,6 @@ class EscuelaController extends Controller
         try{
             $escuela = Escuela::find($id);
             if ($escuela == null) {
-                $escuela->delete();
                 return response()->json([
                     'success' => false,
                     'code' => 701,
@@ -206,6 +205,7 @@ class EscuelaController extends Controller
                     'data' => null
                 ], 409 );
             }else{
+                $escuela->delete();
                 return response()->json([
                     'success' => true,
                     'code' => 700,

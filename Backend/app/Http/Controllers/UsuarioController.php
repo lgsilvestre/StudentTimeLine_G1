@@ -57,7 +57,7 @@ class UsuarioController extends Controller
                 ], 409);
             }
             foreach ($users as $user) {
-                $user->nombre_carrera= $escuelas[$user->escuela-1]->nombre;
+                $user->nombre_escuela= $escuelas[$user->escuela-1]->nombre;
             }
             return response()->json([
                 'success' => true,
@@ -101,12 +101,13 @@ class UsuarioController extends Controller
     public function store(Request $request){            
         //validador que se encarga de revisar que los datos sean del tipo de dato que se solicito
         //tambien verifica que vengan como por ejemplo el email y el password
-        $validator = Validator::make($request->all(), [
+        $entradas = $request->only('nombre', 'escuela', 'escuelaAux', 'rol', 'foto', 'email', 'password');
+        $validator = Validator::make($entradas, [
             'nombre' => ['required','string'],
             'escuela' => ['required', 'numeric'], //Cambiar lo de la foreign key dps
             'escuelaAux' => ['required', 'numeric', 'nullable'], //Cambiar lo de la foreign key dps
             'rol' => ['required','string'], 
-            'foto' => ['image','mimes:jpeg,png,jpg,gif,svg','max:2048','nullable'],
+            'foto' => ['image','file'],
             'email'=> ['required','email'],
             'password' => ['required' , 'string']
         ]);
@@ -128,15 +129,8 @@ class UsuarioController extends Controller
             $user->assignRole($request->rol);
             $user ->email=$request->email;
             $user ->password=bcrypt($request->password);
-            if($request->hasfile('foto')){
-                $imagen = $request->file('foto');
-                $nombreImagen = time () . '.' . $imagen->getClientOriginalExtension();
-                Image::make($imagen)->resize(400,400)->save( public_path('/uploads/imagenes/' . $nombreImagen));
-                $user->foto=$nombreImagen;
-            }else{
-                $user ->foto=null;
-            }
-            $r = $user->save();
+            $user->foto=$request->foto;
+            $user = $user->save();
             return response()->json([
                 'success' => true,
                 'code' => 300,
@@ -180,7 +174,7 @@ class UsuarioController extends Controller
      */
     public function edit($id){
         try{
-            $user = User::findOrFail($id);
+            $user = User::find($id);
             if($user==null){
                 return response()->json([
                     'success' => false,
@@ -189,6 +183,8 @@ class UsuarioController extends Controller
                     'data' => null
                 ], 409);
             }
+            $escuelas=Escuela::withTrashed()->orderBy('id','asc')->get();
+            $user->nombre_escuela= $escuelas[$user->escuela-1]->nombre;
             //return response($user->foto)->header('Content-Type', 'image/png');
             return response()->json([
                 'success' => true,
@@ -216,13 +212,13 @@ class UsuarioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $credentials = $request->only('nombre', 'escuela', 'rol', 'foto', 'email', 'password');
-        $validator = Validator::make($credentials, [
+        $entradas = $request->only('nombre', 'escuela', 'escuelaAux', 'role', 'foto', 'email', 'password');
+        $validator = Validator::make($entradas, [
             'nombre' => ['string', 'nullable'],
             'escuela' => ['numeric', 'nullable'],
             'escuelaAux' => ['numeric', 'nullable'],
             'role' => ['string', 'nullable'],
-            'foto' => ['image','mimes:jpeg,png,jpg,gif,svg','max:2048','nullable'],
+            'foto' => ['file'],
             'email' => ['email', 'nullable'],
             'password' => ['string', 'nullable']
         ]);
@@ -248,10 +244,7 @@ class UsuarioController extends Controller
                 $usuario->nombre = $request->nombre;
             }
             if($request->foto!=null){
-                if($request->hasfile('foto')){
-                    $imagen = base64_encode(file_get_contents($request->file('foto')));
-                    $usuario -> foto = $imagen;
-                }
+                $usuario ->foto= $request->foto;
             }
             if($request->email!=null){
                 $usuario->email = $request->email;
