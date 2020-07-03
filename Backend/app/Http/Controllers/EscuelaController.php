@@ -67,10 +67,10 @@ class EscuelaController extends Controller
      */
     public function store(Request $request)
     {
-        $credentials = $request->only('nombre');
+        $credentials = $request->only('cod_escuela', 'nombre');
         $validator = Validator::make($credentials, [
-            'cod_escuela' => ['number'],
-            'nombre' => ['string'],
+            'cod_escuela' => ['required', 'number'],
+            'nombre' => [' required', 'string'],
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -141,7 +141,7 @@ class EscuelaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id){
-        $credentials = $request->only('nombre');
+        $credentials = $request->only('cod_escuela', 'nombre');
         $validator = Validator::make($credentials, [
             'cod_escuela' => ['number', 'nullable'],
             'nombre' => ['string', 'nullable'],

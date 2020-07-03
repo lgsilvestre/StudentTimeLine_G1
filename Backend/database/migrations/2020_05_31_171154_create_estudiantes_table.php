@@ -28,6 +28,9 @@ class CreateEstudiantesTable extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
+
+        DB::statement("ALTER TABLE estudiantes ADD foto MEDIUMBLOB");
+        DB::statement("ALTER TABLE estudiantes CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci");
     }
 
     /**
