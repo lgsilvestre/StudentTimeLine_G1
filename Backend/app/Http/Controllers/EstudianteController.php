@@ -247,4 +247,22 @@ class EstudianteController extends Controller
             ], 409 );
         }
     }
+
+    public function index_Deshabilitados(){
+
+        $estudiantes = Estudiante::onlyTrashed()->get();
+        return $estudiantes;
+    }
+
+    public function restore($id){
+        
+        $estudiante=Estudiante::onlyTrashed()->find($id)->restore();
+        return response()->json([
+            'success' => true,
+            'message' => "el estudiante se recupero con exito",
+            'data' => ['estudiante'=>$estudiante]
+        ], 200);
+    }
+
+    
 }
