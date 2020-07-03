@@ -81,4 +81,19 @@ class CursoController extends Controller
 
         return response()->json(['El curso '.$curso->nombre.' ha sido eliminado con éxito.']);
     }
+    public function index_Deshabilitados(){
+
+        $cursos = Curso::onlyTrashed()->get();
+        return $cursos;
+    }
+
+    public function restore($id){
+        
+        $curso=Curso::onlyTrashed()->find($id)->restore();
+        return response()->json([
+            'success' => true,
+            'message' => "el curso se recupero con exito",
+            'data' => ['curso'=>$curso]
+        ], 200);
+    }
 }
