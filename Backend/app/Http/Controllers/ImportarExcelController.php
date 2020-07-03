@@ -10,6 +10,15 @@ use Log;
 
 class ImportarExcelController extends Controller
 {
+
+    /**
+     * Metodo que se encarga de bloquear las rutas del controlador Usuario
+     */
+    public function __construct()
+    {
+        $this->middleware(['permission:importar estudiantes'], ['only' => ['index']]);
+    }
+
     function index()
     {
         $data = DB::table('estudiantes')->orderBy('id', 'asc')->get();

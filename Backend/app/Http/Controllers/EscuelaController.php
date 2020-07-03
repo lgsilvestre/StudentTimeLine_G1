@@ -9,19 +9,17 @@ class EscuelaController extends Controller
 {
 
     /**
-   
      * Metodo que se encarga de bloquear las rutas del controlador Escuela
      */
-
-     /** 
     public function __construct()
     {
         $this->middleware(['permission:create escuela'], ['only' => ['create', 'store']]);
         $this->middleware(['permission:read escuela'], ['only' => 'index']);
         $this->middleware(['permission:update escuela'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete escuela'], ['only' => 'delete']);
+        $this->middleware(['permission:restore escuela'], ['only' => 'disabled', 'restore']);
     }
-*/
+
     /**
      * Metodo que se encarga de listar a todos escuelas
      * Errores code inician 100
@@ -226,7 +224,7 @@ class EscuelaController extends Controller
         }
     }
 
-    public function index_Deshabilitados(){
+    public function disabled(){
 
         $escuelas = Escuela::onlyTrashed()->get();
         return $escuelas;

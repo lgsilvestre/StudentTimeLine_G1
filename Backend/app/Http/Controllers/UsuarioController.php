@@ -22,6 +22,7 @@ class UsuarioController extends Controller
         $this->middleware(['permission:read user'], ['only' => 'index']);
         $this->middleware(['permission:update user'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete user'], ['only' => 'delete']);
+        $this->middleware(['permission:restore user'], ['only' => 'disabled', 'restore']);
     }
   
     /**
@@ -335,7 +336,7 @@ class UsuarioController extends Controller
             ], 409 );
         }
     }
-    public function index_Deshabilitados(){
+    public function disabled(){
 
         $usuarios = User::onlyTrashed()->get();
         return $usuarios;

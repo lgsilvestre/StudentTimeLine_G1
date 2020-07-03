@@ -8,6 +8,20 @@ use Illuminate\Http\Request;
 
 class EstudianteController extends Controller
 {
+
+    /**
+     * Metodo que se encarga de bloquear las rutas del controlador Usuario
+     */
+    public function __construct()
+    {
+        $this->middleware(['permission:create estudiante'], ['only' => ['create', 'store']]);
+        $this->middleware(['permission:read estudiante'], ['only' => 'index']);
+        $this->middleware(['permission:update estudiante'], ['only' => ['edit', 'update']]);
+        $this->middleware(['permission:delete estudiante'], ['only' => 'delete']);
+        $this->middleware(['permission:restore estudiante'], ['only' => 'disabled', 'restore']);
+    }
+
+
     /**
      * Metodo que se encarga de listar a todos estudiantes
      * Errores code inician 100
@@ -248,7 +262,7 @@ class EstudianteController extends Controller
         }
     }
 
-    public function index_Deshabilitados(){
+    public function disabled(){
 
         $estudiantes = Estudiante::onlyTrashed()->get();
         return $estudiantes;

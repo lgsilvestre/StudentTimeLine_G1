@@ -19,26 +19,25 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1'], function () {
+    #Controlador de usuario
     Route::resource('usuario', 'UsuarioController');
+    Route::get('usuario/disabled','UsuarioController@disabled');
+    Route::post('usuario/restore/{id}','UsuarioController@restore');
+    #Controlador de escuela
     Route::resource('escuela', 'EscuelaController'); 
+    Route::get('escuela/disabled','EscuelaController@disabled');
+    Route::post('escuela/restore/{id}','EscuelaController@restore');
+    #Controlador de curso
     Route::resource('curso', 'CursoController');
-    Route::get('send-mail','MailSend@mailsend');
-    #recuperar deshabilitado escuela
-    Route::get('/ver_deshabilitados_escuela','EscuelaController@index_Deshabilitados');
-    Route::post('/recuperar_escuela/{id}','EscuelaController@restore');
-    #recueperar dehabilitado curso
-    Route::get('/ver_deshabilitados_curso','CursoController@index_Deshabilitados');
-    Route::post('/recuperar_curso/{id}','CursoController@restore');
-    #recueperar dehabilitado usuario
-    Route::get('/ver_deshabilitados_usuario','UsuarioController@index_Deshabilitados');
-    Route::post('/recuperar_usuario/{id}','UsuarioController@restore');
-    #recueperar dehabilitado estudiante
- 
-
-    Route::get('/importar_excel', 'ImportarExcelController@index');
-    Route::post('/importar_excel/importar', 'ImportarExcelController@importar');
+    Route::get('curso/disabled','CursoController@disabled');
+    Route::post('curso/restore/{id}','CursoController@restore');
+    #Controlador de estudiante
     Route::resource('estudiante', 'EstudianteController' );
-    Route::get('/exportar_excel/exportar', 'ExportarExcelController@exportar');
+    Route::get('estudiante/disabled','EstudianteController@disabled');
+    Route::post('estudiante/restore/{id}','EstudianteController@restore');
+    #Controlador importar y exportar estudiante
+    Route::post('estudiante/importar', 'ImportarExcelController@index');
+    Route::get('estudiante/exportar', 'ExportarExcelController@index');
 });
 
 Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
@@ -48,8 +47,4 @@ Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
     Route::get('/auth/logout', 'TokensController@logoutToken');
     Route::post('/auth/restartPassword', 'TokensController@restartPassword');
 });
-
-Route::resource('estudiante', 'EstudianteController' );
-Route::get('/ver_deshabilitados_estudiante','EstudianteController@index_Deshabilitados');
-Route::post('/recuperar_estudiante/{id}','EstudianteController@restore');
 
