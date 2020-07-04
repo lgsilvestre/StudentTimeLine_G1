@@ -19,8 +19,25 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1'], function () {
+    #Controlador de usuario
     Route::resource('usuario', 'UsuarioController');
-    Route::resource('escuela', 'EscuelaController');
+    Route::get('usuario/disabled','UsuarioController@disabled');
+    Route::post('usuario/restore/{id}','UsuarioController@restore');
+    #Controlador de escuela
+    Route::resource('escuela', 'EscuelaController'); 
+    Route::get('escuela/disabled','EscuelaController@disabled');
+    Route::post('escuela/restore/{id}','EscuelaController@restore');
+    #Controlador de curso
+    Route::resource('curso', 'CursoController');
+    Route::get('curso/disabled','CursoController@disabled');
+    Route::post('curso/restore/{id}','CursoController@restore');
+    #Controlador de estudiante
+    Route::resource('estudiante', 'EstudianteController' );
+    Route::get('estudiante/disabled','EstudianteController@disabled');
+    Route::post('estudiante/restore/{id}','EstudianteController@restore');
+    #Controlador importar y exportar estudiante
+    Route::post('estudiante/importar', 'ImportarExcelController@index');
+    Route::get('estudiante/exportar', 'ExportarExcelController@index');
 });
 
 Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
@@ -28,15 +45,6 @@ Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
     Route::post('/auth/login', 'TokensController@login');
     Route::post('/auth/refresh', 'TokensController@refreshToken');
     Route::get('/auth/logout', 'TokensController@logoutToken');
-    Route::resource('estudiante', 'EstudianteController' );
     Route::post('/auth/restartPassword', 'TokensController@restartPassword');
 });
-
-Route::get('send-mail','MailSend@mailsend');
-Route::get('/importar_excel', 'ImportarExcelController@index');
-Route::post('/importar_excel/importar', 'ImportarExcelController@importar');
-
-Route::get('/exportar_excel/exportar', 'ExportarExcelController@exportar');
-
-Route::resource('curso', 'CursoController');
 

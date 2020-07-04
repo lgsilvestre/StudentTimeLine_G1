@@ -8,6 +8,19 @@ use Illuminate\Http\Request;
 
 class CursoController extends Controller
 {
+
+    /**
+     * Metodo que se encarga de bloquear las rutas del controlador Usuario
+     */
+    public function __construct()
+    {
+        $this->middleware(['permission:create curso'], ['only' => ['create', 'store']]);
+        $this->middleware(['permission:read curso'], ['only' => 'index']);
+        $this->middleware(['permission:update curso'], ['only' => ['edit', 'update']]);
+        $this->middleware(['permission:delete curso'], ['only' => 'delete']);
+        $this->middleware(['permission:restore curso'], ['only' => 'disabled', 'restore']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -80,5 +93,20 @@ class CursoController extends Controller
         $curso->delete();
 
         return response()->json(['El curso '.$curso->nombre.' ha sido eliminado con éxito.']);
+    }
+    public function disabled(){
+
+        $cursos = Curso::onlyTrashed()->get();
+        return $cursos;
+    }
+
+    public function restore($id){
+        
+        $curso=Curso::onlyTrashed()->find($id)->restore();
+        return response()->json([
+            'success' => true,
+            'message' => "el curso se recupero con exito",
+            'data' => ['curso'=>$curso]
+        ], 200);
     }
 }
