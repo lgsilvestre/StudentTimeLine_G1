@@ -336,14 +336,13 @@ class UsuarioController extends Controller
             ], 409 );
         }
     }
+    
     public function disabled(){
-
         $usuarios = User::onlyTrashed()->get();
         return $usuarios;
     }
 
     public function restore($id){
-        
         $usuario=User::onlyTrashed()->find($id)->restore();
         return response()->json([
             'success' => true,

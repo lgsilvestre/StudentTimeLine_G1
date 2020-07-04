@@ -20,24 +20,24 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1'], function () {
     #Controlador de usuario
+    Route::get('/usuario/disabled','UsuarioController@disabled');
+    Route::post('/usuario/restore/{id}','UsuarioController@restore');
     Route::resource('usuario', 'UsuarioController');
-    Route::get('usuario/disabled','UsuarioController@disabled');
-    Route::post('usuario/restore/{id}','UsuarioController@restore');
     #Controlador de escuela
+    Route::get('/escuela/disabled','EscuelaController@disabled');
+    Route::post('/escuela/restore/{id}','EscuelaController@restore');
     Route::resource('escuela', 'EscuelaController'); 
-    Route::get('escuela/disabled','EscuelaController@disabled');
-    Route::post('escuela/restore/{id}','EscuelaController@restore');
     #Controlador de curso
-    Route::resource('curso', 'CursoController');
-    Route::get('curso/disabled','CursoController@disabled');
-    Route::post('curso/restore/{id}','CursoController@restore');
+    Route::get('/curso/disabled','CursoController@disabled');
+    Route::post('/curso/restore/{id}','CursoController@restore');
+    Route::resource('/curso', 'CursoController');
     #Controlador de estudiante
-    Route::resource('estudiante', 'EstudianteController' );
-    Route::get('estudiante/disabled','EstudianteController@disabled');
-    Route::post('estudiante/restore/{id}','EstudianteController@restore');
-    #Controlador importar y exportar estudiante
-    Route::post('estudiante/importar', 'ImportarExcelController@index');
-    Route::get('estudiante/exportar', 'ExportarExcelController@index');
+    Route::get('/estudiante/disabled','EstudianteController@disabled');
+    Route::post('/estudiante/restore/{id}','EstudianteController@restore');
+    Route::post('/estudiante/importar', 'ImportarExcelController@index');
+    Route::get('/estudiante/exportar', 'ExportarExcelController@index');
+    Route::resource('/estudiante', 'EstudianteController' );
+    
 });
 
 Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
