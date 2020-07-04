@@ -34,12 +34,12 @@ class UsuarioController extends Controller
         try{
             $credenciales = JWTAuth::parseToken()->authenticate();
             if($credenciales->rol=="admin"){
-                $users = User::all();
+                $usuarios = User::all();
                 $escuelas=Escuela::withTrashed()->orderBy('id','asc')->get();
             }else if($credenciales->rol=="secretaria de escuela"){
-                $users = User::Where('rol', '=' , 'profesor')->where(function ($query ) use ($credenciales){
-                    $query->where('escuela', '=' , $credenciales->escuela)
-                          ->orWhere('escuelaAux', '=' , $credenciales->escuelaAux);
+                $usuarios = User::Where('rol', '=' , 'profesor')->where(function ($query) use ($credenciales) {
+                    return $query->where('escuela', '=' , $credenciales->escuela)
+                                ->orWhere('escuela', '=' , $credenciales->escuelaAux);
                 })->get();
                 $escuelas=Escuela::withTrashed()->orderBy('id','asc')->get();
             }else if($credenciales->rol=="profesor"){
@@ -57,14 +57,20 @@ class UsuarioController extends Controller
                     'data' => ['error'=>'al momento de buscar el rol del solicitante no lo encuentra']
                 ], 409);
             }
-            foreach ($users as $user) {
-                $user->nombre_escuela= $escuelas[$user->escuela-1]->nombre;
+            foreach ($usuarios as $usuario) {
+                $usuario->nombre_escuela= $escuelas[$usuario->escuela-1]->nombre;
+                if($usuario->escuelaAux!=null){
+                    $usuario->nombre_escuelaAux= $escuelas[$usuario->escuelaAux-1]->nombre;
+                }else{
+                    $usuario->nombre_escuelaAux= 'no posee otra escuela';
+                }
             }
             return response()->json([
                 'success' => true,
                 'code' => 100,
                 'message' => "La operacion se a realizado con exito",
-                'data' => ['usuarios'=>$users]
+                'data' => ['usuarios'=>$usuarios,
+                            'solicitud' => $credenciales]
             ], 200);
         //----- Mecanismos anticaidas y reporte de errores -----
         //este catch permite responder directamente que problemas en la peticion SQL
@@ -337,11 +343,31 @@ class UsuarioController extends Controller
         }
     }
     
+    /**
+     * 
+     */
     public function disabled(){
         $usuarios = User::onlyTrashed()->get();
-        return $usuarios;
+        $escuelas=Escuela::withTrashed()->orderBy('id','asc')->get();
+        foreach ($usuarios as $usuario) {
+            $usuario->nombre_escuela= $escuelas[$usuario->escuela-1]->nombre;
+            if($usuario->escuelaAux!=null){
+                $usuario->nombre_escuelaAux= $escuelas[$usuario->escuelaAux-1]->nombre;
+            }else{
+                $usuario->nombre_escuelaAux= 'no posee otra escuela';
+            }
+        }
+        return response()->json([
+            'success' => true,
+            'code' => 800,
+            'message' => "Operacion realizada con exito",
+            'data' => ['usuarios'=>$usuarios]
+        ], 200);
     }
 
+    /**
+     * 
+     */
     public function restore($id){
         $usuario=User::onlyTrashed()->find($id)->restore();
         return response()->json([

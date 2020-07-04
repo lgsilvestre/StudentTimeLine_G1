@@ -37,7 +37,7 @@ Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1'], function () {
     Route::post('/estudiante/importar', 'ImportarExcelController@index');
     Route::get('/estudiante/exportar', 'ExportarExcelController@index');
     Route::resource('/estudiante', 'EstudianteController' );
-    
+
 });
 
 Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
