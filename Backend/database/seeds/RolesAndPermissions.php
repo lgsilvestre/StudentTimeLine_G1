@@ -42,9 +42,9 @@ class RolesAndPermissions extends Seeder
         Permission::create(['name' => 'delete estudiante']);
         Permission::create(['name' => 'restore estudiante']);
         //Importar
-        Permission::create(['name' => 'importar estudiantes']);
+        Permission::create(['name' => 'importar estudiante']);
         //Exportar
-        Permission::create(['name' => 'exportar estudiantes']);
+        Permission::create(['name' => 'exportar estudiante']);
         //---------------- asignacion de permisos ----------------
 
         //Creacion de rol y asignacion de permisos al rol de "administrador"
