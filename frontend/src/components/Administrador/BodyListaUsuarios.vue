@@ -44,19 +44,13 @@
                                                         <strong> Lista Usuarios Eliminados </strong>
                                                     </v-card-title>
                                                 </v-img>
-                                                <v-data-table  :headers="columnas" :items="listaUsuarios"
+                                                <v-data-table  :headers="columnas" :items="listaUsuariosEliminados"
                                                     :search="search" :loading="cargando" :items-per-page="10"  >            
                                                     <template v-slot:item.opciones="{ item }">
                                                     <!-- boton para modificar usuario seleccionado -->
                                                         <v-btn color="white" fab small depressed class="mr-2 py-2">
-                                                            <v-icon color="primary" @click="MostrarPanelModificar(item)" >
-                                                                fas fa-edit
-                                                            </v-icon>
-                                                        </v-btn>
-                                                    <!-- boton para eliminar usuario seleccionado -->
-                                                        <v-btn color="white" fab small depressed class="mr-2 py-2">
-                                                            <v-icon color="warning" @click="EliminarUsuario(item)" >
-                                                                fas fa-trash-alt
+                                                            <v-icon color="primary" @click="restaurarUsuarioEliminado(item)" >
+                                                                fas fa-trash-restore
                                                             </v-icon>
                                                         </v-btn>
                                                     </template>
@@ -403,39 +397,75 @@ export default {
             var url = 'http://127.0.0.1:8000/api/v1/usuario/disabled';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
-    
-                for (let index = 0; index < result.data.data.usuarios.length; index++) {
-                    const element = result.data.data.usuarios[index];
+                console.log(result)
+                for (let index = 0; index < result.data.length; index++) {
+                    const element = result.data[index];
                     let usuario = {
                         id: element.id,
                         nombre: element.nombre,
                         role: element.rol,
                         imagen: element.imagen,
                         correo: element.email,   
-                        escuela: element.nombre_carrera,
-                    };                         
+                        escuela: element.nombre_escuela,
+                    }; 
+                    console.log(usuario)                        
                     
                     this.listaUsuariosAux[index]=usuario;
                 }
-                this.cargando = false;
                 this.listaUsuariosEliminados = this.listaUsuariosAux;
             }
             ).catch((error)=>{
-                if (error.message == 'Network Error') {
-                    this.alertaError = true;
-                    this.cargando = false;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
-                }
-                else{
-                    if (error.response.data.success == false) {
-                        if(error.response.data.code == 101){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
-                            this.textoAlertas = error.response.data.message;
-                            this.alertaError = true;                            
-                        }                        
-                    }
-                }
+                console.log(error)
+            });
+
+        },
+        restaurarUsuarioEliminado(item){
+            console.log("ITEM")
+             var url =`http://127.0.0.1:8000/api/v1/usuario/restore/${item.id}`;
+             console.log(url)
+      
+            axios.post(url,this.$store.state.config)
+            .then((result)=>{
+            if (result.statusText=='OK') {
+                //  console.log(result.data)
+                this.obtenerListaUsuariosEliminados();
+                this.obtenerUsuarios(); 
+            }
+            }).catch((error)=>{
+                                
+                // if (error.message == 'Network Error') {
+                //     console.log(error)
+                //     this.alertaError = true;
+                //     this.textoAlertas = "Error al modificar el usuario, intente mas tarde."
+                // }
+                // else{
+                //     if (error.response.data.success == false) {
+                //         if(error.response.data.code == 601){
+                //             console.log(error.response.data.code +' '+ error.response.data.message);
+                //             console.log(error.response.data);
+                //             this.textoAlertas = error.response.data.message;
+                //             this.alertaError = true;
+                //         }
+                //         if(error.response.data.code == 602){
+                //             console.log(error.response.data.code +' '+ error.response.data.message);
+                //             console.log(error.response.data);
+                //             this.textoAlertas = error.response.data.message;
+                //             this.alertaError = true;
+                //         }
+                //         if(error.response.data.code == 603){
+                //             console.log(error.response.data.code +' '+ error.response.data.message);
+                //             console.log(error.response.data);
+                //             this.textoAlertas = error.response.data.message;
+                //             this.alertaError = true;
+                //         }
+                //         if(error.response.data.code == 604){
+                //             console.log(error.response.data.code +' '+ error.response.data.message);
+                //             console.log(error.response.data);
+                //             this.textoAlertas = error.response.data.message;
+                //             this.alertaError = true;
+                //         }
+                //     }
+                // }
             });
 
         },
@@ -498,9 +528,6 @@ export default {
             var url = 'http://127.0.0.1:8000/api/v1/usuario';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
-                console.log(result);
-                console.log(result.data);
-                console.log("Hola");
                 for (let index = 0; index < result.data.data.usuarios.length; index++) {
                     const element = result.data.data.usuarios[index];
                     let usuario = {
@@ -509,7 +536,7 @@ export default {
                         role: element.rol,
                         imagen: element.imagen,
                         correo: element.email,   
-                        escuela: element.nombre_carrera,
+                        escuela: element.nombre_escuela,
                     };                         
                     
                     this.listaUsuariosAux[index]=usuario;
