@@ -428,10 +428,12 @@ export default {
             .then((result)=>{
                 console.log("USUARIO RESTAURADO")
                 console.log(result)
-            if (result.statusText=='OK') {
+            if (result.data.data.usuario==true) {
                 //  console.log(result.data)
                 this.obtenerListaUsuariosEliminados();
                 this.obtenerUsuarios(); 
+                this.alertaExito = true;
+                this.textoAlertas = result.data.message
             }
             }).catch((error)=>{
                                 
