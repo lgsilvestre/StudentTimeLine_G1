@@ -400,12 +400,10 @@ export default {
              this.dialogListaUsuariosEliminado = true;
             this.listaUsuariosAux = [];
             var aux;
-            var url = 'http://127.0.0.1:8000/api/v1/usuario';
+            var url = 'http://127.0.0.1:8000/api/v1/usuario/disabled';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
-                console.log(result);
-                console.log(result.data);
-                console.log("Hola");
+    
                 for (let index = 0; index < result.data.data.usuarios.length; index++) {
                     const element = result.data.data.usuarios[index];
                     let usuario = {
@@ -420,7 +418,7 @@ export default {
                     this.listaUsuariosAux[index]=usuario;
                 }
                 this.cargando = false;
-                this.listaUsuarios = this.listaUsuariosAux;
+                this.listaUsuariosEliminados = this.listaUsuariosAux;
             }
             ).catch((error)=>{
                 if (error.message == 'Network Error') {
@@ -497,7 +495,7 @@ export default {
             this.cargando = true;
             this.listaUsuariosAux = [];
             var aux;
-            var url = 'http://127.0.0.1:8000/api/v1/usuario/disabled';
+            var url = 'http://127.0.0.1:8000/api/v1/usuario';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 console.log(result);
@@ -517,8 +515,7 @@ export default {
                     this.listaUsuariosAux[index]=usuario;
                 }
                 this.cargando = false;
-                this.listaUsuariosEliminados = this.listaUsuariosAux;
-                console.log(this.listaUsuariosEliminados)
+                this.listaUsuarios = this.listaUsuariosAux;
             }
             ).catch((error)=>{
                 if (error.message == 'Network Error') {
