@@ -38,7 +38,7 @@ class UsuarioController extends Controller
             }else if($credenciales->rol=="secretaria de escuela"){
                 $users = User::Where('rol', '=' , 'profesor')->where(function ($query ) use ($credenciales){
                     $query->where('escuela', '=' , $credenciales->escuela)
-                          ->orWhere('escuelaAux', '=' , $credenciales->escuelaAux);
+                          ->orWhere('escuelaAux', '=' , $credenciales->escuela);
                 })->get();
                 $escuelas=Escuela::withTrashed()->orderBy('id','asc')->get();
             }else if($credenciales->rol=="profesor"){
