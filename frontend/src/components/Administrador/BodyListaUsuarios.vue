@@ -3,7 +3,7 @@
         <v-row >
             <v-col cols="12" md="1"></v-col>
             <v-col cols="12" md="10">
-                <v-card class="mx-auto my-10" max-width="70%" >
+                <v-card >
                     <v-img class="mx-auto white--text align-end justify-center"
                         width="100%" height="180px"       
                         src="@/assets/Globales/background-panel-07.jpg" >                    
@@ -21,14 +21,12 @@
                             
                                 <v-card class="mx-auto my-10" max-width="70%">
                                     <v-toolbar dark color="primary">
+                                    <v-spacer></v-spacer>
                                     <v-btn icon dark @click="dialogListaUsuariosEliminado = false">
                                         <v-icon>mdi-close</v-icon>
                                     </v-btn>
-                                    <v-toolbar-title>Settings</v-toolbar-title>
-                                    <v-spacer></v-spacer>
-                                    <v-toolbar-items>
-                                        <v-btn dark text @click="dialogListaUsuariosEliminado = false">Save</v-btn>
-                                    </v-toolbar-items>
+                                    <v-toolbar-title>Cerrar</v-toolbar-title>
+                                    
                                     </v-toolbar>
                                     <v-container>
                                         <v-row>
@@ -68,7 +66,7 @@
                             <v-dialog v-model="dialog" persistent max-width="500px">
                                 <template v-slot:activator="{ on }">
                                     <v-btn  fab large bottom left v-on="on" >
-                                        <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
+                                        <v-icon class="mx-2" color="green">fas fa-plus</v-icon>
                                     </v-btn>
                                 </template>
                                 <v-card class="mx-auto" max-width="800" shaped >
@@ -397,9 +395,10 @@ export default {
             var url = 'http://127.0.0.1:8000/api/v1/usuario/disabled';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
+                console.log("OBTENER LISTA DE USUARIOS ELIMINDOS")
                 console.log(result)
-                for (let index = 0; index < result.data.length; index++) {
-                    const element = result.data[index];
+                for (let index = 0; index < result.data.data.usuarios.length; index++) {
+                    const element = result.data.data.usuarios[index];
                     let usuario = {
                         id: element.id,
                         nombre: element.nombre,
@@ -423,9 +422,12 @@ export default {
             console.log("ITEM")
              var url =`http://127.0.0.1:8000/api/v1/usuario/restore/${item.id}`;
              console.log(url)
-      
-            axios.post(url,this.$store.state.config)
+            //  console.log("CONFIGURACION")
+            // console.log(this.$store.state.config)
+            axios.post(url,null,this.$store.state.config)
             .then((result)=>{
+                console.log("USUARIO RESTAURADO")
+                console.log(result)
             if (result.statusText=='OK') {
                 //  console.log(result.data)
                 this.obtenerListaUsuariosEliminados();
