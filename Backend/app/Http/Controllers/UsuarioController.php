@@ -22,6 +22,7 @@ class UsuarioController extends Controller
         $this->middleware(['permission:read user'], ['only' => 'index']);
         $this->middleware(['permission:update user'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete user'], ['only' => 'delete']);
+        $this->middleware(['permission:restore user'], ['only' => 'disabled', 'restore']);
     }
   
     /**
@@ -33,12 +34,12 @@ class UsuarioController extends Controller
         try{
             $credenciales = JWTAuth::parseToken()->authenticate();
             if($credenciales->rol=="admin"){
-                $users = User::all();
+                $usuarios = User::all();
                 $escuelas=Escuela::withTrashed()->orderBy('id','asc')->get();
             }else if($credenciales->rol=="secretaria de escuela"){
-                $users = User::Where('rol', '=' , 'profesor')->where(function ($query ) use ($credenciales){
-                    $query->where('escuela', '=' , $credenciales->escuela)
-                          ->orWhere('escuelaAux', '=' , $credenciales->escuelaAux);
+                $usuarios = User::Where('rol', '=' , 'profesor')->where(function ($query) use ($credenciales) {
+                    return $query->where('escuela', '=' , $credenciales->escuela)
+                                ->orWhere('escuela', '=' , $credenciales->escuelaAux);
                 })->get();
                 $escuelas=Escuela::withTrashed()->orderBy('id','asc')->get();
             }else if($credenciales->rol=="profesor"){
@@ -56,14 +57,19 @@ class UsuarioController extends Controller
                     'data' => ['error'=>'al momento de buscar el rol del solicitante no lo encuentra']
                 ], 409);
             }
-            foreach ($users as $user) {
-                $user->nombre_escuela= $escuelas[$user->escuela-1]->nombre;
+            foreach ($usuarios as $usuario) {
+                $usuario->nombre_escuela= $escuelas[$usuario->escuela-1]->nombre;
+                if($usuario->escuelaAux!=null){
+                    $usuario->nombre_escuelaAux= $escuelas[$usuario->escuelaAux-1]->nombre;
+                }else{
+                    $usuario->nombre_escuelaAux= 'no posee otra escuela';
+                }
             }
             return response()->json([
                 'success' => true,
                 'code' => 100,
                 'message' => "La operacion se a realizado con exito",
-                'data' => ['usuarios'=>$users]
+                'data' => ['usuarios'=>$usuarios]
             ], 200);
         //----- Mecanismos anticaidas y reporte de errores -----
         //este catch permite responder directamente que problemas en la peticion SQL
@@ -101,12 +107,13 @@ class UsuarioController extends Controller
     public function store(Request $request){            
         //validador que se encarga de revisar que los datos sean del tipo de dato que se solicito
         //tambien verifica que vengan como por ejemplo el email y el password
-        $validator = Validator::make($request->all(), [
+        $entradas = $request->only('nombre', 'escuela', 'escuelaAux', 'rol', 'foto', 'email', 'password');
+        $validator = Validator::make($entradas, [
             'nombre' => ['required','string'],
             'escuela' => ['required', 'numeric'], //Cambiar lo de la foreign key dps
             'escuelaAux' => ['required', 'numeric', 'nullable'], //Cambiar lo de la foreign key dps
             'rol' => ['required','string'], 
-            'foto' => ['image','mimes:jpeg,png,jpg,gif,svg','max:2048','nullable'],
+            'foto' => ['image','file'],
             'email'=> ['required','email'],
             'password' => ['required' , 'string']
         ]);
@@ -128,13 +135,8 @@ class UsuarioController extends Controller
             $user->assignRole($request->rol);
             $user ->email=$request->email;
             $user ->password=bcrypt($request->password);
-            if($request->hasfile('foto')){
-                $imagen = base64_encode(file_get_contents($request->file('foto')));
-                $usuario -> foto = $imagen;
-            }else{
-                $user ->foto=null;
-            }
-            $r = $user->save();
+            $user->foto=$request->foto;
+            $user = $user->save();
             return response()->json([
                 'success' => true,
                 'code' => 300,
@@ -216,13 +218,13 @@ class UsuarioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $credentials = $request->only('nombre', 'escuela', 'rol', 'foto', 'email', 'password');
-        $validator = Validator::make($credentials, [
+        $entradas = $request->only('nombre', 'escuela', 'escuelaAux', 'role', 'foto', 'email', 'password');
+        $validator = Validator::make($entradas, [
             'nombre' => ['string', 'nullable'],
             'escuela' => ['numeric', 'nullable'],
             'escuelaAux' => ['numeric', 'nullable'],
             'role' => ['string', 'nullable'],
-            'foto' => ['image','mimes:jpeg,png,jpg,gif,svg','max:2048','nullable'],
+            'foto' => ['file'],
             'email' => ['email', 'nullable'],
             'password' => ['string', 'nullable']
         ]);
@@ -248,10 +250,7 @@ class UsuarioController extends Controller
                 $usuario->nombre = $request->nombre;
             }
             if($request->foto!=null){
-                if($request->hasfile('foto')){
-                    $imagen = base64_encode(file_get_contents($request->file('foto')));
-                    $usuario -> foto = $imagen;
-                }
+                $usuario ->foto= $request->foto;
             }
             if($request->email!=null){
                 $usuario->email = $request->email;
@@ -342,4 +341,40 @@ class UsuarioController extends Controller
             ], 409 );
         }
     }
+    
+    /**
+     * 
+     */
+    public function disabled(){
+        $usuarios = User::onlyTrashed()->get();
+        $escuelas=Escuela::withTrashed()->orderBy('id','asc')->get();
+        foreach ($usuarios as $usuario) {
+            $usuario->nombre_escuela= $escuelas[$usuario->escuela-1]->nombre;
+            if($usuario->escuelaAux!=null){
+                $usuario->nombre_escuelaAux= $escuelas[$usuario->escuelaAux-1]->nombre;
+            }else{
+                $usuario->nombre_escuelaAux= 'no posee otra escuela';
+            }
+        }
+        return response()->json([
+            'success' => true,
+            'code' => 800,
+            'message' => "Operacion realizada con exito",
+            'data' => ['usuarios'=>$usuarios]
+        ], 200);
+    }
+
+    /**
+     * 
+     */
+    public function restore($id){
+        $usuario=User::onlyTrashed()->find($id)->restore();
+        return response()->json([
+            'success' => true,
+            'message' => "el usuario se recupero con exito",
+            'data' => ['usuario'=>$usuario]
+        ], 200);
+    }
+
+
 }

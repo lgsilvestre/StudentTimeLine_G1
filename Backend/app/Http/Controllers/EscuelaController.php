@@ -17,6 +17,7 @@ class EscuelaController extends Controller
         $this->middleware(['permission:read escuela'], ['only' => 'index']);
         $this->middleware(['permission:update escuela'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete escuela'], ['only' => 'delete']);
+        $this->middleware(['permission:restore escuela'], ['only' => 'disabled', 'restore']);
     }
 
     /**
@@ -67,10 +68,10 @@ class EscuelaController extends Controller
      */
     public function store(Request $request)
     {
-        $credentials = $request->only('nombre');
+        $credentials = $request->only('cod_escuela', 'nombre');
         $validator = Validator::make($credentials, [
-            'cod_escuela' => ['number'],
-            'nombre' => ['string'],
+            'cod_escuela' => ['required', 'number'],
+            'nombre' => [' required', 'string'],
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -141,7 +142,7 @@ class EscuelaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id){
-        $credentials = $request->only('nombre');
+        $credentials = $request->only('cod_escuela', 'nombre');
         $validator = Validator::make($credentials, [
             'cod_escuela' => ['number', 'nullable'],
             'nombre' => ['string', 'nullable'],
@@ -222,4 +223,22 @@ class EscuelaController extends Controller
             ], 409 );
         }
     }
+
+    public function disabled(){
+
+        $escuelas = Escuela::onlyTrashed()->get();
+        return $escuelas;
+    }
+
+    public function restore($id){
+        
+        $escuela=Escuela::onlyTrashed()->find($id)->restore();
+        
+        return response()->json([
+            'success' => true,
+            'message' => "escuela recupero con exito",
+            'data' => ['escuela'=>$escuela]
+        ], 200);
+    }
+
 }
