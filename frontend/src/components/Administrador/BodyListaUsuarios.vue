@@ -19,7 +19,7 @@
                     <v-spacer></v-spacer>
 
                     <!-- Formulario Registrar Usuario -->
-                    <v-dialog v-model="dialog" persistent max-width="500px">
+                    <v-dialog :key="keyDialogCreacion" v-model="dialog" persistent max-width="500px">
                         <template v-slot:activator="{ on }">
                             <v-btn
                             fab
@@ -122,7 +122,7 @@
                     </v-dialog> 
 
                     <!-- Formulario Modificar Usuario -->
-                    <v-dialog v-model="modUsuarioActivo" persistent max-width="500px">
+                    <v-dialog v-model="modUsuarioActivo" persistent max-width="500px" :key="keyDialogModificar">
                         <v-card elevation="1" shaped>
                             <v-card-title  class="headline primary text--center" primary-title > 
                                 <h5 class="white--text ">Modificar Usuario</h5>
@@ -192,7 +192,7 @@
                         </v-card>                        
                     </v-dialog>
 
-                    <v-dialog v-model="dialogEliminar" ref="form" persistent max-width="450px">
+                    <v-dialog  v-model="dialogEliminar" ref="form" persistent max-width="450px">
                         <v-card class="mx-auto" max-width="450"  >
                             <v-card-title
                                 class="headline primary text--center"
@@ -365,6 +365,9 @@ export default {
             dialogEliminar: false,
             cargando: true,
             
+            keyDialogCreacion: 2,
+
+            keyDialogModificar: 1,
         }
     },
     created () {   
@@ -389,8 +392,7 @@ export default {
             this.datosUsuario.correo='';
             this.datosUsuario.contrasena='';
             this.datosUsuario.imagen=null;
-            this.$refs.form.reset();
-            this.$refs.form.resetValidation();
+            this.keyDialogCreacion++;
         },
 
         obtenerEscuelas(){
@@ -525,12 +527,14 @@ export default {
                             console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;      
+                            this.resetRegistrarUsuario();
                         }
                         if(error.response.data.code == 302){
                             console.log(error.response.data.code +' '+ error.response.data.message);
                             console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
-                            this.alertaError = true;      
+                            this.alertaError = true;  
+                            this.resetRegistrarUsuario();   
                         }
                     }
                 }                
@@ -588,7 +592,7 @@ export default {
             this.datosUsuario.correo='';
             this.datosUsuario.contrasena='';
             this.datosUsuario.imagen=null;
-            this.$refs.form.resetValidation();
+            this.keyDialogModificar--;
         },
         modificarUsuario(){
             console.log('modificar usuario')
@@ -637,24 +641,28 @@ export default {
                             console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;
+                            this.resetModificacionUsuario();
                         }
                         if(error.response.data.code == 602){
                             console.log(error.response.data.code +' '+ error.response.data.message);
                             console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;
+                            this.resetModificacionUsuario();
                         }
                         if(error.response.data.code == 603){
                             console.log(error.response.data.code +' '+ error.response.data.message);
                             console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;
+                            this.resetModificacionUsuario();
                         }
                         if(error.response.data.code == 604){
                             console.log(error.response.data.code +' '+ error.response.data.message);
                             console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;
+                            this.resetModificacionUsuario();
                         }
                     }
                 }

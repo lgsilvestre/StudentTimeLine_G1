@@ -1,6 +1,6 @@
 <template>
     <v-container  fluid >
-        <v-row   class="align-center justify-center" >
+        <v-row   class="align-start justify-center" no-wrap>
             <!-- Alertas -->
 
             <!-- alerta de exito de la modificacion -->
@@ -33,10 +33,10 @@
             </v-snackbar>
 
 
-            <v-col cols="12" md="1">
+            <v-col cols="12" md="2">
                 </v-col>
                 <v-col  cols="12" md="3">
-                   <v-card elevation="1"  min-width="350px" color=""> 
+                   <v-card elevation="1"  min-width="350px" class="d-flex flex-column flex-wrap"> 
                         <v-card-title
                         class="headline primary text--center"
                         primary-title>
@@ -51,7 +51,7 @@
                             </v-avatar>
                         </v-container >
                         <v-divider></v-divider>
-                        <v-container fluid class="px-5 text-left">
+                        <v-container fluid class="px-5 text-center">
                             <p class="font-weight-black">Nombre: {{ datosUsuario.nombre }} </p>
                             <p class="font-weight-black">Rol: {{ datosUsuario.rol}}</p>
                             <p class="font-weight-black">Escuela:  {{datosUsuario.escuela  }}</p>
@@ -62,9 +62,9 @@
                     </v-card>
 
                 </v-col>
-                <v-col cols="12" md="2"></v-col>
+                <v-col cols="12" md="1"></v-col>
                 <v-col cols="12" md="4">
-                    <v-card elevation="1" shaped>
+                    <v-card elevation="1" class="d-flex flex-column flex-wrap">
                     <v-card-title  class="headline primary text--center" primary-title > 
                         <h5 class="white--text ">Modificar Usuario</h5>
                             </v-card-title>
@@ -83,7 +83,7 @@
                                         label="Escuela"
                                         outlined
                                         prepend-inner-icon="mdi-school"
-                                        v-show="datosUsuario.rol == 'admin' "
+                                        v-show="modificar"
                                         ></v-select>
 
                                         <v-select v-model="datosUsuarioModificar.role"
@@ -91,7 +91,7 @@
                                         :items="roles"
                                         outlined
                                         prepend-inner-icon="mdi-account-tie"
-                                        v-show="datosUsuario.rol == 'admin' "
+                                        v-show="modificar"
                                         ></v-select>
                                       <v-file-input  accept="image/png, image/jpeg, image/bmp" 
                                         label="Seleccione una imagen"
@@ -154,6 +154,7 @@ export default {
             alertAcept: false,
             textoAcept: '',
             delay: 4000,
+            modificar: true,
 
             mostrar: false, 
             datosUsuarioModificar:[ {nombre:''},{escuela:''},{role:''},{correo:''},{contrasena:''} ,{imagen:null}],
@@ -229,6 +230,9 @@ export default {
                 });
                 
                 this.datosUsuario = this.datosUsuarioAux;
+                if(this.datosUsuario.rol != "admin"){
+                    this.modificar = false;
+                };
             }
             }).catch((err)=>{
                 if (error.message == 'Network Error') {
