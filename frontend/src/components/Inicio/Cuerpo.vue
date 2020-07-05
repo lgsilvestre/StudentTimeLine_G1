@@ -1,7 +1,8 @@
 <template>
     <div >        
         <v-container class="align-center my-5" >
-            <v-img  src="@/assets/Inicio/bannerInicio.png"></v-img>
+            <v-img  src="@/assets/Inicio/bannerInicio.png"
+            ></v-img>
         </v-container>
 
         <v-container fluid justify-center >

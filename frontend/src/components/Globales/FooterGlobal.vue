@@ -1,6 +1,6 @@
 <template >
     <v-container class="pa-md-7" fluid >
-  <v-footer dark absolute color="primary" min-width="720" >
+  <v-footer dark absolute color="primary" >
         <v-row no-gutters justify-center>
             <v-col class="d-none d-sm-none d-md-flex" align-self="center" md="4" >
                 <v-btn class="ml-2" color="primary white--text" depressed   @click="urlUniversidad" >Universidad de Talca</v-btn>

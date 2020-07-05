@@ -1,13 +1,12 @@
 <template>
     <div class="InicioSesion">
         <v-dialog
-        width="70%"
+        :width="$vuetify.breakpoint.smAndDown ? '100%' : '70%'"
         transition="scroll-y-reverse-transition" origin="bottom "
         >
         <template v-slot:activator="{ on }">
             <v-btn text rounded v-on="on" color="white" >
-                <h4 class="white--text">Inicio Sesión</h4>
-                <h4 class="primary--text">1</h4>
+                <h4 class="white--text pr-2">Inicio Sesión</h4>
                 <v-icon large >mdi-account-circle</v-icon>
             </v-btn>
         </template>
@@ -42,7 +41,8 @@
                             <h5 class="white--text ">Iniciar Sesión en SGDA</h5>
                             </v-card-title>
                                 <v-form>
-                                <v-container class="px-10 pt-10">
+                                    
+                                <v-container class="pt-10 px-5">
                                     <v-text-field v-model="lista.email"
                                         label="Correo"
                                         outlined

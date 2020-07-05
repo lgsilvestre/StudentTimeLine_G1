@@ -9,9 +9,14 @@
         <!-- Logo Institucional -->
         <div class="d-flex align-center">
         <v-img 
-            class="shrink mr-2"
+            class="shrink mr-2 d-none d-sm-flex"
             src="@/assets/Globales/utalca.png"
             width="300"
+        />
+        <v-img 
+            class="shrink mr-2 d-flex d-sm-none"
+            src="@/assets/Globales/utalca2.png"
+            width="45"
         />
         </div>
 
