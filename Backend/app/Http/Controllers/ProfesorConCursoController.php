@@ -100,8 +100,11 @@ class ProfesorConCursoController extends Controller
      * @param  \App\Profesor_Con_Curso  $profesor_Con_Curso
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Profesor_Con_Curso $profesor_Con_Curso)
+    public function destroy($id)
     {
         //
+        $profesorCurso = Profesor_Con_Curso::find($id);
+        $profesorCurso->delete();
+        return $profesorCurso;
     }
 }
