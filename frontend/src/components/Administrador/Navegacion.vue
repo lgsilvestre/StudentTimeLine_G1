@@ -42,24 +42,14 @@
             </v-list>
         </v-menu>
 
-        <v-menu open-on-hover offset-x left>
-            <template v-slot:activator="{ on }">
-                <v-list-item  v-on="on" class="difuminado" active-class="activacion">
-                    <v-list-item-icon >
-                        <v-icon color="white">fas fa-chalkboard-teacher</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title class="white--text letra"> <strong>Profesor</strong></v-list-item-title>
-                </v-list-item>
-            </template>
-            <v-list>
-                <v-list-item v-for="(item, index) in itemsProfesor" :key="index" @click="CrearEscuela">
-                    <v-list-item-icon>
-                        <v-icon> {{ item.icon }} </v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>{{ item.title }}</v-list-item-title>
-                </v-list-item>
-            </v-list>
-        </v-menu>
+       
+        <v-list-item  v-on="on" class="difuminado" active-class="activacion" to="/administrador/profesores">
+            <v-list-item-icon >
+                <v-icon color="white">fas fa-chalkboard-teacher</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title class="white--text letra"> <strong>Profesores</strong></v-list-item-title>
+        </v-list-item>
+            
         
             
                 <v-list-item  v-on="on" class="difuminado" active-class="activacion" to="/administrador/estudiantes">

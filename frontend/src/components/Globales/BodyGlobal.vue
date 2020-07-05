@@ -2,30 +2,32 @@
     <v-container  fluid >
         <v-row   class="align-center justify-center" >
             <!-- Alertas -->
-            <v-snackbar v-model="alertaCorrecto" :timeout="timeout"  bottom
-            color="success"
-            left
-            class="mb-1 pb-12 pr-0 mr-0">
-            <div>
-                <strong>{{aletaText}}</strong>
-            </div>
-                <v-btn color="white" elevation="0" x-small fab
-                @click="alertaCorrecto = !alertaCorrecto"
-                > 
+
+            <!-- alerta de exito de la modificacion -->
+            <v-snackbar v-model="alertAcept" :timeout=delay
+            bottom color="secondary" left class="mb-1 pb-12 pr-0 mr-0" >
+                <div>
+                    <v-icon color="white" class="mr-2">
+                        fas fa-check-circle
+                    </v-icon>
+                    <strong>{{textoAcept}}</strong>
+                </div>
+                <v-btn color="white" elevation="0" x-small
+                fab @click="alertAcept = ! alertAcept" > 
                     <v-icon color="secondary">fas fa-times</v-icon>
                 </v-btn>
             </v-snackbar>
-
-            <v-snackbar v-model="alertaError" :timeout="timeout"  bottom
-            color="warning"
-            left
-            class="mb-1 pb-12 pr-0 mr-0">
-            <div>
-                <strong>{{aletaText}}</strong>
-            </div>
-                <v-btn color="white" elevation="0" x-small fab
-                @click="alertaError = !alertaError"
-                > 
+            <!-- alerta de error en la modificacion -->
+            <v-snackbar v-model="alertAcept" :timeout=delay bottom
+            color="secondary" left class="mb-1 pb-12 pr-0 mr-0">
+                <div>
+                    <v-icon color="white" class="mr-2">
+                        fas fa-check-circle
+                    </v-icon>
+                    <strong>{{textoAcept}}</strong>
+                </div>
+                <v-btn color="white" elevation="0" x-small
+                fab @click="alertAcept = ! alertAcept" > 
                     <v-icon color="secondary">fas fa-times</v-icon>
                 </v-btn>
             </v-snackbar>
@@ -43,8 +45,9 @@
                         <v-container fluid class="px-10 text-center">
                             <v-avatar size="100">
                                 <img
-                                    src="https://randomuser.me/api/portraits/men/85.jpg"
+                                    :src="datosUsuario.foto"
                                 > 
+                                <!-- src="https://randomuser.me/api/portraits/men/85.jpg" -->
                             </v-avatar>
                         </v-container >
                         <v-divider></v-divider>
@@ -65,7 +68,7 @@
                     <v-card-title  class="headline primary text--center" primary-title > 
                         <h5 class="white--text ">Modificar Usuario</h5>
                             </v-card-title>
-                                <v-form  @submit.prevent="modificarUsuario" class=" px-8 pt-4 "  >
+                                <v-form  @submit.prevent="modificarUsuario" class=" px-8 pt-4 " >
                                         <v-text-field v-model="datosUsuarioModificar.nombre" label="Nombre de usuario" outlined
                                           color="secondary"
                                           :rules="[() => !!datosUsuario.nombre ]"
@@ -96,6 +99,7 @@
                                         outlined
                                         prepend-icon=""   
                                         prepend-inner-icon="mdi-camera"
+                                        @change="convertirImagen"
                                         v-model="datosUsuarioModificar.imagen">
                                         </v-file-input>
 
@@ -145,43 +149,67 @@ import axios from 'axios'
 export default {
     data() {
         return {
-            alertaCorrecto: false,
-            alertaError: false,
-            aletaText: '',
-            timeout: 4000,
+            alertError: false,
+            textoError: '',
+            alertAcept: false,
+            textoAcept: '',
+            delay: 4000,
 
             mostrar: false, 
-            datosUsuarioModificar:[ {nombre:''},{escuela:''},{role:''},{correo:''},{contrasena:''} ,{imagen:''}],
+            datosUsuarioModificar:[ {nombre:''},{escuela:''},{role:''},{correo:''},{contrasena:''} ,{imagen:null}],
             datosUsuario:[], 
             datosUsuarioAux:[],
-            // miUsuario: null, 
-            listaEscuela:[
-                { text: 'ID',align: 'start',value: 'id',sortable: false},
-                { text: 'Nombre', value: 'nombre',sortable: false, },                
-            ],            
-            listaEscuelaAux:[],
             roles: ['Administrador', 'Secretaría de Escuela', 'Profesor'],   
             // ==================================
             // variables para la modificacion de usuario
             listaUsuarios:[],
             listaUsuariosAux:[],
+            
+
+            //escuela
+            listaEscuela:[{id:''},{nombre:''},{cod:''}],
+            miEscuela:null,
+            desserts:[],
+            dessertsAux:[],
+            //prueba de imagen
+            imagenMiniatura:null,
+            
+            
+            
         }
     },
     computed:{
-        ...mapState(['usuario']),   
+        ...mapState(['usuario']), 
+        
     },
      created() {
-         
         this.obtenerEscuelas();
         this.obtenerUsuario();
      },
     methods:{
+        /**
+         * Convierte la imagen cargada a base 64.
+         */
+        convertirImagen(e){
+             this.imagenMiniatura=null;
+            if(e != null){
+                let image =e;
+                let reader = new FileReader();
+                reader.readAsDataURL(image);
+                reader.onload = e =>{
+                    this.imagenMiniatura=e.target.result;
+                }
+            }  
+        },
+        /**
+         * Obtiene la informacino del usuario logeado.
+         */
         obtenerUsuario(){
-            var url =`http://127.0.0.1:8000/api/v1/usuario/${this.$store.state.usuario.user.id}`;
+            var url =`http://127.0.0.1:8000/api/v1/usuario/${this.$store.state.usuario.usuario.id}/edit`;
             axios.get(url,this.$store.state.config)
             .then((result)=>{
-            if (result.statusText=='OK') {
-                this.datosUsuarioAux=result.data;
+            if (result.data.code==500) {
+                this.datosUsuarioAux=result.data.data.usuario;
                 if (this.datosUsuarioAux == "admin") {
                     this.datosUsuarioAux.role= this.roles[0];
                 };
@@ -189,76 +217,176 @@ export default {
                     this.datosUsuarioAux.rol= this.roles[1];
                 };
                 if (this.datosUsuarioAux.rol  == "profesor") {
-                    this.datosUsuarioAux.role= this.roles[1];
+                    this.datosUsuarioAux.role= this.roles[2];
                 };
+                //para asignarle un nombre a la 
                 this.listaEscuela.forEach(element => {
                     if(element.id == this.datosUsuarioAux.escuela){
                         this.datosUsuarioAux.escuela = element.nombre;
+                        //obtenemos toda la informacion de la escuela del usuario
+                        this.miEscuela=element;
                     }
                 });
-
-                this.datosUsuario = this.datosUsuarioAux           
+                
+                this.datosUsuario = this.datosUsuarioAux;
             }
             }).catch((err)=>{
-                console.log(err)
+                if (error.message == 'Network Error') {
+                    console.log(error);
+                    state.verificacionLogin= true;
+                    state.cargaLogin=false;
+                    state.mensajeErrorLogin= 'Error al comunicarse con el servidor, intente más tarde';
+                } else {
+                    if (error.response.data.success == false) {
+                        switch (error.response.data.code) {
+                            case 501:
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
+                                break;
+                            case 502:
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
+
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
             });
         },
-
+        /**
+         * Obtiene lista de las escuelas registradas.
+         */
         obtenerEscuelas(){
-            this.listaEscuelaAux = [];
+            this.dessertsAux = [];
             var url = 'http://127.0.0.1:8000/api/v1/escuela';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
-                for (let index = 0; index < result.data.length; index++) {
-                    const element = result.data[index];
-                    let escuela = {
+                if (result.data.success == true) {
+                    for (let index = 0; index < result.data.data.escuelas.length; index++) {
+                        const element = result.data.data.escuelas[index];
+                        let escuela = {
                         id: element.id,
                         nombre: element.nombre,
-                    };
-                    this.listaEscuelaAux[index]=escuela;
-                    }
-                    this.listaEscuela = this.listaEscuelaAux;
+                        cod_car: element.cod_carrera,
+                        };
+                        this.dessertsAux[index]=escuela;
                 }
-                );
+                    this.listaEscuela = this.dessertsAux;
+                    
+            }
+                
+            })
+            .catch((error) => {
+                console.log(error);
+            if (error.message == 'Network Error') {
+              console.log(error);
+              //this.textoError = 'Error al cargar los datos, intente más tarde'
+            } else {
+              if (error.response.data.success == false) {
+                switch (error.response.data.code) {
+                  case 101:
+                      console.log(error.response.data.code +' '+ error.response.data.message);
+                      console.log(error.response.data);
+                      //this.textoError = error.response.data.message;
+                      break;
+                  default:
+                      break;
+                }
+              }
+            }
+                
+            });
       },
-
-      modificarUsuario(){
-            var correo =  this.datosUsuarioModificar.correo;
-            var contrasena  =  this.datosUsuarioModificar.contrasena;
+        /**
+         * Modica la informacion del usuario logeado.
+         */
+      modificarUsuario(e){
+            var correo = '';
+            var contrasena  =  '';
+            correo= this.datosUsuarioModificar.correo;
+            contrasena = this.datosUsuarioModificar.contrasena;
             // validamos que el correo puede ser null o segun la regla establecida
             if( /.+@utalca.cl/.test(correo) || correo == null || correo == ''){
-                if( contrasena == null|| contrasena =='' || contrasena.length >= 8){
+                if(contrasena == null || contrasena =='' || contrasena.length >= 8 ){
+                    //conversion del rol, para guardarla en la base de datos.
                     var aux;
                     if ( this.datosUsuarioModificar.role == "Administrador") {
-                        aux = "admin"
-                    };
+                        aux = "admin";
+                    }; 
                     if ( this.datosUsuarioModificar.role == "Secretaría de Escuela") {
-                        aux = "secretaria de escuela"
+                        aux = "secretaria de escuela";
                     };
                     if ( this.datosUsuarioModificar.role == "Profesor") {
-                        aux = "profesor"
+                        aux = "profesor";
                     };
                     var url =`http://127.0.0.1:8000/api/v1/usuario/${this.datosUsuario.id}`;
+
                     let put ={
                         "nombre": this.datosUsuarioModificar.nombre,
                         "escuela": this.datosUsuarioModificar.escuela,
                         "role": aux,
-                        "foto": null,
+                        "foto":this.imagenMiniatura,
                         "email":correo,
                         "password": contrasena,
                     }
                     axios.put(url,put,this.$store.state.config)
                     .then((result)=>{
-                    if (result.statusText=='OK') {
-                         this.obtenerUsuario();
+                    if (result.data.success == true){
+                        this.obtenerUsuario();
                         this.resetModificacionUsuario();
-                        this.alertaCorrecto = true;
-                         this.aletaText='La modificación fue exitosa.';
-                        console.log('se modifico correctamente')
+                        this.alertAcept = true;
+                        var mensaje=result.data.message;
+                        this.textoAcept=mensaje;
+                        
+                        console.log('se modifico correctamente');
                     }
                     }).catch((err)=>{
                         console.log(err);
                         this.resetModificacionUsuario();
+                        if (error.message == 'Network Error') {
+                            console.log(error);
+                            this.alertError = true;
+                            var mensaje=result.data.message;
+                            this.textoAcept=mensaje;
+                        } else {
+                        if (error.response.data.success == false) {
+                            switch (error.response.data.code) {
+                            case 601:
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
+                                this.alertError = true;
+                                var mensaje=result.data.message;
+                                this.textoAcept=mensaje;
+                                //this.textoError = error.response.data.message;
+                                break;
+                            case 602:
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
+                                this.alertError = true;
+                                var mensaje=result.data.message;
+                                this.textoAcept=mensaje;
+                                break;
+                            case 603:
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
+                                this.alertError = true;
+                                var mensaje=result.data.message;
+                                this.textoAcept=mensaje;
+                                break;
+                            case 604:
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
+                                this.alertError = true;
+                                var mensaje=result.data.message;
+                                this.textoAcept=mensaje;
+                                break;
+                            default:
+                                break;
+                            }
+                        }
+                        }
                     });
                 }else{
                     this.alertaError= true;
@@ -271,6 +399,7 @@ export default {
                 this.alertaError = true;
                 this.aletaText='el correo es invalido.';
             }
+            
 
     },
         resetModificacionUsuario(){
@@ -280,9 +409,10 @@ export default {
             this.datosUsuarioModificar.correo='';
             this.datosUsuarioModificar.contrasena='';
             this.datosUsuarioModificar.imagen=null;
-            this.alertaCorrecto =false;
-            this.alertaError =false;
-            this.aletaText =''
+            this.alertError= false;
+            this.textoError= '';
+            this.alertAcept= false;
+            this.textoAcept= '';
             
          },
     }
