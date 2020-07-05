@@ -41,6 +41,13 @@ class ProfesorConCursoController extends Controller
     public function store(Request $request)
     {
         //
+        $profesorCurso= new Profesor_Con_curso();
+        $profesorCurso-> profesor=$request->profesor;
+        $profesorCurso-> curso=$request->curso;
+        $profesorCurso-> anio=$request->anio;
+        $profesorCurso-> semestre=$request->semestre;
+        $profesorCurso->save();
+        return $profesorCurso;
     }
 
     /**
