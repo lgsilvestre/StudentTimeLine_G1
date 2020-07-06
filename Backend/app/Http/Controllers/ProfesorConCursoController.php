@@ -14,7 +14,9 @@ class ProfesorConCursoController extends Controller
      */
     public function index()
     {
-        //
+        #Podríamos retornar los nombres en lugar del id del profesor y del curso.
+        $CursosyProfesores = Profesor_Con_Curso::all();
+        return $CursosyProfesores;
     }
 
     /**
@@ -82,9 +84,9 @@ class ProfesorConCursoController extends Controller
      * @param  \App\Profesor_Con_Curso  $profesor_Con_Curso
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Profesor_Con_Curso $profesor_Con_Curso)
+    public function update(Request $request, $id)
     {
-        //
+
     }
 
     /**
