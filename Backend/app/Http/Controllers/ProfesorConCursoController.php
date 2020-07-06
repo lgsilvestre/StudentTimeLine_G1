@@ -86,7 +86,13 @@ class ProfesorConCursoController extends Controller
      */
     public function update(Request $request, $id)
     {
-
+        $CursoProfesor = Profesor_Con_Curso::find($id);
+        $CursoProfesor->profesor = $request->profesor ;
+        $CursoProfesor->curso = $request->curso;
+        $CursoProfesor->anio = $request->anio;
+        $CursoProfesor->semestre = $request->semestre;
+        $CursoProfesor->save();
+        return compact('CursoProfesor');
     }
 
     /**
