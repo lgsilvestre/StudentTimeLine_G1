@@ -45,6 +45,7 @@ export default {
             icoInstagram: 'mdi-instagram',
             icoYoutube:'mdi-youtube',
             nombrePag:'La Calila y los Mojojojo',
+            
         }
     },
     methods:{
