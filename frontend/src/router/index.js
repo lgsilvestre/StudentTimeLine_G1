@@ -57,15 +57,15 @@ Vue.use(VueRouter)
             admin: true
         },
       },
-      // {
-      //   //Enrutamiento de la vista del administrador
-      //   path: 'escuela/habilitarEscuela',
-      //   name: 'habilitarEscuela',
-      //   component: () => import(/* webpackChunkName: "Administrador" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
-      //   meta: {
-      //     admin: true
-      //   },
-      // },
+      {
+         //Enrutamiento de la vista del administrador
+        path: 'profesores',
+        name: 'profesoresAdministrador',
+         component: () => import(/* webpackChunkName: "Administrador" */ '@/components/SecretariaDeEscuela/BodyProfesores.vue'),
+        meta: {
+          admin: true
+        },
+      },
       // {
       //   //Enrutamiento de la vista del administrador
       //   path: 'escuela/deshabilitarEscuela',
@@ -212,15 +212,15 @@ Vue.use(VueRouter)
       //     secretariaEscuela: true
       //   },
       // },
-      // {
-      //   //Enrutamiento de la vista habilitarProfesorSecretariaEscuela
-      //   path: 'habilitarProfesor',
-      //   name: 'habilitarProfesorSecretariaEscuela',
-      //   component: () => import(/* webpackChunkName: "" */ '@/views/SecretariaEscuela.vue'/* ruta exacta por definir dado que no esta aun creada*/),
-      //   meta: {
-      //     secretariaEscuela: true
-      //   },
-      // },
+      {
+         //Enrutamiento de la vista habilitarProfesorSecretariaEscuela
+        path: 'profesores',
+        name: 'profesoresSecretariaEscuela',
+        component: () => import(/* webpackChunkName: "" */ '@/components/SecretariaDeEscuela/BodyProfesores.vue'),
+        meta: {
+          secretariaEscuela: true
+        },
+      },
       // {
       //   //Enrutamiento de la vista deshabilitarProfesorSecretariaEscuela
       //   path: 'deshabilitarProfesor',

@@ -69,8 +69,7 @@ class UsuarioController extends Controller
                 'success' => true,
                 'code' => 100,
                 'message' => "La operacion se a realizado con exito",
-                'data' => ['usuarios'=>$usuarios,
-                            'solicitud' => $credenciales]
+                'data' => ['usuarios'=>$usuarios]
             ], 200);
         //----- Mecanismos anticaidas y reporte de errores -----
         //este catch permite responder directamente que problemas en la peticion SQL
@@ -372,7 +371,7 @@ class UsuarioController extends Controller
         $usuario=User::onlyTrashed()->find($id)->restore();
         return response()->json([
             'success' => true,
-            'message' => "el estudiante se recupero con exito",
+            'message' => "el usuario se recupero con exito",
             'data' => ['usuario'=>$usuario]
         ], 200);
     }
