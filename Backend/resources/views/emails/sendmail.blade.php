@@ -323,9 +323,7 @@ a.es-button {
      <tr class="gmail-fix" height="0"> 
       <td> 
        <table width="600" cellspacing="0" cellpadding="0" border="0" align="center"> 
-         <tr> 
-          <td style="line-height: 1px; min-width: 600px;" height="0"><img src="https://i.postimg.cc/rpQnWHdn/24101592364722519.png" alt="alternatetext"></td> 
-         </tr> 
+         
        </table></td> 
      </tr> 
      <tr> 
@@ -341,7 +339,7 @@ a.es-button {
                   <td width="580" valign="top" align="center"> 
                    <table width="100%" cellspacing="0" cellpadding="0" role="presentation"> 
                      <tr> 
-                      <td class="es-p5t es-p10r es-p10l" align="center" style="font-size: 0px;"><amp-img src="images/24101592364722519.png" alt style="display: block;" width="560" height="132"></amp-img></td> 
+                      <td class="es-p5t es-p10r es-p10l" align="center" style="font-size: 0px;"><amp-img src="https://i.postimg.cc/rpQnWHdn/24101592364722519.png" alt style="display: block;" width="560" height="132"></amp-img></td> 
                      </tr> 
                    </table></td> 
                  </tr> 
@@ -359,9 +357,9 @@ a.es-button {
                <table width="100%" cellspacing="0" cellpadding="0"> 
                  <tr> 
                   <td width="600" valign="top" align="center"> 
-                   <table style="background-color: #ffffff;" width="100%" cellspacing="0" cellpadding="0" bgcolor="#ffffff" role="presentation"> 
+                   <table style="background-color: #ffffff; margin-top: 10px;" width="100%" cellspacing="0" cellpadding="0" bgcolor="#ffffff" role="presentation" > 
                      <tr> 
-                      <td class="es-m-txt-l es-p15t es-p40b es-p30r es-p30l" bgcolor="#ffffff"><p style="line-height: 150%; font-family: roboto, 'helvetica neue', helvetica, arial, sans-serif; text-align: justify;">Estimado/a {{ $details['usuario'] }}, usted ha recibido el correo para recuperar la contraseña de su cuenta del SGDA (Sistema de Gestión de Ayudantes), para reestablecer su contraseña haga clic en el siguiente recuadro.👇😄</p></td> 
+                      <td class="es-m-txt-l es-p15t es-p40b es-p30r es-p30l" bgcolor="#ffffff"><p style="line-height: 150%; font-family: roboto, 'helvetica neue', helvetica, arial, sans-serif; text-align: justify;">Estimado/a {{ $details['usuario'] }}, usted ha recibido el correo para recuperar la contraseña de su cuenta del SGDA (Sistema de Gestión de Ayudantes), para reestablecer su contraseña haga clic en el siguiente recuadro.</p></td> 
                      </tr> 
                    </table></td> 
                  </tr> 
