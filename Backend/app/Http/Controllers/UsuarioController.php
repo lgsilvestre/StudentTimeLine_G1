@@ -31,6 +31,7 @@ class UsuarioController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
+        $usuarios = User::onlyTrashed()->get();
         try{
             $credenciales = JWTAuth::parseToken()->authenticate();
             if($credenciales->rol=="admin"){
@@ -52,7 +53,7 @@ class UsuarioController extends Controller
             }else{
                 return response()->json([
                     'success' => false,
-                    'code' => 101,
+                    'code' => 102,
                     'message' => 'Error que no deberia pasar en index',
                     'data' => ['error'=>'al momento de buscar el rol del solicitante no lo encuentra']
                 ], 409);
@@ -76,7 +77,7 @@ class UsuarioController extends Controller
         } catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
                 'success' => false,
-                'code' => 101,
+                'code' => 103,
                 'message' => 'Error al solicitar peticion a la base de datos',
                 'data' => ['error'=>$ex]
             ], 409);
@@ -343,34 +344,73 @@ class UsuarioController extends Controller
     }
     
     /**
-     * 
+     * Metodo que se encarga de listar a todos usuarios eliminados
+     * Errores code inician 800
+     * @return \Illuminate\Http\Response
      */
     public function disabled(){
-        $usuarios = User::onlyTrashed()->get();
-        $escuelas=Escuela::withTrashed()->orderBy('id','asc')->get();
-        foreach ($usuarios as $usuario) {
-            $usuario->nombre_escuela= $escuelas[$usuario->escuela-1]->nombre;
-            if($usuario->escuelaAux!=null){
-                $usuario->nombre_escuelaAux= $escuelas[$usuario->escuelaAux-1]->nombre;
+        try{
+            $credenciales = JWTAuth::parseToken()->authenticate();
+            if($credenciales->rol=="admin"){
+                $usuarios = User::onlyTrashed()->get();
+                $escuelas=Escuela::withTrashed()->orderBy('id','asc')->get();
+            }else if($credenciales->rol=="secretaria de escuela"){
+                $usuarios = User::onlyTrashed()->Where('rol', '=' , 'profesor')->where(function ($query) use ($credenciales) {
+                    return $query->where('escuela', '=' , $credenciales->escuela)
+                                ->orWhere('escuela', '=' , $credenciales->escuelaAux);
+                })->get();
+                $escuelas=Escuela::withTrashed()->orderBy('id','asc')->get();
+            }else if($credenciales->rol=="profesor"){
+                return response()->json([
+                    'success' => false,
+                    'code' => 801,
+                    'message' => 'No tiene los permisos necesarios para realizar esta operacion',
+                    'data' => ['error'=>'No deberia llegar aca']
+                ], 403);
             }else{
-                $usuario->nombre_escuelaAux= 'no posee otra escuela';
+                return response()->json([
+                    'success' => false,
+                    'code' => 802,
+                    'message' => 'Error que no deberia pasar en index',
+                    'data' => ['error'=>'al momento de buscar el rol del solicitante no lo encuentra']
+                ], 409);
             }
+            foreach ($usuarios as $usuario) {
+                $usuario->nombre_escuela= $escuelas[$usuario->escuela-1]->nombre;
+                if($usuario->escuelaAux!=null){
+                    $usuario->nombre_escuelaAux= $escuelas[$usuario->escuelaAux-1]->nombre;
+                }else{
+                    $usuario->nombre_escuelaAux= 'no posee otra escuela';
+                }
+            }
+            return response()->json([
+                'success' => true,
+                'code' => 800,
+                'message' => "La operacion se a realizado con exito",
+                'data' => ['usuarios'=>$usuarios]
+            ], 200);
+        //----- Mecanismos anticaidas y reporte de errores -----
+        //este catch permite responder directamente que problemas en la peticion SQL
+        } catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 803,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
         }
-        return response()->json([
-            'success' => true,
-            'code' => 800,
-            'message' => "Operacion realizada con exito",
-            'data' => ['usuarios'=>$usuarios]
-        ], 200);
     }
 
     /**
-     * 
+     * Metodo que se encarga recuperar un usuario
+     * Errores code inician 900
+     * @return \Illuminate\Http\Response
      */
     public function restore($id){
         $usuario=User::onlyTrashed()->find($id)->restore();
         return response()->json([
             'success' => true,
+            'code' => 900,
             'message' => "el usuario se recupero con exito",
             'data' => ['usuario'=>$usuario]
         ], 200);
