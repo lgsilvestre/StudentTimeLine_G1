@@ -26,7 +26,7 @@
                 <v-list-item-title class="white--text letra"><strong>Profesores</strong></v-list-item-title>                            
             </v-list-item>
 
-            <v-list-item @click="cursos" class="difuminado" active-class="activacion">
+            <v-list-item class="difuminado" active-class="activacion" to="/secretariaEscuela/cursos">
                 <v-list-item-icon >
                     <v-icon color="white">fab fa-accusoft</v-icon>
                 </v-list-item-icon>
@@ -53,9 +53,7 @@
                 </v-list-item-icon>
                 <v-list-item-title class="white--text letra" ><strong>Contactar</strong></v-list-item-title>                            
             </v-list-item>
-                     
         </v-list>
-
         <template v-slot:append >
         <v-list-item class=" difuminado" style="background-color: #FF6B6B" @click="unLogin">
             <v-list-item-icon >
@@ -64,7 +62,6 @@
             <v-list-item-title class="white--text letra" ><strong>Cerrar sesion</strong></v-list-item-title>
         </v-list-item>
         </template>       
-
     </v-navigation-drawer>
 </template>
 

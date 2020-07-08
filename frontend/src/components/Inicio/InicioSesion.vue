@@ -82,12 +82,9 @@
                                 
                             </v-form> 
                         </v-card>
-                        
                     </v-col>
-                    <v-col class="d-none d-sm-none d-md-block " md="1">
-                            
+                    <v-col class="d-none d-sm-none d-md-block " md="1">   
                     </v-col>
-                    
                 </v-row>
             </v-container>
         </v-card>

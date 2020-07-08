@@ -24,34 +24,25 @@
                 </v-list-item-icon>
                 <v-list-item-title class="white--text letra" > <strong>Usuario</strong></v-list-item-title>
             </v-list-item>
-
-        <v-list-item  v-on="on" to="/administrador/curso" class="difuminado" active-class="activacion">
+        <v-list-item  class="difuminado" active-class="activacion" to="/administrador/cursos">
             <v-list-item-icon>
                 <v-icon color="white">fab fa-accusoft</v-icon>
-                </v-list-item-icon>
-            <v-list-item-title class="white--text letra" ><strong>Curso</strong></v-list-item-title>
+            </v-list-item-icon>
+            <v-list-item-title class="white--text letra" ><strong>Cursos</strong></v-list-item-title>
         </v-list-item>
 
-       
         <v-list-item  v-on="on" class="difuminado" active-class="activacion" to="/administrador/profesores">
             <v-list-item-icon >
                 <v-icon color="white">fas fa-chalkboard-teacher</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="white--text letra"> <strong>Profesores</strong></v-list-item-title>
         </v-list-item>
-            
-        
-            
-                <v-list-item  v-on="on" class="difuminado" active-class="activacion" to="/administrador/estudiantes">
-                    <v-list-item-icon >
-                        <v-icon color="white">fas fa-user-graduate</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title class="white--text letra" ><strong>Estudiantes</strong></v-list-item-title>
-                </v-list-item>
-            
-            
-        
-
+        <v-list-item  v-on="on" class="difuminado" active-class="activacion" to="/administrador/estudiantes">
+            <v-list-item-icon >
+                <v-icon color="white">fas fa-user-graduate</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title class="white--text letra" ><strong>Estudiantes</strong></v-list-item-title>
+        </v-list-item>
         <v-menu open-on-hover  offset-x left>
             <template v-slot:activator="{ on }">
                 <v-list-item  v-on="on"  class="difuminado" active-class="activacion">
@@ -70,7 +61,6 @@
                 </v-list-item>
             </v-list>
         </v-menu>
-
         <v-menu open-on-hover  offset-x left>
             <template v-slot:activator="{ on }">
                 <v-list-item  v-on="on" class="difuminado" active-class="activacion">
@@ -89,7 +79,6 @@
                 </v-list-item>
             </v-list>
         </v-menu>
-
     </v-list>
     <template v-slot:append >
         <v-list-item class=" difuminado" style="background-color: #FF6B6B" @click="unLogin">
@@ -99,7 +88,6 @@
             <v-list-item-title class="white--text letra" ><strong>Cerrar sesion</strong></v-list-item-title>
         </v-list-item>
     </template>
-    
     </v-navigation-drawer>
 </template>
 
