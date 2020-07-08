@@ -131,15 +131,15 @@ Vue.use(VueRouter)
       //   },
       // },
   
-      //{
+      {
         //Enrutamiento de la vista cursosAdministrador
-       // path: 'cursos',
-       // name: 'cursosAdministrador',
-        //component: () => import(/* webpackChunkName: "" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
-        //meta: {
-          //admin: true
-        //},
-      //},
+        path: 'cursos',
+        name: 'cursosAdministrador',
+        component: () => import(/* webpackChunkName: "" */ '@/components/SecretariaDeEscuela/BodyCursos.vue'),
+        meta: {
+          admin: true
+        },
+      },
       
       
       
@@ -175,7 +175,6 @@ Vue.use(VueRouter)
           secretariaEscuela: true
         },
       },
-      
       // {
       //   //Enrutamiento de la vista crearObservacionSecretariaEscuela
       //   path: 'observaciones/crearObservacion',
@@ -231,15 +230,15 @@ Vue.use(VueRouter)
       //   },
       // },
 
-      // {
-      //   //Enrutamiento de la vista cursosSecretariaEscuela
-      //   path: 'cursos',
-      //   name: 'cursosSecretariaEscuela',
-      //   component: () => import(/* webpackChunkName: "" */ '@/views/SecretariaEscuela.vue'/* ruta exacta por definir dado que no esta aun creada*/),
-      //   meta: {
-      //     secretariaEscuela: true
-      //   },
-      // },
+      {
+        //Enrutamiento de la vista cursosAdministrador
+        path: 'cursos',
+        name: 'cursosSecretariaEscuela',
+        component: () => import(/* webpackChunkName: "" */ '@/components/SecretariaDeEscuela/BodyCursos.vue'),
+        meta: {
+          secretariaEscuela: true
+        },
+      },
       // {
       //   //Enrutamiento de la vista contactarSecretariaEscuela
       //   path: 'contactar',
