@@ -17,6 +17,7 @@ class EscuelaController extends Controller
         $this->middleware(['permission:read escuela'], ['only' => 'index']);
         $this->middleware(['permission:update escuela'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete escuela'], ['only' => 'delete']);
+        $this->middleware(['permission:restore escuela'], ['only' => 'disabled', 'restore']);
     }
 
     /**
@@ -222,4 +223,22 @@ class EscuelaController extends Controller
             ], 409 );
         }
     }
+
+    public function disabled(){
+
+        $escuelas = Escuela::onlyTrashed()->get();
+        return $escuelas;
+    }
+
+    public function restore($id){
+        
+        $escuela=Escuela::onlyTrashed()->find($id)->restore();
+        
+        return response()->json([
+            'success' => true,
+            'message' => "escuela recupero con exito",
+            'data' => ['escuela'=>$escuela]
+        ], 200);
+    }
+
 }

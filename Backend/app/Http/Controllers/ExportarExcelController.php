@@ -12,7 +12,15 @@ use DB;
 class ExportarExcelController extends Controller
 {
 
-    public function exportar(Request $request) 
+    /**
+     * Metodo que se encarga de bloquear las rutas del controlador Usuario
+     */
+    public function __construct()
+    {
+        $this->middleware(['permission:exportar estudiantes'], ['only' => ['index']]);
+    }
+
+    public function index(Request $request) 
     {
         $request = 1;
 

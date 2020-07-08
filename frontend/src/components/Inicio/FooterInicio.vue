@@ -1,6 +1,6 @@
 <template >
       <v-container class="pa-md-7" fluid >
-          <v-footer  dark  absolute  color="primary" min-width="720"  >
+          <v-footer  dark  absolute  color="primary">
     <!-- <v-card class=" flex" flat tile  > -->
       <!-- <v-card-title class="primary"  > -->
          <v-row no-gutters justify-center >
