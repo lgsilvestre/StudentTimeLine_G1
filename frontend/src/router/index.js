@@ -5,29 +5,21 @@ import store from '../store';
 
 Vue.use(VueRouter)
 
-  const routes = [
-  
-  {
-    path: '/',
-    name: 'Inicio',
-    component: Inicio
-  },
-  {
-    //Enrutamiento de la vista del administrador
-    path: '/administrador',
-    name: 'Administrador',
-    component: () => import(/* webpackChunkName: "Administrador" */ '@/views/Administrador.vue'),
-    meta: {
-      requiresAuth: true
+const routes = [
+
+    {
+        path: '/',
+        name: 'Inicio',
+        component: Inicio
     },
-    children:[
-      {
+    {
         //Enrutamiento de la vista del administrador
-        path: 'escuela',
-        name: 'Escuela',
-        component: () => import(/* webpackChunkName: "Administrador" */ '@/components/Administrador/BodyEscuelas.vue'/* ruta exacta por definir dado que no esta aun creada*/),
+        path: '/administrador',
+        name: 'Administrador',
+        component: () =>
+            import ( /* webpackChunkName: "Administrador" */ '@/views/Administrador.vue'),
         meta: {
-          admin: true
+            requiresAuth: true
         },
       },
       {
@@ -146,23 +138,84 @@ Vue.use(VueRouter)
     ]
   },
 
-  {
-    //Enrutamiento de la vista del administrador
-    path: '/secretariaEscuela',
-    name: 'secretariaEscuel',
-    component: () => import(/* webpackChunkName: "Administrador" */ '@/views/SecretariaEscuela.vue'),
-    meta: {
-      requiresAuth: true
+            // {
+            //   //Enrutamiento de la vista crearObservacionAdministrador
+            //   path: 'observaciones/crearObservacion',
+            //   name: 'crearObservacionAdministrador',
+            //   component: () => import(/* webpackChunkName: "" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
+            //   meta: {
+            //     admin: true
+            //   },
+            // },
+            // {
+            //   //Enrutamiento de la vista listarObservacionesAdministrador
+            //   path: 'observaciones/listarObservaciones',
+            //   name: 'listarObservacionesAdministradorr',
+            //   component: () => import(/* webpackChunkName: "" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
+            //   meta: {
+            //     admin: true
+            //   },
+            // },
+            // {
+            //   //Enrutamiento de la vista modificarObservacionAdministrador
+            //   path: 'observaciones/modificarObservacion',
+            //   name: 'modificarObservacionAdministrador',
+            //   component: () => import(/* webpackChunkName: "" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
+            //   meta: {
+            //     admin: true
+            //   },
+            // },
+            // {
+            //   //Enrutamiento de la vista eliminarObservacionAdministrador
+            //   path: 'observaciones/eliminarObservacion',
+            //   name: 'eliminarObservacionAdministrador',
+            //   component: () => import(/* webpackChunkName: "" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
+            //   meta: {
+            //     admin: true
+            //   },
+            // },
+            // {
+            //   //Enrutamiento de la vista habilitarProfesorAdministrador
+            //   path: 'habilitarProfesor',
+            //   name: 'habilitarProfesorAdministrador',
+            //   component: () => import(/* webpackChunkName: "" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
+            //   meta: {
+            //     admin: true
+            //   },
+            // },
+            // {
+            //   //Enrutamiento de la vista deshabilitarProfesorAdministrador
+            //   path: 'deshabilitarProfesor',
+            //   name: 'deshabilitarProfesorAdministrador',
+            //   component: () => import(/* webpackChunkName: "" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
+            //   meta: {
+            //     admin: true
+            //   },
+            // },
+
+            //{
+            //Enrutamiento de la vista cursosAdministrador
+            // path: 'cursos',
+            // name: 'cursosAdministrador',
+            //component: () => import(/* webpackChunkName: "" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
+            //meta: {
+            //admin: true
+            //},
+            //},
+
+
+
+        ]
     },
-    children:[
-      {
+
+    {
         //Enrutamiento de la vista del administrador
-        path: 'perfil',
-        name: 'perfilSecretariaEscuela',
+        path: '/secretariaEscuela',
+        name: 'secretariaEscuel',
         component: () =>
-          import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/BodyGlobal.vue'),
+            import ( /* webpackChunkName: "Administrador" */ '@/views/SecretariaEscuela.vue'),
         meta: {
-          secretariaEscuela: true
+            requiresAuth: true
         },
         
       },
@@ -259,88 +312,98 @@ Vue.use(VueRouter)
     meta: {
       requiresAuth: true
     },
-    children:[
-      {
-        //Enrutamiento de la vista del administrador
-        path: 'perfil',
-        name: 'perfilProfesor',
+    {
+        //Enrutamiento de la vista del profesor
+        path: '/profesor',
+        name: 'profesor',
         component: () =>
-            import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/BodyGlobal.vue'),
+            import ( /* webpackChunkName: "" */ '@/views/Profesor.vue'),
         meta: {
-            profesor: true
+            requiresAuth: true
         },
-      },
-      {
-        //Enrutamiento de la vista del administrador
-        path: 'estudiantes',
-        name: 'estudiantesProfesor',
-        component: () =>import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/EstudiantesGlobal.vue'),
-        meta: {
-            profesor: true
-        },
-      },
-      // {
-      //   //Enrutamiento de la vista crearObservacionProfesor
-      //   path: 'observaciones/crearObservacion',
-      //   name: 'crearObservacionProfesor',
-      //   component: () => import(/* webpackChunkName: "" */ '@/views/Profesor.vue'/* ruta exacta por definir dado que no esta aun creada*/),
-      //   meta: {
-      //     profesor: true
-      // },
-      // },
-      // {
-      //   //Enrutamiento de la vista listarObservacionesProfesor
-      //   path: 'observaciones/listarObservaciones',
-      //   name: 'listarObservacionesProfesor',
-      //   component: () => import(/* webpackChunkName: "" */ '@/views/Profesor.vue'/* ruta exacta por definir dado que no esta aun creada*/),
-      //   meta: {
-      //     profesor: true
-      // },
-      // },
-      // {
-      //   //Enrutamiento de la vista modificarObservacionProfesor
-      //   path: 'observaciones/modificarObservacion',
-      //   name: 'modificarObservacionProfesor',
-      //   component: () => import(/* webpackChunkName: "" */ '@/views/Profesor.vue'/* ruta exacta por definir dado que no esta aun creada*/),
-      //   meta: {
-      //     profesor: true
-      // },
-      // },
-      // {
-      //   //Enrutamiento de la vista eliminarObservacionProfesor
-      //   path: 'observaciones/eliminarObservacion',
-      //   name: 'eliminarObservacionProfesor',
-      //   component: () => import(/* webpackChunkName: "" */ '@/views/Profesor.vue'/* ruta exacta por definir dado que no esta aun creada*/),
-      //   meta: {
-      //     profesor: true
-      // },
-      // },
-      // {
-      //   //Enrutamiento de la vista cursosProfesor
-      //   path: 'cursos',
-      //   name: 'cursosProfesor',
-      //   component: () => import(/* webpackChunkName: "" */ '@/views/Profesor.vue'/* ruta exacta por definir dado que no esta aun creada*/),
-      //   meta: {
-      //     profesor: true
-      // },
-      // },
-      // {
-      //   //Enrutamiento de la vista contactarProfesor
-      //   path: 'contactar',
-      //   name: 'contactarProfesor',
-      //   component: () => import(/* webpackChunkName: "" */ '@/views/Profesor.vue'/* ruta exacta por definir dado que no esta aun creada*/),
-      //   meta: {
-      //     profesor: true
-      // },
-      // },
-    ],
-  },
-  {
-    //Enrutamiento de la vista de RecuperacionContraseña
-    path: '/recuperacionContrasena',
-    name: 'RecuperacionContrasena',
-    component: () => import(/* webpackChunkName: "RecuperacionContraseña" */ '@/views/RecuperacionContrasena.vue')
-  },
+        children: [{
+                //Enrutamiento de la vista del administrador
+                path: 'perfil',
+                name: 'perfilProfesor',
+                component: () =>
+                    import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/BodyGlobal.vue'),
+                meta: {
+                    profesor: true
+                },
+            },
+            {
+                //Enrutamiento de la vista del administrador
+                path: 'estudiantes',
+                name: 'estudiantesProfesor',
+                component: () =>
+                    import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/EstudiantesGlobal.vue'),
+                meta: {
+                    profesor: true
+                },
+            },
+            // {
+            //   //Enrutamiento de la vista crearObservacionProfesor
+            //   path: 'observaciones/crearObservacion',
+            //   name: 'crearObservacionProfesor',
+            //   component: () => import(/* webpackChunkName: "" */ '@/views/Profesor.vue'/* ruta exacta por definir dado que no esta aun creada*/),
+            //   meta: {
+            //     profesor: true
+            // },
+            // },
+            // {
+            //   //Enrutamiento de la vista listarObservacionesProfesor
+            //   path: 'observaciones/listarObservaciones',
+            //   name: 'listarObservacionesProfesor',
+            //   component: () => import(/* webpackChunkName: "" */ '@/views/Profesor.vue'/* ruta exacta por definir dado que no esta aun creada*/),
+            //   meta: {
+            //     profesor: true
+            // },
+            // },
+            // {
+            //   //Enrutamiento de la vista modificarObservacionProfesor
+            //   path: 'observaciones/modificarObservacion',
+            //   name: 'modificarObservacionProfesor',
+            //   component: () => import(/* webpackChunkName: "" */ '@/views/Profesor.vue'/* ruta exacta por definir dado que no esta aun creada*/),
+            //   meta: {
+            //     profesor: true
+            // },
+            // },
+            // {
+            //   //Enrutamiento de la vista eliminarObservacionProfesor
+            //   path: 'observaciones/eliminarObservacion',
+            //   name: 'eliminarObservacionProfesor',
+            //   component: () => import(/* webpackChunkName: "" */ '@/views/Profesor.vue'/* ruta exacta por definir dado que no esta aun creada*/),
+            //   meta: {
+            //     profesor: true
+            // },
+            // },
+            // {
+            //   //Enrutamiento de la vista cursosProfesor
+            //   path: 'cursos',
+            //   name: 'cursosProfesor',
+            //   component: () => import(/* webpackChunkName: "" */ '@/views/Profesor.vue'/* ruta exacta por definir dado que no esta aun creada*/),
+            //   meta: {
+            //     profesor: true
+            // },
+            // },
+            // {
+            //   //Enrutamiento de la vista contactarProfesor
+            //   path: 'contactar',
+            //   name: 'contactarProfesor',
+            //   component: () => import(/* webpackChunkName: "" */ '@/views/Profesor.vue'/* ruta exacta por definir dado que no esta aun creada*/),
+            //   meta: {
+            //     profesor: true
+            // },
+            // },
+        ],
+    },
+    {
+        //Enrutamiento de la vista de RecuperacionContraseña
+        path: '/recuperacionContrasena',
+        name: 'RecuperacionContrasena',
+        component: () =>
+            import ( /* webpackChunkName: "RecuperacionContraseña" */ '@/views/RecuperacionContrasena.vue')
+    },
 
 ]
 
@@ -352,40 +415,37 @@ const router = new VueRouter({
     routes
 });
 
-router.beforeEach((to,from, next) =>{
-  if (to.meta.requiresAuth) {
-    if (store.state.admin) {
-      next();
-    } 
-    else if (store.state.secretariaEscuela) {
-      next();
-    } 
-    else if (store.state.profesor) {
-      next();
-    }
-    else {
-      next({
-        name:'Inicio'
-      });
-    }
-  } else{
-    if (to.meta.admin) {
-      if (store.state.admin) {
-        next();
-      } 
-    } else if (to.meta.secretariaEscuela) {
-      if (store.state.secretariaEscuela) {
-        next();
-      } 
-    } else if (to.meta.profesor) {
-      if (store.state.profesor) {
-        next();
-      } 
+router.beforeEach((to, from, next) => {
+    if (to.meta.requiresAuth) {
+        if (store.state.admin) {
+            next();
+        } else if (store.state.secretariaEscuela) {
+            next();
+        } else if (store.state.profesor) {
+            next();
+        } else {
+            next({
+                name: 'Inicio'
+            });
+        }
     } else {
-      console.log('holaaa3');
-      next();
-    }
-  };
+        if (to.meta.admin) {
+            if (store.state.admin) {
+                next();
+            }
+        } else if (to.meta.secretariaEscuela) {
+            if (store.state.secretariaEscuela) {
+                next();
+            }
+        } else if (to.meta.profesor) {
+            if (store.state.profesor) {
+                next();
+            }
+        } else {
+            console.log('holaaa3');
+            next();
+        }
+    };
 });
 
 export default router
