@@ -324,7 +324,7 @@ a.es-button {
       <td> 
        <table width="600" cellspacing="0" cellpadding="0" border="0" align="center"> 
          <tr> 
-          <td style="line-height: 1px; min-width: 600px;" height="0"><amp-anim src="https://esputnik.com/repository/applications/images/blank.gif" style="display: block; max-height: 0px; min-height: 0px; min-width: 600px; width: 600px;" alt width="600" height="1" ></amp-anim></td> 
+          <td style="line-height: 1px; min-width: 600px;" height="0"><img src="https://i.postimg.cc/rpQnWHdn/24101592364722519.png" alt="alternatetext"></td> 
          </tr> 
        </table></td> 
      </tr> 
