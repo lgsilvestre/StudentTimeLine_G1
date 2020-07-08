@@ -111,9 +111,9 @@ class UsuarioController extends Controller
         $validator = Validator::make($entradas, [
             'nombre' => ['required','string'],
             'escuela' => ['required', 'numeric'], //Cambiar lo de la foreign key dps
-            'escuelaAux' => ['required', 'numeric', 'nullable'], //Cambiar lo de la foreign key dps
+            'escuelaAux' => ['numeric', 'nullable'], //Cambiar lo de la foreign key dps
             'rol' => ['required','string'], 
-            'foto' => ['image','file'],
+            'foto' => ['image','file', 'nullable'],
             'email'=> ['required','email'],
             'password' => ['required' , 'string']
         ]);
