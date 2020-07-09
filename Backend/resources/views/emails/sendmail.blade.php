@@ -339,7 +339,7 @@ a.es-button {
                   <td width="580" valign="top" align="center"> 
                    <table width="100%" cellspacing="0" cellpadding="0" role="presentation"> 
                      <tr> 
-                      <td class="es-p5t es-p10r es-p10l" align="center" style="font-size: 0px;"><amp-img src="https://i.postimg.cc/rpQnWHdn/24101592364722519.png" alt style="display: block;" width="560" height="132"></amp-img></td> 
+                      <td class="es-p5t es-p10r es-p10l" align="center" style="font-size: 0px;"><img src="https://i.postimg.cc/rpQnWHdn/24101592364722519.png" alt style="display: block;" width="560" height="132"></img></td> 
                      </tr> 
                    </table></td> 
                  </tr> 
