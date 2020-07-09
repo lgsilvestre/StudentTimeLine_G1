@@ -13,9 +13,9 @@ class CursoTableSeeder extends Seeder
     public function run()
     {
         $calculo1=Curso::create([
-            'nombre' => 'Calculo I',
+            'nombre' => 'Taller',
             'plan' => '2020',
-            'descripcion' => 'Asignatura Calculo I', 
+            'descripcion' => 'Taller de desarrollo de software ', 
             'escuela' => 8 #Ramos comunes
         ]);
 

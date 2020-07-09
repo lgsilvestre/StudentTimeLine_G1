@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Profesor_Con_Curso;
+use App\Semestre;
 use Illuminate\Http\Request;
 
-class ProfesorConCursoController extends Controller
+class SemestreController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +14,8 @@ class ProfesorConCursoController extends Controller
      */
     public function index()
     {
-        #Podríamos retornar los nombres en lugar del id del profesor y del curso.
-        $CursosyProfesores = Profesor_Con_Curso::all();
-        return compact('CursosyProfesores');
+        $semestre = Semestre::all();
+        return compact('semestre');
     }
 
     /**
@@ -42,21 +41,20 @@ class ProfesorConCursoController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $profesorCurso= new Profesor_Con_curso();
-        $profesorCurso-> profesor=$request->profesor;
-        $profesorCurso-> curso=$request->curso;
-        $profesorCurso->save();
-        return compact('profesorCurso');
+        $semestre = new Semestre();
+        $semestre-> anio=$request->anio;
+        $semestre-> semestre=$request->semestre;
+        $semestre->save();
+        return compact('semestre');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Profesor_Con_Curso  $profesor_Con_Curso
+     * @param  \App\Semestre  $semestre
      * @return \Illuminate\Http\Response
      */
-    public function show(Profesor_Con_Curso $profesor_Con_Curso)
+    public function show(Semestre $semestre)
     {
         return response()->json([
             'success' => false,
@@ -69,10 +67,10 @@ class ProfesorConCursoController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Profesor_Con_Curso  $profesor_Con_Curso
+     * @param  \App\Semestre  $semestre
      * @return \Illuminate\Http\Response
      */
-    public function edit(Profesor_Con_Curso $profesor_Con_Curso)
+    public function edit(Semestre $semestre)
     {
         return response()->json([
             'success' => false,
@@ -86,48 +84,47 @@ class ProfesorConCursoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Profesor_Con_Curso  $profesor_Con_Curso
+     * @param  \App\Semestre  $semestre
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $CursoProfesor = Profesor_Con_Curso::find($id);
-        $CursoProfesor->profesor = $request->profesor ;
-        $CursoProfesor->curso = $request->curso;
-        $CursoProfesor->save();
-        return compact('CursoProfesor');
+        $semestre = Semestre::find($id);
+        $semestre->anio = $request->anio;
+        $semestre->semestre = $request->semestre;
+        $semestre->save();
+        return compact('semestre');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Profesor_Con_Curso  $profesor_Con_Curso
+     * @param  \App\Semestre  $semestre
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
-        $profesorCurso = Profesor_Con_Curso::find($id);
-        $profesorCurso->delete();
-        return $profesorCurso;
+        $semestre = Semestre::find($id);
+        $semestre->delete();
+        return compact('semestre');
     }
+
     public function disabled(){
 
-        $profesoresCursos= Profesor_Con_Curso::onlyTrashed()->get();
-        return compact('profesoresCursos');
+        $semestres = Semestre::onlyTrashed()->get();
+        return compact('semestres');
     }
 
     public function restore($id){
-        
-        $profesorCurso= Profesor_Con_Curso::onlyTrashed()->find($id)->restore();
-        
+        $semestre = Semestre::onlyTrashed()->find($id)->restore();
         return response()->json([
             'success' => true,
-            'message' => "profesor-Curso recupero con exito",
-            'data' => ['profesorCurso'=>$profesorCurso]
+            'message' => 'el semestre se recupero con exito',
+            'data' => ['semstre'=>$semestre]
         ], 200);
     }
 
-
-
 }
+
+    
+
