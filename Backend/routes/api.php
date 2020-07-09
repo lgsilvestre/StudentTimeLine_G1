@@ -59,5 +59,6 @@ Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
     Route::get('/auth/logout', 'TokensController@logoutToken');
     Route::post('/auth/restartPassword', 'TokensController@restartPassword');
     Route::post('/auth/sendRestartPassword', 'TokensController@sendRestartPassword');
+    Route::get('/auth/respondWithToken', 'TokensController@respondWithToken');
 });
 

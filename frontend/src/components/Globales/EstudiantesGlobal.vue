@@ -753,7 +753,7 @@
                 "situacion_academica": this.estudianteImportar.situacion_academica,
                 "porcentaje_avance":0,
                 "creditos_aprobados":0,
-                "escuela": this.estudianteImportar.escuela,
+                "escuela": this.estudianteImportar.escuela
             };
             axios.post(url,post,this.$store.state.config)
             .then((result)=>{

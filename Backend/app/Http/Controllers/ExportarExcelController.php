@@ -8,7 +8,7 @@ use Excel;
 use App\Estudiante;
 use DB;
 
-
+use Validator;
 class ExportarExcelController extends Controller
 {
 

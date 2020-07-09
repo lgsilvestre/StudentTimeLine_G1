@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Curso;
 use Illuminate\Http\Request;
-
+use Validator;
 
 class CursoController extends Controller
 {
@@ -29,7 +29,27 @@ class CursoController extends Controller
     public function index()
     {
         $cursos = Curso::all();
-        return $cursos;
+        return response()->json([
+            'success' => true,
+            'code' => 100,
+            'message' => "La operacion se a realizado con exito",
+            'data' => ['cursos'=>$cursos]
+        ], 200);
+    }
+
+    /**
+     * Metodo que no sirve deberia redireccionar cuando funciona dentro de laravel
+     * Este metodo esta inactivo asi que se manda un error correspondiente
+     * Errores code inician 200
+     * @return \Illuminate\Http\Response
+     */
+    public function create(){
+        return response()->json([
+            'success' => false,
+            'code' => 201,
+            'message' => 'el cliente debe usar un protocolo distinto',
+            'data' => ['error'=>'El el protocolo se llama store']
+        ], 426 );
     }
 
     /**
@@ -47,8 +67,12 @@ class CursoController extends Controller
         $curso->descripcion = $request->descripcion;
         $curso->escuela = $request->escuela;
         $curso->save();
-
-        return compact('curso');
+        return response()->json([
+            'success' => true,
+            'code' => 100,
+            'message' => "La operacion se a realizado con exito",
+            'data' => ['curso'=>$curso]
+        ], 200);
     }
 
     /**
@@ -59,8 +83,28 @@ class CursoController extends Controller
      */
     public function show($id)
     {
-        $curso = Curso::find($id);
-        return compact('curso');
+        return response()->json([
+            'success' => false,
+            'code' => 401,
+            'message' => 'Este recurso está bloqueado',
+            'data' => ['error'=>'El el protocolo se llama index']
+        ], 426);
+    }
+
+    /**
+     * Metodo que no sirve deberia redireccionar cuando funciona dentro de laravel
+     * Este metodo esta inactivo asi que se manda un error correspondiente
+     * Errores code inician 500
+     * @param  \App\Curso  $curso
+     * @return \Illuminate\Http\Curso
+     */
+    public function edit($id){
+        return response()->json([
+            'success' => false,
+            'code' => 501,
+            'message' => 'el cliente debe usar un protocolo distinto',
+            'data' => ['error'=>'El el protocolo se llama store']
+        ], 426);
     }
 
     /**
@@ -72,41 +116,146 @@ class CursoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $curso = Curso::find($id);
-        $curso->nombre = $request->nombre;
-        $curso->plan = $request->plan;
-        $curso->descripcion = $request->descripcion;
-        $curso->escuela = $request->escuela;
-        $curso->save();
-        return compact('curso');
+        $entradas = $request->only('cod_escuela', 'nombre');
+        $validator = Validator::make($entradas, [
+            'cod_escuela' => ['numeric', 'nullable'],
+            'nombre' => ['string', 'nullable'],
+            'cod_escuela' => ['numeric', 'nullable'],
+            'nombre' => ['string', 'nullable']
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'code' => 601,
+                'message' => 'Error en datos ingresados',
+                'data' => ['error'=>$validator->errors()]
+            ], 422);
+        }
+        try{
+            $curso = Curso::find($id);
+            if ($curso == null) {
+                return response()->json([
+                    'success' => false,
+                    'code' => 602,
+                    'message' => 'La curso con el id '.$id.' no existe',
+                    'data' => null
+                ], 409);
+            }
+            if($entradas['nombre']!=null){
+                $curso->nombre = $entradas['nombre'];
+            }
+            if($entradas['plan']!=null){
+                $curso->plan = $entradas['plan'];
+            }
+            if($entradas['descripcion']!=null){
+                $curso->descripcion = $entradas['descripcion'];
+            }
+            if($entradas['escuela']!=null){
+                $curso->escuela = $entradas['escuela'];
+            }
+            $curso-> save();
+            return response()->json([
+                'success' => true,
+                'code' => 600,
+                'message' => "Operacion realizada con exito",
+                'data' => ['curso'=>$curso]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 603,
+                'message' => "Error en la base de datos",
+                'data' => ['error'=>$ex]
+            ], 409 );
+        }
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
+     * Metodo que se encarga de eliminar un curso
+     * Errores code inician 700
      * @param  \App\Curso  $curso
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        $curso = Curso::find($id);
-        $curso->delete();
-
-        return response()->json(['El curso '.$curso->nombre.' ha sido eliminado con éxito.']);
+    public function destroy($id){
+        try{
+            $curso = Curso::find($id);
+            if ($curso == null) {
+                return response()->json([
+                    'success' => false,
+                    'code' => 701,
+                    'message' => 'El curso con el id '.$id.' no existe',
+                    'data' => null
+                ], 409 );
+            }else{
+                $curso->delete();
+                return response()->json([
+                    'success' => true,
+                    'code' => 700,
+                    'message' => "Operacion realizada con exito",
+                    'data' =>['curso'=> $curso]
+                ], 200);
+            }
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 702,
+                'message' => "Error en la base de datos",
+                'data' => ['error'=>$ex]
+            ], 409 );
+        }
     }
+
+    /**
+     * Metodo que se encarga de listar las escuelas eliminadas
+     * Errores code inician 800
+     */
     public function disabled(){
-
-        $cursos = Curso::onlyTrashed()->get();
-        return $cursos;
+        try{
+            $cursos = Curso::onlyTrashed()->get();
+            return response()->json([
+                'success' => true,
+                'code' => 800,
+                'message' => "Operacion realizada con exito",
+                'data' =>['cursos'=> $cursos]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 801,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
     }
 
+    /**
+     * Metodo que se encarga de recuperar un curso
+     * Errores code inician 900
+     */
     public function restore($id){
-        
-        $curso=Curso::onlyTrashed()->find($id)->restore();
-        return response()->json([
-            'success' => true,
-            'message' => "el curso se recupero con exito",
-            'data' => ['curso'=>$curso]
-        ], 200);
+        try{
+            $curso=Curso::onlyTrashed()->find($id)->restore();
+            if($curso==false){
+                return response()->json([
+                    'success' => false,
+                    'code' => 901,
+                    'message' => "La escuela no se logro recuperar",
+                    'data' => ['curso'=>$curso]
+                ], 409);
+            }
+            return response()->json([
+                'success' => true,
+                'code' => 900,
+                'message' => "La escuela recupero con exito",
+                'data' => ['curso'=>$curso]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 902,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
     }
 }

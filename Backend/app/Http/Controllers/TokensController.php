@@ -15,7 +15,6 @@ use Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Mail\EmergencyCallReceived;
 use \App\Mail\SendMail;
-//use App\Mail\SendMail;
 
 class TokensController extends Controller
 {
@@ -44,7 +43,7 @@ class TokensController extends Controller
                     'code' => 1,
                     'message' => 'Operacion realizada con exito',
                     'data' => ['token'=>$token,
-                               'usuario' =>User::where('email', $credenciales['email'])->get()->first()],
+                            'usuario' =>User::where('email', $credenciales['email'])->get()->first()],
                 ], 200);
             } else {
                 return response()->json([
@@ -103,7 +102,6 @@ class TokensController extends Controller
                 'data' => ['error'=>$ex]
             ], 409);
         }
-
     }
 
     /**
@@ -257,5 +255,4 @@ class TokensController extends Controller
             ], 502);
         }
     }
-    
 }
