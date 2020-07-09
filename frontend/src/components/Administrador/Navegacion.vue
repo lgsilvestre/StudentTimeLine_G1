@@ -4,7 +4,8 @@
     >
     <v-list-item class="px-2 py-1 difuminado" active-class="activacion" to="/administrador/perfil">
         <v-list-item-avatar >
-            <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
+            <v-img :src="usuario.usuario.foto"
+            ></v-img>
         </v-list-item-avatar>
         <v-list-item-title class="white--text letra" ><strong>Administrador</strong></v-list-item-title>
     </v-list-item>
@@ -142,7 +143,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['drawers']),
+        ...mapState(['drawers', 'usuario']),
 
     },
     icons:{
