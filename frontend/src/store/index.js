@@ -4,7 +4,6 @@ import axios from 'axios'
 import router from '@/router'
 Vue.use(Vuex)
 
-
 export default new Vuex.Store({
     state: {
         status: '',
@@ -15,91 +14,126 @@ export default new Vuex.Store({
         drawers: {
             drawer: true,
             miniVarianteAdm: false,
-
         },
+        drawerProfesor: false,
         admin: false,
         profesor: false,
         secretariaEscuela: false,
-
         numProfesores: 70,
         numObservaciones: 69,
         numCarreras: 7,
         numEstudiantes: 1234,
-
         config: {
-            headers
-            : {
+            headers: {
                 Authorization: ''
             }
         },
-
         cargaLogin: false,
-
+        verificacionLogin: false,
+        mensajeErrorLogin:'',
     },
-  
     mutations: {
         login(state, lista,methods) { //funcion de login
         state.cargaLogin= true;
+        state.verificacionLogin= false;
         let post = {
             "email": lista.email,
             "password": lista.pass,
         };
         var url = 'http://127.0.0.1:8000/api/v1/auth/login';
-        axios.post(url, post).then((result) => {
-            state.usuario = result.data;
-            state.tk = 'Bearer '+ state.usuario.token;
-            state.config.headers.Authorization = state.tk;
-            if (state.usuario.user.rol == "admin") {
-                //redireccionamiento hacia el usuario administrador
-                
-                state.admin=true;
-                state.cargaLogin=false;
-                router.push({ path: '/administrador' });
-            } else {
-                if (state.usuario.user.rol == "secretaria de escuela") {
-                    //redireccionamiento hacia el usuario secretaria de escuela
-                    state.secretariaEscuela=true;
+        axios.post(url, post)
+            .then((result) => {
+                console.log(result.data.data);
+                state.usuario = result.data.data;
+                state.tk = 'Bearer '+ state.usuario.token;
+                state.config.headers.Authorization = state.tk;
+                if (state.usuario.usuario.rol == "admin") {
+                    //redireccionamiento hacia el usuario administrador
+                    state.admin=true;
                     state.cargaLogin=false;
-                    router.push({ path: '/secretariaEscuela' });
+                    router.push({ path: '/administrador' });
                 } else {
-                    if (state.usuario.user.rol == "profesor") {
-                        //redireccionamiento hacia el usuario profesor
-                        state.profesor=true;
+                    if (state.usuario.usuario.rol == "secretaria de escuela") {
+                        //redireccionamiento hacia el usuario secretaria de escuela
+                        state.secretariaEscuela=true;
                         state.cargaLogin=false;
-                        router.push({ path: '/profesor' });
+                        router.push({ path: '/secretariaEscuela' });
                     } else {
-                        //alerta a usuarios que no estan registrados, esto se solucionara la proxima semana
-
+                        if (state.usuario.usuario.rol == "profesor") {
+                            //redireccionamiento hacia el usuario profesor
+                            state.profesor=true;
+                            state.cargaLogin=false;
+                            router.push({ path: '/profesor' });
+                        } 
                     }
                 }
-            }
-        });
-        },
-        unLogin(state){
-            //esta funcionalidad se agregara mas adelante cuando el backend tenga lista esta funcionalidad
-            var url = 'http://127.0.0.1:8000/api/v1/auth/logout';
-            axios.get(url,state.config)
-            .then((result)=>{
-                console.log(result);
-            if (result.statusText=='OK') {
-                state.status='';
-                state.usuario= null;
-                state.RCstatus=null;
-                state.tk=null;
-                state.drawelAdmin= false;
-                state.admin= false;
-                state.profesor= false;
-                state.secretariaEscuela= false;
-                state.numProfesores= 70;
-                state.numObservaciones= 69;
-                state.numCarreras= 7;
-                state.numEstudiantes= 1234;
-                state.config.headers.Authorization='';
-                router.push({ path: '/' });
-            }
+            })
+            .catch((error) => {
+                if (error.message == 'Network Error') {
+                    console.log(error);
+                    state.verificacionLogin= true;
+                    state.cargaLogin=false;
+                    state.mensajeErrorLogin= 'Error al comunicarse con el servidor, intente más tarde';
+                } else {
+                    if (error.response.data.success == false) {
+                        switch (error.response.data.code) {
+                            case 2:
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
+                                state.verificacionLogin= true;
+                                state.cargaLogin=false;
+                                state.mensajeErrorLogin= error.response.data.message;
+                                break;
+                            case 3:
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
+                                state.verificacionLogin= true;
+                                state.cargaLogin=false;
+                                state.mensajeErrorLogin= error.response.data.message;
+                                break;
+                            case 4:
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
+                                state.verificacionLogin= true;
+                                state.cargaLogin=false;
+                                state.mensajeErrorLogin= error.response.data.message;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
             });
         },
-        
+        unLogin(state){
+            var url = 'http://127.0.0.1:8000/api/v1/auth/logout';
+            axios.get(url,state.config)
+                .then((result)=>{
+                    console.log(result);
+                    if (result.statusText=='OK') {
+                        state.status='';
+                        state.usuario= null;
+                        state.RCstatus=null;
+                        state.tk=null;
+                        state.drawelAdmin= false;
+                        state.admin= false;
+                        state.profesor= false;
+                        state.secretariaEscuela= false;
+                        state.numProfesores= 70;
+                        state.numObservaciones= 69;
+                        state.numCarreras= 7;
+                        state.numEstudiantes= 1234;
+                        state.config.headers.Authorization='';
+                        router.push({ path: '/' });
+                    }
+                })
+                .catch((error) =>{
+                    if (error.message == 'Network Error') {
+                        console.log(error);
+                        console.log('Error al comunicarse con el servidor, intente más tarde');
+                    }
+                });
+        },
         registrarUsuario(state, nuevoUsuario) {
             var aux;
             if (nuevoUsuario.role == "Administrador") {
@@ -145,13 +179,11 @@ export default new Vuex.Store({
                     console.log(result.statusText);
                 });
         },
-        setDrawelAdmin(state) {
-            state.drawers.miniVarianteAdm = !state.drawers.miniVarianteAdm;
-            // console.log('pucha : ' + state.drawelAdmin);
-        },
     },
     methods:{
-
+        hola(){
+            console.log('hola po olvidona');
+        }
     },
     actions: {
     },

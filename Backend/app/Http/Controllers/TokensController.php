@@ -161,7 +161,7 @@ class TokensController extends Controller
             if($user==null){
                 return response()->json([
                     'success' => false,
-                    'code' => 2,
+                    'code' => 3,
                     'message' => 'Correo no existe',
                     'data' => 'El usuario con el correo:'.$credenciales['email'].' no existe'
                 ], 401);
@@ -184,7 +184,7 @@ class TokensController extends Controller
         }catch(\Exception $e){
             return response()->json([
                 'success' => false,
-                'code' => 2,
+                'code' => 4,
                 'message' => 'Error',
                 'data' => $e
             ], 502);
