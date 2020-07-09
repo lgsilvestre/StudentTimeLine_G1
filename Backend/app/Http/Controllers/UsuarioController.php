@@ -225,7 +225,7 @@ class UsuarioController extends Controller
             'escuela' => ['numeric', 'nullable'],
             'escuelaAux' => ['numeric', 'nullable'],
             'role' => ['string', 'nullable'],
-            'foto' => ['file'],
+            //'foto' => ['file'],
             'email' => ['email', 'nullable'],
             'password' => ['string', 'nullable']
         ]);
