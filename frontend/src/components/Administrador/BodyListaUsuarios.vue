@@ -14,18 +14,20 @@
                             <strong> Lista Usuarios </strong>
                             
                             <v-spacer></v-spacer>
+
                             <v-btn class="mr-2" fab large bottom left @click="obtenerListaUsuariosEliminados" >
                                 <v-icon class="mx-2" color="warning">fas fa-trash-alt</v-icon>
                              </v-btn>
                              <v-dialog v-model="dialogListaUsuariosEliminado" fullscreen hide-overlay transition="dialog-bottom-transition">
                             
-                                <v-card class="mx-auto my-10" max-width="70%">
+                                <v-card class="mx-auto my-10 " max-width="70%">
                                     <v-toolbar dark color="primary">
                                     <v-spacer></v-spacer>
-                                    <v-btn icon dark @click="dialogListaUsuariosEliminado = false">
+                                    <v-btn  depressed color="primary" @click="dialogListaUsuariosEliminado = false">
                                         <v-icon>mdi-close</v-icon>
-                                    </v-btn>
+                                        
                                     <v-toolbar-title>Cerrar</v-toolbar-title>
+                                    </v-btn>
                                     
                                     </v-toolbar>
                                     <v-container>
@@ -56,9 +58,32 @@
                                             </v-col>
                                             <v-col cols="12" md="1"></v-col>
                                         </v-row>
+                                        
                                     </v-container>
                                 
                                     
+                                </v-card>
+                            </v-dialog>
+                                
+                            <v-dialog  v-model="dialogRestaurarUsuarioEliminado" ref="form" persistent max-width="450px">
+                                <v-card class="mx-auto" max-width="450"  >
+                                    <v-card-title class="headline primary text--center" primary-title >
+                                        <h5 class="white--text ">Restaurar Usuario</h5>
+                                            </v-card-title> 
+                                            <!-- <v-container fluid class=" text-left"> -->
+                                            <v-card-title class="text-justify" style="font-size: 100%;">Esta seguro que desea restaurar el siguiente Usuario?</v-card-title>
+                                            <v-card-text>Nombre : {{ this.datosUsuario.nombre }}</v-card-text>
+                                            <v-card-text>Rol : {{ this.datosUsuario.role }}</v-card-text>
+                                            <v-card-text>Email : {{ this.datosUsuario.correo }}</v-card-text>
+                                            <!-- </v-container > -->
+                                            <div style="text-align:right;">
+                                                <v-btn rounded color="warning" class=" mb-4 "  @click="dialogRestaurarUsuarioEliminado = false">
+                                                    <h4 class="white--text">Cancelar</h4>
+                                                </v-btn>
+                                                <v-btn rounded color="secondary"   class=" mb-4 ml-2 mr-5" @click="restaurarUsuario()">
+                                                    <h4 class="white--text">Restaurar</h4>
+                                                </v-btn>
+                                            </div> 
                                 </v-card>
                             </v-dialog>
 
@@ -337,6 +362,7 @@ export default {
             timeout: 6000,
             /*  ----------- */
             dialogListaUsuariosEliminado:false,
+            dialogRestaurarUsuarioEliminado:false,
 
             dialog: false,
             mostrar: false, 
@@ -419,8 +445,29 @@ export default {
 
         },
         restaurarUsuarioEliminado(item){
+            this.datosUsuario.id= item.id;
+            this.datosUsuario.nombre= item.nombre;
+            this.datosUsuario.escuela= item.escuela;
+            this.datosUsuario.imagen= item.imagen;
+            this.datosUsuario.correo= item.correo;
+            this.datosUsuario.contrasena= item.contrasena;
+            if (item.role == "admin") {
+                this.datosUsuario.role= this.roles[0];
+            };
+            if (item.role  == "secretaria de escuela") {
+                this.datosUsuario.role= this.roles[1];
+            };
+            if (item.role  == "profesor") {
+                this.datosUsuario.role= this.roles[1];
+            };
+            this.dialogRestaurarUsuarioEliminado = true;
+
+
+        },
+        restaurarUsuario(){
+            this.dialogRestaurarUsuarioEliminado= false;
             console.log("ITEM")
-             var url =`http://127.0.0.1:8000/api/v1/usuario/restore/${item.id}`;
+             var url =`http://127.0.0.1:8000/api/v1/usuario/restore/${this.datosUsuario.id}`;
              console.log(url)
             //  console.log("CONFIGURACION")
             // console.log(this.$store.state.config)
@@ -471,8 +518,8 @@ export default {
                 //     }
                 // }
             });
-
         },
+
 
         /* Metodo que reinicia los campos del formulario de registrar usuario, asi como las validaciones */
         resetRegistrarUsuario(){
