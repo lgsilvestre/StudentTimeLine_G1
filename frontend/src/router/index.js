@@ -13,6 +13,11 @@ Vue.use(VueRouter)
     component: Inicio
   },
   {
+    path: '/ReinicioContraseña/:codigo',
+    name: 'ReinicioContraseña',
+    component: () => import(/* webpackChunkName: "ReinicioContraseña" */ '@/views/ReinicioContraseña.vue'),
+  },
+  {
     //Enrutamiento de la vista del administrador
     path: '/administrador',
     name: 'Administrador',

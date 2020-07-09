@@ -98,7 +98,6 @@ export default {
     name: 'InicioSesion',
     data () {
         return {
-            sheet: false,
             mostrar: false,
             cargar: null,
             verificandoLogin: false,
