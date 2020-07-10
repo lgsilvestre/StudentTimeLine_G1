@@ -6,175 +6,189 @@
                 <v-card >
                     <v-img class="mx-auto white--text align-end justify-center"
                         width="100%" height="180px"       
-                        src="@/assets/Globales/background-panel-07.jpg" >                    
-                        <v-card-title class="white--text" style="font-size: 200%;text-shadow: #555 2px 2px 3px;">     
-                            <v-icon class="mx-3" color="white">fas fa-users</v-icon>    
-
+                        src="@/assets/Globales/fondo3.jpg" >                    
+                        <v-card-title class="white--text">     
                             <!-- Titulo -->
-                            <strong> Lista Usuarios </strong>
-                            
-                            <v-spacer></v-spacer>
-
-                            <v-btn class="mr-2" fab large bottom left @click="obtenerListaUsuariosEliminados" >
-                                <v-icon class="mx-2" color="warning">fas fa-trash-alt</v-icon>
-                             </v-btn>
-                             <v-dialog v-model="dialogListaUsuariosEliminado" fullscreen hide-overlay transition="dialog-bottom-transition">
-                            
-                                <v-card class="mx-auto my-10 " max-width="70%">
-                                    <v-toolbar dark color="primary">
-                                    <v-spacer></v-spacer>
-                                    <v-btn  depressed color="primary" @click="dialogListaUsuariosEliminado = false">
-                                        <v-icon>mdi-close</v-icon>
-                                        
-                                    <v-toolbar-title>Cerrar</v-toolbar-title>
-                                    </v-btn>
+                            <v-row>
+                                <v-col sm="6" md="3" class="align-self-end" style="text-shadow: #000000 3px 3px 4px;">
+                                    <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;' "> Usuarios </strong>
+                                </v-col>
+                                <v-col sm="0" md="6" class="align-self-end d-none d-md-flex" style="text-align:center;">
+                                    <v-text-field
+                                    v-model="buscar"
+                                    append-icon="mdi-magnify"
+                                    label="Buscar"
+                                    hide-details
+                                    outlined
+                                    class="px-5 pb-2"
+                                    clearable
+                                    dense
+                                    solo
+                                    rounded
+                                    color="secondary"
+                                    background-color="white"
+                                    ></v-text-field>
+                                </v-col>
+                                <v-col sm="6" md="3" class="align-self-end" style="text-align:right;">
                                     
-                                    </v-toolbar>
-                                    <v-container>
-                                        <v-row>
-                                            <v-col cols="12" md="1"></v-col>
-                                            <v-col cols="12" md="10">
-                                                <v-img class="mx-auto white--text align-end justify-center"
-                                                    width="100%" height="180px"       
-                                                    src="@/assets/Globales/background-panel-07.jpg" >                    
-                                                    <v-card-title class="white--text" style="font-size: 200%;text-shadow: #555 2px 2px 3px;">     
-                                                        <v-icon class="mx-3" color="white">fas fa-users</v-icon>    
-
-                                                        <!-- Titulo -->
-                                                        <strong> Lista Usuarios Eliminados </strong>
-                                                    </v-card-title>
-                                                </v-img>
-                                                <v-data-table  :headers="columnas" :items="listaUsuariosEliminados"
-                                                    :search="search" :loading="cargando" :items-per-page="10"  >            
-                                                    <template v-slot:item.opciones="{ item }">
-                                                    <!-- boton para modificar usuario seleccionado -->
-                                                        <v-btn color="white" fab small depressed class="mr-2 py-2">
-                                                            <v-icon color="primary" @click="restaurarUsuarioEliminado(item)" >
-                                                                fas fa-trash-restore
-                                                            </v-icon>
+                                    <!-- Formulario Registrar Usuario -->
+                                    <v-dialog v-model="dialog" persistent max-width="500px">
+                                        <template v-slot:activator="{ on }">
+                                            <v-btn  fab large bottom left v-on="on" >
+                                                <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
+                                            </v-btn>
+                                        </template>
+                                        <v-card class="mx-auto" max-width="800" shaped >
+                                            <v-card-title class="headline primary text--center" primary-title >
+                                                <h5 class="white--text ">Registrar Usuario</h5>
+                                            </v-card-title>
+                                            <v-card-text class="px-12 mt-10" >
+                                                <v-form  ref="form" >
+                                                    <v-text-field
+                                                        class="mx-2"
+                                                        v-model="datosUsuario.nombre"
+                                                        label="Nombre de Usuario"
+                                                        :rules="[() => !!datosUsuario.nombre ||'Requerido']"
+                                                        outlined
+                                                        prepend-inner-icon="mdi-account"
+                                                    ></v-text-field>
+                                                    <v-select
+                                                        class="mx-2"
+                                                        v-model="datosUsuario.escuela"
+                                                        label="Escuela"
+                                                        :items="listaEscuela"
+                                                        item-text="nombre"
+                                                        item-value="id"
+                                                        :rules="[() => !!datosUsuario.escuela ||'Requerido']"
+                                                        outlined
+                                                        prepend-inner-icon="mdi-school"
+                                                    >                                
+                                                    </v-select>
+                                                    <v-select
+                                                        class="mx-2"
+                                                        v-model="datosUsuario.role"
+                                                        label="Rol"
+                                                        :items="roles"
+                                                        :rules="[() => !!datosUsuario.role ||'Requerido']"
+                                                        outlined
+                                                        prepend-inner-icon="mdi-account-tie"
+                                                    >                                
+                                                    </v-select>
+                                                    <v-text-field
+                                                        class="mx-2"
+                                                        v-model="datosUsuario.correo"
+                                                        label="Correo Electronico"
+                                                        :rules="reglasEmail"
+                                                        outlined
+                                                        prepend-inner-icon="mdi-email"
+                                                    >
+                                                    </v-text-field>
+                                                    <v-text-field
+                                                        class="mx-2"
+                                                        v-model="datosUsuario.contrasena"
+                                                        :prepend-inner-icon= "mostrar ? 'mdi-eye' : 'mdi-eye-off'"
+                                                        :type="mostrar ? 'text' : 'password'"
+                                                        :rules="reglas"
+                                                        label="Contraseña"
+                                                        outlined
+                                                        hint="Al menos 8 caracteres"
+                                                        @click:prepend-inner="mostrar = !mostrar"                              
+                                                    >
+                                                    </v-text-field>
+                                                    <v-file-input
+                                                        class="mx-2"                                        
+                                                        @change="convertirImagen"
+                                                        chips
+                                                        solo
+                                                        label="Fotografia del Usuario"
+                                                        placeholder="Seleccionar Imagen"
+                                                        outlined                                
+                                                        prepend-inner-icon="mdi-camera"
+                                                        prepend-icon=""
+                                                    ></v-file-input>   
+                                                    <v-container  style="text-align:right;">
+                                                        <v-btn rounded color="warning" @click="resetRegistrarUsuario()">
+                                                            <h4 class="white--text">Cancelar</h4>
                                                         </v-btn>
-                                                    </template>
-                                                </v-data-table>
-                                            </v-col>
-                                            <v-col cols="12" md="1"></v-col>
-                                        </v-row>
-                                        
-                                    </v-container>
-                                
-                                    
-                                </v-card>
-                            </v-dialog>
-                                
-                            <v-dialog  v-model="dialogRestaurarUsuarioEliminado" ref="form" persistent max-width="450px">
-                                <v-card class="mx-auto" max-width="450"  >
-                                    <v-card-title class="headline primary text--center" primary-title >
-                                        <h5 class="white--text ">Restaurar Usuario</h5>
-                                            </v-card-title> 
-                                            <!-- <v-container fluid class=" text-left"> -->
-                                            <v-card-title class="text-justify" style="font-size: 100%;">Esta seguro que desea restaurar el siguiente Usuario?</v-card-title>
-                                            <v-card-text>Nombre : {{ this.datosUsuario.nombre }}</v-card-text>
-                                            <v-card-text>Rol : {{ this.datosUsuario.role }}</v-card-text>
-                                            <v-card-text>Email : {{ this.datosUsuario.correo }}</v-card-text>
-                                            <!-- </v-container > -->
-                                            <div style="text-align:right;">
-                                                <v-btn rounded color="warning" class=" mb-4 "  @click="dialogRestaurarUsuarioEliminado = false">
-                                                    <h4 class="white--text">Cancelar</h4>
-                                                </v-btn>
-                                                <v-btn rounded color="secondary"   class=" mb-4 ml-2 mr-5" @click="restaurarUsuario()">
-                                                    <h4 class="white--text">Restaurar</h4>
-                                                </v-btn>
-                                            </div> 
-                                </v-card>
-                            </v-dialog>
-
-                            <!-- Formulario Registrar Usuario -->
-                            <v-dialog v-model="dialog" persistent max-width="500px">
-                                <template v-slot:activator="{ on }">
-                                    <v-btn  fab large bottom left v-on="on" >
-                                        <v-icon class="mx-2" color="green">fas fa-plus</v-icon>
+                                                        <v-btn rounded color="secondary" class="ml-2 mr'5" @click="registrarUsuario()" >
+                                                            <h4 class="white--text">Registrar</h4>
+                                                        </v-btn>
+                                                    </v-container>  
+                                                </v-form>
+                                            </v-card-text>
+                                        </v-card>
+                                    </v-dialog> 
+                                    <v-btn class="ml-2" fab large bottom left @click="obtenerListaUsuariosEliminados" >
+                                        <v-icon class="mx-2" color="secondary">fas fa-trash-restore-alt</v-icon>
                                     </v-btn>
-                                </template>
-                                <v-card class="mx-auto" max-width="800" shaped >
-                                    <v-card-title class="headline primary text--center" primary-title >
-                                        <h5 class="white--text ">Registrar Usuario</h5>
-                                    </v-card-title>
-                                    <v-card-text class="px-12 mt-10" >
-                                        <v-form  ref="form" >
-                                            <v-text-field
-                                                class="mx-2"
-                                                v-model="datosUsuario.nombre"
-                                                label="Nombre de Usuario"
-                                                :rules="[() => !!datosUsuario.nombre ||'Requerido']"
-                                                outlined
-                                                prepend-inner-icon="mdi-account"
-                                            ></v-text-field>
-                                            <v-select
-                                                class="mx-2"
-                                                v-model="datosUsuario.escuela"
-                                                label="Escuela"
-                                                :items="listaEscuela"
-                                                item-text="nombre"
-                                                item-value="id"
-                                                :rules="[() => !!datosUsuario.escuela ||'Requerido']"
-                                                outlined
-                                                prepend-inner-icon="mdi-school"
-                                            >                                
-                                            </v-select>
-                                            <v-select
-                                                class="mx-2"
-                                                v-model="datosUsuario.role"
-                                                label="Rol"
-                                                :items="roles"
-                                                :rules="[() => !!datosUsuario.role ||'Requerido']"
-                                                outlined
-                                                prepend-inner-icon="mdi-account-tie"
-                                            >                                
-                                            </v-select>
-                                            <v-text-field
-                                                class="mx-2"
-                                                v-model="datosUsuario.correo"
-                                                label="Correo Electronico"
-                                                :rules="reglasEmail"
-                                                outlined
-                                                prepend-inner-icon="mdi-email"
-                                            >
-                                            </v-text-field>
-                                            <v-text-field
-                                                class="mx-2"
-                                                v-model="datosUsuario.contrasena"
-                                                :prepend-inner-icon= "mostrar ? 'mdi-eye' : 'mdi-eye-off'"
-                                                :type="mostrar ? 'text' : 'password'"
-                                                :rules="reglas"
-                                                label="Contraseña"
-                                                outlined
-                                                hint="Al menos 8 caracteres"
-                                                @click:prepend-inner="mostrar = !mostrar"                              
-                                            >
-                                            </v-text-field>
-                                            <v-file-input
-                                                class="mx-2"                                        
-                                                @change="convertirImagen"
-                                                chips
-                                                solo
-                                                label="Fotografia del Usuario"
-                                                placeholder="Seleccionar Imagen"
-                                                outlined                                
-                                                prepend-inner-icon="mdi-camera"
-                                                prepend-icon=""
-                                            ></v-file-input>   
-                                            <v-container  style="text-align:right;">
-                                                <v-btn rounded color="warning" @click="resetRegistrarUsuario()">
-                                                    <h4 class="white--text">Cancelar</h4>
-                                                </v-btn>
-                                                <v-btn rounded color="secondary" class="ml-2 mr'5" @click="registrarUsuario()" >
-                                                    <h4 class="white--text">Registrar</h4>
-                                                </v-btn>
-                                            </v-container>  
-                                        </v-form>
-                                    </v-card-text>
-                                </v-card>
-                            </v-dialog> 
+                                    <v-dialog v-model="dialogListaUsuariosEliminado" fullscreen hide-overlay transition="dialog-bottom-transition">
+                                        <v-card class="mx-auto my-10 " max-width="70%">
+                                            <v-toolbar dark color="primary">
+                                            <v-spacer></v-spacer>
+                                            <v-btn  depressed color="primary" @click="dialogListaUsuariosEliminado = false">
+                                                <v-icon>mdi-close</v-icon>
+                                                
+                                            <v-toolbar-title>Cerrar</v-toolbar-title>
+                                            </v-btn>
+                                            
+                                            </v-toolbar>
+                                            <v-container>
+                                                <v-row>
+                                                    <v-col cols="12" md="1"></v-col>
+                                                    <v-col cols="12" md="10">
+                                                        <v-img class="mx-auto white--text align-end justify-center"
+                                                            width="100%" height="180px"       
+                                                            src="@/assets/Globales/background-panel-07.jpg" >                    
+                                                            <v-card-title class="white--text" style="font-size: 200%;text-shadow: #555 2px 2px 3px;">     
+                                                                <v-icon class="mx-3" color="white">fas fa-users</v-icon>    
 
+                                                                <!-- Titulo -->
+                                                                <strong> Lista Usuarios Eliminados </strong>
+                                                            </v-card-title>
+                                                        </v-img>
+                                                        <v-data-table  :headers="columnas" :items="listaUsuariosEliminados"
+                                                            :search="search" :loading="cargando" :items-per-page="10"  >            
+                                                            <template v-slot:item.opciones="{ item }">
+                                                            <!-- boton para modificar usuario seleccionado -->
+                                                                <v-btn color="white" fab small depressed class="mr-2 py-2">
+                                                                    <v-icon color="primary" @click="restaurarUsuarioEliminado(item)" >
+                                                                        fas fa-trash-restore
+                                                                    </v-icon>
+                                                                </v-btn>
+                                                            </template>
+                                                        </v-data-table>
+                                                    </v-col>
+                                                    <v-col cols="12" md="1"></v-col>
+                                                </v-row>
+                                                
+                                            </v-container>
+                                        
+                                            
+                                        </v-card>
+                                    </v-dialog>
+                                    <v-dialog  v-model="dialogRestaurarUsuarioEliminado" ref="form" persistent max-width="450px">
+                                        <v-card class="mx-auto" max-width="450"  >
+                                            <v-card-title class="headline primary text--center" primary-title >
+                                                <h5 class="white--text ">Restaurar Usuario</h5>
+                                                    </v-card-title> 
+                                                    <!-- <v-container fluid class=" text-left"> -->
+                                                    <v-card-title class="text-justify" style="font-size: 100%;">Esta seguro que desea restaurar el siguiente Usuario?</v-card-title>
+                                                    <v-card-text>Nombre : {{ this.datosUsuario.nombre }}</v-card-text>
+                                                    <v-card-text>Rol : {{ this.datosUsuario.role }}</v-card-text>
+                                                    <v-card-text>Email : {{ this.datosUsuario.correo }}</v-card-text>
+                                                    <!-- </v-container > -->
+                                                    <div style="text-align:right;">
+                                                        <v-btn rounded color="warning" class=" mb-4 "  @click="dialogRestaurarUsuarioEliminado = false">
+                                                            <h4 class="white--text">Cancelar</h4>
+                                                        </v-btn>
+                                                        <v-btn rounded color="secondary"   class=" mb-4 ml-2 mr-5" @click="restaurarUsuario()">
+                                                            <h4 class="white--text">Restaurar</h4>
+                                                        </v-btn>
+                                                    </div> 
+                                        </v-card>
+                                    </v-dialog>
+                                </v-col>
+                            </v-row>
                             <!-- Formulario Modificar Usuario -->
                             <v-dialog v-model="modUsuarioActivo" persistent max-width="500px">
                                 <v-card elevation="1" shaped>
@@ -272,10 +286,23 @@
                             </v-dialog>                
                         </v-card-title>                                                                                   
                     </v-img>
-
+                    <v-text-field
+                    v-model="buscar"
+                    append-icon="mdi-magnify"
+                    label="Buscar"
+                    hide-details
+                    outlined
+                    class="px-5 py-2 d-sm-flex d-md-none"
+                    clearable
+                    dense
+                    solo
+                    rounded
+                    color="secondary"
+                    background-color="white"
+                    ></v-text-field>
                     <!-- propiedades tablas -->
                     <v-data-table  :headers="columnas" :items="listaUsuarios"
-                        :search="search" :loading="cargando" :items-per-page="10"  >            
+                        :search="buscar" :loading="cargando" :items-per-page="10"  >            
                         <template v-slot:item.opciones="{ item }">
                         <!-- boton para modificar usuario seleccionado -->
                             <v-btn color="white" fab small depressed class="mr-2 py-2">
@@ -363,7 +390,7 @@ export default {
             /*  ----------- */
             dialogListaUsuariosEliminado:false,
             dialogRestaurarUsuarioEliminado:false,
-
+            buscar: '',
             dialog: false,
             mostrar: false, 
             datosUsuario:[ {nombre:''},{escuela:''},{role:''},{correo:''},{contrasena:''} ,{imagen:null}],  
@@ -632,6 +659,9 @@ export default {
             };
             console.log("escuela: "+this.datosUsuario.escuela)
             console.log("rol: "+ aux)
+            if (this.datosUsuario.imagen == null) {
+                this.datosUsuario.imagen = null;
+            }
             let post = {
                 "foto": this.datosUsuario.imagen,
                 "nombre": this.datosUsuario.nombre,
@@ -745,7 +775,7 @@ export default {
             if ( this.datosUsuario.role == "Profesor") {
                 aux = "profesor"
             };
-
+            
             var url =`http://127.0.0.1:8000/api/v1/usuario/${this.datosUsuario.id}`;
             let put ={
                 "nombre": this.datosUsuario.nombre,
