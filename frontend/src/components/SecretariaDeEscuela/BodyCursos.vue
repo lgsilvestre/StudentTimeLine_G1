@@ -24,8 +24,10 @@
                 <v-row >
                     <v-col
                     v-for="(semestre, index) in listaSemestres" :key="index"
-                    cols="12" sm="6" md="4" lg="3" >
-                    <v-card dark style="background-color:#4ECDC4; border-style:solid; border-color:rgba(0,0,0,0.); ">
+                    cols="12" sm="6" md="4" lg="3">
+                    <!-- @click="obtenerCursosSemestre(semestre)" -->
+                    <v-card dark style="background-color:#4ECDC4; border-style:solid; border-color:rgba(0,0,0,0.); "
+                    @click="calcularRol(semestre.id)" >
                         <!-- <v-img
                             class="mx-auto white--text align-end justify-center"
                             width="100%"
@@ -43,7 +45,7 @@
                                 </div>
                             
                             </div>
-                        <!-- </v-img> -->
+                        <!-- </v-img> -->                       
                     </v-card>
                     </v-col>
                 </v-row>
@@ -52,7 +54,7 @@
 
          </v-col>
      </v-row>
-     <v-dialog v-model="dialogAñadirSemestre" ref="form" persistent max-width="450px">
+<v-dialog v-model="dialogAñadirSemestre" ref="form" persistent max-width="450px">
          <v-card class="mx-auto" max-width="800" shaped >
                                     <v-card-title class="headline primary text--center" primary-title >
                                         <h5 class="white--text ">Registrar Semestre</h5>
@@ -163,11 +165,13 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
 import axios from 'axios'
 export default {
     data() {
         return {
-            /* Variables para el uso de las alertas */
+
+            rolActual: '',
             alertaError: false,
             alertaExito: false,
             textoAlertas: '',
@@ -189,32 +193,25 @@ export default {
                 value => value <= 3|| 'El semestre debe ser menor a 3',
                 value => value >= 1 || 'El semestre debe ser mayor a 1',
                 ]
-          
         
         }
+    },
+    watch: {
+      menu (val) {
+        val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
+      },
     },
     created(){
         this.obtenerListaDeSemestres();        
     },
     methods: {
+        ...mapMutations(['calcularRol']),
+
         /**
          * Obtiene la lista de todos los 
          *   semestres registrados en la base de datos
          */
         obtenerListaDeSemestres(){
-            // this.listaSemestresAux=[
-            //     {id:1, semestre:1,anio:2000},
-            //     {id:2, semestre:2,anio:2000},
-            //     {id:3, semestre:3,anio:2000},
-            //     {id:4, semestre:1,anio:2001},
-            //     {id:5, semestre:2,anio:2001},
-            //     {id:6, semestre:3,anio:2001},
-            //     {id:7, semestre:1,anio:2002},
-            //     {id:8, semestre:2,anio:2002},
-            //     {id:9, semestre:3,anio:2002},
-                
-            // ]
-            // this.listaSemestres= this.listaSemestresAux
              this.listaSemestresAux = [];
             var aux;
             var url = 'http://127.0.0.1:8000/api/v1/semestre';
@@ -301,8 +298,54 @@ export default {
             }
 
 
-        }
-      
+        },
+        obtenerCursosSemestre(item){            
+            // this.listaInsCursosAux = [];
+            // var aux;
+            // var url = `http://127.0.0.1:8000/api/v1/instanciaCurso/${item.id}`;
+            // axios.get(url,this.$store.state.config)
+            // .then((result)=>{
+            //     console.log("obtener cursos") 
+            //     console.log(result.data.data.insCurso)               
+            //     for (let index = 0; index < result.data.data.insCursos.length; index++) {
+            //         const element = result.data.data.insCursos[index];                    
+            //         let insCurso = {
+            //             id: element.id,
+            //             nombre: element.nombre, 
+            //             escuela: element.nombre_escuela,
+            //             plan: element.plan,
+            //         };                
+                    
+            //         this.listaInsCursosAux[index]=insCurso;
+            //     }
+            //     this.listaInsCursos = this.listaInsCursosAux;                
+            // }
+            // ).catch((error)=>{
+            //     console.log(error.response)
+            // });
+            this.listaInsCursosAux = [];
+            var aux;
+            var url = `http://127.0.0.1:8000/api/v1/curso`;
+            axios.get(url,this.$store.state.config)
+            .then((result)=>{
+                for( let index=0; index < result.data.data.cursos.length; index++){
+                    const element = result.data.data.cursos[index];
+                    let curso = {
+                        id: element.id,
+                        nombre: element.nombre,
+                        plan: element.plan,
+                        descripcion: element.descripcion,
+                        escuela: element.escuela,
+                    };
+                     this.listaInsCursosAux[index]=curso;
+                }
+                this.listaInsCursos = this.listaInsCursosAux;     
+                console.log(this.listaInsCursos);
+            }
+            ).catch((error)=>{
+                console.log(error.response)
+            });
+        },
     },
     
 
