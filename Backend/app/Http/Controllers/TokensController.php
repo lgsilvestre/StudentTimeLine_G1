@@ -23,8 +23,8 @@ class TokensController extends Controller
      * Metodo que permite iniciar sesion
      */
     public function login(Request $request){
-        $credentials = $request->only('email', 'password');
-        $validator = Validator::make($credentials, [
+        $credenciales = $request->only('email', 'password');
+        $validator = Validator::make($credenciales, [
             'email' => 'required|email',
             'password' => 'required'
         ]);
@@ -37,14 +37,14 @@ class TokensController extends Controller
             ], 422);
         }
         try{
-            $token = JWTAuth::attempt($credentials);
+            $token = JWTAuth::attempt($credenciales);
             if ($token) {
                 return response()->json([
                     'success' => true,
                     'code' => 1,
                     'message' => 'Operacion realizada con exito',
                     'data' => ['token'=>$token,
-                               'usuario' =>User::where('email', $credentials['email'])->get()->first()],
+                               'usuario' =>User::where('email', $credenciales['email'])->get()->first()],
                 ], 200);
             } else {
                 return response()->json([
@@ -143,10 +143,10 @@ class TokensController extends Controller
     /**
      * Metodo que se encarga en recuperar la contraseña
      */
-    public function restartPassword(Request $request){
-        $credentials = $request->only('email');
-        $validator = Validator::make($credentials, [
-            'email' => 'required|email',
+    public function sendRestartPassword(Request $request){
+        $credenciales = $request->only('email');
+        $validator = Validator::make($credenciales, [
+            'email' => 'required|email'
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -157,21 +157,24 @@ class TokensController extends Controller
             ], 422);
         }
         try{
-            $user = User::where('email', $credentials['email'])->get()->first();
+            $user = User::where('email', $credenciales['email'])->get()->first();
             if($user==null){
                 return response()->json([
                     'success' => false,
                     'code' => 3,
                     'message' => 'Correo no existe',
-                    'data' => 'El usuario con el correo:'.$credentials['email'].' no existe'
+                    'data' => 'El usuario con el correo:'.$credenciales['email'].' no existe'
                 ], 401);
             }
-            $details = [
-                'title' => 'Recuperacion de clave del sistema de gestion de ayudantes',
-                'body' => "Hace poco hemos recibido una solicitud de restablecimiento de la contraseña de su cuenta: ".$user['email']. ' ACA DEBERIA IR EL LINK PARA RECUPERAR LA CLAVE'.'    '. 
-                'Si no ha solicitado la contraseña puede simplemente ignorar este correo electrónico. No se efectuará ningún cambio en su cuenta. Recuerde, su correo y su contraseña le permiten acceder a nuestro sistema.',
-            ];
+            $codigo = bin2hex(random_bytes(20));
+            $details = array(
+                'usuario' => $user['nombre'],
+                'direccion' => 'http://localhost:8080/ReinicioContraseña/'.$codigo
+            );
             \Mail::to($user['email'])->send(new SendMail($details));
+            $user->codigoRecuperacion = $codigo;
+            $user->fechaRecuperacion = date("Y-m-d H:i:s", strtotime('+24 hours'));
+            $user->save();
             return response()->json([
                 'success' => true,
                 'code' => 1,
@@ -188,5 +191,71 @@ class TokensController extends Controller
         }
     }
 
+    /**
+     * Metodo que se encarga en recuperar la contraseña
+     * entradas:
+     * Correo
+     * clave
+     */
+    public function restartPassword(Request $request){
+        $credenciales = $request->only('password', 'codigo');
+        $validator = Validator::make($credenciales, [
+            'password' => 'required|string',
+            'codigo' => 'required|string'
+        ]);
+        if ($validator->fails()){
+            return response()->json([
+                'success' => false,
+                'code' => 2,
+                'message' => 'Error en el tipo de dato',
+                'data' => ['error'=>$validator->errors()]
+            ], 422);
+        }
+        try{
+            $user = User::where('codigoRecuperacion', $credenciales['codigo'])->get()->first();
+            if($user==null){
+                return response()->json([
+                    'success' => false,
+                    'code' => 2,
+                    'message' => 'Correo no existe',
+                    'data' => 'El usuario con el codigo: '.$credenciales['codigo'].' no existe'
+                ], 401);
+            }
+            $current = date("Y-m-d H:i:s");
+            if (strtotime($current) > strtotime($user->fechaRecuperacion)) {
+                return response()->json([
+                    'success' => false,
+                    'code' => 1,
+                    'message' => 'El código de recuperación de contraseña ha expirado. Por favor intenta de nuevo.',
+                    'data' => null
+                ], 400);
+            }
+            if( $credenciales['codigo']!=$user->codigoRecuperacion){
+                return response()->json([
+                    'success' => false,
+                    'code' => 1,
+                    'message' => 'El codigo no es compatible',
+                    'data' => null
+                ], 400);
+            }
+            $user->password= bcrypt($credenciales['password']);
+            $user->codigoRecuperacion=null;
+            $user->fechaRecuperacion=null;
+            $user->save();
+            return response()->json([
+                'success' => true,
+                'code' => 1,
+                'message' => 'Se a restablecido su contraseña con exito',
+                'data' => null
+            ], 200);
+        }catch(\Exception $e){
+            return response()->json([
+                'success' => false,
+                'code' => 2,
+                'message' => 'Error',
+                'data' => $e
+            ], 502);
+        }
+    }
     
 }

@@ -10,7 +10,7 @@
                                 justify="center"
                                 no-gutters
                                 >
-                                <v-col cols="12" sm="12" md="4" >
+                                <v-col cols="12" sm="12" md="4" lg="4" xl="3">
                                     <v-card elevation="1" shaped>
                                         <v-card-title
                                         class="headline primary text--center"
@@ -18,7 +18,7 @@
                                         >
                                         <h5 class="white--text ">Recuperar su contraseña </h5>
                                         </v-card-title>
-                                        <v-container class="px-8">
+                                        <v-container class="px-5">
                                             <v-text-field 
                                             class="pt-5 "
                                                 v-model="email"
@@ -27,8 +27,8 @@
                                                 outlined
                                                 prepend-inner-icon="mdi-email"
                                             ></v-text-field>
-                                        
                                             <v-btn rounded block color="primary " class=""
+                                            :loading="RCstatus" 
                                             @click="recuperarContrasena"
                                             >
                                             Recuperar contraseña
@@ -103,7 +103,7 @@ export default {
     data () {
       return {
         email: '',
-        RCstatus: '',
+        RCstatus: false,
         alertError: false,
         textoError: '',
         alertAcept: false,
@@ -114,16 +114,17 @@ export default {
     methods:{
         recuperarContrasena(){
         //funcion para recuperar contrasena
-        alert = true;
+        this.RCstatus = true;
         let post ={
             "email": this.email,
         };
         console.log(this.email);
-        var url = 'http://127.0.0.1:8000/api/v1/auth/restartPassword';
+        var url = 'http://127.0.0.1:8000/api/v1/auth/sendRestartPassword';
         axios.post(url,post)
         .then((result)=>{
           console.log(result.data);
           if (result.data.success == true) {
+            this.RCstatus = false;
             this.alertAcept= true;
             this.textoAcept= result.data.message;
             this.email = '';
@@ -132,9 +133,11 @@ export default {
         .catch((error)=>{
           if (error.message == 'Network Error') {
               console.log(error);
+              this.RCstatus = false;
               this.alertError= true;
               this.textoError= "Error usted no esta registrado o existe un problema en red, intente mas tarde";
           } else {
+              this.RCstatus = false;
               if (error.response.data.success == false) {
                   switch (error.response.data.code) {
                       case 2:

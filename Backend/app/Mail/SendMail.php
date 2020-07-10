@@ -24,7 +24,7 @@ class SendMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Mail from Real Programmer')
+        return $this->subject('Recuperación de contraseña')
                     ->view('emails.sendmail');
     }
 }
