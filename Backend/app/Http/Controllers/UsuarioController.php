@@ -115,7 +115,7 @@ class UsuarioController extends Controller
             'escuelaAux' => ['numeric', 'nullable'], //Cambiar lo de la foreign key dps
             'rol' => ['required','string'], 
             'email'=> ['required','email'],
-            'password' => ['required' , 'string']
+            'password' => ['required' , 'string', 'nullable']
         ]);
         //respuesta cuando falla
         if ($validator->fails()) {
@@ -126,6 +126,33 @@ class UsuarioController extends Controller
                 'data' => ['error'=>$validator->errors()]
             ], 422);
         }
+        if(!array_key_exists ("nombre" , $entradas)){
+            $entradas['nombre'] = null;
+        }
+        if(!array_key_exists ("escuela" , $entradas)){
+            $entradas['escuela'] = null;
+        }
+        if(!array_key_exists ("escuelaAux" , $entradas)){
+            $entradas['escuelaAux'] = null;
+        }
+        if(!array_key_exists ("rol" , $entradas)){
+            $entradas['rol'] = null;
+        }
+        if(!array_key_exists ("email" , $entradas)){
+            $entradas['email'] = null;
+        }
+        if(!array_key_exists ("password" , $entradas)){
+            $entradas['password'] = null;
+        }
+        if(!array_key_exists ("foto" , $entradas)){
+            $entradas['foto'] = null;
+        }
+        return response()->json([
+            'success' => true,
+            'code' => 301,
+            'message' => 'Error en datos ingresados',
+            'data' => ['entradas'=>$entradas]
+        ], 200);
         try{
             $user = new User();
             $user ->nombre=$entradas['nombre'];
@@ -236,6 +263,27 @@ class UsuarioController extends Controller
                 'data' =>['error'=> $validator->errors()]
             ], 422);
         }
+        if(!array_key_exists ("nombre" , $entradas)){
+            $entradas['nombre'] = null;
+        }
+        if(!array_key_exists ("escuela" , $entradas)){
+            $entradas['escuela'] = null;
+        }
+        if(!array_key_exists ("escuelaAux" , $entradas)){
+            $entradas['escuelaAux'] = null;
+        }
+        if(!array_key_exists ("role" , $entradas)){
+            $entradas['role'] = null;
+        }
+        if(!array_key_exists ("email" , $entradas)){
+            $entradas['email'] = null;
+        }
+        if(!array_key_exists ("password" , $entradas)){
+            $entradas['password'] = null;
+        }
+        if(!array_key_exists ("foto" , $entradas)){
+            $entradas['foto'] = null;
+        }
         try{
             $usuario = User::find($id);
             if($usuario==null){
@@ -275,7 +323,7 @@ class UsuarioController extends Controller
             }
             //Usuario secretaria de escuela o profesor
             if($credenciales->rol == "secretaria de escuela" || $credenciales->rol == "profesor"){
-                if($entradas['escuela']!=null || $entradas['rol']!=null ||  $entradas['escuelaAux']!=null){
+                if($entradas['escuela']!=null || $entradas['role']!=null ||  $entradas['escuelaAux']!=null){
                     $credenciales = JWTAuth::invalidate($credenciales);
                     //mandar correo por intento de haking
                     return response()->json([
