@@ -268,9 +268,9 @@ class UsuarioController extends Controller
                 if($entradas['escuelaAux']!=null){
                     $usuario->escuelaAux = $entradas['escuelaAux'];
                 }
-                if($entradas['rol']!=null){
-                    $usuario->rol = $entradas['rol'];
-                    $usuario->assignRole($entradas['rol']);
+                if($entradas['role']!=null){
+                    $usuario->rol = $entradas['role'];
+                    $usuario->assignRole($entradas['role']);
                 }
             }
             //Usuario secretaria de escuela o profesor
