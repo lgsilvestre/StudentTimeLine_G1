@@ -1,141 +1,157 @@
 <template>
     <v-container  fluid >
         <v-row   class="align-center justify-center" >
-            <!-- Alertas -->
-            <v-snackbar v-model="alertaCorrecto" :timeout="timeout"  bottom
-            color="success"
-            left
-            class="mb-1 pb-12 pr-0 mr-0">
+            <v-col cols="12" md="0"  lg="1" >
+            </v-col>
+            <v-col  cols="12" md="6" lg="5">
+                <v-card elevation="1" > 
+                    <v-img
+                        class="mx-auto white--text align-end justify-center"
+                        width="100%"
+                        src="@/assets/Globales/fondo.jpg"
+                    >
+                    <v-card-title
+                    class="headline  text--center"
+                    primary-title>
+                        <div class="difuminado">
+                            <strong class="white--text letra">Perfil</strong>
+                        </div>
+                        <v-spacer></v-spacer>
+                        <v-avatar :size="$vuetify.breakpoint.smAndDown ? 120 : 180" class="borde mt">
+                            <img
+                                :src="datosUsuario.foto"
+                            > 
+                        </v-avatar>
+                    </v-card-title>
+                    </v-img>
+                    <v-divider></v-divider>
+                    <v-row class="px-5 mt-5">
+                        <v-col cols="4">
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">Nombre</h3>
+                        </v-col>
+                        <v-col cols="1">
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">:</h3>
+                        </v-col >
+                        <v-col :cols="$vuetify.breakpoint.smAndDown ? 6 : 7">
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">{{ datosUsuario.nombre}}</h3>
+                        </v-col>
+                    </v-row>
+                    <v-row class="px-5">
+                        <v-col cols="4">
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">Rol</h3>
+                        </v-col>
+                        <v-col cols="1">
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">:</h3>
+                        </v-col >
+                        <v-col :cols="$vuetify.breakpoint.smAndDown ? 6 : 7">
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">{{ datosUsuario.rol}}</h3>
+                        </v-col>
+                    </v-row>
+                    <v-row class="px-5">
+                        <v-col cols="4">
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">Escuela</h3>
+                        </v-col>
+                        <v-col cols="1">
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">:</h3>
+                        </v-col >
+                        <v-col :cols="$vuetify.breakpoint.smAndDown ? 6 : 7">
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">{{datosUsuario.nombre_escuela}}</h3>
+                        </v-col>
+                    </v-row>
+                    <v-row class="px-5 pb-5">
+                        <v-col cols="4">
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">Correo</h3>
+                        </v-col>
+                        <v-col cols="1">
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">:</h3>
+                        </v-col >
+                        <v-col :cols="$vuetify.breakpoint.smAndDown ? 6 : 7">
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">{{ datosUsuario.email}}</h3>
+                        </v-col>
+                    </v-row>
+                    
+                </v-card>
+            </v-col>
+            <v-col cols="12" md="1" lg="1">
+            </v-col>
+            <v-col cols="12" md="5" lg="4">
+                <v-card elevation="1" shaped>
+                <v-card-title  class="headline primary text--center" primary-title > 
+                    <h5 class="white--text ">Editar Perfil</h5>
+                </v-card-title>
+                <v-form  @submit.prevent="modificarUsuario" class=" px-8 mt-7" >
+                    <v-text-field v-model="datosUsuarioModificar.nombre" label="Nombre de usuario" outlined
+                    color="secondary"
+                    :rules="[() => !!datosUsuario.nombre ]"
+                    prepend-inner-icon="mdi-account"
+                    ></v-text-field>
+                    <v-file-input  accept="image/png, image/jpeg, image/bmp" 
+                    label="Seleccione una imagen"
+                    color="secondary"
+                    outlined
+                    prepend-icon=""   
+                    prepend-inner-icon="mdi-camera"
+                    @change="convertirImagen"
+                    v-model="datosUsuarioModificar.imagen">
+                    </v-file-input>
+                    <v-text-field 
+                    v-model="datosUsuarioModificar.correo"
+                    label="Correo Electronico"
+                    outlined
+                    color="secondary"
+                    prepend-inner-icon="mdi-email"
+                    hint="ejemplo@utalca.cl"
+                    ></v-text-field>
+                    <v-text-field v-model="datosUsuarioModificar.contrasena" label="Contraseña "
+                    :prepend-inner-icon= "mostrar ? 'mdi-eye' : 'mdi-eye-off'"
+                    :type="mostrar ? 'text' : 'password'"
+                    outlined
+                    color="secondary"
+                    hint="Al menos 8 caracteres"
+                    @click:prepend-inner="mostrar = !mostrar"
+                    ></v-text-field>
+                    <div style="text-align:right;">
+                        <v-btn rounded color="primary" class="mb-4 ml-2"    type="submit">
+                            <h4 class="white--text">Modificar</h4>
+                        </v-btn>
+                    </div>
+                </v-form> 
+                </v-card>
+            </v-col>
+            <v-col cols="12" lg="1">
+            </v-col>
+        </v-row>
+        <!-- Alertas -->
+        <!-- alerta de exito de la modificacion -->
+        <v-snackbar v-model="alertAcept" :timeout=delay
+        bottom color="secondary" left class="mb-1 pb-12 pr-0 mr-0" >
             <div>
-                <strong>{{aletaText}}</strong>
+                <v-icon color="white" class="mr-2">
+                    fas fa-check-circle
+                </v-icon>
+                <strong>{{textoAcept}}</strong>
             </div>
-                <v-btn color="white" elevation="0" x-small fab
-                @click="alertaCorrecto = !alertaCorrecto"
-                > 
-                    <v-icon color="secondary">fas fa-times</v-icon>
-                </v-btn>
-            </v-snackbar>
-
-            <v-snackbar v-model="alertaError" :timeout="timeout"  bottom
-            color="warning"
-            left
-            class="mb-1 pb-12 pr-0 mr-0">
+            <v-btn color="white" elevation="0" x-small
+            fab @click="alertAcept = ! alertAcept" > 
+                <v-icon color="secondary">fas fa-times</v-icon>
+            </v-btn>
+        </v-snackbar>
+        <!-- alerta de error en la modificacion -->
+        <v-snackbar v-model="alertError" :timeout=delay bottom
+        color="secondary" left class="mb-1 pb-12 pr-0 mr-0">
             <div>
-                <strong>{{aletaText}}</strong>
+                <v-icon color="white" class="mr-2">
+                    fas fa-exclamation-triangle
+                </v-icon>
+                <strong>{{textoError}}</strong>
             </div>
-                <v-btn color="white" elevation="0" x-small fab
-                @click="alertaError = !alertaError"
-                > 
-                    <v-icon color="secondary">fas fa-times</v-icon>
-                </v-btn>
-            </v-snackbar>
-
-
-            <v-col cols="12" md="1">
-                </v-col>
-                <v-col  cols="12" md="3">
-                   <v-card elevation="1"  min-width="350px" color=""> 
-                        <v-card-title
-                        class="headline primary text--center"
-                        primary-title>
-                            <h5 class="white--text ">Perfil de usuario</h5>
-                        </v-card-title>
-                        <v-container fluid class="px-10 text-center">
-                            <v-avatar size="100">
-                                <img
-                                    src="https://randomuser.me/api/portraits/men/85.jpg"
-                                > 
-                            </v-avatar>
-                        </v-container >
-                        <v-divider></v-divider>
-                        <v-container fluid class="px-5 text-left">
-                            <p class="font-weight-black">Nombre: {{ datosUsuario.nombre }} </p>
-                            <p class="font-weight-black">Rol: {{ datosUsuario.rol}}</p>
-                            <p class="font-weight-black">Escuela:  {{datosUsuario.escuela  }}</p>
-                            <p class="font-weight-black">Correo: {{ datosUsuario.email }}</p>
-
-                        </v-container>
-
-                    </v-card>
-
-                </v-col>
-                <v-col cols="12" md="2"></v-col>
-                <v-col cols="12" md="4">
-                    <v-card elevation="1" shaped>
-                    <v-card-title  class="headline primary text--center" primary-title > 
-                        <h5 class="white--text ">Modificar Usuario</h5>
-                            </v-card-title>
-                                <v-form  @submit.prevent="modificarUsuario" class=" px-8 pt-4 "  >
-                                        <v-text-field v-model="datosUsuarioModificar.nombre" label="Nombre de usuario" outlined
-                                          color="secondary"
-                                          :rules="[() => !!datosUsuario.nombre ]"
-                                          prepend-inner-icon="mdi-account"
-                                          
-                                        ></v-text-field>
-
-                                        <v-select  v-model="datosUsuarioModificar.escuela"
-                                        :items="listaEscuela"
-                                        item-text="nombre"
-                                        item-value="id"
-                                        label="Escuela"
-                                        outlined
-                                        prepend-inner-icon="mdi-school"
-                                        v-show="datosUsuario.rol == 'admin' "
-                                        ></v-select>
-
-                                        <v-select v-model="datosUsuarioModificar.role"
-                                        label="Rol" 
-                                        :items="roles"
-                                        outlined
-                                        prepend-inner-icon="mdi-account-tie"
-                                        v-show="datosUsuario.rol == 'admin' "
-                                        ></v-select>
-                                      <v-file-input  accept="image/png, image/jpeg, image/bmp" 
-                                        label="Seleccione una imagen"
-                                        color="secondary"
-                                        outlined
-                                        prepend-icon=""   
-                                        prepend-inner-icon="mdi-camera"
-                                        v-model="datosUsuarioModificar.imagen">
-                                        </v-file-input>
-
-                                      <v-text-field 
-                                          v-model="datosUsuarioModificar.correo"
-                                          label="Correo Electronico"
-                                          outlined
-                                          color="secondary"
-                                          prepend-inner-icon="mdi-email"
-                                        hint="ejemplo@utalca.cl"
-                                          
-                                      ></v-text-field>
-
-                                      <v-text-field v-model="datosUsuarioModificar.contrasena" label="Contraseña "
-                                        :prepend-inner-icon= "mostrar ? 'mdi-eye' : 'mdi-eye-off'"
-                                        :type="mostrar ? 'text' : 'password'"
-                                        outlined
-                                        color="secondary"
-                                        hint="Al menos 8 caracteres"
-                                        @click:prepend-inner="mostrar = !mostrar"
-                                      ></v-text-field>
-
-                                      <div style="text-align:right;">
-                                          
-                                                <v-btn rounded color="primary" class="mb-4 ml-2"    type="submit">
-                                                    <h4 class="white--text">Modificar</h4>
-                                                </v-btn>
-                                      </div>
-                              </v-form> 
-
-
-                          </v-card>
-
-                </v-col>
-                <v-col cols="12" md="2">
-                </v-col>
-            </v-row>
-      </v-container> 
-    
-   
+            
+            <v-btn color="white" elevation="0" x-small
+            fab @click="alertError = ! alertError" > 
+                <v-icon color="secondary">fas fa-times</v-icon>
+            </v-btn>
+        </v-snackbar>
+    </v-container> 
 </template>
 
 <script>
@@ -145,43 +161,67 @@ import axios from 'axios'
 export default {
     data() {
         return {
-            alertaCorrecto: false,
-            alertaError: false,
-            aletaText: '',
-            timeout: 4000,
-
+            alertError: false,
+            textoError: '',
+            alertAcept: false,
+            textoAcept: '',
+            delay: 4000,
             mostrar: false, 
-            datosUsuarioModificar:[ {nombre:''},{escuela:''},{role:''},{correo:''},{contrasena:''} ,{imagen:''}],
+            datosUsuarioModificar:[ {nombre:null},{correo:null},{contrasena:null} ,{imagen:null}],
             datosUsuario:[], 
             datosUsuarioAux:[],
-            // miUsuario: null, 
-            listaEscuela:[
-                { text: 'ID',align: 'start',value: 'id',sortable: false},
-                { text: 'Nombre', value: 'nombre',sortable: false, },                
-            ],            
-            listaEscuelaAux:[],
             roles: ['Administrador', 'Secretaría de Escuela', 'Profesor'],   
             // ==================================
             // variables para la modificacion de usuario
             listaUsuarios:[],
             listaUsuariosAux:[],
+            
+
+            //escuela
+            listaEscuela:[{id:''},{nombre:''},{cod:''}],
+            miEscuela:null,
+            desserts:[],
+            dessertsAux:[],
+            //prueba de imagen
+            imagenMiniatura:null,
+            correo:'',
+            
+            
         }
     },
     computed:{
-        ...mapState(['usuario']),   
+        ...mapState(['usuario']), 
+        
     },
-     created() {
-         
-        this.obtenerEscuelas();
+    beforeMount() {
         this.obtenerUsuario();
-     },
+    },
     methods:{
+        /**
+         * Convierte la imagen cargada a base 64.
+         */
+        convertirImagen(e){
+            this.imagenMiniatura=null;
+            if(e != null){
+                let image =e;
+                let reader = new FileReader();
+                reader.readAsDataURL(image);
+                reader.onload = e =>{
+                    this.imagenMiniatura=e.target.result;
+                }
+            }  
+        },
+        /**
+         * Obtiene la informacino del usuario logeado.
+         */
         obtenerUsuario(){
-            var url =`http://127.0.0.1:8000/api/v1/usuario/${this.$store.state.usuario.user.id}`;
+            var url =`http://127.0.0.1:8000/api/v1/usuario/${this.$store.state.usuario.usuario.id}/edit`;
             axios.get(url,this.$store.state.config)
             .then((result)=>{
-            if (result.statusText=='OK') {
-                this.datosUsuarioAux=result.data;
+                this.$store.state.usuario.usuario =result.data.data.usuario;
+            if (result.data.success == true) {
+                this.datosUsuarioAux=result.data.data.usuario;
+                console.log();
                 if (this.datosUsuarioAux == "admin") {
                     this.datosUsuarioAux.role= this.roles[0];
                 };
@@ -189,81 +229,122 @@ export default {
                     this.datosUsuarioAux.rol= this.roles[1];
                 };
                 if (this.datosUsuarioAux.rol  == "profesor") {
-                    this.datosUsuarioAux.role= this.roles[1];
+                    this.datosUsuarioAux.role= this.roles[2];
                 };
-                this.listaEscuela.forEach(element => {
-                    if(element.id == this.datosUsuarioAux.escuela){
-                        this.datosUsuarioAux.escuela = element.nombre;
-                    }
-                });
-
-                this.datosUsuario = this.datosUsuarioAux           
+                this.datosUsuario = this.datosUsuarioAux;
+                if(this.datosUsuario.rol != "admin"){
+                    this.modificar = false;
+                };
             }
             }).catch((err)=>{
-                console.log(err)
+                if (error.message == 'Network Error') {
+                    console.log(error);
+                    state.verificacionLogin= true;
+                    state.cargaLogin=false;
+                    state.mensajeErrorLogin= 'Error al comunicarse con el servidor, intente más tarde';
+                } else {
+                    if (error.response.data.success == false) {
+                        switch (error.response.data.code) {
+                            case 501:
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
+                                break;
+                            case 502:
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
             });
         },
-
-        obtenerEscuelas(){
-            this.listaEscuelaAux = [];
-            var url = 'http://127.0.0.1:8000/api/v1/escuela';
-            axios.get(url,this.$store.state.config)
-            .then((result)=>{
-                for (let index = 0; index < result.data.length; index++) {
-                    const element = result.data[index];
-                    let escuela = {
-                        id: element.id,
-                        nombre: element.nombre,
-                    };
-                    this.listaEscuelaAux[index]=escuela;
-                    }
-                    this.listaEscuela = this.listaEscuelaAux;
-                }
-                );
-      },
-
-      modificarUsuario(){
-            var correo =  this.datosUsuarioModificar.correo;
-            var contrasena  =  this.datosUsuarioModificar.contrasena;
+        
+        /**
+         * Modica la informacion del usuario logeado.
+         */
+        modificarUsuario(e){
             // validamos que el correo puede ser null o segun la regla establecida
-            if( /.+@utalca.cl/.test(correo) || correo == null || correo == ''){
-                if( contrasena == null|| contrasena =='' || contrasena.length >= 8){
-                    var aux;
-                    if ( this.datosUsuarioModificar.role == "Administrador") {
-                        aux = "admin"
-                    };
-                    if ( this.datosUsuarioModificar.role == "Secretaría de Escuela") {
-                        aux = "secretaria de escuela"
-                    };
-                    if ( this.datosUsuarioModificar.role == "Profesor") {
-                        aux = "profesor"
-                    };
+            if( /.+@utalca.cl/.test(this.datosUsuarioModificar.correo) || this.datosUsuarioModificar.correo == null || this.datosUsuarioModificar.correo == ''){
+                if(this.datosUsuarioModificar.contrasena == null || this.datosUsuarioModificar.contrasena =='' || this.datosUsuarioModificar.contrasena.length >= 8 ){
+                    //conversion del rol, para guardarla en la base de datos.
+                    if (this.datosUsuarioModificar.correo == null) {
+                        this.datosUsuarioModificar.correo = null;
+                    }
+                    if (this.datosUsuarioModificar.nombre == null) {
+                        this.datosUsuarioModificar.nombre =null;
+                    }
+                    if (this.datosUsuarioModificar.contrasena == null) {
+                        this.datosUsuarioModificar.contrasena =null;
+                    }
                     var url =`http://127.0.0.1:8000/api/v1/usuario/${this.datosUsuario.id}`;
                     let put ={
                         "nombre": this.datosUsuarioModificar.nombre,
-                        "escuela": this.datosUsuarioModificar.escuela,
-                        "role": aux,
-                        "foto": null,
-                        "email":correo,
-                        "password": contrasena,
+                        "foto":this.imagenMiniatura,
+                        "password": this.datosUsuarioModificar.contrasena,
+                        "email" : this.datosUsuarioModificar.correo,
                     }
+                    console.log(put);
                     axios.put(url,put,this.$store.state.config)
                     .then((result)=>{
-                    if (result.statusText=='OK') {
-                         this.obtenerUsuario();
+                    if (result.data.success == true){
+                        this.obtenerUsuario();
                         this.resetModificacionUsuario();
-                        this.alertaCorrecto = true;
-                         this.aletaText='La modificación fue exitosa.';
-                        console.log('se modifico correctamente')
+                        this.alertAcept = true;
+                        var mensaje=result.data.message;
+                        this.textoAcept=mensaje;
+                        console.log('se modifico correctamente');
                     }
                     }).catch((err)=>{
                         console.log(err);
                         this.resetModificacionUsuario();
+                        if (error.message == 'Network Error') {
+                            console.log(error);
+                            this.alertError = true;
+                            var mensaje=result.data.message;
+                            this.textoError=mensaje;
+                        } else {
+                        if (error.response.data.success == false) {
+                            switch (error.response.data.code) {
+                            case 601:
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
+                                this.alertError = true;
+                                var mensaje=result.data.message;
+                                this.textoError=mensaje;
+                                //this.textoError = error.response.data.message;
+                                break;
+                            case 602:
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
+                                this.alertError = true;
+                                var mensaje=result.data.message;
+                                this.textoError=mensaje;
+                                break;
+                            case 603:
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
+                                this.alertError = true;
+                                var mensaje=result.data.message;
+                                this.textoError=mensaje;
+                                break;
+                            case 604:
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
+                                this.alertError = true;
+                                var mensaje=result.data.message;
+                                this.textoError=mensaje;
+                                break;
+                            default:
+                                break;
+                            }
+                        }
+                        }
                     });
                 }else{
                     this.alertaError= true;
-                   this.aletaText='La contraseña es incorrecta.';
-
+                    this.aletaText='La contraseña es incorrecta.';
                 }
                 // this.resetModificacionUsuario();
             }else{
@@ -271,20 +352,35 @@ export default {
                 this.alertaError = true;
                 this.aletaText='el correo es invalido.';
             }
+            
 
     },
         resetModificacionUsuario(){
-            this.datosUsuarioModificar.nombre='';
-            this.datosUsuarioModificar.escuela='';
-            this.datosUsuarioModificar.role='';
-            this.datosUsuarioModificar.correo='';
-            this.datosUsuarioModificar.contrasena='';
+            this.datosUsuarioModificar.nombre=null;
+            this.datosUsuarioModificar.correo=null;
+            this.datosUsuarioModificar.contrasena=null;
             this.datosUsuarioModificar.imagen=null;
-            this.alertaCorrecto =false;
-            this.alertaError =false;
-            this.aletaText =''
+            this.imagenMiniatura=null;
+            this.alertError= false;
+            this.textoError= '';
+            this.alertAcept= false;
+            this.textoAcept= '';
             
-         },
+        },
     }
 }
 </script>
+<style scoped>
+    .difuminado{
+        text-shadow: #555 2px 2px 3px;
+    }
+    .letra{
+        font-size: 125%;
+    }
+    .borde {
+        color:#fff;
+        background-color: rgba(0,0,0,0.6);
+        border-style: solid; 
+        border-color: color;
+    }
+</style>

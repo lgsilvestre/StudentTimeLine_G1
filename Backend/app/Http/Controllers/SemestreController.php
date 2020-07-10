@@ -4,9 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Semestre;
 use Illuminate\Http\Request;
+use Validator;
 
 class SemestreController extends Controller
 {
+
+    /**
+     * Metodo que se encarga de bloquear las rutas del controlador Usuario
+     */
+    public function __construct()
+    {
+        $this->middleware(['permission:create semestre'], ['only' => ['create', 'store']]);
+        $this->middleware(['permission:read semestre'], ['only' => 'index']);
+        $this->middleware(['permission:update semestre'], ['only' => ['edit', 'update']]);
+        $this->middleware(['permission:delete semestre'], ['only' => 'delete']);
+        $this->middleware(['permission:restore semestre'], ['only' => 'disabled', 'restore']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,8 +28,22 @@ class SemestreController extends Controller
      */
     public function index()
     {
-        $semestre = Semestre::all();
-        return compact('semestre');
+        try{
+            $semestres = Semestre::all();
+            return response()->json([
+                'success' => true,
+                'code' => 100,
+                'message' => "La operacion se a realizado con exito",
+                'data' => ['semestres'=>$semestres]
+            ], 200);
+        } catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 101,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
     }
 
     /**
@@ -27,10 +55,10 @@ class SemestreController extends Controller
     {
         return response()->json([
             'success' => false,
-            'code' => 401,
+            'code' => 201,
             'message' => 'Este recurso está bloqueado',
             'data' => ['error'=>'El el protocolo se llama store']
-        ], 423);
+        ], 426);
     }
 
     /**
@@ -41,11 +69,44 @@ class SemestreController extends Controller
      */
     public function store(Request $request)
     {
-        $semestre = new Semestre();
-        $semestre-> anio=$request->anio;
-        $semestre-> semestre=$request->semestre;
-        $semestre->save();
-        return compact('semestre');
+        $entradas = $request->only('anio', 'semestre');
+        $validator = Validator::make($entradas, [
+            'anio' => ['required', 'numeric'],
+            'semestre' => [' required', 'numeric'],
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'code' => 301,
+                'message' => 'Error en datos ingresados',
+                'data' => ['error'=>$validator->errors()]
+            ], 422);
+        }
+        if(!array_key_exists ("anio" , $entradas)){
+            $entradas['anio'] = null;
+        }
+        if(!array_key_exists ("semestre" , $entradas)){
+            $entradas['semestre'] = null;
+        }
+        try{
+            $semestre = new Semestre();
+            $semestre-> anio=$entradas['anio'];
+            $semestre-> semestre=$entradas['semestre'];
+            $semestre->save();
+            return response()->json([
+                'success' => true,
+                'code' => 300,
+                'message' => "Operacion realizada con exito",
+                'data' => ['semestre'=>$semestre]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 302,
+                'message' => "Error en la base de datos",
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
     }
 
     /**
@@ -61,7 +122,7 @@ class SemestreController extends Controller
             'code' => 401,
             'message' => 'Este recurso está bloqueado',
             'data' => ['error'=>'El el protocolo se llama index']
-        ], 423);
+        ], 426);
     }
 
     /**
@@ -74,10 +135,10 @@ class SemestreController extends Controller
     {
         return response()->json([
             'success' => false,
-            'code' => 401,
+            'code' => 501,
             'message' => 'Este recurso está bloqueado',
             'data' => ['error'=>'El el protocolo se llama update']
-        ], 423);
+        ], 426);
     }
 
     /**
@@ -89,11 +150,56 @@ class SemestreController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $semestre = Semestre::find($id);
-        $semestre->anio = $request->anio;
-        $semestre->semestre = $request->semestre;
-        $semestre->save();
-        return compact('semestre');
+        $entradas = $request->only('anio', 'semestre');
+        $validator = Validator::make($entradas, [
+            'anio' => ['numeric', 'nullable'],
+            'semestre' => ['numeric', 'nullable'],
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'code' => 601,
+                'message' => 'Error en datos ingresados',
+                'data' => ['error'=>$validator->errors()]
+            ], 422);
+        }
+        if(!array_key_exists ("anio" , $entradas)){
+            $entradas['anio'] = null;
+        }
+        if(!array_key_exists ("semestre" , $entradas)){
+            $entradas['semestre'] = null;
+        }
+        try{
+            $semestre = Semestre::find($id);
+            if ($semestre == null) {
+                return response()->json([
+                    'success' => false,
+                    'code' => 602,
+                    'message' => 'La semestre con el id '.$id.' no existe',
+                    'data' => null
+                ], 409);
+            }
+            if($entradas['anio']!=null){
+                $semestre->anio = $entradas['anio'];
+            }
+            if($entradas['semestre']!=null){
+                $semestre->semestre = $entradas['semestre'];
+            }
+            $semestre->save();
+            return response()->json([
+                'success' => true,
+                'code' => 600,
+                'message' => "Operacion realizada con exito",
+                'data' => ['semestre'=>$semestre]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 603,
+                'message' => "Error en la base de datos",
+                'data' => ['error'=>$ex]
+            ], 409 );
+        }
     }
 
     /**
@@ -104,24 +210,79 @@ class SemestreController extends Controller
      */
     public function destroy($id)
     {
+        try{
+            $semestre = Semestre::find($id);
+            if ($semestre == null) {
+                return response()->json([
+                    'success' => false,
+                    'code' => 701,
+                    'message' => 'El semestre con el id '.$id.' no existe',
+                    'data' => null
+                ], 409 );
+            }else{
+                $semestre->delete();
+                return response()->json([
+                    'success' => true,
+                    'code' => 700,
+                    'message' => "Operacion realizada con exito",
+                    'data' =>['semestre'=> $semestre]
+                ], 200);
+            }
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 702,
+                'message' => "Error en la base de datos",
+                'data' => ['error'=>$ex]
+            ], 409 );
+        }
         $semestre = Semestre::find($id);
-        $semestre->delete();
-        return compact('semestre');
     }
 
     public function disabled(){
-
-        $semestres = Semestre::onlyTrashed()->get();
-        return compact('semestres');
+        try{
+            $semestres = Semestre::onlyTrashed()->get();
+            return response()->json([
+                'success' => true,
+                'code' => 800,
+                'message' => "Operacion realizada con exito",
+                'data' =>['semestres'=> $semestres]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 801,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
     }
 
     public function restore($id){
-        $semestre = Semestre::onlyTrashed()->find($id)->restore();
-        return response()->json([
-            'success' => true,
-            'message' => 'el semestre se recupero con exito',
-            'data' => ['semstre'=>$semestre]
-        ], 200);
+        try{
+            $semestre = Semestre::onlyTrashed()->find($id)->restore();
+            if($semestre==false){
+                return response()->json([
+                    'success' => false,
+                    'code' => 901,
+                    'message' => "La semestre no se logro recuperar",
+                    'data' => ['semestre'=>$semestre]
+                ], 409);
+            }
+            return response()->json([
+                'success' => true,
+                'code' => 900,
+                'message' => "La semestre recupero con exito",
+                'data' => ['semestre'=>$semestre]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 902,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
     }
 
 }
