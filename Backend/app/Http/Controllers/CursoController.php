@@ -6,6 +6,8 @@ use App\Curso;
 use Illuminate\Http\Request;
 use Validator;
 
+use Tymon\JWTAuth\Facades\JWTAuth;
+
 class CursoController extends Controller
 {
 
@@ -26,15 +28,42 @@ class CursoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $cursos = Curso::all();
-        return response()->json([
-            'success' => true,
-            'code' => 100,
-            'message' => "La operacion se a realizado con exito",
-            'data' => ['cursos'=>$cursos]
-        ], 200);
+    public function index(){
+        try{
+            $credenciales = JWTAuth::parseToken()->authenticate();
+            if($credenciales->rol=="admin"){
+                $cursos = Curso::all();
+            }else if($credenciales->rol=="secretaria de escuela"){
+                $cursos = Curso::where(function ($query) use ($credenciales) {
+                    return $query->where('escuela', '=' , $credenciales->escuela)
+                                ->orWhere('escuela', '=' , $credenciales->escuelaAux);
+                })->get();
+            }else if($credenciales->rol=="profesor"){
+                $cursos = Curso::where('escuela', '=' , $credenciales->escuela)->get();
+            }else{
+                return response()->json([
+                    'success' => false,
+                    'code' => 102,
+                    'message' => 'Error que no deberia pasar en index',
+                    'data' => ['error'=>'al momento de buscar el rol del solicitante no lo encuentra']
+                ], 409);
+            }
+            return response()->json([
+                'success' => true,
+                'code' => 100,
+                'message' => "La operacion se a realizado con exito",
+                'data' => ['cursos'=>$cursos]
+            ], 200);
+        //----- Mecanismos anticaidas y reporte de errores -----
+        //este catch permite responder directamente que problemas en la peticion SQL
+        } catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 103,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
     }
 
     /**
