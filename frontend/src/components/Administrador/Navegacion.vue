@@ -7,7 +7,7 @@
             <v-img :src="usuario.usuario.foto"
             ></v-img>
         </v-list-item-avatar>
-        <v-list-item-title class="white--text letra" ><strong>Administrador</strong></v-list-item-title>
+        <v-list-item-title class="white--text letra" ><strong>Perfil</strong></v-list-item-title>
     </v-list-item>
     <v-divider></v-divider>
     <v-list style=" margine-right: 0; margine-left:0;"  >  
