@@ -34,6 +34,28 @@ export default new Vuex.Store({
         perfilEstudiante:'',
     },
     mutations: {
+        calcularRol(state,id){            
+            if(state.admin){
+                router.push({ path: '/administrador/cursos/'+id });
+            }
+            else if(state.profesor){
+                router.push({ path: '/profesor/cursos/'+id });
+            }
+            else{
+                router.push({ path: '/secretariaEscuela/cursos/'+id });
+            }            
+        },
+        calcularRolVuelta(state){            
+            if(state.admin){
+                router.push({ path: '/administrador/cursos/'});
+            }
+            else if(state.profesor){
+                router.push({ path: '/profesor/cursos/'});
+            }
+            else{
+                router.push({ path: '/secretariaEscuela/cursos/'});
+            }            
+        },
         login(state, lista,methods) { //funcion de login
         state.cargaLogin= true;
         state.verificacionLogin= false;
