@@ -14,23 +14,20 @@ class ProfesorCursoTableSeeder extends Seeder
     {
         $relacion1=Profesor_Con_Curso::create([
             'profesor' => 6,
-            'curso' => 1,
-            'anio' => '2020', 
-            'semestre' => 1
+            'curso' => 1
+
         ]);
 
         $relacion2=Profesor_Con_Curso::create([
-            'profesor' => 6,
-            'curso' => 2,
-            'anio' => '2020', 
-            'semestre' => 1
+            'profesor' => 5,
+            'curso' => 2
+
         ]);
 
         $relacion3=Profesor_Con_Curso::create([
             'profesor' => 7,
-            'curso' => 3,
-            'anio' => '2020', 
-            'semestre' => 1
+            'curso' => 3
+
         ]);
     }
 }

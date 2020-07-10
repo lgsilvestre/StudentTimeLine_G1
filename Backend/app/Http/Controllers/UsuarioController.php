@@ -114,7 +114,6 @@ class UsuarioController extends Controller
             'escuela' => ['required', 'numeric'], //Cambiar lo de la foreign key dps
             'escuelaAux' => ['numeric', 'nullable'], //Cambiar lo de la foreign key dps
             'rol' => ['required','string'], 
-            'foto' => ['image','file', 'nullable'],
             'email'=> ['required','email'],
             'password' => ['required' , 'string']
         ]);
@@ -129,14 +128,14 @@ class UsuarioController extends Controller
         }
         try{
             $user = new User();
-            $user ->nombre=$request->nombre;
-            $user ->escuela=$request->escuela;
-            $user ->escuelaAux=$request->escuelaAux;
-            $user ->rol=$request->rol;
-            $user->assignRole($request->rol);
-            $user ->email=$request->email;
-            $user ->password=bcrypt($request->password);
-            $user->foto=$request->foto;
+            $user ->nombre=$entradas['nombre'];
+            $user ->escuela=$entradas['escuela'];
+            $user ->escuelaAux=$entradas['escuelaAux'];
+            $user ->rol=$entradas['rol'];
+            $user->assignRole($entradas['rol']);
+            $user ->email=$entradas['email'];
+            $user ->password=bcrypt($entradas['password']);
+            $user->foto=$entradas['foto'];
             $user = $user->save();
             return response()->json([
                 'success' => true,
@@ -247,36 +246,36 @@ class UsuarioController extends Controller
                     'data' => null
                 ], 409);
             }
-            if($request->nombre!=null){
-                $usuario->nombre = $request->nombre;
+            if($entradas['nombre']!=null){
+                $usuario->nombre = $entradas['nombre'];;
             }
-            if($request->foto!=null){
-                $usuario ->foto= $request->foto;
+            if($entradas['foto']!=null){
+                $usuario ->foto= $entradas['foto'];;
             }
-            if($request->email!=null){
-                $usuario->email = $request->email;
+            if($entradas['email']!=null){
+                $usuario->email = $entradas['email'];;
             }
-            if($request->password!=null){
-                $usuario->password =  bcrypt($request->password);
+            if($entradas['password']!=null){
+                $usuario->password =  bcrypt($entradas['password']);
             }
             //OBTENEMOS LA CREDENCIALES DEL USUARIO QUE MANDO LA SOLICITUD
             $credenciales = JWTAuth::parseToken()->authenticate();
             //Si el usuario que solicita la informacion es un administrador
             if($credenciales->rol == "admin"){
-                if($request->escuela!=null){
-                    $usuario->escuela = $request->escuela;
+                if($entradas['escuela']!=null){
+                    $usuario->escuela = $entradas['escuela'];
                 }
-                if($request->escuelaAux!=null){
-                    $usuario->escuelaAux = $request->escuelaAux;
+                if($entradas['escuelaAux']!=null){
+                    $usuario->escuelaAux = $entradas['escuelaAux'];
                 }
-                if($request->rol!=null){
-                    $usuario->rol = $request->rol;
-                    $usuario->assignRole($request->rol);
+                if($entradas['rol']!=null){
+                    $usuario->rol = $entradas['rol'];
+                    $usuario->assignRole($entradas['rol']);
                 }
             }
             //Usuario secretaria de escuela o profesor
             if($credenciales->rol == "secretaria de escuela" || $credenciales->rol == "profesor"){
-                if($request->escuela!=null || $request->rol!=null || $request->escuelaAux!=null){
+                if($entradas['escuela']!=null || $entradas['rol']!=null ||  $entradas['escuelaAux']!=null){
                     $credenciales = JWTAuth::invalidate($credenciales);
                     //mandar correo por intento de haking
                     return response()->json([

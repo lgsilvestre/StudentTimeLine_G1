@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Profesor_Con_Curso;
+use App\InstanciaCurso;
 use Illuminate\Http\Request;
 use Validator;
 
-
-class ProfesorConCursoController extends Controller
+class InstanciaCursoController extends Controller
 {
+
     /**
      * Metodo que se encarga de bloquear las rutas del controlador Usuario
      */
     public function __construct(){
-        $this->middleware(['permission:create profesor con curso'], ['only' => ['create', 'store']]);
-        $this->middleware(['permission:read profesor con curso'], ['only' => 'index']);
-        $this->middleware(['permission:update profesor con curso'], ['only' => ['edit', 'update']]);
-        $this->middleware(['permission:delete profesor con curso'], ['only' => 'delete']);
-        $this->middleware(['permission:restore profesor con curso'], ['only' => 'disabled', 'restore']);
+        $this->middleware(['permission:create instancia curso'], ['only' => ['create', 'store']]);
+        $this->middleware(['permission:read instancia curso'], ['only' => 'index']);
+        $this->middleware(['permission:update instancia curso'], ['only' => ['edit', 'update']]);
+        $this->middleware(['permission:delete instancia curso'], ['only' => 'delete']);
+        $this->middleware(['permission:restore instancia curso'], ['only' => 'disabled', 'restore']);
     }
 
     /**
@@ -26,13 +26,12 @@ class ProfesorConCursoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
-        #Podríamos retornar los nombres en lugar del id del profesor y del curso.
-        $CursosyProfesores = Profesor_Con_Curso::all();
-        return response()->json([
+       $insCurso = InstanciaCurso::all();
+       return response()->json([
             'success' => true,
-            'code' => 100,
-            'message' => "La operacion se a realizado con exito",
-            'data' => ['CursosyProfesores'=>$CursosyProfesores]
+            'code' => 700,
+            'message' => "Operacion realizada con exito",
+            'data' =>['insCurso'=> $insCurso]
         ], 200);
     }
 
@@ -41,13 +40,13 @@ class ProfesorConCursoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(){
+    public function create(){    
         return response()->json([
             'success' => false,
             'code' => 201,
-            'message' => 'Este recurso está bloqueado',
+            'message' => 'el cliente debe usar un protocolo distinto',
             'data' => ['error'=>'El el protocolo se llama store']
-        ], 426);
+        ], 426 );
     }
 
     /**
@@ -58,27 +57,25 @@ class ProfesorConCursoController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $profesorCurso= new Profesor_Con_curso();
-        $profesorCurso-> profesor=$request->profesor;
-        $profesorCurso-> curso=$request->curso;
-        $profesorCurso->save();
+        $insCurso = new InstanciaCurso();
+        $insCurso-> semestre=$request->semestre;
+        $insCurso-> curso=$request->curso;
+        $insCurso->save();
         return response()->json([
             'success' => true,
             'code' => 300,
             'message' => "Operacion realizada con exito",
-            'data' => ['profesorCurso'=>$profesorCurso]
+            'data' => ['insCurso'=>$insCurso]
         ], 200);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Profesor_Con_Curso  $profesor_Con_Curso
+     * @param  \App\InstanciaCurso  $instanciaCurso
      * @return \Illuminate\Http\Response
      */
-    public function show(Profesor_Con_Curso $profesor_Con_Curso)
-    {
+    public function show(InstanciaCurso $instanciaCurso){
         return response()->json([
             'success' => false,
             'code' => 401,
@@ -90,16 +87,15 @@ class ProfesorConCursoController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Profesor_Con_Curso  $profesor_Con_Curso
+     * @param  \App\InstanciaCurso  $instanciaCurso
      * @return \Illuminate\Http\Response
      */
-    public function edit(Profesor_Con_Curso $profesor_Con_Curso)
-    {
+    public function edit(InstanciaCurso $instanciaCurso){
         return response()->json([
             'success' => false,
-            'code' => 401,
-            'message' => 'Este recurso está bloqueado',
-            'data' => ['error'=>'El el protocolo se llama update']
+            'code' => 501,
+            'message' => 'el cliente debe usar un protocolo distinto',
+            'data' => ['error'=>'El el protocolo se llama store']
         ], 426);
     }
 
@@ -107,63 +103,62 @@ class ProfesorConCursoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Profesor_Con_Curso  $profesor_Con_Curso
+     * @param  \App\InstanciaCurso  $instanciaCurso
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $CursoProfesor = Profesor_Con_Curso::find($id);
-        $CursoProfesor->profesor = $request->profesor ;
-        $CursoProfesor->curso = $request->curso;
-        $CursoProfesor->save();
+        $insCurso = InstanciaCurso::find($id);
+        $insCurso->semestre = $request->semestre;
+        $insCurso->curso = $request->curso;
+        $insCurso->save();
         return response()->json([
             'success' => true,
             'code' => 600,
             'message' => "Operacion realizada con exito",
-            'data' => ['CursoProfesor'=>$CursoProfesor]
+            'data' => ['insCurso'=>$insCurso]
         ], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Profesor_Con_Curso  $profesor_Con_Curso
+     * @param  \App\InstanciaCurso  $instanciaCurso
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
-        $profesorCurso = Profesor_Con_Curso::find($id);
-        $profesorCurso->delete();
+        $insCurso =InstanciaCurso::find($id);
+        $insCurso->delete();
         return response()->json([
             'success' => true,
             'code' => 700,
             'message' => "Operacion realizada con exito",
-            'data' =>['profesorCurso'=> $profesorCurso]
+            'data' =>['insCurso'=> $insCurso]
         ], 200);
+        
     }
+
     public function disabled(){
 
-        $profesoresCursos= Profesor_Con_Curso::onlyTrashed()->get();
+        $insCursos =InstanciaCurso::onlyTrashed()->get();
         return response()->json([
             'success' => true,
             'code' => 800,
             'message' => "Operacion realizada con exito",
-            'data' =>['profesoresCursos'=> $profesoresCursos]
+            'data' =>['insCursos'=> $insCursos]
         ], 200);
     }
 
     public function restore($id){
         
-        $profesorCurso= Profesor_Con_Curso::onlyTrashed()->find($id)->restore();
+        $insCurso=InstanciaCurso::onlyTrashed()->find($id)->restore();
         return response()->json([
             'success' => true,
             'code' => 900,
             'message' => "La escuela recupero con exito",
-            'data' => ['profesorCurso'=>$profesorCurso]
+            'data' => ['insCurso'=>$insCurso]
         ], 200);
     }
-
-
 
 }

@@ -38,7 +38,17 @@ Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1'], function () {
     Route::get('/estudiante/exportar', 'ExportarExcelController@index');
     Route::resource('/estudiante', 'EstudianteController' );
     #Controlador de Profesor_Con_Curso
-    Route::resource('/ProfesorConCurso', 'ProfesorConCursoController' );
+    Route::get('/profesorConCurso/disabled','ProfesorConCursoController@disabled');
+    Route::post('/profesorConCurso/restore/{id}','ProfesorConCursoController@restore');
+    Route::resource('/profesorConCurso', 'ProfesorConCursoController' );
+    #Controlador de semestre
+    Route::get('/semestre/disabled','SemestreController@disabled');
+    Route::post('/semestre/restore/{id}','SemestreController@restore');
+    Route::resource('/semestre','SemestreController');
+    #controlador de instancia curso
+    Route::get('/instanciaCurso/disabled','InstanciaCursoController@disabled');
+    Route::post('/instanciaCurso/restore/{id}','InstanciaCursoController@restore');
+    Route::resource('/instanciaCurso','InstanciaCursoController');
 
 });
 
@@ -49,5 +59,6 @@ Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
     Route::get('/auth/logout', 'TokensController@logoutToken');
     Route::post('/auth/restartPassword', 'TokensController@restartPassword');
     Route::post('/auth/sendRestartPassword', 'TokensController@sendRestartPassword');
+    Route::get('/auth/respondWithToken', 'TokensController@respondWithToken');
 });
 
