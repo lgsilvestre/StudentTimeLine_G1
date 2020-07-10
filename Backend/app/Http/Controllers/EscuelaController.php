@@ -42,7 +42,6 @@ class EscuelaController extends Controller
                 'data' => ['error'=>$ex]
             ], 409);
         }
-        
     }
 
     /**
@@ -68,9 +67,9 @@ class EscuelaController extends Controller
      */
     public function store(Request $request)
     {
-        $credentials = $request->only('cod_escuela', 'nombre');
-        $validator = Validator::make($credentials, [
-            'cod_escuela' => ['required', 'number'],
+        $entradas = $request->only('cod_escuela', 'nombre');
+        $validator = Validator::make($entradas, [
+            'cod_escuela' => ['required', 'numeric'],
             'nombre' => [' required', 'string'],
         ]);
         if ($validator->fails()) {
@@ -81,10 +80,16 @@ class EscuelaController extends Controller
                 'data' => ['error'=>$validator->errors()]
             ], 422);
         }
+        if(!array_key_exists ("cod_escuela" , $entradas)){
+            $entradas['cod_escuela'] = null;
+        }
+        if(!array_key_exists ("nombre" , $entradas)){
+            $entradas['nombre'] = null;
+        }
         try{
             $escuela = new Escuela();
-            $escuela->nombre = $request->nombre;
-            $escuela->cod_escuela = $request->cod_escuela;
+            $escuela->cod_escuela = $entradas['cod_escuela'];
+            $escuela->nombre = $entradas['nombre'];
             $escuela = $escuela->save();
             return response()->json([
                 'success' => true,
@@ -115,7 +120,7 @@ class EscuelaController extends Controller
             'code' => 401,
             'message' => 'Este recurso está bloqueado',
             'data' => ['error'=>'El el protocolo se llama index']
-        ], 423);
+        ], 426);
     }
 
     /**
@@ -142,18 +147,24 @@ class EscuelaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id){
-        $credentials = $request->only('cod_escuela', 'nombre');
-        $validator = Validator::make($credentials, [
-            'cod_escuela' => ['number', 'nullable'],
+        $entradas = $request->only('cod_escuela', 'nombre');
+        $validator = Validator::make($entradas, [
+            'cod_escuela' => ['numeric', 'nullable'],
             'nombre' => ['string', 'nullable'],
         ]);
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
-                'code' => 1,
+                'code' => 601,
                 'message' => 'Error en datos ingresados',
                 'data' => ['error'=>$validator->errors()]
             ], 422);
+        }
+        if(!array_key_exists ("cod_escuela" , $entradas)){
+            $entradas['cod_escuela'] = null;
+        }
+        if(!array_key_exists ("nombre" , $entradas)){
+            $entradas['nombre'] = null;
         }
         try{
             $escuela = Escuela::find($id);
@@ -165,11 +176,11 @@ class EscuelaController extends Controller
                     'data' => null
                 ], 409);
             }
-            if($request->nombre!=null){
-                $escuela->nombre = $request->nombre;
+            if($entradas['cod_escuela']!=null){
+                $escuela->cod_escuela = $entradas['cod_escuela'];
             }
-            if($request->cod_escuela!=null){
-                $escuela->cod_escuela = $request->cod_escuela;
+            if($entradas['nombre']!=null){
+                $escuela->nombre = $entradas['nombre'];
             }
             $escuela-> save();
             return response()->json([
@@ -181,19 +192,18 @@ class EscuelaController extends Controller
         }catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
                 'success' => false,
-                'code' => 604,
+                'code' => 603,
                 'message' => "Error en la base de datos",
                 'data' => ['error'=>$ex]
             ], 409 );
         }
-        
     }
 
     /**
      * Metodo que se encarga de eliminar una escuela
      * Errores code inician 700
-     * @param  \App\Estudiante  $estudiante
-     * @return \Illuminate\Http\Response
+     * @param  \App\Escuela  $Escuela
+     * @return \Illuminate\Http\Escuela
      */
     public function destroy($id){
         try{
@@ -224,21 +234,58 @@ class EscuelaController extends Controller
         }
     }
 
+    /**
+     * Metodo que se encarga de listar las escuelas eliminadas
+     * Errores code inician 800
+     */
     public function disabled(){
-
-        $escuelas = Escuela::onlyTrashed()->get();
-        return $escuelas;
+        try{
+            $escuelas = Escuela::onlyTrashed()->get();
+            return response()->json([
+                'success' => true,
+                'code' => 800,
+                'message' => "Operacion realizada con exito",
+                'data' =>['escuela'=> $escuelas]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 801,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
     }
 
+    /**
+     * Metodo que se encarga de recuperar una escuela
+     * Errores code inician 900
+     */
     public function restore($id){
-        
-        $escuela=Escuela::onlyTrashed()->find($id)->restore();
-        
-        return response()->json([
-            'success' => true,
-            'message' => "escuela recupero con exito",
-            'data' => ['escuela'=>$escuela]
-        ], 200);
+        try{
+            $escuela=Escuela::onlyTrashed()->find($id)->restore();
+            if($escuela==false){
+                return response()->json([
+                    'success' => false,
+                    'code' => 901,
+                    'message' => "La escuela no se logro recuperar",
+                    'data' => ['escuela'=>$escuela]
+                ], 409);
+            }
+            return response()->json([
+                'success' => true,
+                'code' => 900,
+                'message' => "La escuela recupero con exito",
+                'data' => ['escuela'=>$escuela]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 902,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
     }
 
 }

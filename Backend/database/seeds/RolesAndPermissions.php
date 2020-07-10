@@ -45,6 +45,24 @@ class RolesAndPermissions extends Seeder
         Permission::create(['name' => 'importar estudiante']);
         //Exportar
         Permission::create(['name' => 'exportar estudiante']);
+        //Creacion de permisos sobre el crud del profesor con curso
+        Permission::create(['name' => 'create profesor con curso']);
+        Permission::create(['name' => 'read profesor con curso']);
+        Permission::create(['name' => 'update profesor con curso']);
+        Permission::create(['name' => 'delete profesor con curso']);
+        Permission::create(['name' => 'restore profesor con curso']);
+        //Creacion de permisos sobre el crud del semestre
+        Permission::create(['name' => 'create semestre']);
+        Permission::create(['name' => 'read semestre']);
+        Permission::create(['name' => 'update semestre']);
+        Permission::create(['name' => 'delete semestre']);
+        Permission::create(['name' => 'restore semestre']);
+        //Creacion de permisos sobre el crud del instancia curso
+        Permission::create(['name' => 'create instancia curso']);
+        Permission::create(['name' => 'read instancia curso']);
+        Permission::create(['name' => 'update instancia curso']);
+        Permission::create(['name' => 'delete instancia curso']);
+        Permission::create(['name' => 'restore instancia curso']);
         //---------------- asignacion de permisos ----------------
 
         //Creacion de rol y asignacion de permisos al rol de "administrador"
@@ -76,7 +94,26 @@ class RolesAndPermissions extends Seeder
         //Puede exportar e importar
         $role->givePermissionTo('importar estudiante');
         $role->givePermissionTo('exportar estudiante');
-
+        //permisos CRUD de profesor con curso, todos los permisos
+        $role->givePermissionTo('create profesor con curso');
+        $role->givePermissionTo('read profesor con curso');
+        $role->givePermissionTo('update profesor con curso');
+        $role->givePermissionTo('delete profesor con curso');
+        $role->givePermissionTo('restore profesor con curso');
+        //permisos CRUD de semestre, todos los permisos
+        $role->givePermissionTo('create semestre');
+        $role->givePermissionTo('read semestre');
+        $role->givePermissionTo('update semestre');
+        $role->givePermissionTo('delete semestre');
+        $role->givePermissionTo('restore semestre');
+        //permisos CRUD de instancia curso, todos los permisos
+        $role->givePermissionTo('create instancia curso');
+        $role->givePermissionTo('read instancia curso');
+        $role->givePermissionTo('update instancia curso');
+        $role->givePermissionTo('delete instancia curso');
+        $role->givePermissionTo('restore instancia curso');
+        
+        
         //Creacion de rol y asignacion de permisos al rol de "secretaria de escuela"
         $role = Role::create(['name' => 'secretaria de escuela']);
         //Solo puede modificarse asi mismo y ver los usuarios
@@ -100,6 +137,22 @@ class RolesAndPermissions extends Seeder
         //Puede exportar e importar
         $role->givePermissionTo('importar estudiante');
         $role->givePermissionTo('exportar estudiante');
+        //Solo puede ver los semestres
+        $role->givePermissionTo('read semestre');
+        //permisos CRUD de profesor con curso, todos los permisos
+        $role->givePermissionTo('create profesor con curso');
+        $role->givePermissionTo('read profesor con curso');
+        $role->givePermissionTo('update profesor con curso');
+        $role->givePermissionTo('delete profesor con curso');
+        $role->givePermissionTo('restore profesor con curso');
+        //permisos CRUD de instancia curso, todos los permisos
+        $role->givePermissionTo('create instancia curso');
+        $role->givePermissionTo('read instancia curso');
+        $role->givePermissionTo('update instancia curso');
+        $role->givePermissionTo('delete instancia curso');
+        $role->givePermissionTo('restore instancia curso');
+
+
         //Creacion de rol y asignacion de permisos al rol de "profesor"
         $role = Role::create(['name' => 'profesor']);
         //Puede modificar su propio usuario
@@ -110,5 +163,13 @@ class RolesAndPermissions extends Seeder
         $role->givePermissionTo('read estudiante');
         //Solo puede exportar, no importar
         $role->givePermissionTo('exportar estudiante');
+        //Solo puede ver a los estudiantes
+        $role->givePermissionTo('read curso');
+        //Puede ver el listado de los semestre
+        $role->givePermissionTo('read semestre');
+        //Puede ver el listado de los profesor con curso
+        $role->givePermissionTo('read profesor con curso');
+        //Puede ver el listado de las instancias curso
+        $role->givePermissionTo('read instancia curso');
     }
 }

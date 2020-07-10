@@ -5,6 +5,7 @@ use App\Estudiante;
 use App\Escuela;
 use Illuminate\Http\Request;
 
+use Validator;
 
 class EstudianteController extends Controller
 {
@@ -74,19 +75,18 @@ class EstudianteController extends Controller
     public function store(Request $request){
         $entradas = $request->only('matricula', 'rut', 'nombre_completo', 'correo', 'anho_ingreso', 'situacion_academica', 'porcentaje_avance', 'creditos_aprobados', 'escuela', 'foto');
         $validator = Validator::make($entradas, [
-            'matricula' => ['required','string'],
+            'matricula' => ['required','numeric'],
             'rut' => ['required', 'string'],
-            'nombre_completo' => ['required', 'numeric', 'nullable'],
-            'correo' => ['required','numeric'], 
+            'nombre_completo' => ['required', 'string'],
+            'correo' => ['required','email'], 
             'anho_ingreso' => ['required','numeric'],
             'situacion_academica' => ['required','string'],
-            'porcentaje_avance' => ['required', 'string'],
+            'porcentaje_avance' => ['required', 'numeric'],
             'creditos_aprobados' => ['required','numeric'], 
-            'escuela' => ['required','numeric'],
-            'foto' => ['nullable', 'file']
+            'escuela' => ['required','numeric']
         ]);
         //respuesta cuando falla
-        if ($validator->fails()) {
+        if($validator->fails()) {
             return response()->json([
                 'success' => false,
                 'code' => 301,
@@ -94,18 +94,48 @@ class EstudianteController extends Controller
                 'data' => ['error'=>$validator->errors()]
             ], 422);
         }
+        if(!array_key_exists ("matricula" , $entradas)){
+            $entradas['matricula'] = null;
+        }
+        if(!array_key_exists ("rut" , $entradas)){
+            $entradas['rut'] = null;
+        }
+        if(!array_key_exists ("nombre_completo" , $entradas)){
+            $entradas['nombre_completo'] = null;
+        }
+        if(!array_key_exists ("correo" , $entradas)){
+            $entradas['correo'] = null;
+        }
+        if(!array_key_exists ("anho_ingreso" , $entradas)){
+            $entradas['anho_ingreso'] = null;
+        }
+        if(!array_key_exists ("situacion_academica" , $entradas)){
+            $entradas['situacion_academica'] = null;
+        }
+        if(!array_key_exists ("porcentaje_avance" , $entradas)){
+            $entradas['porcentaje_avance'] = null;
+        }
+        if(!array_key_exists ("creditos_aprobados" , $entradas)){
+            $entradas['creditos_aprobados'] = null;
+        }
+        if(!array_key_exists ("escuela" , $entradas)){
+            $entradas['escuela'] = null;
+        }
+        if(!array_key_exists ("foto" , $entradas)){
+            $entradas['foto'] = null;
+        }
         try{
             $estudiante = new Estudiante();
-            $estudiante -> matricula=$request->matricula;
-            $estudiante -> rut=$request->rut;
-            $estudiante -> nombre_completo=$request->nombre_completo;
-            $estudiante -> correo=$request->correo;
-            $estudiante -> anho_ingreso=$request->anho_ingreso;
-            $estudiante -> situacion_academica=$request->situacion_academica;
-            $estudiante -> porcentaje_avance=$request->porcentaje_avance;
-            $estudiante -> creditos_aprobados=$request->creditos_aprobados;
-            $estudiante -> escuela=$request->escuela;
-            $estudiante->foto=$request->foto;
+            $estudiante->matricula = $entradas['matricula'];
+            $estudiante->rut = $entradas['rut'];
+            $estudiante->nombre_completo = $entradas['nombre_completo'];
+            $estudiante->correo = $entradas['correo'];
+            $estudiante->anho_ingreso = $entradas['anho_ingreso'];
+            $estudiante->situacion_academica = $entradas['situacion_academica'];
+            $estudiante->porcentaje_avance = $entradas['porcentaje_avance'];
+            $estudiante->creditos_aprobados = $entradas['creditos_aprobados'];
+            $estudiante->escuela = $entradas['escuela'];
+            $estudiante->foto = $entradas['foto'];
             $estudiante = $estudiante->save();
             return response()->json([
                 'success' => true,
@@ -167,10 +197,9 @@ class EstudianteController extends Controller
         $validator = Validator::make($entradas, [
             'nombre_completo' => ['nullable','string'],
             'situacion_academica' => ['nullable', 'string'], //Cambiar lo de la foreign key dps
-            'porcentaje_avance' => ['nullable', 'numeric', 'nullable'], //Cambiar lo de la foreign key dps
+            'porcentaje_avance' => ['nullable', 'numeric'], //Cambiar lo de la foreign key dps
             'creditos_aprobados' => ['nullable','numeric'], 
             'escuela' => ['nullable','numeric'],
-            'foto' => ['nullable', 'file']
         ]);
         //respuesta cuando falla
         if ($validator->fails()) {
@@ -180,6 +209,33 @@ class EstudianteController extends Controller
                 'message' => 'Error en datos ingresados',
                 'data' => ['error'=>$validator->errors()]
             ], 422);
+        }
+        if(!array_key_exists ("matricula" , $entradas)){
+            $entradas['matricula'] = null;
+        }
+        if(!array_key_exists ("rut" , $entradas)){
+            $entradas['rut'] = null;
+        }
+        if(!array_key_exists ("nombre_completo" , $entradas)){
+            $entradas['nombre_completo'] = null;
+        }
+        if(!array_key_exists ("correo" , $entradas)){
+            $entradas['correo'] = null;
+        }
+        if(!array_key_exists ("anho_ingreso" , $entradas)){
+            $entradas['anho_ingreso'] = null;
+        }
+        if(!array_key_exists ("situacion_academica" , $entradas)){
+            $entradas['situacion_academica'] = null;
+        }
+        if(!array_key_exists ("porcentaje_avance" , $entradas)){
+            $entradas['porcentaje_avance'] = null;
+        }
+        if(!array_key_exists ("creditos_aprobados" , $entradas)){
+            $entradas['creditos_aprobados'] = null;
+        }
+        if(!array_key_exists ("escuela" , $entradas)){
+            $entradas['escuela'] = null;
         }
         try{
             $estudiante = Estudiante::find($id);
@@ -191,23 +247,23 @@ class EstudianteController extends Controller
                     'data' => null
                 ], 409);
             }
-            if($request->nombre_completo != null){
-                $estudiante->nombre_completo = $request->nombre_completo;
+            if($entradas['nombre_completo'] != null){
+                $estudiante->nombre_completo = $entradas['nombre_completo'];
             }
-            if($request->situacion_academica != null){
-                $estudiante->situacion_academica = $request->situacion_academica;
+            if($entradas['situacion_academica'] != null){
+                $estudiante->situacion_academica = $entradas['situacion_academica'];
             }
-            if($request->porcentaje_avance != null){
-                $estudiante->porcentaje_avance = $request->porcentaje_avance;
+            if($entradas['porcentaje_avance'] != null){
+                $estudiante->porcentaje_avance = $entradas['porcentaje_avance'];
             }
-            if($request->creditos_aprobados != null){
-                $estudiante->creditos_aprobados = $request->creditos_aprobados;
+            if($entradas['creditos_aprobados'] != null){
+                $estudiante->creditos_aprobados = $entradas['creditos_aprobados'];
             }
-            if($request->escuela != null){
-                $estudiante->escuela = $request->escuela;
+            if($entradas['escuela'] != null){
+                $estudiante->escuela = $entradas['escuela'];
             }
-            if($request->foto!=null){
-                $estudiante ->foto= $request->foto;
+            if($entradas['foto']!=null){
+                $estudiante ->foto= $entradas['foto'];
             }
             $estudiante->save();
             return response()->json([
@@ -263,19 +319,49 @@ class EstudianteController extends Controller
     }
 
     public function disabled(){
-
-        $estudiantes = Estudiante::onlyTrashed()->get();
-        return $estudiantes;
+        try{
+            $estudiantes = Estudiante::onlyTrashed()->get();
+            return response()->json([
+                'success' => true,
+                'code' => 800,
+                'message' => "Operacion realizada con exito",
+                'data' =>['estudiantes'=> $estudiantes]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 801,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
     }
 
     public function restore($id){
-        
-        $estudiante=Estudiante::onlyTrashed()->find($id)->restore();
-        return response()->json([
-            'success' => true,
-            'message' => "el estudiante se recupero con exito",
-            'data' => ['estudiante'=>$estudiante]
-        ], 200);
+        try{
+            $estudiante=Estudiante::onlyTrashed()->find($id)->restore();
+            if($estudiante==false){
+                return response()->json([
+                    'success' => false,
+                    'code' => 901,
+                    'message' => "La estudiante no se logro recuperar",
+                    'data' => ['estudiante'=>$estudiante]
+                ], 409);
+            }
+            return response()->json([
+                'success' => true,
+                'code' => 900,
+                'message' => "La estudiante recupero con exito",
+                'data' => ['estudiante'=>$estudiante]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 902,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
     }
 
     

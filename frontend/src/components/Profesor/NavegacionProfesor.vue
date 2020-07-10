@@ -1,5 +1,5 @@
 <template>
-<v-navigation-drawer app right v-model="drawers.drawer"  :mini-variant.sync="drawers.miniVarianteAdm"  permanent 
+<v-navigation-drawer app right v-model="drawers.drawer" :mini-variant="drawers.miniVarianteAdm"  :permanent="$vuetify.breakpoint.mdAndUp" :temporary="$vuetify.breakpoint.smAndDown"
     src="@/assets/Globales/background-panel-02.jpg"
 >
         <v-list-item class="px-2 py-1 difuminado" active-class="activacion" to="/profesor/perfil">

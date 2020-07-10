@@ -20,14 +20,12 @@ class CreateProfesorConCursosTable extends Migration
             $table->bigInteger('profesor')->unsigned();
             $table->foreign('profesor')->references('id')->on('users');
             $table->bigInteger('curso')->unsigned();
-            $table->foreign('curso')->references('id')->on('cursos');
-            $table->string('anio');
-            $table->integer('semestre');
+            $table->foreign('curso')->references('id')->on('instancia_cursos');
             $table->softDeletes();
             $table->timestamps();
             #se deja como unique a los atributos profesor, semestre, anio y curso, ya que la finalidad de esta relación
             #es indicar desde cuando se esta haciendo cargo un profesor de un curso
-            $table->unique(['profesor','curso','semestre','anio']);
+            $table->unique(['profesor','curso']);
         });
     }
 
@@ -41,3 +39,4 @@ class CreateProfesorConCursosTable extends Migration
         Schema::dropIfExists('profesor__con__cursos');
     }
 }
+
