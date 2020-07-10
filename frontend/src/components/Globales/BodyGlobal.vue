@@ -166,6 +166,7 @@ export default {
             alertAcept: false,
             textoAcept: '',
             delay: 4000,
+            modificar: true,
 
             mostrar: false, 
             datosUsuarioModificar:[ {nombre:''},{correo:''},{contrasena:''} ,{imagen:null}],
@@ -233,6 +234,9 @@ export default {
                     this.datosUsuarioAux.role= this.roles[2];
                 };
                 this.datosUsuario = this.datosUsuarioAux;
+                if(this.datosUsuario.rol != "admin"){
+                    this.modificar = false;
+                };
             }
             }).catch((err)=>{
                 if (error.message == 'Network Error') {

@@ -400,6 +400,9 @@ export default {
             //Varibles para el listado de alumnos eliminados
             listaUsuariosEliminados:[],
             
+            keyDialogCreacion: 2,
+
+            keyDialogModificar: 1,
         }
     },
     created () {   
@@ -530,8 +533,7 @@ export default {
             this.datosUsuario.correo='';
             this.datosUsuario.contrasena='';
             this.datosUsuario.imagen=null;
-            this.$refs.form.reset();
-            this.$refs.form.resetValidation();
+            this.keyDialogCreacion++;
         },
 
         obtenerEscuelas(){
@@ -663,12 +665,14 @@ export default {
                             console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;      
+                            this.resetRegistrarUsuario();
                         }
                         if(error.response.data.code == 302){
                             console.log(error.response.data.code +' '+ error.response.data.message);
                             console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
-                            this.alertaError = true;      
+                            this.alertaError = true;  
+                            this.resetRegistrarUsuario();   
                         }
                     }
                 }                
@@ -726,7 +730,7 @@ export default {
             this.datosUsuario.correo='';
             this.datosUsuario.contrasena='';
             this.datosUsuario.imagen=null;
-            this.$refs.form.resetValidation();
+            this.keyDialogModificar--;
         },
         modificarUsuario(){
             console.log('modificar usuario')
@@ -775,24 +779,28 @@ export default {
                             console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;
+                            this.resetModificacionUsuario();
                         }
                         if(error.response.data.code == 602){
                             console.log(error.response.data.code +' '+ error.response.data.message);
                             console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;
+                            this.resetModificacionUsuario();
                         }
                         if(error.response.data.code == 603){
                             console.log(error.response.data.code +' '+ error.response.data.message);
                             console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;
+                            this.resetModificacionUsuario();
                         }
                         if(error.response.data.code == 604){
                             console.log(error.response.data.code +' '+ error.response.data.message);
                             console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;
+                            this.resetModificacionUsuario();
                         }
                     }
                 }

@@ -194,7 +194,7 @@ export default {
         }
     },
     created(){
-        this.obtenerListaDeSemestres();
+        this.obtenerListaDeSemestres();        
     },
     methods: {
         /**
