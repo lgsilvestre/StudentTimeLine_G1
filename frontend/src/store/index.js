@@ -31,6 +31,7 @@ export default new Vuex.Store({
         cargaLogin: false,
         verificacionLogin: false,
         mensajeErrorLogin:'',
+        perfilEstudiante:'',
     },
     mutations: {
         calcularRol(state,id){            

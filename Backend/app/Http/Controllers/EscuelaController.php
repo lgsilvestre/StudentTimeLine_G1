@@ -80,6 +80,12 @@ class EscuelaController extends Controller
                 'data' => ['error'=>$validator->errors()]
             ], 422);
         }
+        if(!array_key_exists ("cod_escuela" , $entradas)){
+            $entradas['cod_escuela'] = null;
+        }
+        if(!array_key_exists ("nombre" , $entradas)){
+            $entradas['nombre'] = null;
+        }
         try{
             $escuela = new Escuela();
             $escuela->cod_escuela = $entradas['cod_escuela'];
@@ -153,6 +159,12 @@ class EscuelaController extends Controller
                 'message' => 'Error en datos ingresados',
                 'data' => ['error'=>$validator->errors()]
             ], 422);
+        }
+        if(!array_key_exists ("cod_escuela" , $entradas)){
+            $entradas['cod_escuela'] = null;
+        }
+        if(!array_key_exists ("nombre" , $entradas)){
+            $entradas['nombre'] = null;
         }
         try{
             $escuela = Escuela::find($id);

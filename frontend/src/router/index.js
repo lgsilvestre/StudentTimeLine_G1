@@ -63,6 +63,15 @@ Vue.use(VueRouter)
         },
       },
       {
+        //Enrutamiento de la vista del administrador
+        path: 'estudiantes/:matricula',
+        name: 'estudiantesPerfilAdministrador',
+        component: () =>import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/EstudiantePerfil.vue'),
+        meta: {
+            admin: true
+        },
+      },
+      {
          //Enrutamiento de la vista del administrador
         path: 'profesores',
         name: 'profesoresAdministrador',
@@ -189,6 +198,16 @@ Vue.use(VueRouter)
           secretariaEscuela: true
         },
       },
+      {
+        //Enrutamiento de la vista del administrador
+        path: 'estudiantes/:matricula',
+        name: 'estudiantesPerfilSecretariaEscuela',
+        component: () =>import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/EstudiantePerfil.vue'),
+        meta: {
+          secretariaEscuela: true
+        },
+      },
+      
       // {
       //   //Enrutamiento de la vista crearObservacionSecretariaEscuela
       //   path: 'observaciones/crearObservacion',

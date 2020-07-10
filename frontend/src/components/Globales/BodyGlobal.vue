@@ -166,10 +166,8 @@ export default {
             alertAcept: false,
             textoAcept: '',
             delay: 4000,
-            modificar: true,
-
             mostrar: false, 
-            datosUsuarioModificar:[ {nombre:''},{correo:''},{contrasena:''} ,{imagen:null}],
+            datosUsuarioModificar:[ {nombre:null},{correo:null},{contrasena:null} ,{imagen:null}],
             datosUsuario:[], 
             datosUsuarioAux:[],
             roles: ['Administrador', 'Secretaría de Escuela', 'Profesor'],   
@@ -186,7 +184,7 @@ export default {
             dessertsAux:[],
             //prueba de imagen
             imagenMiniatura:null,
-            
+            correo:'',
             
             
         }
@@ -267,21 +265,27 @@ export default {
          * Modica la informacion del usuario logeado.
          */
         modificarUsuario(e){
-            var correo = '';
-            var contrasena  =  '';
-            correo= this.datosUsuarioModificar.correo;
-            contrasena = this.datosUsuarioModificar.contrasena;
             // validamos que el correo puede ser null o segun la regla establecida
-            if( /.+@utalca.cl/.test(correo) || correo == null || correo == ''){
-                if(contrasena == null || contrasena =='' || contrasena.length >= 8 ){
+            if( /.+@utalca.cl/.test(this.datosUsuarioModificar.correo) || this.datosUsuarioModificar.correo == null || this.datosUsuarioModificar.correo == ''){
+                if(this.datosUsuarioModificar.contrasena == null || this.datosUsuarioModificar.contrasena =='' || this.datosUsuarioModificar.contrasena.length >= 8 ){
                     //conversion del rol, para guardarla en la base de datos.
+                    if (this.datosUsuarioModificar.correo == null) {
+                        this.datosUsuarioModificar.correo = null;
+                    }
+                    if (this.datosUsuarioModificar.nombre == null) {
+                        this.datosUsuarioModificar.nombre =null;
+                    }
+                    if (this.datosUsuarioModificar.contrasena == null) {
+                        this.datosUsuarioModificar.contrasena =null;
+                    }
                     var url =`http://127.0.0.1:8000/api/v1/usuario/${this.datosUsuario.id}`;
                     let put ={
                         "nombre": this.datosUsuarioModificar.nombre,
                         "foto":this.imagenMiniatura,
-                        "email":correo,
-                        "password": contrasena,
+                        "password": this.datosUsuarioModificar.contrasena,
+                        "email" : this.datosUsuarioModificar.correo,
                     }
+                    console.log(put);
                     axios.put(url,put,this.$store.state.config)
                     .then((result)=>{
                     if (result.data.success == true){
@@ -290,7 +294,6 @@ export default {
                         this.alertAcept = true;
                         var mensaje=result.data.message;
                         this.textoAcept=mensaje;
-                        
                         console.log('se modifico correctamente');
                     }
                     }).catch((err)=>{
@@ -353,12 +356,11 @@ export default {
 
     },
         resetModificacionUsuario(){
-            this.datosUsuarioModificar.nombre='';
-            this.datosUsuarioModificar.escuela='';
-            this.datosUsuarioModificar.role='';
-            this.datosUsuarioModificar.correo='';
-            this.datosUsuarioModificar.contrasena='';
+            this.datosUsuarioModificar.nombre=null;
+            this.datosUsuarioModificar.correo=null;
+            this.datosUsuarioModificar.contrasena=null;
             this.datosUsuarioModificar.imagen=null;
+            this.imagenMiniatura=null;
             this.alertError= false;
             this.textoError= '';
             this.alertAcept= false;
