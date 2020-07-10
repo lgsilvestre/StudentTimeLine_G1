@@ -163,6 +163,8 @@ class RolesAndPermissions extends Seeder
         $role->givePermissionTo('read estudiante');
         //Solo puede exportar, no importar
         $role->givePermissionTo('exportar estudiante');
+        //Solo puede ver a los estudiantes
+        $role->givePermissionTo('read curso');
         //Puede ver el listado de los semestre
         $role->givePermissionTo('read semestre');
         //Puede ver el listado de los profesor con curso

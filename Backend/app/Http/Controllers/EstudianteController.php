@@ -94,6 +94,33 @@ class EstudianteController extends Controller
                 'data' => ['error'=>$validator->errors()]
             ], 422);
         }
+        if(!array_key_exists ("matricula" , $entradas)){
+            $entradas['matricula'] = null;
+        }
+        if(!array_key_exists ("rut" , $entradas)){
+            $entradas['rut'] = null;
+        }
+        if(!array_key_exists ("nombre_completo" , $entradas)){
+            $entradas['nombre_completo'] = null;
+        }
+        if(!array_key_exists ("correo" , $entradas)){
+            $entradas['correo'] = null;
+        }
+        if(!array_key_exists ("anho_ingreso" , $entradas)){
+            $entradas['anho_ingreso'] = null;
+        }
+        if(!array_key_exists ("situacion_academica" , $entradas)){
+            $entradas['situacion_academica'] = null;
+        }
+        if(!array_key_exists ("porcentaje_avance" , $entradas)){
+            $entradas['porcentaje_avance'] = null;
+        }
+        if(!array_key_exists ("creditos_aprobados" , $entradas)){
+            $entradas['creditos_aprobados'] = null;
+        }
+        if(!array_key_exists ("escuela" , $entradas)){
+            $entradas['escuela'] = null;
+        }
         try{
             $estudiante = new Estudiante();
             $estudiante->matricula = $entradas['matricula'];
@@ -179,6 +206,33 @@ class EstudianteController extends Controller
                 'message' => 'Error en datos ingresados',
                 'data' => ['error'=>$validator->errors()]
             ], 422);
+        }
+        if(!array_key_exists ("matricula" , $entradas)){
+            $entradas['matricula'] = null;
+        }
+        if(!array_key_exists ("rut" , $entradas)){
+            $entradas['rut'] = null;
+        }
+        if(!array_key_exists ("nombre_completo" , $entradas)){
+            $entradas['nombre_completo'] = null;
+        }
+        if(!array_key_exists ("correo" , $entradas)){
+            $entradas['correo'] = null;
+        }
+        if(!array_key_exists ("anho_ingreso" , $entradas)){
+            $entradas['anho_ingreso'] = null;
+        }
+        if(!array_key_exists ("situacion_academica" , $entradas)){
+            $entradas['situacion_academica'] = null;
+        }
+        if(!array_key_exists ("porcentaje_avance" , $entradas)){
+            $entradas['porcentaje_avance'] = null;
+        }
+        if(!array_key_exists ("creditos_aprobados" , $entradas)){
+            $entradas['creditos_aprobados'] = null;
+        }
+        if(!array_key_exists ("escuela" , $entradas)){
+            $entradas['escuela'] = null;
         }
         try{
             $estudiante = Estudiante::find($id);

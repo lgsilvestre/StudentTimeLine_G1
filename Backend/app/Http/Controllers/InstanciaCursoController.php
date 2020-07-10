@@ -75,13 +75,14 @@ class InstanciaCursoController extends Controller
      * @param  \App\InstanciaCurso  $instanciaCurso
      * @return \Illuminate\Http\Response
      */
-    public function show(InstanciaCurso $instanciaCurso){
+    public function show($id){
+        $insCurso = InstanciaCurso::Where('semestre', '=' , $id)->get();
         return response()->json([
-            'success' => false,
-            'code' => 401,
-            'message' => 'Este recurso está bloqueado',
-            'data' => ['error'=>'El el protocolo se llama index']
-        ], 426);
+            'success' => true,
+            'code' => 400,
+            'message' => "Operacion realizada con exito",
+            'data' => ['insCurso'=>$insCurso]
+        ], 200);
     }
 
     /**

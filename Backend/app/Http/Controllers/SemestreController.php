@@ -82,6 +82,12 @@ class SemestreController extends Controller
                 'data' => ['error'=>$validator->errors()]
             ], 422);
         }
+        if(!array_key_exists ("anio" , $entradas)){
+            $entradas['anio'] = null;
+        }
+        if(!array_key_exists ("semestre" , $entradas)){
+            $entradas['semestre'] = null;
+        }
         try{
             $semestre = new Semestre();
             $semestre-> anio=$entradas['anio'];
@@ -156,6 +162,12 @@ class SemestreController extends Controller
                 'message' => 'Error en datos ingresados',
                 'data' => ['error'=>$validator->errors()]
             ], 422);
+        }
+        if(!array_key_exists ("anio" , $entradas)){
+            $entradas['anio'] = null;
+        }
+        if(!array_key_exists ("semestre" , $entradas)){
+            $entradas['semestre'] = null;
         }
         try{
             $semestre = Semestre::find($id);
