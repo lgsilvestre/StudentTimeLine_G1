@@ -27,12 +27,13 @@
                                 bottom
                                 left
                                 v-on="on"
+                                @click="obtenerProfesoresDeshabilitados"
                                 >
                                     <v-icon class="mx-2" color="secondary">fas fa-trash-restore-alt</v-icon>
                                 </v-btn>
                             </template>
                             <v-toolbar color="primary">
-                                <v-btn icon dark @click="profesoresEliminados = false">
+                                <v-btn icon dark @click="resetDialogProfesoresDeshabilitados">
                                     <v-icon>mdi-close</v-icon>
                                 </v-btn>
                                 <v-toolbar-title class="white--text"> <strong>Lista de Usuarios Eliminados</strong></v-toolbar-title>
@@ -248,8 +249,7 @@ export default {
         }
     },
     created () {   
-        this.obtenerProfesores();    
-        this.obtenerProfesoresDeshabilitados();
+        this.obtenerProfesores();        
     },
     methods: {
 
@@ -294,6 +294,7 @@ export default {
 
         /* Metodo que permite obtener todos los profesores deshabilitados a los cuales tenga acceso el usuario */
         obtenerProfesoresDeshabilitados(){
+            this.profesoresEliminados = true;
             this.cargando = true;
             this.listaProfesoresAux = [];
             var aux;
@@ -312,6 +313,7 @@ export default {
                 }
                 this.cargando = false;
                 this.listaProfesoresEliminados = this.listaProfesoresAux;
+
             }
             ).catch((error)=>{
                 console.log(error)
@@ -386,6 +388,10 @@ export default {
             this.dialogEliminar = true;
         },
 
+        resetDialogProfesoresDeshabilitados(){
+            this.obtenerProfesores();
+            this.profesoresEliminados = false;
+        },
 
         mostrarHabilitarProfesor(item){
             this.datosUsuario.id = item.id;
@@ -402,9 +408,9 @@ export default {
             .then((result)=>{
                 console.log("USUARIO RESTAURADO")
                 console.log(result)
-            if (result.data.data.usuario==true) {
-                this.obtenerProfesores();
+            if (result.data.data.usuario==true) {                
                 this.obtenerProfesoresDeshabilitados();
+                this.dialogHabilitar = false;
                 this.alertaExito = true;
                 this.textoAlertas = "Es usuario esta habilitado nuevamente.";
             }

@@ -145,6 +145,15 @@ Vue.use(VueRouter)
           admin: true
         },
       },
+      {
+        //Enrutamiento de la vista cursosAdministrador
+        path: 'cursos/:id',
+        name: 'insCursosAdministrador',
+        component: () => import(/* webpackChunkName: "" */ '@/components/SecretariaDeEscuela/BodyInsCurso.vue'),
+        meta: {
+          admin: true
+        },
+      },
       
       
       
@@ -253,6 +262,15 @@ Vue.use(VueRouter)
       //     secretariaEscuela: true
       //   },
       // },
+      {
+        //Enrutamiento de la vista cursosAdministrador
+        path: 'cursos/:id',
+        name: 'insCursosSecretariaEscuela',
+        component: () => import(/* webpackChunkName: "" */ '@/components/SecretariaDeEscuela/BodyInsCurso.vue'),
+        meta: {
+          secretariaEscuela: true
+        },
+      },
       
     ],
   },
@@ -282,6 +300,15 @@ Vue.use(VueRouter)
         component: () =>import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/EstudiantesGlobal.vue'),
         meta: {
             profesor: true
+        },
+      },
+      {
+        //Enrutamiento de la vista cursosAdministrador
+        path: 'cursos/:id',
+        name: 'insCursosProfesor',
+        component: () => import(/* webpackChunkName: "" */ '@/components/SecretariaDeEscuela/BodyInsCurso.vue'),
+        meta: {
+          profesor: true
         },
       },
       // {
