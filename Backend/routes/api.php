@@ -49,6 +49,10 @@ Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1'], function () {
     Route::get('/instanciaCurso/disabled','InstanciaCursoController@disabled');
     Route::post('/instanciaCurso/restore/{id}','InstanciaCursoController@restore');
     Route::resource('/instanciaCurso','InstanciaCursoController');
+    #controlador de ayudanteCurso
+    Route::get('/ayudanteCurso/disable','AyudanteConCursoController@disable');
+    Route::post('/ayudanteCurso/restore','AyudanteConCursoController@restore');
+    Route::resource('/ayudanteCurso','AyudanteConCursoController');
 
 });
 
