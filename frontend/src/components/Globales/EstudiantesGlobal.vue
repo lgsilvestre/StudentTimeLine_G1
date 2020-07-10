@@ -761,6 +761,7 @@
                     this.resetUnicoEstudiante();
                     this.alertAcept = true;
                     this.textoAcept = 'Se agregó el estudiante correctamente '
+                    this.obtenerEstudiantes();
                 }
             })
             .catch((error)=>{
