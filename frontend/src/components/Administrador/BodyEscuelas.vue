@@ -369,7 +369,7 @@
         var url = 'http://127.0.0.1:8000/api/v1/escuela';
         let post ={
           "nombre": this.escuela.nombre,
-          "cod_carrera":this.escuela.cod,
+          "cod_escuela":this.escuela.cod,
         };
         axios.post(url,post,this.$store.state.config)
         .then((result)=>{
@@ -414,7 +414,7 @@
         var url = 'http://127.0.0.1:8000/api/v1/escuela/'+item.id;
         let put ={
           "nombre": this.escuelaEditar.nombre,
-          "cod_carrera":  this.escuelaEditar.cod,
+          "cod_escuela":  this.escuelaEditar.cod,
         }
         axios.put(url,put,this.$store.state.config)
         .then((result)=>{
@@ -517,12 +517,6 @@
         this.dialogModificar=false;
         this.keyDialogModicar ++;
       },
-      
-    },
-    watch:{
-
     },
   }
-
-  
 </script>
