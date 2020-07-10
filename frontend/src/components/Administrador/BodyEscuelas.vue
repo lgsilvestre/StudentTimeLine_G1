@@ -1,220 +1,261 @@
 <template>
   <v-container>
-      <v-row >
-          <v-col cols="12" md="3"  
-          align-self="end">
-          </v-col>
-          <v-col cols="12" md="6">
-              <v-card>
-                  <v-img
-                    class="mx-auto white--text align-end justify-center"
-                    width="100%"
-                    height="180px"
-                    src="@/assets/Globales/fondo.jpg"
-                  >
-                    <v-card-title class="white--text" style="font-size: 200%;text-shadow: #555 2px 2px 3px;"> 
-                        <v-icon class="px-3" color="white" size="30">fas fa-school</v-icon>
-                        <strong> Escuelas</strong>
-                        <v-spacer>
-                        </v-spacer>
-                        <v-dialog v-model="dialog" persistent max-width="500px" :key="keyDialog">
-                          <template v-slot:activator="{ on }">
-                              <v-btn
-                              fab
-                              large
-                              bottom
-                              left
-                              v-on="on"
-                              >
-                                  <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
-                              </v-btn>
-                          </template>
-                          <v-card elevation="1" shaped>
-                              <v-card-title
-                              class="headline primary text--center"
-                              primary-title
-                              >
-                              <h5 class="white--text ">Crear una escuela</h5>
-                              </v-card-title>
-                              <v-container class="px-10 mt-5" color="primary">
-                                  <v-text-field 
-                                      v-model="escuela.nombre"
-                                      label="Nombre de la escuela"
-                                      outlined
-                                      :rules="reglasNombreEscuela"
-                                      color="secondary"
-                                      prepend-inner-icon="fas fa-scroll"
-                                  ></v-text-field>
-                                  <v-text-field 
-                                      v-model="escuela.cod"
-                                      label="Codigo de carrera"
-                                      outlined
-                                      :rules="reglasCodigoCarrera"
-                                      color="secondary"
-                                      prepend-inner-icon="fas fa-hashtag"
-                                  >
-                                  </v-text-field>
-                                  <div class="pb-1" style="text-align:right;">
-                                    <v-btn rounded color="warning" @click="resetCreacionEscuela">
-                                      <h4 class="white--text">Cancelar</h4>
-                                    </v-btn>
-                                    <v-btn rounded color="secondary" class="ml-2" @click="crearEscuela" >
-                                      <h4 class="white--text">Guardar</h4>
-                                    </v-btn>
-                                  </div>
-                              </v-container>
-                          </v-card>
-                        </v-dialog>
-                    </v-card-title>
-                  </v-img>
-                <v-data-table
-                :headers="headers"
-                :items="desserts"
-                :loading="cargando"
-                class="elevation-1 "
-                >
-                  <template v-slot:item.actions="{ item }">
-                    <v-btn color="white" fab small depressed class="mr-2 py-2">
-                      <v-icon  
-                      color="primary"
-                      @click="ModificarEscuela(item)"
-                      >
-                      fas fa-edit
-                      </v-icon>
+    <v-row >
+      <v-col cols="12" md="2"  
+      align-self="end">
+      </v-col>
+      <v-col cols="12" md="8">
+        <v-card>
+          <v-img
+            class="mx-auto white--text align-end justify-center"
+            width="100%"
+            height="180px"
+            src="@/assets/Globales/fondo3.jpg"
+          >
+          <v-card-title class="white--text" > 
+            <v-row>
+              <v-col sm="6" md="3" class="align-self-end" style="text-shadow: #000000 3px 3px 4px;">
+                <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" > Escuelas</strong>
+              </v-col>
+              <v-col sm="0" md="6" class="align-self-end d-none d-md-flex" style="text-align:center;">
+                <v-text-field
+                v-model="buscar"
+                append-icon="mdi-magnify"
+                label="Buscar"
+                hide-details
+                outlined
+                class="px-5 pb-2"
+                clearable
+                dense
+                solo
+                rounded
+                color="secondary"
+                background-color="white"
+                ></v-text-field>
+              </v-col>
+              <v-col sm="6" md="3" class="align-self-end" style="text-align:right;">
+                <v-dialog transition="scroll-y-reverse-transition" v-model="dialog" persistent max-width="500px" :key="keyDialog">
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                    fab
+                    :large="$vuetify.breakpoint.smAndDown ? false : true"
+                    :small="$vuetify.breakpoint.smAndDown ? true : false"
+                    bottom
+                    left
+                    v-on="on"
+                    >
+                      <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
                     </v-btn>
-                    <v-btn color="white" fab small depressed class="mr-2 py-2">
-                      <v-icon
-                      color="warning"
-                      @click="EliminarEscuela(item)"
-                      >
-                      fas fa-trash-alt
-                      </v-icon>
-                    </v-btn>
-                  </template>                                                         
-                </v-data-table>
-                <v-dialog :key="keyDialogModicar" v-model="dialogModificar" persistent max-width="500px">
-                  <v-card
-                  class="mx-auto"
-                  shaped
-                  >
+                  </template>
+                  <v-card elevation="1">
                     <v-card-title
                     class="headline primary text--center"
                     primary-title
                     >
-                      <h5 class="white--text ">Modificar Escuela</h5>
+                    <h5 class="white--text ">Crear una escuela</h5>
                     </v-card-title>
-                          <v-form 
-                          ref="form"
-                          >
-                          <v-container class="px-10 pt-10">
-                            <v-text-field
-                                v-model="escuelaEditar.nombre"
-                                label="Nombre de Escuela"
-                                :rules="reglasNombreEscuela"
-                                outlined
-                                prepend-inner-icon="fas fa-scroll"
-                            >
-                            </v-text-field>                                  
-                            <v-text-field
-                              v-model="escuelaEditar.cod"
-                              label="Codigo Carrera"
-                              :rules="reglasCodigoCarrera"                                      
-                              outlined
-                              prepend-inner-icon="fas fa-hashtag"
-                            >
-                            </v-text-field> 
-                            <div class=" pb-1" style="text-align:right;">
-                                <v-btn rounded color="warning" @click="resetEditarEscuela">
-                                  <h4 class="white--text">Cancelar</h4>
-                                </v-btn>
-                                <v-btn rounded color="secondary" class="ml-2" @click="editarEscuela(escuelaEditar)">
-                                  <h4 class="white--text">Modificar</h4>
-                                </v-btn>
-                            </div>    
-                          </v-container>         
-                          </v-form>
-                  </v-card>
-                  </v-dialog>
-                  <v-dialog v-model="dialogEliminar" persistent max-width="500px">
-                      <v-card
-                      class="mx-auto"
-                      max-width="800"
+                    <v-container class="px-10 mt-5" color="primary">
+                      <v-text-field 
+                      v-model="escuela.nombre"
+                      label="Nombre de la escuela"
+                      outlined
+                      :rules="reglasNombreEscuela"
+                      color="secondary"
+                      prepend-inner-icon="fas fa-scroll"
+                      ></v-text-field>
+                      <v-text-field 
+                      v-model="escuela.cod"
+                      label="Codigo de carrera"
+                      outlined
+                      :rules="reglasCodigoCarrera"
+                      color="secondary"
+                      prepend-inner-icon="fas fa-hashtag"
                       >
-                        <v-card-title
-                        class="headline primary text--center"
-                        primary-title
-                        >
-                          <h5 class="white--text ">Eliminar Escuela</h5>
-                        </v-card-title>
-                        <v-card-title class="text-justify" style="font-size: 110%;">Esta seguro que desea eliminar la siguiente Escuela?</v-card-title>
-                        <v-card-text>Nombre Escuela: {{ escuelaEliminar.nombre }}</v-card-text>
-                        <v-card-text>Codigo Carrera: {{ escuelaEliminar.cod }}</v-card-text>
-                        <v-card-text class="px-12 mt-3" >     
-                        <v-container class="px-10" style="text-align:right;">
-                              <v-btn rounded color="warning" @click="dialogEliminar = false">
-                                <h4 class="white--text">Cancelar</h4>
-                              </v-btn>
-                              <v-btn rounded color="secondary" class="ml-2 mr-n12" @click="borrarEscuela(escuelaEliminar)">
-                                <h4 class="white--text">Eliminar</h4>
-                              </v-btn>
-                            </v-container>  
-                        </v-card-text>
-                      </v-card>
-                  </v-dialog> 
-              </v-card>
-          </v-col>
-          <v-col cols="12" md="3">
+                      </v-text-field>
+                      <div class="pb-1" style="text-align:right;">
+                        <v-btn rounded color="warning" @click="resetCreacionEscuela">
+                          <h4 class="white--text">Cancelar</h4>
+                        </v-btn>
+                        <v-btn rounded color="secondary" class="ml-2" @click="crearEscuela" >
+                          <h4 class="white--text">Guardar</h4>
+                        </v-btn>
+                      </div>
+                    </v-container>
+                  </v-card>
+                </v-dialog>
+                <v-btn
+                  class="ml-2"
+                  fab
+                  :large="$vuetify.breakpoint.smAndDown ? false : true"
+                  :small="$vuetify.breakpoint.smAndDown ? true : false"
+                  bottom
+                  left
+                  >
+                    <v-icon  color="secondary">fas fa-trash-restore-alt</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+
             
-          </v-col>          
-      </v-row>
-      <v-snackbar
-        v-model="alertError"
-        :timeout=delay
-        bottom
-        color="warning"
-        left
-        class="mb-1 pb-12 pr-0 mr-0"
-      >
-        <div>
-          <v-icon color="white" class="mr-2">
-            fas fa-exclamation-triangle
-          </v-icon>
-          <strong>{{textoError}} </strong>
-        </div>
-        <v-btn
-            color="white"
-            elevation="0"
-            x-small
-            fab
-            @click="alertError = ! alertError"
-        > 
-            <v-icon color="warning">fas fa-times</v-icon>
-        </v-btn>
-      </v-snackbar>
-      <v-snackbar
-        v-model="alertAcept"
-        :timeout=delay
-        bottom
-        color="secondary"
-        left
-        class="mb-1 pb-12 pr-0 mr-0"
-      >
-        <div>
-          <v-icon color="white" class="mr-2">
-            fas fa-check-circle
-          </v-icon>
-          <strong>{{textoAcept}}</strong>
-        </div>
-        <v-btn
+          </v-card-title>
+          </v-img>
+          <v-text-field
+          v-model="buscar"
+          append-icon="mdi-magnify"
+          label="Buscar"
+          hide-details
+          outlined
+          class="px-5 py-2 d-sm-flex d-md-none"
+          clearable
+          dense
+          solo
+          rounded
+          color="secondary"
+          background-color="white"
+          ></v-text-field>
+          <v-data-table
+          :headers="headers"
+          :items="desserts"
+          :loading="cargando"
+          :search="buscar"
+          class="elevation-1 "
+          >
+            <template v-slot:item.actions="{ item }">
+              <v-btn color="white" fab small depressed class="mr-2 py-2">
+                <v-icon  
+                color="primary"
+                @click="ModificarEscuela(item)"
+                >
+                fas fa-edit
+                </v-icon>
+              </v-btn>
+              <v-btn color="white" fab small depressed class="mr-2 py-2">
+                <v-icon
+                color="warning"
+                @click="EliminarEscuela(item)"
+                >
+                fas fa-trash-alt
+                </v-icon>
+              </v-btn>
+            </template>                                                         
+          </v-data-table>
+          <v-dialog transition="scroll-y-reverse-transition" :key="keyDialogModicar" v-model="dialogModificar" persistent max-width="500px">
+            <v-card
+            class="mx-auto"
+            
+            >
+              <v-card-title
+              class="headline primary text--center"
+              primary-title
+              >
+                <h5 class="white--text ">Modificar Escuela</h5>
+              </v-card-title>
+              <v-container class="px-10 pt-10">
+                <v-text-field
+                v-model="escuelaEditar.nombre"
+                label="Nombre de Escuela"
+                :rules="reglasNombreEscuela"
+                outlined
+                prepend-inner-icon="fas fa-scroll"
+                >
+                </v-text-field>                                  
+                <v-text-field
+                v-model="escuelaEditar.cod"
+                label="Codigo Carrera"
+                :rules="reglasCodigoCarrera"                                      
+                outlined
+                prepend-inner-icon="fas fa-hashtag"
+                >
+                </v-text-field> 
+                <div class=" pb-1" style="text-align:right;">
+                  <v-btn rounded color="warning" @click="resetEditarEscuela">
+                    <h4 class="white--text">Cancelar</h4>
+                  </v-btn>
+                  <v-btn rounded color="secondary" class="ml-2" @click="editarEscuela(escuelaEditar)">
+                    <h4 class="white--text">Modificar</h4>
+                  </v-btn>
+                </div>    
+              </v-container>         
+            </v-card>
+            </v-dialog>
+            <v-dialog transition="scroll-y-reverse-transition" v-model="dialogEliminar" persistent max-width="500px">
+              <v-card
+              class="mx-auto"
+              max-width="800"
+              >
+                <v-card-title
+                class="headline primary text--center"
+                primary-title
+                >
+                  <h5 class="white--text ">Eliminar Escuela</h5>
+                </v-card-title>
+                <v-card-title class="text-justify" style="font-size: 110%;">Esta seguro que desea eliminar la siguiente Escuela?</v-card-title>
+                <v-card-text class="pt-2">Nombre Escuela: {{ escuelaEliminar.nombre }}</v-card-text>
+                <v-card-text>Codigo Carrera: {{ escuelaEliminar.cod }}</v-card-text>   
+                <div class="px-10  pb-4" style="text-align:right;">
+                  <v-btn rounded color="warning" @click="dialogEliminar = false">
+                    <h4 class="white--text">Cancelar</h4>
+                  </v-btn>
+                  <v-btn rounded color="secondary" class="ml-2" @click="borrarEscuela(escuelaEliminar)">
+                    <h4 class="white--text">Eliminar</h4>
+                  </v-btn>
+                </div>  
+                
+              </v-card>
+            </v-dialog> 
+        </v-card>
+        </v-col>
+        <v-col cols="12" md="2">
+        </v-col>          
+    </v-row>
+    <v-snackbar
+      v-model="alertError"
+      :timeout=delay
+      bottom
+      color="warning"
+      left
+      class="mb-1 pb-12 pr-0 mr-0"
+    >
+      <div>
+        <v-icon color="white" class="mr-2">
+          fas fa-exclamation-triangle
+        </v-icon>
+        <strong>{{textoError}} </strong>
+      </div>
+      <v-btn
           color="white"
           elevation="0"
           x-small
           fab
-          @click="alertAcept = ! alertAcept"
-        > 
-            <v-icon color="secondary">fas fa-times</v-icon>
-        </v-btn>
-      </v-snackbar>
+          @click="alertError = ! alertError"
+      > 
+          <v-icon color="warning">fas fa-times</v-icon>
+      </v-btn>
+    </v-snackbar>
+    <v-snackbar
+      v-model="alertAcept"
+      :timeout=delay
+      bottom
+      color="secondary"
+      left
+      class="mb-1 pb-12 pr-0 mr-0"
+    >
+      <div>
+        <v-icon color="white" class="mr-2">
+          fas fa-check-circle
+        </v-icon>
+        <strong>{{textoAcept}}</strong>
+      </div>
+      <v-btn
+        color="white"
+        elevation="0"
+        x-small
+        fab
+        @click="alertAcept = ! alertAcept"
+      > 
+        <v-icon color="secondary">fas fa-times</v-icon>
+      </v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -223,6 +264,7 @@
   import axios from 'axios'
   export default {
     data: () => ({
+      buscar: '',
       dialog: false,
       keyDialog: 1,
       dialogModificar: false,
@@ -239,7 +281,7 @@
         { text: 'ID',align: 'start',value: 'id',sortable: false},
         { text: 'Nombre', value: 'nombre',sortable: false, },
         { text: 'Codigo carrera', value: 'cod_car',sortable: false, },
-        { text: 'Opciones', value: 'actions', sortable: false },
+        { text: 'Opciones', value: 'actions', sortable: false, align:'center' },
       ],
       desserts:[],
       dessertsAux:[],
@@ -290,7 +332,7 @@
                 let escuela = {
                   id: element.id,
                   nombre: element.nombre,
-                  cod_car: element.cod_carrera,
+                  cod_car: element.cod_escuela,
                 };
                 this.dessertsAux[index]=escuela;
               }
@@ -327,7 +369,7 @@
         var url = 'http://127.0.0.1:8000/api/v1/escuela';
         let post ={
           "nombre": this.escuela.nombre,
-          "cod_carrera":this.escuela.cod,
+          "cod_escuela":this.escuela.cod,
         };
         axios.post(url,post,this.$store.state.config)
         .then((result)=>{
@@ -372,7 +414,7 @@
         var url = 'http://127.0.0.1:8000/api/v1/escuela/'+item.id;
         let put ={
           "nombre": this.escuelaEditar.nombre,
-          "cod_carrera":  this.escuelaEditar.cod,
+          "cod_escuela":  this.escuelaEditar.cod,
         }
         axios.put(url,put,this.$store.state.config)
         .then((result)=>{
@@ -475,12 +517,6 @@
         this.dialogModificar=false;
         this.keyDialogModicar ++;
       },
-      
-    },
-    watch:{
-
     },
   }
-
-  
 </script>

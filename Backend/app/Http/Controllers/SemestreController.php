@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Curso;
+use App\Semestre;
 use Illuminate\Http\Request;
 use Validator;
 
-class CursoController extends Controller
+class SemestreController extends Controller
 {
 
     /**
@@ -14,11 +14,11 @@ class CursoController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['permission:create curso'], ['only' => ['create', 'store']]);
-        $this->middleware(['permission:read curso'], ['only' => 'index']);
-        $this->middleware(['permission:update curso'], ['only' => ['edit', 'update']]);
-        $this->middleware(['permission:delete curso'], ['only' => 'delete']);
-        $this->middleware(['permission:restore curso'], ['only' => 'disabled', 'restore']);
+        $this->middleware(['permission:create semestre'], ['only' => ['create', 'store']]);
+        $this->middleware(['permission:read semestre'], ['only' => 'index']);
+        $this->middleware(['permission:update semestre'], ['only' => ['edit', 'update']]);
+        $this->middleware(['permission:delete semestre'], ['only' => 'delete']);
+        $this->middleware(['permission:restore semestre'], ['only' => 'disabled', 'restore']);
     }
 
     /**
@@ -28,28 +28,37 @@ class CursoController extends Controller
      */
     public function index()
     {
-        $cursos = Curso::all();
-        return response()->json([
-            'success' => true,
-            'code' => 100,
-            'message' => "La operacion se a realizado con exito",
-            'data' => ['cursos'=>$cursos]
-        ], 200);
+        try{
+            $semestres = Semestre::all();
+            return response()->json([
+                'success' => true,
+                'code' => 100,
+                'message' => "La operacion se a realizado con exito",
+                'data' => ['semestres'=>$semestres]
+            ], 200);
+        } catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 101,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
     }
 
     /**
-     * Metodo que no sirve deberia redireccionar cuando funciona dentro de laravel
-     * Este metodo esta inactivo asi que se manda un error correspondiente
-     * Errores code inician 200
+     * Show the form for creating a new resource.
+     *
      * @return \Illuminate\Http\Response
      */
-    public function create(){
+    public function create()
+    {
         return response()->json([
             'success' => false,
             'code' => 201,
-            'message' => 'el cliente debe usar un protocolo distinto',
+            'message' => 'Este recurso está bloqueado',
             'data' => ['error'=>'El el protocolo se llama store']
-        ], 426 );
+        ], 426);
     }
 
     /**
@@ -60,28 +69,47 @@ class CursoController extends Controller
      */
     public function store(Request $request)
     {
-        //'nombre','plan','descripcion','escuela'
-        $curso = new Curso();
-        $curso->nombre = $request->nombre;
-        $curso->plan = $request->plan;
-        $curso->descripcion = $request->descripcion;
-        $curso->escuela = $request->escuela;
-        $curso->save();
-        return response()->json([
-            'success' => true,
-            'code' => 100,
-            'message' => "La operacion se a realizado con exito",
-            'data' => ['curso'=>$curso]
-        ], 200);
+        $entradas = $request->only('anio', 'semestre');
+        $validator = Validator::make($entradas, [
+            'anio' => ['required', 'numeric'],
+            'semestre' => [' required', 'numeric'],
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'code' => 301,
+                'message' => 'Error en datos ingresados',
+                'data' => ['error'=>$validator->errors()]
+            ], 422);
+        }
+        try{
+            $semestre = new Semestre();
+            $semestre-> anio=$entradas['anio'];
+            $semestre-> semestre=$entradas['semestre'];
+            $semestre->save();
+            return response()->json([
+                'success' => true,
+                'code' => 300,
+                'message' => "Operacion realizada con exito",
+                'data' => ['semestre'=>$semestre]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 302,
+                'message' => "Error en la base de datos",
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Curso  $curso
+     * @param  \App\Semestre  $semestre
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Semestre $semestre)
     {
         return response()->json([
             'success' => false,
@@ -92,18 +120,18 @@ class CursoController extends Controller
     }
 
     /**
-     * Metodo que no sirve deberia redireccionar cuando funciona dentro de laravel
-     * Este metodo esta inactivo asi que se manda un error correspondiente
-     * Errores code inician 500
-     * @param  \App\Curso  $curso
-     * @return \Illuminate\Http\Curso
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Semestre  $semestre
+     * @return \Illuminate\Http\Response
      */
-    public function edit($id){
+    public function edit(Semestre $semestre)
+    {
         return response()->json([
             'success' => false,
             'code' => 501,
-            'message' => 'el cliente debe usar un protocolo distinto',
-            'data' => ['error'=>'El el protocolo se llama store']
+            'message' => 'Este recurso está bloqueado',
+            'data' => ['error'=>'El el protocolo se llama update']
         ], 426);
     }
 
@@ -111,17 +139,15 @@ class CursoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Curso  $curso
+     * @param  \App\Semestre  $semestre
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $entradas = $request->only('cod_escuela', 'nombre');
+        $entradas = $request->only('anio', 'semestre');
         $validator = Validator::make($entradas, [
-            'cod_escuela' => ['numeric', 'nullable'],
-            'nombre' => ['string', 'nullable'],
-            'cod_escuela' => ['numeric', 'nullable'],
-            'nombre' => ['string', 'nullable']
+            'anio' => ['numeric', 'nullable'],
+            'semestre' => ['numeric', 'nullable'],
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -132,33 +158,27 @@ class CursoController extends Controller
             ], 422);
         }
         try{
-            $curso = Curso::find($id);
-            if ($curso == null) {
+            $semestre = Semestre::find($id);
+            if ($semestre == null) {
                 return response()->json([
                     'success' => false,
                     'code' => 602,
-                    'message' => 'La curso con el id '.$id.' no existe',
+                    'message' => 'La semestre con el id '.$id.' no existe',
                     'data' => null
                 ], 409);
             }
-            if($entradas['nombre']!=null){
-                $curso->nombre = $entradas['nombre'];
+            if($entradas['anio']!=null){
+                $semestre->anio = $entradas['anio'];
             }
-            if($entradas['plan']!=null){
-                $curso->plan = $entradas['plan'];
+            if($entradas['semestre']!=null){
+                $semestre->semestre = $entradas['semestre'];
             }
-            if($entradas['descripcion']!=null){
-                $curso->descripcion = $entradas['descripcion'];
-            }
-            if($entradas['escuela']!=null){
-                $curso->escuela = $entradas['escuela'];
-            }
-            $curso-> save();
+            $semestre->save();
             return response()->json([
                 'success' => true,
                 'code' => 600,
                 'message' => "Operacion realizada con exito",
-                'data' => ['curso'=>$curso]
+                'data' => ['semestre'=>$semestre]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
@@ -171,28 +191,29 @@ class CursoController extends Controller
     }
 
     /**
-     * Metodo que se encarga de eliminar un curso
-     * Errores code inician 700
-     * @param  \App\Curso  $curso
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Semestre  $semestre
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id){
+    public function destroy($id)
+    {
         try{
-            $curso = Curso::find($id);
-            if ($curso == null) {
+            $semestre = Semestre::find($id);
+            if ($semestre == null) {
                 return response()->json([
                     'success' => false,
                     'code' => 701,
-                    'message' => 'El curso con el id '.$id.' no existe',
+                    'message' => 'El semestre con el id '.$id.' no existe',
                     'data' => null
                 ], 409 );
             }else{
-                $curso->delete();
+                $semestre->delete();
                 return response()->json([
                     'success' => true,
                     'code' => 700,
                     'message' => "Operacion realizada con exito",
-                    'data' =>['curso'=> $curso]
+                    'data' =>['semestre'=> $semestre]
                 ], 200);
             }
         }catch(\Illuminate\Database\QueryException $ex){ 
@@ -203,20 +224,17 @@ class CursoController extends Controller
                 'data' => ['error'=>$ex]
             ], 409 );
         }
+        $semestre = Semestre::find($id);
     }
 
-    /**
-     * Metodo que se encarga de listar las escuelas eliminadas
-     * Errores code inician 800
-     */
     public function disabled(){
         try{
-            $cursos = Curso::onlyTrashed()->get();
+            $semestres = Semestre::onlyTrashed()->get();
             return response()->json([
                 'success' => true,
                 'code' => 800,
                 'message' => "Operacion realizada con exito",
-                'data' =>['cursos'=> $cursos]
+                'data' =>['semestres'=> $semestres]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
@@ -228,26 +246,22 @@ class CursoController extends Controller
         }
     }
 
-    /**
-     * Metodo que se encarga de recuperar un curso
-     * Errores code inician 900
-     */
     public function restore($id){
         try{
-            $curso=Curso::onlyTrashed()->find($id)->restore();
-            if($curso==false){
+            $semestre = Semestre::onlyTrashed()->find($id)->restore();
+            if($semestre==false){
                 return response()->json([
                     'success' => false,
                     'code' => 901,
-                    'message' => "La escuela no se logro recuperar",
-                    'data' => ['curso'=>$curso]
+                    'message' => "La semestre no se logro recuperar",
+                    'data' => ['semestre'=>$semestre]
                 ], 409);
             }
             return response()->json([
                 'success' => true,
                 'code' => 900,
-                'message' => "La escuela recupero con exito",
-                'data' => ['curso'=>$curso]
+                'message' => "La semestre recupero con exito",
+                'data' => ['semestre'=>$semestre]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
@@ -258,4 +272,8 @@ class CursoController extends Controller
             ], 409);
         }
     }
+
 }
+
+    
+

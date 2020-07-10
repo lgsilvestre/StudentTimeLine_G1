@@ -7,7 +7,7 @@
     
   </div>
 </template>
-
+ 
 <script>
 import AppBarGlobal from '@/components/Globales/AppBarGlobal.vue';
 import FooterGlobal from '@/components/Globales/FooterGlobal.vue';

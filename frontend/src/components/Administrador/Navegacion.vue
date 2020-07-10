@@ -4,18 +4,21 @@
     >
     <v-list-item class="px-2 py-1 difuminado" active-class="activacion" to="/administrador/perfil">
         <v-list-item-avatar >
-            <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
+            <v-img :src="usuario.usuario.foto"
+            ></v-img>
         </v-list-item-avatar>
-        <v-list-item-title class="white--text letra" ><strong>Administrador</strong></v-list-item-title>
+        <v-list-item-title class="white--text letra" ><strong>Perfil</strong></v-list-item-title>
     </v-list-item>
     <v-divider></v-divider>
     <v-list style=" margine-right: 0; margine-left:0;"  >  
+
         <v-list-item  v-on="on" to="/administrador/escuela" class="difuminado" active-class="activacion">
             <v-list-item-icon>
                 <v-icon color="white">fas fa-school</v-icon>
             </v-list-item-icon>
             <v-list-item-title class="white--text letra" ><strong>Escuela</strong></v-list-item-title>
         </v-list-item>
+
             <v-list-item  v-on="on" to="/administrador/usuarios" class="difuminado" active-class="activacion">
                 <v-list-item-icon>
                     <v-icon color="white">fas fa-users</v-icon>
@@ -140,7 +143,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['drawers']),
+        ...mapState(['drawers', 'usuario']),
 
     },
     icons:{

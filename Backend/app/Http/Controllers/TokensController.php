@@ -15,7 +15,6 @@ use Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Mail\EmergencyCallReceived;
 use \App\Mail\SendMail;
-//use App\Mail\SendMail;
 
 class TokensController extends Controller
 {
@@ -44,7 +43,7 @@ class TokensController extends Controller
                     'code' => 1,
                     'message' => 'Operacion realizada con exito',
                     'data' => ['token'=>$token,
-                               'usuario' =>User::where('email', $credenciales['email'])->get()->first()],
+                            'usuario' =>User::where('email', $credenciales['email'])->get()->first()],
                 ], 200);
             } else {
                 return response()->json([
@@ -103,7 +102,6 @@ class TokensController extends Controller
                 'data' => ['error'=>$ex]
             ], 409);
         }
-
     }
 
     /**
@@ -166,20 +164,10 @@ class TokensController extends Controller
                     'data' => 'El usuario con el correo:'.$credenciales['email'].' no existe'
                 ], 401);
             }
-            $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789";
-            srand((double)microtime()*1000000);
-            $i = 0;
-            $pass = '' ;
-            while ($i <= 7) {
-                $num = rand() % 33;
-                $tmp = substr($chars, $num, 1);
-                $pass = $pass . $tmp;
-                $i++;
-            }
-            $codigo = time().$pass;
+            $codigo = bin2hex(random_bytes(20));
             $details = array(
                 'usuario' => $user['nombre'],
-                'direccion' => 'aqui va la url + el codigo inventado',
+                'direccion' => 'http://localhost:8080/ReinicioContraseña/'.$codigo
             );
             \Mail::to($user['email'])->send(new SendMail($details));
             $user->codigoRecuperacion = $codigo;
@@ -222,7 +210,7 @@ class TokensController extends Controller
             ], 422);
         }
         try{
-            $user = User::where('codigo', $credenciales['codigo'])->get()->first();
+            $user = User::where('codigoRecuperacion', $credenciales['codigo'])->get()->first();
             if($user==null){
                 return response()->json([
                     'success' => false,
@@ -267,5 +255,4 @@ class TokensController extends Controller
             ], 502);
         }
     }
-    
 }
