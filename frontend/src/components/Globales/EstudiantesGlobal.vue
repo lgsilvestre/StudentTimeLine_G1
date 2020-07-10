@@ -328,10 +328,9 @@
                 class="elevation-1 "
                 >
                     <template v-slot:item.actions="{ item }">
-                    <v-btn color="white" fab small depressed class="mr-2 py-2">
+                    <v-btn color="white" fab small depressed class="mr-2 py-2" @click="perfilEstudiante(item)">
                         <v-icon  
                         color="primary"
-                        @click="nada(item)"
                         >
                         fas fa-edit
                         </v-icon>
@@ -880,6 +879,10 @@
             this.estudianteImportar.situacion_academica="";
             this.estudianteImportar.escuela="";
             this.dialogAgregarEstudiante= false;
+        },
+        perfilEstudiante(item){
+            this.$store.state.perfilEstudiante = item;
+            this.$router.push({path:'/administrador/estudiantes/'+item.rut});
         },
 
     },
