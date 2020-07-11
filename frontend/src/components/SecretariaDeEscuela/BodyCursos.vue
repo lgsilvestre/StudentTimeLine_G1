@@ -26,7 +26,7 @@
                     v-for="(semestre, index) in listaSemestres" :key="index"
                     cols="12" sm="6" md="4" lg="3">
                     <!-- @click="obtenerCursosSemestre(semestre)" -->
-                    <v-card dark style="background-color:#4ECDC4; border-style:solid; border-color:rgba(0,0,0,0.); "
+                    <v-card dark style="background-color:#4ECDC4; border-style:solid; border-color:rgba(0,0,0,3.); "
                     @click="calcularRol(semestre.id)" >
                         <!-- <v-img
                             class="mx-auto white--text align-end justify-center"
