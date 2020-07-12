@@ -14,7 +14,8 @@ class CategoriaController extends Controller
      */
     public function index()
     {
-        //
+        $categorias = Categoria::all();
+        return $categorias;
     }
 
     /**
@@ -24,7 +25,12 @@ class CategoriaController extends Controller
      */
     public function create()
     {
-        //
+        return response()->json([
+            'success' => false,
+            'code' => 201,
+            'message' => 'El cliente debe usar un protocolo distinto',
+            'data' => ['error'=>'El protocolo se llama Store']
+        ], 426 );
     }
 
     /**
@@ -35,7 +41,16 @@ class CategoriaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $categoria= new Categoria();
+        $categoria->nombre = $request->nombre;
+        $categoria->save();
+
+        return response()->json([
+            'success' => true,
+            'code' => 100,
+            'message' => "La operación se ha realizado con éxito",
+            'data' => ['categoria'=>$categoria]
+        ], 200);
     }
 
     /**
@@ -46,7 +61,12 @@ class CategoriaController extends Controller
      */
     public function show(Categoria $categoria)
     {
-        //
+        return response()->json([
+            'success' => false,
+            'code' => 401,
+            'message' => 'Este recurso está bloqueado',
+            'data' => ['error'=>'El protocolo se llama Index']
+        ], 423);
     }
 
     /**
@@ -57,7 +77,12 @@ class CategoriaController extends Controller
      */
     public function edit(Categoria $categoria)
     {
-        //
+        return response()->json([
+            'success' => false,
+            'code' => 401,
+            'message' => 'Este recurso está bloqueado',
+            'data' => ['error'=>'El protocolo se llama Update']
+        ], 423);
     }
 
     /**
@@ -67,9 +92,12 @@ class CategoriaController extends Controller
      * @param  \App\Categoria  $categoria
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Categoria $categoria)
+    public function update(Request $request, $id)
     {
-        //
+        $categoria = Categoria::find($id);
+        $categoria->nombre = $request->nombre ;
+        $categoria->save();
+        return compact('categoria');
     }
 
     /**
@@ -78,9 +106,11 @@ class CategoriaController extends Controller
      * @param  \App\Categoria  $categoria
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Categoria $categoria)
+    public function destroy($id)
     {
-        //
+        $categoria = Categoria::find($id);
+        $categoria->delete();
+        return $categoria;
     }
 
     /**
