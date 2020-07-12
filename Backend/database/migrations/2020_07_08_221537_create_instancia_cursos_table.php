@@ -18,6 +18,7 @@ class CreateInstanciaCursosTable extends Migration
             $table->bigInteger('semestre')->unsigned();
             $table->bigInteger('curso')->unsigned();
             $table->softDeletes();
+            $table->string('seccion');
             $table->foreign('semestre')->references('id')->on('semestres');
             $table->foreign('curso')->references('id')->on('cursos');
             $table->timestamps();
