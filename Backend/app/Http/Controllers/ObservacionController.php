@@ -82,4 +82,22 @@ class ObservacionController extends Controller
     {
         //
     }
+
+    /**
+     * Metodo que se encarga de listar todas las observaciones eliminadas
+     * Errores code inician 800
+     * @return \Illuminate\Http\Response
+     */
+    public function disabled(){
+
+    }
+
+    /**
+     * Metodo que se encarga recuperar una observación
+     * Errores code inician 900
+     * @return \Illuminate\Http\Response
+     */
+    public function restore($id){
+
+    }
 }

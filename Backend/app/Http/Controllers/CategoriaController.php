@@ -82,4 +82,22 @@ class CategoriaController extends Controller
     {
         //
     }
+
+    /**
+     * Metodo que se encarga de listar todas las categorias eliminadas
+     * Errores code inician 800
+     * @return \Illuminate\Http\Response
+     */
+    public function disabled(){
+
+    }
+
+    /**
+     * Metodo que se encarga recuperar una categoria
+     * Errores code inician 900
+     * @return \Illuminate\Http\Response
+     */
+    public function restore($id){
+
+    }
 }

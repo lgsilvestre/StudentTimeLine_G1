@@ -15,6 +15,11 @@ class CreateObservacionesTable extends Migration
     {
         Schema::create('observaciones', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('ayudante')->unsigned();
+            $table->bigInteger('estudiante')->unsigned();
+            $table->bigInteger('profesor')->unsigned();
+            $table->bigInteger('curso')->unsigned();
+            $table->bigInteger('categoria')->unsigned();
             $table->foreign('ayudante')->references('id')->on('ayudante__con__cursos');
             $table->foreign('estudiante')->references('id')->on('estudiantes');
             $table->string('titulo');
@@ -22,7 +27,7 @@ class CreateObservacionesTable extends Migration
             $table->foreign('profesor')->references('id')->on('users');
             $table->string('tipo');
             $table->foreign('curso')->references('id')->on('cursos');
-            $table->string('categoria')->references('id')->on('categorias');;
+            $table->foreign('categoria')->references('id')->on('categorias');;
             $table->timestamps();
             $table->softDeletes();
         });
