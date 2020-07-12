@@ -10,11 +10,9 @@
                         <v-list-item class="difuminado"  active-class="activacion" @click="calcularRolVuelta">
                         <v-list-item-icon><v-icon color="primary"> fas fa-arrow-circle-left</v-icon> </v-list-item-icon>
                         <v-list-item-title> Volver </v-list-item-title>
-                    </v-list-item>
-
+                    </v-list-item>      
                     <v-divider></v-divider>
-                    
-                    <v-subheader><strong>Acciones</strong></v-subheader>
+                    <v-subheader><strong>Acciones sobre curso</strong></v-subheader>
 
                     <v-list-item class="difuminado" active-class="activacion" @click="dialogListaCursos = true">
                         <v-list-item-title> Lista de Cursos</v-list-item-title>
@@ -23,7 +21,7 @@
                     <v-list-item  class="difuminado" active-class="activacion" @click="dialogCrearCurso = true">
                         <v-list-item-title> Crear Curso</v-list-item-title>
                     </v-list-item>
-                    <v-list-item  class="difuminado" active-class="activacion" >
+                    <v-list-item  class="difuminado" active-class="activacion" @click="dialogAgregarCursoSemestre = true">
                         <v-list-item-title> Agregar Curso al Semestre</v-list-item-title>
                     </v-list-item>
                     </v-list>
@@ -40,23 +38,31 @@
                     >
                     </v-img>
                     <!-- Tabla de Instacias de Cursos, o para ser exactos, cursos que estan asignados al semestre seleccionado. -->
-                    <v-data-table  :headers="colInsCursos" :items="listaInsCursos"
-                        :search="search" :loading="cargando" :items-per-page="10"  >            
-                        <template v-slot:item.opciones="{ item }">
-                        <!-- boton para modificar instancia de curso seleccionado -->
-                            <v-btn color="white" fab small depressed class="mr-2 py-2">
-                                <v-icon color="primary" @click="modificarInstanciaCurso(item)" >
-                                    fas fa-edit
-                                </v-icon>
-                            </v-btn>
-                        <!-- boton para eliminar instancia de curso seleccionado -->
-                            <v-btn color="white" fab small depressed class="mr-2 py-2">
-                                <v-icon color="warning" @click="setEliminarInstanciaCurso(item)" >
-                                    fas fa-trash-alt
-                                </v-icon>
-                            </v-btn>
+                    <v-data-iterator  :items="listaInsCursos" :page="pagina"   hide-default-footer
+                    :search="buscar" :items-per-page="10">
+                        <template v-slot:header> 
+                            <v-toolbar dark color="blue darken-3" class="mb-1" >
+                                <v-text-field v-model="buscar" clearable flat   hide-details label="Buscar"
+                                ></v-text-field>
+                            </v-toolbar>  
                         </template>
-                    </v-data-table>
+
+                        <template   v-slot:default="props">
+                            <v-row>
+                               <v-col v-for="curso in props.listaInsCursos" :key="curso.nomCurso" cols="12"  sm="6" md="4" lg="3"  >
+                                    <v-card>
+                                        <v-card-title class="subheading font-weight-bold">{{ curso.nomCurso }}</v-card-title>
+
+                                        <v-divider></v-divider>
+
+                                        
+                                        
+                                    </v-card>
+                                </v-col>
+                            </v-row>
+                        </template> 
+
+                    </v-data-iterator>
                 </v-card>
             </v-col>
             <v-col cols="12" md="1">                        
@@ -222,6 +228,72 @@
             </v-card>
         </v-dialog>
 
+        <!-- Dialog para mostrar la lista de los Cursos Existentes -->
+        <v-dialog v-model="dialogAgregarCursoSemestre" fullscreen hide-overlay transition="dialog-bottom-transition">
+            <v-card class="mx-auto my-10 " max-width="70%">
+                <v-toolbar dark color="primary">
+                <v-spacer></v-spacer>
+                <v-btn  depressed color="primary" @click="dialogAgregarCursoSemestre = false">
+                    <v-icon>mdi-close</v-icon>
+                    
+                <v-toolbar-title>Cerrar</v-toolbar-title>
+                </v-btn>
+                
+                </v-toolbar>
+                <v-container>
+                    <!-- fila para el toolbar -->
+                    <v-row>
+                        <v-col cols="12" >
+                            <v-card flat   >
+                                <v-img class="mx-auto white--text align-end justify-center"
+                                        width="100%" height="150px"       
+                                        src="@/assets/Globales/background-panel-08.jpg">
+                                        <v-card-title class="white--text" style="font-size: 200%;text-shadow: #555 2px 2px 3px;">
+                                            <strong > Semestres </strong>
+                                            <v-spacer></v-spacer>
+                                            <!-- <v-btn class="mr-2" fab large bottom left @click="dialogAñadirSemestre =true" >
+                                                <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
+                                            </v-btn> -->
+                                        </v-card-title>
+
+                                </v-img>
+                            </v-card>
+                        </v-col>
+                        <v-col cols="12">
+                            <v-card class="mx-auto" >
+                            <v-container>
+                                <v-row >
+                                    <v-col
+                                    v-for="(curso, index) in listaCursos" :key="index"
+                                    cols="12" sm="6" md="4" lg="3">
+                                    <v-card dark height="120px" style="background-color:#4ECDC4; border-style:solid; border-color:rgba(0,0,0,0.5); "
+                                     @click="asignarCursoASementre(curso)">
+                                            <div class="d-flex flex-no-wrap justify-space-between">
+                                                <div>
+                                                    <v-card-title
+                                                    class="black--text"
+                                                    >  {{ curso.nombre }} </v-card-title>
+
+                                                    <v-card-subtitle  class="black--text"> Plan {{curso.plan}}</v-card-subtitle>
+                                                    <!-- <v-card-subtitle  class="black--text"> Escuela {{curso.escuela}}</v-card-subtitle> -->
+                                                </div>
+                                            
+                                            </div>
+                                    </v-card>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                        </v-card>
+
+                        </v-col>
+                    </v-row>
+                    
+                </v-container>
+            
+                
+            </v-card>
+        </v-dialog>
+
         <!-- Alertas -->
 
         <v-snackbar v-model="alertaError" :timeout="timeout"
@@ -279,6 +351,7 @@ export default {
     data(){
         return{
             /* Variables Alertas */
+            dialogAgregarCursoSemestre:false,
             alertaExito: false,
             alertaError: false,
             textoAlertas: '',
@@ -299,7 +372,7 @@ export default {
                 {text:'ID', value:'id'},
                 {text:'Nombre', value:'nombre'},
                 {text:'Plan', value:'plan'},   
-                {text:'Escuela', value:'escuela'},
+                {text:'Escuela', value:'nomEscuela'},
                 {text:'Descripcion', value:'descripcion'},
                 {text:'Opciones', value:'opciones'},
             ],
@@ -320,6 +393,15 @@ export default {
             dialogCrearInsCurso: false,
             dialogModificarInsCurso: false,
             dialogEliminarInsCurso: false,
+
+            // listaOpcionesDeCursos:[],
+            pagina:1,
+            ordenarPor:"nomCurso",
+            buscar: '',
+            filter: {},
+            keys: [
+            'nomCurso',
+            ]
         }
     },
     created () {   
@@ -327,8 +409,14 @@ export default {
         this.obtenerCursos();
         this.obtenerInstanciasCursos();    
     },
+    computed: {
+        filteredKeys () {
+        return this.keys.filter(key => key !== `nomCurso`)
+      },
+    },
     methods: {
         ...mapMutations(['calcularRolVuelta']),
+        
 
         obtenerEscuelas(){
             this.listaEscuelaAux = [];
@@ -406,6 +494,14 @@ export default {
                         plan: element.plan,
                         descripcion: element.descripcion,
                         escuela: element.escuela,
+                        nomEscuela: '',
+                    };
+                    for (let j = 0; j < this.listaEscuela.length; j++){
+                        /* console.log("id curso: "+this.listaCursos[j].id); */
+                        if(this.listaEscuela[j].id == curso.escuela){
+                            curso.nomEscuela = this.listaEscuela[j].nombre;
+                            break;
+                        };
                     };
                     this.listaCursosAux[index]=curso;
                 }
@@ -422,18 +518,27 @@ export default {
         //Metodo para obtener Todas las Instancias de Curso asociadas al Semestre actual.
         obtenerInstanciasCursos(){
             this.listaInsCursosAux = [];
+            var listaBrayan=[];
             var aux;            
-            var url = `http://127.0.0.1:8000/api/v1/instanciaCurso/${this.$route.params.id}`;
+            var url = `http://127.0.0.1:8000/api/v1/instanciaCurso/${this.$store.infoSemestre.id}`;
             axios.get(url,this.$store.state.config)
-            .then((result)=>{                            
+            .then((result)=>{   
                 for (let index = 0; index < result.data.data.insCurso.length; index++) {
                     const element = result.data.data.insCurso[index];                    
                     let insCurso = {
                         id: element.id,
                         semestre: element.semestre,
                         curso: element.curso,
-                    };                
-                    this.listaInsCursosAux[index]=insCurso;                                        
+                        nomCurso: '',
+                    }; 
+                    for (let j = 0; j < this.listaCursos.length; j++){
+                        /* console.log("id curso: "+this.listaCursos[j].id); */
+                        if(this.listaCursos[j].id == insCurso.curso){
+                            insCurso.nomCurso = this.listaCursos[j].nombre;
+                        };
+                    };  
+
+                    this.listaInsCursosAux[index]=insCurso;                                                         
                 }
                 this.listaInsCursos = this.listaInsCursosAux;  
                 this.cargando = false;              
@@ -523,8 +628,10 @@ export default {
         },
 
 
-        asignarCursoASementre(){
-
+        asignarCursoASementre(curso){
+            console.log(curso.id)
+            console.log(curso.nombre);
+            // api/v1/instanciaCurso  
         },
 
 

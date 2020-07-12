@@ -147,12 +147,6 @@ class UsuarioController extends Controller
         if(!array_key_exists ("foto" , $entradas)){
             $entradas['foto'] = null;
         }
-        return response()->json([
-            'success' => true,
-            'code' => 301,
-            'message' => 'Error en datos ingresados',
-            'data' => ['entradas'=>$entradas]
-        ], 200);
         try{
             $user = new User();
             $user ->nombre=$entradas['nombre'];

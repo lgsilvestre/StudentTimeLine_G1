@@ -321,15 +321,7 @@ Vue.use(VueRouter)
             profesor: true
         },
       },
-      {
-        //Enrutamiento de la vista cursosAdministrador
-        path: 'cursos/:id',
-        name: 'insCursosProfesor',
-        component: () => import(/* webpackChunkName: "" */ '@/components/SecretariaDeEscuela/BodyInsCurso.vue'),
-        meta: {
-          profesor: true
-        },
-      },
+      
       // {
       //   //Enrutamiento de la vista crearObservacionProfesor
       //   path: 'observaciones/crearObservacion',

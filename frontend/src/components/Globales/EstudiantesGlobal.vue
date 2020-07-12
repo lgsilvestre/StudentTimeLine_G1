@@ -143,12 +143,14 @@
                                                     prepend-inner-icon="fas fa-hashtag"
                                                     ></v-text-field>
 
-                                                    <v-text-field  
+                                                    <v-select   
                                                     v-model="estudianteImportar.situacion_academica"
+                                                    :items="listaSituacionAcademica"
+                                                    item-text="nombre"
                                                     label="Situacion academica" outlined
                                                     color="secondary"
                                                     prepend-inner-icon="fas fa-address-book"
-                                                    ></v-text-field>
+                                                    ></v-select >
 
                                                     <v-select 
                                                     v-model="estudianteImportar.escuela" 
@@ -628,6 +630,10 @@
         alertAcept: false,
         textoAcept: '',
         delay: 4000,
+        listaSituacionAcademica:[
+            'Regular ','Egresado ', 'Eliminado ', 'Titulado',
+            'Intercambio','Postergación','Retiro','Temporal'
+        ]
 
     }),
     computed: {
@@ -761,6 +767,7 @@
                     this.resetUnicoEstudiante();
                     this.alertAcept = true;
                     this.textoAcept = 'Se agregó el estudiante correctamente '
+                    this.obtenerEstudiantes();
                 }
             })
             .catch((error)=>{
