@@ -38,23 +38,31 @@
                     >
                     </v-img>
                     <!-- Tabla de Instacias de Cursos, o para ser exactos, cursos que estan asignados al semestre seleccionado. -->
-                    <v-data-table  :headers="colInsCursos" :items="listaInsCursos"
-                        :search="search" :loading="cargando" :items-per-page="10"  >            
-                        <template v-slot:item.opciones="{ item }">
-                        <!-- boton para modificar instancia de curso seleccionado -->
-                            <v-btn color="white" fab small depressed class="mr-2 py-2">
-                                <v-icon color="primary" @click="modificarInstanciaCurso(item)" >
-                                    fas fa-edit
-                                </v-icon>
-                            </v-btn>
-                        <!-- boton para eliminar instancia de curso seleccionado -->
-                            <v-btn color="white" fab small depressed class="mr-2 py-2">
-                                <v-icon color="warning" @click="setEliminarInstanciaCurso(item)" >
-                                    fas fa-trash-alt
-                                </v-icon>
-                            </v-btn>
+                    <v-data-iterator  :items="listaInsCursos" :page="pagina"   hide-default-footer
+                    :search="buscar" :items-per-page="10">
+                        <template v-slot:header> 
+                            <v-toolbar dark color="blue darken-3" class="mb-1" >
+                                <v-text-field v-model="buscar" clearable flat   hide-details label="Buscar"
+                                ></v-text-field>
+                            </v-toolbar>  
                         </template>
-                    </v-data-table>
+
+                        <template   v-slot:default="props">
+                            <v-row>
+                               <v-col v-for="curso in props.listaInsCursos" :key="curso.nomCurso" cols="12"  sm="6" md="4" lg="3"  >
+                                    <v-card>
+                                        <v-card-title class="subheading font-weight-bold">{{ curso.nomCurso }}</v-card-title>
+
+                                        <v-divider></v-divider>
+
+                                        
+                                        
+                                    </v-card>
+                                </v-col>
+                            </v-row>
+                        </template> 
+
+                    </v-data-iterator>
                 </v-card>
             </v-col>
             <v-col cols="12" md="1">                        
@@ -386,13 +394,25 @@ export default {
             dialogModificarInsCurso: false,
             dialogEliminarInsCurso: false,
 
-            listaOpcionesDeCursos:[],
+            // listaOpcionesDeCursos:[],
+            pagina:1,
+            ordenarPor:"nomCurso",
+            buscar: '',
+            filter: {},
+            keys: [
+            'nomCurso',
+            ]
         }
     },
     created () {   
         this.obtenerEscuelas();
         this.obtenerCursos();
         this.obtenerInstanciasCursos();    
+    },
+    computed: {
+        filteredKeys () {
+        return this.keys.filter(key => key !== `nomCurso`)
+      },
     },
     methods: {
         ...mapMutations(['calcularRolVuelta']),
@@ -498,10 +518,11 @@ export default {
         //Metodo para obtener Todas las Instancias de Curso asociadas al Semestre actual.
         obtenerInstanciasCursos(){
             this.listaInsCursosAux = [];
+            var listaBrayan=[];
             var aux;            
             var url = `http://127.0.0.1:8000/api/v1/instanciaCurso/${this.$store.infoSemestre.id}`;
             axios.get(url,this.$store.state.config)
-            .then((result)=>{                            
+            .then((result)=>{   
                 for (let index = 0; index < result.data.data.insCurso.length; index++) {
                     const element = result.data.data.insCurso[index];                    
                     let insCurso = {
@@ -509,15 +530,15 @@ export default {
                         semestre: element.semestre,
                         curso: element.curso,
                         nomCurso: '',
-                    };         
+                    }; 
                     for (let j = 0; j < this.listaCursos.length; j++){
                         /* console.log("id curso: "+this.listaCursos[j].id); */
                         if(this.listaCursos[j].id == insCurso.curso){
-                            insCurso.nomCurso = this.listaCurso[j].nombre;
-                            break;
+                            insCurso.nomCurso = this.listaCursos[j].nombre;
                         };
-                    };       
-                    this.listaInsCursosAux[index]=insCurso;                                        
+                    };  
+
+                    this.listaInsCursosAux[index]=insCurso;                                                         
                 }
                 this.listaInsCursos = this.listaInsCursosAux;  
                 this.cargando = false;              
