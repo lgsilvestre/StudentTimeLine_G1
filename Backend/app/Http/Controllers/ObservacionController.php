@@ -132,7 +132,8 @@ class ObservacionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function disabled(){
-
+        $observaciones= Observacion::onlyTrashed()->get();
+        return compact('observaciones');
     }
 
     /**
@@ -141,6 +142,12 @@ class ObservacionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function restore($id){
-
+        $observacion= Observacion::onlyTrashed()->find($id)->restore();
+        return response()->json([
+            'success' => true,
+            'code' => 900,
+            'message' => "La observacion  se logro recuperar",
+            'data' => ['observacion'=>$observacion]
+        ], 200); 
     }
 }

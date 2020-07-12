@@ -119,7 +119,8 @@ class CategoriaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function disabled(){
-
+        $categorias= Categoria::onlyTrashed()->get();
+        return compact('categorias');
     }
 
     /**
@@ -128,6 +129,12 @@ class CategoriaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function restore($id){
-
+        $categoria= Categoria::onlyTrashed()->find($id)->restore();
+        return response()->json([
+            'success' => true,
+            'code' => 900,
+            'message' => "La categoria  se logro recuperar",
+            'data' => ['categoria'=>$categoria]
+        ], 200);  
     }
 }
