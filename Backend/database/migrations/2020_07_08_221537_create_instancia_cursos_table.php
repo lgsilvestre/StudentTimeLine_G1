@@ -22,7 +22,7 @@ class CreateInstanciaCursosTable extends Migration
             $table->foreign('semestre')->references('id')->on('semestres');
             $table->foreign('curso')->references('id')->on('cursos');
             $table->timestamps();
-            $table->unique(['semestre','curso']);
+            $table->unique(['semestre','curso','seccion']);
         });
     }
 
