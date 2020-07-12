@@ -10,11 +10,9 @@
                         <v-list-item class="difuminado"  active-class="activacion" @click="calcularRolVuelta">
                         <v-list-item-icon><v-icon color="primary"> fas fa-arrow-circle-left</v-icon> </v-list-item-icon>
                         <v-list-item-title> Volver </v-list-item-title>
-                    </v-list-item>
-
+                    </v-list-item>      
                     <v-divider></v-divider>
-                    
-                    <v-subheader><strong>Acciones</strong></v-subheader>
+                    <v-subheader><strong>Acciones sobre curso</strong></v-subheader>
 
                     <v-list-item class="difuminado" active-class="activacion" @click="dialogListaCursos = true">
                         <v-list-item-title> Lista de Cursos</v-list-item-title>
@@ -23,7 +21,7 @@
                     <v-list-item  class="difuminado" active-class="activacion" @click="dialogCrearCurso = true">
                         <v-list-item-title> Crear Curso</v-list-item-title>
                     </v-list-item>
-                    <v-list-item  class="difuminado" active-class="activacion" >
+                    <v-list-item  class="difuminado" active-class="activacion" @click="dialogAgregarCursoSemestre = true">
                         <v-list-item-title> Agregar Curso al Semestre</v-list-item-title>
                     </v-list-item>
                     </v-list>
@@ -222,6 +220,72 @@
             </v-card>
         </v-dialog>
 
+        <!-- Dialog para mostrar la lista de los Cursos Existentes -->
+        <v-dialog v-model="dialogAgregarCursoSemestre" fullscreen hide-overlay transition="dialog-bottom-transition">
+            <v-card class="mx-auto my-10 " max-width="70%">
+                <v-toolbar dark color="primary">
+                <v-spacer></v-spacer>
+                <v-btn  depressed color="primary" @click="dialogAgregarCursoSemestre = false">
+                    <v-icon>mdi-close</v-icon>
+                    
+                <v-toolbar-title>Cerrar</v-toolbar-title>
+                </v-btn>
+                
+                </v-toolbar>
+                <v-container>
+                    <!-- fila para el toolbar -->
+                    <v-row>
+                        <v-col cols="12" >
+                            <v-card flat   >
+                                <v-img class="mx-auto white--text align-end justify-center"
+                                        width="100%" height="150px"       
+                                        src="@/assets/Globales/background-panel-08.jpg">
+                                        <v-card-title class="white--text" style="font-size: 200%;text-shadow: #555 2px 2px 3px;">
+                                            <strong > Semestres </strong>
+                                            <v-spacer></v-spacer>
+                                            <!-- <v-btn class="mr-2" fab large bottom left @click="dialogAñadirSemestre =true" >
+                                                <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
+                                            </v-btn> -->
+                                        </v-card-title>
+
+                                </v-img>
+                            </v-card>
+                        </v-col>
+                        <v-col cols="12">
+                            <v-card class="mx-auto" >
+                            <v-container>
+                                <v-row >
+                                    <v-col
+                                    v-for="(curso, index) in listaCursos" :key="index"
+                                    cols="12" sm="6" md="4" lg="3">
+                                    <v-card dark height="120px" style="background-color:#4ECDC4; border-style:solid; border-color:rgba(0,0,0,0.5); "
+                                     @click="asignarCursoASementre(curso)">
+                                            <div class="d-flex flex-no-wrap justify-space-between">
+                                                <div>
+                                                    <v-card-title
+                                                    class="black--text"
+                                                    >  {{ curso.nombre }} </v-card-title>
+
+                                                    <v-card-subtitle  class="black--text"> Plan {{curso.plan}}</v-card-subtitle>
+                                                    <!-- <v-card-subtitle  class="black--text"> Escuela {{curso.escuela}}</v-card-subtitle> -->
+                                                </div>
+                                            
+                                            </div>
+                                    </v-card>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                        </v-card>
+
+                        </v-col>
+                    </v-row>
+                    
+                </v-container>
+            
+                
+            </v-card>
+        </v-dialog>
+
         <!-- Alertas -->
 
         <v-snackbar v-model="alertaError" :timeout="timeout"
@@ -279,6 +343,7 @@ export default {
     data(){
         return{
             /* Variables Alertas */
+            dialogAgregarCursoSemestre:false,
             alertaExito: false,
             alertaError: false,
             textoAlertas: '',
@@ -320,6 +385,8 @@ export default {
             dialogCrearInsCurso: false,
             dialogModificarInsCurso: false,
             dialogEliminarInsCurso: false,
+
+            listaOpcionesDeCursos:[],
         }
     },
     created () {   
@@ -329,6 +396,7 @@ export default {
     },
     methods: {
         ...mapMutations(['calcularRolVuelta']),
+        
 
         obtenerEscuelas(){
             this.listaEscuelaAux = [];
@@ -431,7 +499,7 @@ export default {
         obtenerInstanciasCursos(){
             this.listaInsCursosAux = [];
             var aux;            
-            var url = `http://127.0.0.1:8000/api/v1/instanciaCurso/${this.$route.params.id}`;
+            var url = `http://127.0.0.1:8000/api/v1/instanciaCurso/${this.$store.infoSemestre.id}`;
             axios.get(url,this.$store.state.config)
             .then((result)=>{                            
                 for (let index = 0; index < result.data.data.insCurso.length; index++) {
@@ -539,8 +607,10 @@ export default {
         },
 
 
-        asignarCursoASementre(){
-
+        asignarCursoASementre(curso){
+            console.log(curso.id)
+            console.log(curso.nombre);
+            // api/v1/instanciaCurso  
         },
 
 
