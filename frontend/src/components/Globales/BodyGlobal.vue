@@ -266,7 +266,8 @@ export default {
          */
         modificarUsuario(e){
             // validamos que el correo puede ser null o segun la regla establecida
-            if( /.+@utalca.cl/.test(this.datosUsuarioModificar.correo) || this.datosUsuarioModificar.correo == null || this.datosUsuarioModificar.correo == ''){
+            // validar correo alumno.talca.cl
+            if(/.+@alumnos.utalca.cl/.test(this.datosUsuarioModificar.correo)|| /.+@utalca.cl/.test(this.datosUsuarioModificar.correo) ||/.+@alumnos.cl/.test(this.datosUsuarioModificar.correo) || this.datosUsuarioModificar.correo == null || this.datosUsuarioModificar.correo == ''){
                 if(this.datosUsuarioModificar.contrasena == null || this.datosUsuarioModificar.contrasena =='' || this.datosUsuarioModificar.contrasena.length >= 8 ){
                     //conversion del rol, para guardarla en la base de datos.
                     if (this.datosUsuarioModificar.correo == null) {
