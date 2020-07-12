@@ -14,7 +14,8 @@ class ObservacionController extends Controller
      */
     public function index()
     {
-        //
+        $observaciones = Observacion::all();
+        return $observaciones;
     }
 
     /**
@@ -24,7 +25,12 @@ class ObservacionController extends Controller
      */
     public function create()
     {
-        //
+        return response()->json([
+            'success' => false,
+            'code' => 201,
+            'message' => 'El cliente debe usar un protocolo distinto',
+            'data' => ['error'=>'El protocolo se llama Store']
+        ], 426 );
     }
 
     /**
@@ -35,7 +41,22 @@ class ObservacionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $observacion = new Observacion();
+        $observacion->ayudante = $request->ayudante;
+        $observacion->estudiante = $request->estudiante;
+        $observacion->titulo = $request->titulo;
+        $observacion->descripcion = $request->descripcion;
+        $observacion->profesor = $request->profesor;
+        $observacion->tipo = $request->tipo;
+        $observacion->curso = $request->curso;
+        $observacion->categoria = $request->categoria;
+        $observacion->save();
+        return response()->json([
+            'success' => true,
+            'code' => 100,
+            'message' => "La operación se ha realizado con éxito.",
+            'data' => ['observacion'=>$observacion]
+        ], 200);
     }
 
     /**
@@ -46,7 +67,12 @@ class ObservacionController extends Controller
      */
     public function show(Observacion $observacion)
     {
-        //
+        return response()->json([
+            'success' => false,
+            'code' => 401,
+            'message' => 'Este recurso está bloqueado',
+            'data' => ['error'=>'El protocolo se llama Index']
+        ], 423);
     }
 
     /**
@@ -57,7 +83,12 @@ class ObservacionController extends Controller
      */
     public function edit(Observacion $observacion)
     {
-        //
+        return response()->json([
+            'success' => false,
+            'code' => 401,
+            'message' => 'Este recurso está bloqueado',
+            'data' => ['error'=>'El protocolo se llama Update']
+        ], 423);
     }
 
     /**
@@ -67,9 +98,19 @@ class ObservacionController extends Controller
      * @param  \App\Observacion  $observacion
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Observacion $observacion)
+    public function update(Request $request, $id)
     {
-        //
+        $observacion = Observacion::find($id);
+        $observacion->ayudante = $request->ayudante;
+        $observacion->estudiante = $request->estudiante;
+        $observacion->titulo = $request->titulo;
+        $observacion->descripcion = $request->descripcion;
+        $observacion->profesor = $request->profesor;
+        $observacion->tipo = $request->tipo;
+        $observacion->curso = $request->curso;
+        $observacion->categoria = $request->categoria;
+        $observacion->save();
+        return compact('observacion');
     }
 
     /**
@@ -78,9 +119,11 @@ class ObservacionController extends Controller
      * @param  \App\Observacion  $observacion
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Observacion $observacion)
+    public function destroy($id)
     {
-        //
+        $observacion= Observacion::find($id);
+        $observacion->delete();
+        return $observacion;
     }
 
     /**
