@@ -32,5 +32,98 @@ class CursoTableSeeder extends Seeder
             'descripcion' => 'Asignatura Física General', 
             'escuela' => 8 #Ramos comunes
         ]);
+
+        Curso::create([
+            'nombre' => 'Introducción a la Programación',
+            'plan' => '16',
+            'descripcion' => 'Ramo introductorio a la carrera en el cual se compacta lo importante de los ramos a lo largo de la carrera', 
+            'escuela' => 1 #Ramos computación
+        ]);
+
+        Curso::create([
+            'nombre' => 'Introducción a la ICC',
+            'plan' => '16',
+            'descripcion' => 'Ramo introductorio a la carrera en el cual se compacta lo importante de los ramos a lo largo de la carrera', 
+            'escuela' => 1 #Ramos computación
+        ]);
+        Curso::create([
+            'nombre' => 'Teoría de Sistemas',
+            'plan' => '16',
+            'descripcion' => 'Ramo super entrete', 
+            'escuela' => 1 #Ramos computación
+        ]);
+
+        Curso::create([
+            'nombre' => 'Introducción la Matemática',
+            'plan' => '16',
+            'descripcion' => 'Ramo super entrete', 
+            'escuela' => 1 #Ramos computación
+        ]);
+
+        Curso::create([
+            'nombre' => 'Comunicación Oral y Escrita I',
+            'plan' => '16',
+            'descripcion' => 'Ramo que corrige la escritura', 
+            'escuela' => 8 #Ramos computación
+        ]);
+
+        Curso::create([
+            'nombre' => 'Idioma Extranjero I',
+            'plan' => '16',
+            'descripcion' => 'Estudio de idioma extranjero', 
+            'escuela' => 8 #Ramos computación
+        ]);
+
+        Curso::create([
+            'nombre' => 'Pensamiento Computacional',
+            'plan' => '16',
+            'descripcion' => 'curso orientado a resolver algoritmos ', 
+            'escuela' => 1 #Ramos computación
+        ]);
+
+        Curso::create([
+            'nombre' => 'Interfaces Humano Computador',
+            'plan' => '16',
+            'descripcion' => 'el curso del oscuro ', 
+            'escuela' => 1 #Ramos computación
+        ]);
+
+        Curso::create([
+            'nombre' => 'Álgebra',
+            'plan' => '16',
+            'descripcion' => 'Ramo matematico', 
+            'escuela' => 8 #Ramos computación
+        ]);
+
+        Curso::create([
+            'nombre' => 'Cálculo I',
+            'plan' => '16',
+            'descripcion' => 'Ramo matematico', 
+            'escuela' => 8 #Ramos computación
+        ]);
+
+        Curso::create([
+            'nombre' => 'Comunicación Oral y Escrita II',
+            'plan' => '16',
+            'descripcion' => 'Ramo entrete', 
+            'escuela' => 8 #Ramos computación
+        ]);
+
+        Curso::create([
+            'nombre' => 'Idioma Extranjero II',
+            'plan' => '16',
+            'descripcion' => 'Estudio de la lengua extranjera', 
+            'escuela' => 8 #Ramos computación
+        ]);
+
+        Curso::create([
+            'nombre' => 'Deporte I',
+            'plan' => '16',
+            'descripcion' => 'Ramo que da preferencia a mejorar la condición fisica', 
+            'escuela' => 8 #Ramos computación
+        ]);
+        
+        
+        
     }
 }

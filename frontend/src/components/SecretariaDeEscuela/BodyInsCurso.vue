@@ -299,7 +299,7 @@ export default {
                 {text:'ID', value:'id'},
                 {text:'Nombre', value:'nombre'},
                 {text:'Plan', value:'plan'},   
-                {text:'Escuela', value:'escuela'},
+                {text:'Escuela', value:'nomEscuela'},
                 {text:'Descripcion', value:'descripcion'},
                 {text:'Opciones', value:'opciones'},
             ],
@@ -406,6 +406,14 @@ export default {
                         plan: element.plan,
                         descripcion: element.descripcion,
                         escuela: element.escuela,
+                        nomEscuela: '',
+                    };
+                    for (let j = 0; j < this.listaEscuela.length; j++){
+                        /* console.log("id curso: "+this.listaCursos[j].id); */
+                        if(this.listaEscuela[j].id == curso.escuela){
+                            curso.nomEscuela = this.listaEscuela[j].nombre;
+                            break;
+                        };
                     };
                     this.listaCursosAux[index]=curso;
                 }
@@ -432,7 +440,15 @@ export default {
                         id: element.id,
                         semestre: element.semestre,
                         curso: element.curso,
-                    };                
+                        nomCurso: '',
+                    };         
+                    for (let j = 0; j < this.listaCursos.length; j++){
+                        /* console.log("id curso: "+this.listaCursos[j].id); */
+                        if(this.listaCursos[j].id == insCurso.curso){
+                            insCurso.nomCurso = this.listaCurso[j].nombre;
+                            break;
+                        };
+                    };       
                     this.listaInsCursosAux[index]=insCurso;                                        
                 }
                 this.listaInsCursos = this.listaInsCursosAux;  
