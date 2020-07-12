@@ -54,6 +54,8 @@ Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1'], function () {
     Route::post('/ayudanteCurso/restore','AyudanteConCursoController@restore');
     Route::resource('/ayudanteCurso','AyudanteConCursoController');
 
+    Route::resource('/Observaciones','ObservacionController');
+    Route::resource('/Categorias','CategoriaController');
 });
 
 Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
@@ -65,4 +67,3 @@ Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
     Route::post('/auth/sendRestartPassword', 'TokensController@sendRestartPassword');
     Route::get('/auth/respondWithToken', 'TokensController@respondWithToken');
 });
-

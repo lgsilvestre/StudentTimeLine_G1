@@ -16,4 +16,11 @@ class Observacion extends Model
     protected $fillable = [
         'ayudante', 'estudiante', 'titulo', 'descripcion', 'profesor', 'tipo','curso','categoria'
     ];
-}
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'observaciones';
+    }
