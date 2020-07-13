@@ -194,6 +194,62 @@ class CursoTableSeeder extends Seeder
         ]);
 
         Curso::create([
+            'nombre' => 'Máquinas Abstractas y Lenguajes Formales',
+            'plan' => '16',
+            'descripcion' => 'aaa', 
+            'escuela' => 1 #Ramos computación
+        ]);
+
+        Curso::create([
+            'nombre' => 'Construcción de Software',
+            'plan' => '16',
+            'descripcion' => 'aaa', 
+            'escuela' => 1 #Ramos computación
+        ]);
+
+        Curso::create([
+            'nombre' => 'Gestión de Base de Datos',
+            'plan' => '16',
+            'descripcion' => 'aaa', 
+            'escuela' => 1 #Ramos computación
+        ]);
+
+        Curso::create([
+            'nombre' => 'Sistemas Operativos',
+            'plan' => '16',
+            'descripcion' => 'aaa', 
+            'escuela' => 1 #Ramos computación
+        ]);
+
+        Curso::create([
+            'nombre' => 'Redes de Computadores',
+            'plan' => '16',
+            'descripcion' => 'aaa', 
+            'escuela' => 1 #Ramos computación
+        ]);
+
+        Curso::create([
+            'nombre' => 'Sistemas Distribuídos',
+            'plan' => '16',
+            'descripcion' => 'aaa', 
+            'escuela' => 1 #Ramos computación
+        ]);
+
+        Curso::create([
+            'nombre' => 'Inteligencia Artificial',
+            'plan' => '16',
+            'descripcion' => 'aaa', 
+            'escuela' => 1 #Ramos computación
+        ]);
+
+        Curso::create([
+            'nombre' => 'Administración de Redes y Sistemas Computacionales',
+            'plan' => '16',
+            'descripcion' => 'aaa', 
+            'escuela' => 1 #Ramos computación
+        ]);
+
+        Curso::create([
             'nombre' => 'Taller de Desarrollo de Software',
             'plan' => '16',
             'descripcion' => 'aaa', 
