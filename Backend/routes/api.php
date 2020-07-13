@@ -50,10 +50,17 @@ Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1'], function () {
     Route::post('/instanciaCurso/restore/{id}','InstanciaCursoController@restore');
     Route::resource('/instanciaCurso','InstanciaCursoController');
     #controlador de ayudanteCurso
-    Route::get('/ayudanteCurso/disable','AyudanteConCursoController@disable');
-    Route::post('/ayudanteCurso/restore','AyudanteConCursoController@restore');
+    Route::get('/ayudanteCurso/disabled','AyudanteConCursoController@disabled');
+    Route::post('/ayudanteCurso/restore/{id}','AyudanteConCursoController@restore');
     Route::resource('/ayudanteCurso','AyudanteConCursoController');
-
+    #controlador de observaciones
+    Route::get('/observaciones/disabled','ObservacionController@disabled');
+    Route::post('/observaciones/restore/{id}','ObservacionController@restore');
+    Route::resource('/observaciones','ObservacionController');
+    #controlador de categorias
+    Route::get('/categorias/disabled','CategoriaController@disabled');
+    Route::post('/categorias/restore/{id}','CategoriaController@restore');
+    Route::resource('/categorias','CategoriaController');
 });
 
 Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
@@ -65,4 +72,3 @@ Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
     Route::post('/auth/sendRestartPassword', 'TokensController@sendRestartPassword');
     Route::get('/auth/respondWithToken', 'TokensController@respondWithToken');
 });
-
