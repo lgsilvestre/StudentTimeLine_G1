@@ -135,7 +135,7 @@ class EscuelaController extends Controller
             'success' => false,
             'code' => 501,
             'message' => 'el cliente debe usar un protocolo distinto',
-            'data' => ['error'=>'El el protocolo se llama store']
+            'data' => ['error'=>'El el protocolo se llama Update']
         ], 426);
     }
 
@@ -287,5 +287,4 @@ class EscuelaController extends Controller
             ], 409);
         }
     }
-
 }

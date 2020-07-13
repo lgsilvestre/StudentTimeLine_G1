@@ -15,12 +15,66 @@ class UserTableSeeder extends Seeder
     public function run()
     {
         $admin=User::create([
+            'nombre' => 'Brayan Escobar',
+            'escuela' => 1,
+            'rol' => 'admin', 
+            'foto' => null,
+            'email' => 'bescobar14@alumnos.utalca.cl',
+            'password' => bcrypt('12345678')
+        ]);
+        $admin->assignRole('admin');
+        $admin=User::create([
+            'nombre' => 'Felipe Milla',
+            'escuela' => 1,
+            'rol' => 'admin', 
+            'foto' => null,
+            'email' => 'fmilla15@alumnos.utalca.cl',
+            'password' => bcrypt('12345678')
+        ]);
+        $admin->assignRole('admin');
+        $admin=User::create([
+            'nombre' => 'Matias Pizarro',
+            'escuela' => 1,
+            'rol' => 'admin', 
+            'foto' => null,
+            'email' => 'mpizarro16@alumnos.utalca.cl',
+            'password' => bcrypt('12345678')
+        ]);
+        $admin->assignRole('admin');
+        $admin=User::create([
+            'nombre' => 'Sebastian Ibarra',
+            'escuela' => 1,
+            'rol' => 'admin', 
+            'foto' => null,
+            'email' => 'sibarra15@alumnos.utalca.cl',
+            'password' => bcrypt('12345678')
+        ]);
+        $admin->assignRole('admin');
+        $admin=User::create([
+            'nombre' => 'Paulo Parraguez',
+            'escuela' => 1,
+            'rol' => 'admin', 
+            'foto' => null,
+            'email' => 'pparraguez14@alumnos.utalca.cl',
+            'password' => bcrypt('12345678')
+        ]);
+        $admin->assignRole('admin');
+        $admin=User::create([
+            'nombre' => 'Javiera Mendez',
+            'escuela' => 1,
+            'rol' => 'admin', 
+            'foto' => null,
+            'email' => 'jmendez14@alumnos.utalca.cl',
+            'password' => bcrypt('12345678')
+        ]);
+        $admin->assignRole('admin');
+        $admin=User::create([
             'nombre' => 'admin',
             'escuela' => 1,
             'rol' => 'admin', 
             'foto' => null,
-            'email' => 'xebaelvemgador@gmail.com',
-            'password' => bcrypt('1234')
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('12345678')
         ]);
         $admin->assignRole('admin');
 
@@ -29,7 +83,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 1,
             'rol' => 'secretaria de escuela', 
             'foto' => null,
-            'email' => 'sibarra15@alumnos.utalca.cl',
+            'email' => 'secretariadeescuela@utalca.cl',
             'password' => bcrypt('1234')
         ]);
         $director->assignRole('secretaria de escuela');
