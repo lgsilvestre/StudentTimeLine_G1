@@ -236,9 +236,8 @@ class SemestreController extends Controller
                 'data' => ['error'=>$ex]
             ], 409 );
         }
-        $semestre = Semestre::find($id);
     }
-
+    
     public function disabled(){
         try{
             $semestres = Semestre::onlyTrashed()->get();
