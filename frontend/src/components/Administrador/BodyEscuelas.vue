@@ -54,7 +54,7 @@
                     >
                     <h5 class="white--text ">Crear una escuela</h5>
                     </v-card-title>
-                    <v-container class="px-10 mt-5" color="primary">
+                    <v-container class="px-5 mt-5" color="primary">
                       <v-text-field 
                       v-model="escuela.nombre"
                       label="Nombre de la escuela"
@@ -73,10 +73,14 @@
                       >
                       </v-text-field>
                       <div class="pb-1" style="text-align:right;">
-                        <v-btn rounded color="warning" @click="resetCreacionEscuela">
+                        <v-btn 
+                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                        rounded color="warning" @click="resetCreacionEscuela">
                           <h4 class="white--text">Cancelar</h4>
                         </v-btn>
-                        <v-btn rounded color="secondary" class="ml-2" @click="crearEscuela" >
+                        <v-btn 
+                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                        rounded color="secondary" class="ml-2" @click="crearEscuela" >
                           <h4 class="white--text">Guardar</h4>
                         </v-btn>
                       </div>
@@ -141,16 +145,15 @@
           </v-data-table>
           <v-dialog transition="scroll-y-reverse-transition" :key="keyDialogModicar" v-model="dialogModificar" persistent max-width="500px">
             <v-card
-            class="mx-auto"
-            
+            elevation="1"
             >
               <v-card-title
-              class="headline primary text--center"
-              primary-title
-              >
+                class="headline primary text--center"
+                primary-title
+                >
                 <h5 class="white--text ">Modificar Escuela</h5>
               </v-card-title>
-              <v-container class="px-10 pt-10">
+              <v-container class="px-5 pt-7">
                 <v-text-field
                 v-model="escuelaEditar.nombre"
                 label="Nombre de Escuela"
@@ -168,10 +171,14 @@
                 >
                 </v-text-field> 
                 <div class=" pb-1" style="text-align:right;">
-                  <v-btn rounded color="warning" @click="resetEditarEscuela">
+                  <v-btn 
+                  :small="$vuetify.breakpoint.smAndDown ? true : false"
+                  rounded color="warning" @click="resetEditarEscuela">
                     <h4 class="white--text">Cancelar</h4>
                   </v-btn>
-                  <v-btn rounded color="secondary" class="ml-2" @click="editarEscuela(escuelaEditar)">
+                  <v-btn 
+                  :small="$vuetify.breakpoint.smAndDown ? true : false"
+                  rounded color="secondary" class="ml-2" @click="editarEscuela(escuelaEditar)">
                     <h4 class="white--text">Modificar</h4>
                   </v-btn>
                 </div>    
@@ -189,14 +196,18 @@
                 >
                   <h5 class="white--text ">Eliminar Escuela</h5>
                 </v-card-title>
-                <v-card-title class="text-justify" style="font-size: 110%;">Esta seguro que desea eliminar la siguiente Escuela?</v-card-title>
+                <v-card-title class="text-justify" :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%;' :'font-size: 110%;'">Esta seguro que desea eliminar la siguiente Escuela?</v-card-title>
                 <v-card-text class="pt-2">Nombre Escuela: {{ escuelaEliminar.nombre }}</v-card-text>
                 <v-card-text>Codigo Carrera: {{ escuelaEliminar.cod }}</v-card-text>   
-                <div class="px-10  pb-4" style="text-align:right;">
-                  <v-btn rounded color="warning" @click="dialogEliminar = false">
+                <div class="px-5  pb-4" style="text-align:right;">
+                  <v-btn 
+                  :small="$vuetify.breakpoint.smAndDown ? true : false"
+                  rounded color="warning" @click="dialogEliminar = false">
                     <h4 class="white--text">Cancelar</h4>
                   </v-btn>
-                  <v-btn rounded color="secondary" class="ml-2" @click="borrarEscuela(escuelaEliminar)">
+                  <v-btn 
+                  :small="$vuetify.breakpoint.smAndDown ? true : false"
+                  rounded color="secondary" class="ml-2" @click="borrarEscuela(escuelaEliminar)">
                     <h4 class="white--text">Eliminar</h4>
                   </v-btn>
                 </div>  
@@ -278,9 +289,9 @@
       cargar: null,
       cargando: true,
       headers: [
-        { text: 'ID',align: 'start',value: 'id',sortable: false},
-        { text: 'Nombre', value: 'nombre',sortable: false, },
-        { text: 'Codigo carrera', value: 'cod_car',sortable: false, },
+        { text: 'ID',align: 'start',value: 'id',sortable: true},
+        { text: 'Nombre', value: 'nombre',sortable: true},
+        { text: 'Codigo carrera', value: 'cod_car',sortable: true },
         { text: 'Opciones', value: 'actions', sortable: false, align:'center' },
       ],
       desserts:[],
