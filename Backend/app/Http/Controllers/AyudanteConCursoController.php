@@ -14,7 +14,7 @@ class AyudanteConCursoController extends Controller
      */
     public function index()
     {
-        $ayudanteCurso= Ayutante_Con_Curso::all();
+        $ayudanteCurso= Ayudante_Con_Curso::all();
         return compact('ayudanteCurso');
     }
 
@@ -36,11 +36,11 @@ class AyudanteConCursoController extends Controller
      */
     public function store(Request $request)
     {
-        $ayudanteCurso = new Ayutante_Con_Curso();
+        $ayudanteCurso = new Ayudante_Con_Curso();
         $ayudanteCurso-> estudiante=$request->estudiante;
         $ayudanteCurso-> curso=$request->curso;
         $ayudanteCurso->save();
-        return compact('$ayudanteCurso');
+        return compact('ayudanteCurso');
     }
 
     /**
@@ -74,8 +74,8 @@ class AyudanteConCursoController extends Controller
      */
     public function update(Request $request,$id)
     {
-        $ayudanteCurso= Ayutante_Con_Curso::find($id);
-        $ayudanteCurso->estudiante=$request->esyudiante;
+        $ayudanteCurso= Ayudante_Con_Curso::find($id);
+        $ayudanteCurso->estudiante= $request->estudiante;
         $ayudanteCurso->curso=$request->curso;
         $ayudanteCurso->save();
         return compact('ayudanteCurso'); 
@@ -89,20 +89,20 @@ class AyudanteConCursoController extends Controller
      */
     public function destroy($id)
     {
-        $ayudanteCurso= Ayutante_Con_Curso::find($id);
+        $ayudanteCurso= Ayudante_Con_Curso::find($id);
         $ayudanteCurso->delete();
 
     }
     public function disabled(){
 
-        $ayudanteCursos = Ayutante_Con_Curso::onlyTrashed()->get();
+        $ayudanteCursos = Ayudante_Con_Curso::onlyTrashed()->get();
         return compact('ayudanteCursos');
     }
 
     public function restore($id){
         
-        $ayudanteCurso = Ayutante_Con_Curso::onlyTrashed()->find($id)->restore();
-  
+        $ayudanteCurso = Ayudante_Con_Curso::onlyTrashed()->find($id)->restore();
+        compact('ayudanteCurso');
     }
 
 }

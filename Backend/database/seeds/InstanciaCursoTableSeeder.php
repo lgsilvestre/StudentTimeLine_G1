@@ -13,17 +13,20 @@ class InstanciaCursoTableSeeder extends Seeder
     {
         InstanciaCurso::create([
             'semestre' => 1,
-            'curso' => 1
+            'curso' => 1,
+            'seccion'=> 'A'
         ]);
 
         InstanciaCurso::create([
             'semestre' => 1,
-            'curso' => 2
+            'curso' => 2,
+            'seccion'=> 'A'
         ]);
 
         InstanciaCurso::create([
             'semestre' => 1,
-            'curso' => 3
+            'curso' => 3,
+            'seccion'=> 'A'
         ]);
     }
 }
