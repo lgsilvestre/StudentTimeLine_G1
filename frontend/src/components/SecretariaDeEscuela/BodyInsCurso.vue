@@ -44,23 +44,22 @@
                              </v-btn>
                         </v-card-title> 
                     </v-img>
-                    <v-data-iterator :items="listaInsCursos" :search="search" :sort-by="sortBy.toLowerCase()" >
-                       <template v-slot:header>
-                           <v-toolbar>
-                                <v-text-field
-                                    v-model="search"
-                                    append-icon="mdi-magnify"
-                                    label="Search"
-                                    single-line
-                                    hide-details
+                    <!-- Tabla de Instacias de Cursos, o para ser exactos, cursos que estan asignados al semestre seleccionado. -->
+                    <v-data-iterator :items="listaInsCursos" :page="pagina" 
+                    :search="buscar" >
+                        <template v-slot:header> 
+                            <v-toolbar dark color="blue darken-3" class="mb-1" >
+                                <v-text-field v-model="buscar" clearable flat   hide-details label="Buscar"
                                 ></v-text-field>
-                           </v-toolbar>
-                       </template>
-                        <template v-slot:default="props">
+                            </v-toolbar>  
+                        </template>
+
+                        <template >
                             <v-row>
-                                <v-col v-for="item in props.items" :key="item.nomCurso" cols="12"  sm="6" md="4" lg="3">
-                                    <v-card class="ml-5" style="background-color:#FFE66D; border-style:solid; border-color:rgba(0,0,0,0.5); ">
-                                        <v-card-title class="subheading font-weight-bold">{{ item.nomCurso }}</v-card-title>
+                               <v-col v-for="curso in this.listaInsCursos" :key="curso.nomCurso" cols="12"  sm="6" md="4" lg="3"  >
+                                    <v-card>
+                                        <v-card-title class="subheading font-weight-bold">{{curso.nomCurso}}</v-card-title>
+                                    <v-card-text>hoalsgasga</v-card-text>
                                     </v-card>
                                 </v-col>
                             </v-row>
@@ -399,15 +398,14 @@ export default {
             dialogEliminarInsCurso: false,
 
             // listaOpcionesDeCursos:[],
-            search: '',
-            sortBy:'nomCurso',
-            headers: [
-         
-          { text: 'id', value: 'id' },
-          { text: 'semestre', value: 'semestre' },
-          { text: 'Curso ', value: 'curso' },
-          { text: 'Nombre curso', value: 'nomCurso' },
-        ]
+            pagina:1,
+            ordenarPor:"nomCurso",
+            buscar: '',
+            filter: {},
+            keys: [
+            'nomCurso',
+            ],
+            collection: "default",
         }
     },
   _props: {
@@ -553,9 +551,10 @@ export default {
                         };
                     };  
 
-                    this.listaInsCursosAux[index]=insCurso;                                                         
+                    this.listaInsCursosAux[index]=insCurso;    
+                                                                          
                 }
-                this.listaInsCursos = this.listaInsCursosAux;  
+                this.listaInsCursos = this.listaInsCursosAux;                  
                 this.cargando = false;              
             }
             ).catch((error)=>{
