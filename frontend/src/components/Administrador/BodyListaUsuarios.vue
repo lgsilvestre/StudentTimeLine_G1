@@ -125,7 +125,6 @@
                                         <v-icon class="mx-2" color="secondary">fas fa-trash-restore-alt</v-icon>
                                     </v-btn>
                                     <v-dialog 
-                                    overlay-color="blue"
                                     v-model="dialogListaUsuariosEliminado" fullscreen   transition="dialog-bottom-transition" >
                                         <v-card class="mx-auto my-10 " max-width="100%" style="display: block; background-color:#F7FFF7;">
                                             <v-toolbar dark color="primary">
@@ -135,7 +134,7 @@
                                                 <strong> Cerrar </strong>
                                                 <v-icon class="ml-1">mdi-close</v-icon>
                                             </v-btn>
-                                            
+                            
                                             </v-toolbar>
                                             <v-container style="background-color: #F7FFF7;">
                                                 <v-row>
