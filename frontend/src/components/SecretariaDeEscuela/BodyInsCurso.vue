@@ -44,22 +44,23 @@
                              </v-btn>
                         </v-card-title> 
                     </v-img>
-                    <!-- Tabla de Instacias de Cursos, o para ser exactos, cursos que estan asignados al semestre seleccionado. -->
-                    <v-data-iterator :items="listaInsCursos" :page="pagina" 
-                    :search="buscar" >
-                        <template v-slot:header> 
-                            <v-toolbar dark color="blue darken-3" class="mb-1" >
-                                <v-text-field v-model="buscar" clearable flat   hide-details label="Buscar"
+                    <v-data-iterator :items="listaInsCursos" :search="search" :sort-by="sortBy.toLowerCase()" >
+                       <template v-slot:header>
+                           <v-toolbar>
+                                <v-text-field
+                                    v-model="search"
+                                    append-icon="mdi-magnify"
+                                    label="Search"
+                                    single-line
+                                    hide-details
                                 ></v-text-field>
-                            </v-toolbar>  
-                        </template>
-
-                        <template >
+                           </v-toolbar>
+                       </template>
+                        <template v-slot:default="props">
                             <v-row>
-                               <v-col v-for="curso in this.listaInsCursos" :key="curso.nomCurso" cols="12"  sm="6" md="4" lg="3"  >
-                                    <v-card>
-                                        <v-card-title class="subheading font-weight-bold">{{curso.nomCurso}}</v-card-title>
-                                    <v-card-text>hoalsgasga</v-card-text>
+                                <v-col v-for="item in props.items" :key="item.nomCurso" cols="12"  sm="6" md="4" lg="3">
+                                    <v-card class="ml-5" style="background-color:#FFE66D; border-style:solid; border-color:rgba(0,0,0,0.5); ">
+                                        <v-card-title class="subheading font-weight-bold">{{ item.nomCurso }}</v-card-title>
                                     </v-card>
                                 </v-col>
                             </v-row>
@@ -233,7 +234,6 @@
 
         <!-- Dialog para mostrar la lista de los Cursos Existentes -->
         <v-dialog v-model="dialogAgregarCursoSemestre" fullscreen hide-overlay transition="dialog-bottom-transition">
-            <v-card class="mx-auto my-10 " max-width="70%">
                 <v-toolbar dark color="primary">
                 <v-spacer></v-spacer>
                 <v-btn  depressed color="primary" @click="dialogAgregarCursoSemestre = false">
@@ -243,57 +243,104 @@
                 </v-btn>
                 
                 </v-toolbar>
-                <v-container>
-                    <!-- fila para el toolbar -->
+                <v-card> 
                     <v-row>
-                        <v-col cols="12" >
-                            <v-card flat   >
-                                <v-img class="mx-auto white--text align-end justify-center"
-                                        width="100%" height="150px"       
-                                        src="@/assets/Globales/background-panel-08.jpg">
-                                        <v-card-title class="white--text" style="font-size: 200%;text-shadow: #555 2px 2px 3px;">
-                                            <strong > Semestres </strong>
-                                            <v-spacer></v-spacer>
-                                            <!-- <v-btn class="mr-2" fab large bottom left @click="dialogAñadirSemestre =true" >
-                                                <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
-                                            </v-btn> -->
-                                        </v-card-title>
-
-                                </v-img>
+                        <v-col cols="12" md="1">
+                        </v-col>
+                        <v-col cols="12" md="10">
+                            <v-card 
+                                class="mx-auto"                                 
+                            >
+                                <v-img
+                                    class="mx-auto white--text align-end justify-center"
+                                    width="100%"
+                                    height="180px"       
+                                    src="@/assets/Globales/fondo3.jpg"        
+                                >
+                                <v-card-title class="white--text" style="font-size: 200%;text-shadow: #555 2px 2px 3px;">     
+                                    <v-icon class="mx-3" color="white">fas fa-chalkboard-teacher</v-icon> 
+                                    <strong>Cursos</strong>
+                                </v-card-title>
+                                </v-img>  
+                                <v-data-table
+                                    v-model="seleccionados"
+                                    :headers="colCursos2"
+                                    :items="listaCursos"
+                                    :loading="cargando"
+                                    :items-per-page="10"
+                                    show-select
+                                    item-key="id"                                    
+                                >                                             
+                                </v-data-table>
+                                <div class="text-end mb-2 pb-2 mx-2">
+                                    <v-btn color="primary" tile class="mr-2" @click="asignarCursos">Asignar Cursos</v-btn>                                    
+                                </div>
                             </v-card>
                         </v-col>
-                        <v-col cols="12">
-                            <v-card class="mx-auto" >
-                            <v-container>
-                                <v-row >
-                                    <v-col
-                                    v-for="(curso, index) in listaCursos" :key="index"
-                                    cols="12" sm="6" md="4" lg="3">
-                                    <v-card dark height="120px" style="background-color:#4ECDC4; border-style:solid; border-color:rgba(0,0,0,0.5); "
-                                     @click="asignarCursoASementre(curso)">
-                                            <div class="d-flex flex-no-wrap justify-space-between">
-                                                <div>
-                                                    <v-card-title
-                                                    class="black--text"
-                                                    >  {{ curso.nombre }} </v-card-title>
-
-                                                    <v-card-subtitle  class="black--text"> Plan {{curso.plan}}</v-card-subtitle>
-                                                    <!-- <v-card-subtitle  class="black--text"> Escuela {{curso.escuela}}</v-card-subtitle> -->
-                                                </div>
-                                            
-                                            </div>
-                                    </v-card>
-                                    </v-col>
-                                </v-row>
-                            </v-container>
-                        </v-card>
-
+                        <v-col cols="12" md="1">
                         </v-col>
                     </v-row>
-                    
-                </v-container>
-            
+                </v-card>
+        </v-dialog>
+
+        <!-- Dialog para asignar cursos a un semestre -->
+        <v-dialog v-model="dialogAsignarCurso" max-width="800">
+            <v-card class="mx-auto" max-width="800" >
+                <v-card-title primary-title class="headline primary text--center">
+                    <h5 class="white--text">Asignar Profesor a Cursos</h5>
+                </v-card-title>
                 
+                <v-row class="d-flex flex-wrap align-center justify-center">
+                    <v-col cols="12" lg="4">                                                 
+                        <v-card  flat dense>
+                            <v-list  class="d-flex flex-wrap" dense>
+                                <v-list-item-subtitle>Cursos Seleccionados</v-list-item-subtitle>
+                                <v-list-item
+                                    v-for="(item, i) in seleccionados"
+                                    :key="i"
+                                    >
+                                    <v-list-item-title>{{item.nombre}}</v-list-item-title>
+                                </v-list-item>
+                            </v-list>
+                        </v-card>           
+                    </v-col>
+                    <v-divider vertical></v-divider>
+                    <v-col cols="12" lg="6">
+                        <v-card flat >
+                            <v-card-title
+                            class="headline primary text--center"
+                            primary-title
+                            >
+                            <h5 class="white--text ">Seleccionar Profesor</h5>
+                            </v-card-title>
+                                <v-form>
+                                <v-container class="pt-10 px-5">
+                                    <v-select
+                                        class="mx-2"
+                                        v-model="profesorSeleccionado"
+                                        label="Profesor"
+                                        :items="listaProfesores"
+                                        item-text="nombre"
+                                        item-value="id"
+                                        :rules="[() => !!profesorSeleccionado ||'Requerido']"
+                                        outlined
+                                        prepend-inner-icon="mdi-school"
+                                    >                                
+                                    </v-select>                           
+                                </v-container>
+                            </v-form> 
+                            <v-spacer></v-spacer>
+                            <v-container  style="text-align:right;">
+                                <v-btn rounded color="warning" @click="resetAsignarCurso()">
+                                    <h4 class="white--text">Cancelar</h4>
+                                </v-btn>
+                                <v-btn rounded color="secondary" class="ml-2 mr'5" @click="asignarCursoASementre()" >
+                                    <h4 class="white--text">Asignar</h4>
+                                </v-btn>
+                            </v-container>                        
+                        </v-card>
+                    </v-col>   
+                </v-row>        
             </v-card>
         </v-dialog>
 
@@ -355,6 +402,7 @@ export default {
         return{
             /* Variables Alertas */
             dialogAgregarCursoSemestre:false,
+            dialogAsignarCurso: false,
             alertaExito: false,
             alertaError: false,
             textoAlertas: '',
@@ -365,6 +413,8 @@ export default {
 
             search: '',
             cargando: true,
+            seleccionados: [],
+            profesorSeleccionado: '',
             colInsCursos:[
                 {text:'ID', value:'id'},
                 // {text:'Semestre', value:'semestre'},
@@ -379,9 +429,18 @@ export default {
                 {text:'Descripcion', value:'descripcion'},
                 {text:'Opciones', value:'opciones'},
             ],
+            colCursos2:[
+                {text:'ID', value:'id',align: 'start'},
+                {text:'Nombre', value:'nombre',align: 'start'},
+                {text:'Plan', value:'plan',align: 'start'},   
+                {text:'Escuela', value:'nomEscuela',align: 'start'},
+                {text:'Descripcion', value:'descripcion',align: 'start'},
+            ],
             
             listaEscuela: [],
             listaEscuelaAux: [],
+            listaProfesores: [],
+            listaProfesoresAux: [],
 
             listaCursos: [],
             listaCursosAux: [],
@@ -398,30 +457,31 @@ export default {
             dialogEliminarInsCurso: false,
 
             // listaOpcionesDeCursos:[],
-            pagina:1,
-            ordenarPor:"nomCurso",
-            buscar: '',
-            filter: {},
-            keys: [
-            'nomCurso',
+            search: '',
+            sortBy:'nomCurso',
+            headers: [
+                { text: 'id', value: 'id' },
+                { text: 'semestre', value: 'semestre' },
+                { text: 'Curso ', value: 'curso' },
+                { text: 'Nombre curso', value: 'nomCurso' },
             ],
-            collection: "default",
         }
     },
-  _props: {
+    _props: {
     item: {
-      id: '',semestre: '',curso: '',nomCurso: ''
+        id: '',semestre: '',curso: '',nomCurso: ''
     }
-  },
+    },
     get props() {
-      return this._props
+        return this._props
     },
     set props(value) {
-      this._props=value
+        this._props=value
     },
     created () {   
+        this.obtenerProfesores();
         this.obtenerEscuelas();
-        this.obtenerCursos();
+        this.obtenerCursos();        
         this.obtenerInstanciasCursos();    
     },
     computed: {
@@ -430,6 +490,44 @@ export default {
     methods: {
         ...mapMutations(['calcularRolVuelta']),
         
+        obtenerProfesores(){
+            this.cargando = true;
+            this.listaProfesoresAux = [];
+            var aux;
+            var url = 'http://127.0.0.1:8000/api/v1/usuario';
+            axios.get(url,this.$store.state.config)
+            .then((result)=>{
+                for (let index = 0; index < result.data.data.usuarios.length; index++) {
+                    const element = result.data.data.usuarios[index];
+                    let usuario = {
+                        id: element.id,
+                        nombre: element.nombre,
+                        correo: element.email,   
+                        escuela: element.nombre_escuela,
+                    };                         
+                    this.listaProfesoresAux[index]=usuario;
+                }
+                this.cargando = false;
+                this.listaProfesores = this.listaProfesoresAux;
+            }
+            ).catch((error)=>{
+                if (error.message == 'Network Error') {
+                    this.alertaError = true;
+                    this.cargando = false;
+                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                }
+                else{
+                    if (error.response.data.success == false) {
+                        if(error.response.data.code == 101){
+                            console.log(error.response.data.code +' '+ error.response.data.message);
+                            console.log(error.response.data);
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true;                            
+                        }                        
+                    }
+                }
+            });
+        },
 
         obtenerEscuelas(){
             this.listaEscuelaAux = [];
@@ -551,10 +649,9 @@ export default {
                         };
                     };  
 
-                    this.listaInsCursosAux[index]=insCurso;    
-                                                                          
+                    this.listaInsCursosAux[index]=insCurso;                                                         
                 }
-                this.listaInsCursos = this.listaInsCursosAux;                  
+                this.listaInsCursos = this.listaInsCursosAux;  
                 this.cargando = false;              
             }
             ).catch((error)=>{
@@ -641,11 +738,89 @@ export default {
 
         },
 
+        asignarCursos(){
+            if(this.seleccionados.length != 0){
+                this.profesorSeleccionado = '';
+                this.dialogAsignarCurso = true;     
+            }
+            else{
+                this.textoAlertas = "Debe seleccionar al menos un curso.";
+                this.alertaError = true;
+            }
+        },
 
-        asignarCursoASementre(curso){
-            console.log(curso.id)
-            console.log(curso.nombre);
-            // api/v1/instanciaCurso  
+        resetAsignarCurso(){
+            this.dialogAsignarCurso = false;
+            this.profesorSeleccionado = '';
+            this.seleccionados = [];
+        },
+
+        asignarCursoASementre(){
+            if(this.profesorSeleccionado != ''){
+                console.log("profe: "+this.profesorSeleccionado);
+                this.dialogAsignarCurso = true;                                   
+                for(let i = 0; i < this.seleccionados.length ; i++){
+                    /* datos instancia curso */
+                    let post = {
+                        "semestre": this.$store.infoSemestre.id,
+                        "curso": this.seleccionados[i].id,
+                        "seccion": 'A',
+                    }
+
+                    /* datos profe con curso */
+                    let post2 = {
+                        "profesor" : this.profesorSeleccionado,
+                        "curso": this.seleccionados[i].id,
+                    };
+                    
+                    var url = 'http://127.0.0.1:8000/api/v1/instanciaCurso';     
+                    
+                    var url2 = 'http://127.0.0.1:8000/api/v1/profesorConCurso';     
+
+                    /*  crear instancia de curso */
+                    axios.post(url, post, this.$store.state.config)
+                    .then((result) => {
+                        this.textoAlertas = "Se asignó el curso correctamente"
+                        this.alertaExito=true;
+                        
+                    }).catch((error)=>{
+                        console.log( error.response.data);
+                        if (error.message == 'Network Error') {
+                            console.log(error)
+                            this.alertaError = true;
+                            this.textoAlertas = "Error al asignar el curso, intente mas tarde."
+                            this.resetRegistrarUsuario();
+                        };    
+                                       
+                    });
+
+                    /* crear profesor con curso */
+                    axios.post(url2, post2, this.$store.state.config)
+                    .then((result) => {
+                        this.textoAlertas = "Se asignó el profesor correctamente"
+                        this.alertaExito=true;
+                        
+                    }).catch((error)=>{
+                        console.log(error.response);
+                        if (error.message == 'Network Error') {
+                            console.log(error)  
+                            this.alertaError = true;
+                            this.textoAlertas = "Error al asignar el profesor intente mas tarde."
+                            this.resetRegistrarUsuario();
+                        };                        
+                    });
+                }   
+                this.seleccionados = []; 
+                this.profesorSeleccionado = '';
+                this.dialogAsignarCurso = false; 
+                this.obtenerInstanciasCursos();     
+            }
+            else{
+                this.textoAlertas = "Debe seleccionar al menos un profesor";
+                this.alertaError = true;
+            }
+            
+
         },
 
 
