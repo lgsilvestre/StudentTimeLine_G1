@@ -235,8 +235,11 @@ class AyudanteConCursoController extends Controller
                 'data' => ['error'=>$ex]
             ], 409 );
         }
-
     }
+
+    /**
+     * 
+     */
     public function disabled(){
         try{
             $ayudantesCurso = Ayudante_Con_Curso::onlyTrashed()->get();

@@ -83,7 +83,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 1,
             'rol' => 'secretaria de escuela', 
             'foto' => null,
-            'email' => 'sibarra15@alumnos.utalca.cl',
+            'email' => 'secretariadeescuela@utalca.cl',
             'password' => bcrypt('1234')
         ]);
         $director->assignRole('secretaria de escuela');
