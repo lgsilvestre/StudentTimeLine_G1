@@ -2,10 +2,7 @@
     <v-container >
         <v-row class="justify-center">
             <v-col cols="12" md="3" >
-                <v-card                    
-                    max-width="300"
-                    shaped
-                >
+                <v-card  max-width="300" shaped >
                     <v-list rounded dense>
                         <v-list-item class="difuminado"  active-class="activacion" @click="calcularRolVuelta">
                         <v-list-item-icon><v-icon color="primary"> fas fa-arrow-circle-left</v-icon> </v-list-item-icon>
@@ -34,7 +31,7 @@
                     <v-img
                         class="mx-auto white--text align-end justify-center"
                         width="100%"
-                        height="180px"       
+                        height="180px"        
                         src="@/assets/Globales/background-panel-08.jpg" >
                         <v-card-title class="white--text" style="font-size: 200%;text-shadow: #555 2px 2px 3px;">
                             <strong > Cursos </strong>
@@ -59,8 +56,32 @@
                         <template v-slot:default="props">
                             <v-row>
                                 <v-col v-for="item in props.items" :key="item.nomCurso" cols="12"  sm="6" md="4" lg="3">
-                                    <v-card class="ml-5" style="background-color:#FFE66D; border-style:solid; border-color:rgba(0,0,0,0.5); ">
-                                        <v-card-title class="subheading font-weight-bold">{{ item.nomCurso }}</v-card-title>
+                                    <v-card  class="ml-5 mr-5" style="background-color:#FFE66D; border-style:solid; border-color:rgba(0,0,0,0.5);">
+                                        <!-- <v-card-title class="subheading font-weight-bold">{{ item.nomCurso }}</v-card-title> -->
+                                        
+                                        <div class="d-flex flex-no-wrap justify-space-between">
+                                            <div>
+                                               <v-card-title class="subheading font-weight-bold">{{ item.nomCurso }}</v-card-title>
+                                            </div>
+                                            <v-menu class="text-left" offset-y>
+                                                <template v-slot:activator="{ on, attrs }">
+                                                    <v-btn color="primary" icon v-bind="attrs" v-on="on" >
+                                                    <v-icon>fas fa-ellipsis-v</v-icon>
+                                                    </v-btn>
+                                                </template>
+                                                <v-list>
+                                                    <v-list-item
+                                                    v-for="(acciones, index) in listaAccionesSobreInstaciaCurso" :key="index"
+                                                    @click="acionesSobreInstanciaCurso(acciones,item)"
+                                                    >
+                                                    <v-list-item-title>{{ acciones }}</v-list-item-title>
+                                                    </v-list-item>
+                                                </v-list>
+                                        </v-menu>
+                                        </div>
+                                        
+                                        
+                                       
                                     </v-card>
                                 </v-col>
                             </v-row>
@@ -465,6 +486,7 @@ export default {
                 { text: 'Curso ', value: 'curso' },
                 { text: 'Nombre curso', value: 'nomCurso' },
             ],
+            listaAccionesSobreInstaciaCurso: [ 'Modificar curso' , 'Cerrar curso'  ],
         }
     },
     _props: {
@@ -756,33 +778,33 @@ export default {
         },
 
         asignarCursoASementre(){
+            /**variables para el correcto funcionamiento de la consulta. */
+            let ins_curso=0;
+            let profe_Selec="";
             if(this.profesorSeleccionado != ''){
-                console.log("profe: "+this.profesorSeleccionado);
+                profe_Selec=this.profesorSeleccionado;
                 this.dialogAsignarCurso = true;                                   
                 for(let i = 0; i < this.seleccionados.length ; i++){
                     /* datos instancia curso */
                     let post = {
-                        "semestre": this.$store.infoSemestre.id,
+                        "semestre":this.$store.infoSemestre.id,
                         "curso": this.seleccionados[i].id,
-                        "seccion": 'A',
+                        "seccion": "A",
                     }
-
-                    /* datos profe con curso */
-                    let post2 = {
-                        "profesor" : this.profesorSeleccionado,
-                        "curso": this.seleccionados[i].id,
-                    };
-                    
-                    var url = 'http://127.0.0.1:8000/api/v1/instanciaCurso';     
-                    
-                    var url2 = 'http://127.0.0.1:8000/api/v1/profesorConCurso';     
-
-                    /*  crear instancia de curso */
+                     var url = 'http://127.0.0.1:8000/api/v1/instanciaCurso';   
                     axios.post(url, post, this.$store.state.config)
                     .then((result) => {
-                        this.textoAlertas = "Se asignó el curso correctamente"
-                        this.alertaExito=true;
-                        
+                        ins_curso= result.data.data.insCurso.id;
+                        let post2 = {
+                            "profesor" :  profe_Selec,
+                            "curso":  ins_curso,
+                            };
+                        //SEGUNDA CONSULTA
+                        if(ins_curso != 0 ){ 
+                            console.log('DATOS ENVIADOS A PROFESOR CON  CURSO')
+                            console.log(post2)
+                            this.agregarProfesorCurso(post2)
+                        }     
                     }).catch((error)=>{
                         console.log( error.response.data);
                         if (error.message == 'Network Error') {
@@ -790,25 +812,26 @@ export default {
                             this.alertaError = true;
                             this.textoAlertas = "Error al asignar el curso, intente mas tarde."
                             this.resetRegistrarUsuario();
-                        };    
+                        }
+                        if(error.response.data.code == 301){
+                            console.log(error.response.data.code +' '+ error.response.data.message);
+                            console.log(error.response.data);
+                            this.alertaError = true;      
+                            this.textoAlertas = error.response.data.message;
+                        } 
+                        if(error.response.data.code == 302){
+                            console.log(error.response.data.code +' '+ error.response.data.message);
+                            console.log(error.response.data);
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true;      
+                        }   
                                        
                     });
-
-                    /* crear profesor con curso */
-                    axios.post(url2, post2, this.$store.state.config)
-                    .then((result) => {
-                        this.textoAlertas = "Se asignó el profesor correctamente"
-                        this.alertaExito=true;
+                    
                         
-                    }).catch((error)=>{
-                        console.log(error.response);
-                        if (error.message == 'Network Error') {
-                            console.log(error)  
-                            this.alertaError = true;
-                            this.textoAlertas = "Error al asignar el profesor intente mas tarde."
-                            this.resetRegistrarUsuario();
-                        };                        
-                    });
+                 
+                 
+                   
                 }   
                 this.seleccionados = []; 
                 this.profesorSeleccionado = '';
@@ -821,6 +844,38 @@ export default {
             }
             
 
+        },
+       
+        agregarProfesorCurso(post2){
+             var url2 = 'http://127.0.0.1:8000/api/v1/profesorConCurso'; 
+                    /* crear profesor con curso */
+                    axios.post(url2, post2, this.$store.state.config)
+                    .then((result) => {
+                        console.log(result)
+                        this.textoAlertas = "Se asignó el profesor correctamente"
+                        this.alertaExito=true;
+                        
+                    }).catch((error)=>{
+                        console.log(error.response);
+                        if (error.message == 'Network Error') {
+                            console.log(error)  
+                            this.alertaError = true;
+                            this.textoAlertas = "Error al asignar el profesor intente mas tarde."
+                            this.resetRegistrarUsuario();
+                        }
+                        if(error.response.data.code == 301){
+                            console.log(error.response.data.code +' '+ error.response.data.message);
+                            console.log(error.response.data);
+                            this.alertaError = true;      
+                            this.textoAlertas = error.response.data.message;
+                        }    
+                        if(error.response.data.code == 302){
+                            console.log(error.response.data.code +' '+ error.response.data.message);
+                            console.log(error.response.data);
+                            this.alertaError = true;      
+                            this.textoAlertas = error.response.data.message;
+                        }                    
+                    });
         },
 
 
@@ -862,8 +917,27 @@ export default {
                 }
                 //Mensajes de error proximamente                
             });
+        },
+        /**
+         * Procesa la lista de acciones que puede tener un semestre
+         */
+        acionesSobreInstanciaCurso(item,curso){
+            if(item =='Modificar curso'){
+                console.log("Modificar Semestre")
+                console.log(curso)
+                
+                //  this.dialogModificarSemestre=true;
+                // this.semestreActual_1=semestre;
+            }
+            if(item=='Cerrar curso'){
+                this.datosInsCurso= curso;
+                this.dialogEliminarInsCurso=true
+
+            }
+            
         },        
     }
+    
     
 }
 </script>
