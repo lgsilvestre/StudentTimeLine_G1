@@ -364,6 +364,16 @@ class UserTableSeeder extends Seeder
         $profesor->assignRole('profesor');
 
         $profesor=User::create([
+            'nombre' => 'Daniel Monero',
+            'escuela' => 1,
+            'rol' => 'profesor', 
+            'foto' => null,
+            'email' => 'dmoreno@utalca.cl',
+            'password' => bcrypt('12345678')
+        ]);
+        $profesor->assignRole('profesor');
+
+        $profesor=User::create([
             'nombre' => 'Julio Miguel Caballero Ruiz',
             'escuela' => 1,
             'rol' => 'profesor', 

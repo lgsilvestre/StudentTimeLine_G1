@@ -116,10 +116,33 @@ class InstanciaCursoTableSeeder extends Seeder
         ]);
         InstanciaCurso::create([
             'semestre' => 1,
-            'curso' => 21,
+            'curso' => 28,
             'seccion'=> 'A'
         ]);
-
-
+        InstanciaCurso::create([
+            'semestre' => 1,
+            'curso' => 31,
+            'seccion'=> 'A'
+        ]);
+        InstanciaCurso::create([
+            'semestre' => 1,
+            'curso' => 29,
+            'seccion'=> 'A'
+        ]);
+        InstanciaCurso::create([
+            'semestre' => 1,
+            'curso' => 34,
+            'seccion'=> 'A'
+        ]);
+        InstanciaCurso::create([
+            'semestre' => 1,
+            'curso' => 35,
+            'seccion'=> 'A'
+        ]);
+        InstanciaCurso::create([
+            'semestre' => 1,
+            'curso' => 36,
+            'seccion'=> 'A'
+        ]);
     }
 }
