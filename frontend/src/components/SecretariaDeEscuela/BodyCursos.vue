@@ -63,42 +63,35 @@
                 <v-card-title class="headline primary text--center" primary-title >
                     <h5 class="white--text ">Registrar Semestre</h5>
                 </v-card-title>
-                <v-card-text class="px-12 mt-10" >
+                <v-card-text class="px-12 mt-5" >
                     <v-form  ref="form" >
                         <v-container>
+                            <v-row >
+                                <v-col cols="6" >
+                                    <strong>Año</strong>
+                                </v-col>
+                                <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
+                                    <v-text-field  v-model="añoActual" dense
+                                        outlined  color="secondary" :disabled="unAnhoVariable"
+                                        :rules="rules" type="number"
+                                        ></v-text-field>
+                                </v-col>
+                            </v-row>
                             <v-row >
                                 <v-col cols="6" >
                                     <strong>Semestre</strong>
                                 </v-col>
                                 <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
-                                    <v-text-field
-                                        v-model="añoActual"
+                                    <v-select
+                                        v-model="semestreActual"
+                                        :items="listaSemestres_reg"
+                                        item-text="sem"
                                         dense
                                         outlined
                                         color="secondary"
-                                        :disabled="unAnhoVariable"
-                                        :rules="rules"
-                                        type="number"
-                                        ></v-text-field>
+                                        ></v-select>
                                 </v-col>
                             </v-row>
-                            <v-row >
-                                <v-col cols="6" >
-                                    <strong>año</strong>
-                                </v-col>
-                                <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
-                                    <v-text-field
-                                    v-model="semestreActual"
-                                        dense
-                                        outlined
-                                        color="secondary"
-                                        :disabled="unAnhoVariable"
-                                        :rules="rules_2"
-                                        type="number"
-                                        ></v-text-field>
-                                </v-col>
-                            </v-row>
-                            
                             
                         </v-container>
                                   
@@ -125,34 +118,28 @@
                         <v-container>
                             <v-row >
                                 <v-col cols="6" >
-                                    <strong>Semestre</strong>
+                                    <strong>Año</strong>
                                 </v-col>
                                 <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
-                                    <v-text-field
-                                        v-model="añoActual"
-                                        dense
-                                        outlined
-                                        color="secondary"
-                                        :disabled="unAnhoVariable"
-                                        :rules="rules"
-                                        type="number"
+                                    <v-text-field  v-model="añoActual" dense
+                                        outlined  color="secondary" :disabled="unAnhoVariable"
+                                        :rules="rules" type="number"
                                         ></v-text-field>
                                 </v-col>
                             </v-row>
                             <v-row >
                                 <v-col cols="6" >
-                                    <strong>año</strong>
+                                    <strong>Semestre</strong>
                                 </v-col>
                                 <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
-                                    <v-text-field
-                                    v-model="semestreActual"
+                                    <v-select
+                                        v-model="semestreActual"
+                                        :items="listaSemestres_reg"
+                                        item-text="sem"
                                         dense
                                         outlined
                                         color="secondary"
-                                        :disabled="unAnhoVariable"
-                                        :rules="rules_2"
-                                        type="number"
-                                        ></v-text-field>
+                                        ></v-select>
                                 </v-col>
                             </v-row>
                         </v-container>
@@ -277,6 +264,7 @@ export default {
                 ],
 
             accionesSemestre: [ 'Modificar Semestre' , 'Cerrar Semestre'  ],
+            listaSemestres_reg:[ {sem: 1},  {sem: 2}, {sem: 3}]
         
         }
     },
@@ -470,6 +458,7 @@ export default {
                 console.log("Modificar Semestre")
                  this.dialogModificarSemestre=true;
                 this.semestreActual_1=semestre;
+                this.añoActual=semestre.anio;
             }
             if(item=='Cerrar Semestre'){
                 console.log("Eliminar semestre")

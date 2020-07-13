@@ -14,7 +14,7 @@ class EstudianteTableSeeder extends Seeder
         Estudiante::create([
             'matricula' => 2000407035,
             'rut' => '192170168',
-            'nombre_completo' => 'paulo parraguez diaz', 
+            'nombre_completo' => 'Paulo Parraguez Diaz', 
             'correo' => 'p.parraguez.diaz@hotmail.cl',
             'anho_ingreso' => 2016,
             'situacion_academica' =>'regular',
@@ -24,10 +24,10 @@ class EstudianteTableSeeder extends Seeder
         ]);
 
         Estudiante::create([
-            'matricula' => 2000407015,
+            'matricula' => 2016407023,
             'rut' => '192170169',
-            'nombre_completo' => 'javiero melendez melendez', 
-            'correo' => 'jmelendez@gmail.com',
+            'nombre_completo' => 'Javiera Mendez Osorio', 
+            'correo' => 'jamendez16@alumnos.utalca.cl',
             'anho_ingreso' => 2016,
             'situacion_academica' =>'regular',
             'porcentaje_avance' => 75,
