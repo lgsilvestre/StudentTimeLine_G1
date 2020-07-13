@@ -175,13 +175,13 @@
                 class="headline primary text--center"
                 primary-title
                 >
-                <h5 class="white--text ">Eliminar Semestre</h5>
+                <h5 class="white--text ">Cerrar Semestre</h5>
                 </v-card-title> 
-                <v-card-title class="text-justify" style="font-size: 100%;">Esta seguro que desea eliminar el siguiente semestre?</v-card-title>
+                <v-card-title class="text-justify" style="font-size: 100%;">Esta seguro que desea cerrar el siguiente semestre?</v-card-title>
                 <v-card-text>Año : {{ semestreActual_1.anio }}</v-card-text>
                 <v-card-text>Semetre : {{ semestreActual_1.semestre }}</v-card-text>
                 <div style="text-align:right;">
-                    <v-btn rounded color="warning" class=" mb-4 "  @click="dialogEliminar = false">
+                    <v-btn rounded color="warning" class=" mb-4 "  @click="dialogEliminarSemestre = false">
                         <h4 class="white--text">Cancelar</h4>
                     </v-btn>
                     <v-btn rounded color="secondary"   class=" mb-4 ml-2 mr-5" @click="eliminarSemestre()">
@@ -276,7 +276,7 @@ export default {
                 value => value >= 1 || 'El semestre debe ser mayor a 1',
                 ],
 
-            accionesSemestre: [ 'Modificar' , 'Eliminar'  ],
+            accionesSemestre: [ 'Modificar Semestre' , 'Cerrar Semestre'  ],
         
         }
     },
@@ -321,8 +321,9 @@ export default {
                             case 101:
                                 console.log(error.response.data.code +' '+ error.response.data.message);
                                 console.log(error.response.data);
-                                // mensaje= error.response.data.message;
-                                // añadir alerta
+                                mensaje= error.response.data.message;
+                                this.textoAlertas = mensaje;
+                                this.alertaError = true;  
                                 break;
                             
                                 break;
@@ -333,6 +334,9 @@ export default {
 
 
         },
+        /**
+         * Registra la información de un semestre en la base de datos.
+         */
         registrarSemestre(){
             var año_Aux = new Date().getFullYear()
             if(this.añoActual <= año_Aux && this.añoActual>= 1981 && this.semestreActual>=1 && this.semestreActual <= 3){
@@ -462,12 +466,12 @@ export default {
          * Procesa la lista de acciones que puede tener un semestre
          */
         acionesSobreSemestre(item,semestre){
-            if(item =='Modificar'){
+            if(item =='Modificar Semestre'){
                 console.log("Modificar Semestre")
                  this.dialogModificarSemestre=true;
                 this.semestreActual_1=semestre;
             }
-            if(item=='Eliminar'){
+            if(item=='Cerrar Semestre'){
                 console.log("Eliminar semestre")
                 this.semestreActual_1=semestre;
                 this.dialogEliminarSemestre = true;

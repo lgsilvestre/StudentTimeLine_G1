@@ -29,39 +29,43 @@
             </v-col>    
                         
             <v-col cols="12" md="8">
+                <!-- aca ira la lista de las instancias de curso -->
                 <v-card class="justify-center">
                     <v-img
                         class="mx-auto white--text align-end justify-center"
                         width="100%"
                         height="180px"       
-                        src="@/assets/Globales/fondo3.jpg"        
-                    >
+                        src="@/assets/Globales/background-panel-08.jpg" >
+                        <v-card-title class="white--text" style="font-size: 200%;text-shadow: #555 2px 2px 3px;">
+                            <strong > Cursos </strong>
+                            <v-spacer></v-spacer>
+                            <v-btn class="mr-2" fab large bottom left >
+                                <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
+                             </v-btn>
+                        </v-card-title> 
                     </v-img>
-                    <!-- Tabla de Instacias de Cursos, o para ser exactos, cursos que estan asignados al semestre seleccionado. -->
-                    <v-data-iterator  :items="listaInsCursos" :page="pagina"   hide-default-footer
-                    :search="buscar" :items-per-page="10">
-                        <template v-slot:header> 
-                            <v-toolbar dark color="blue darken-3" class="mb-1" >
-                                <v-text-field v-model="buscar" clearable flat   hide-details label="Buscar"
+                    <v-data-iterator :items="listaInsCursos" :search="search" :sort-by="sortBy.toLowerCase()" >
+                       <template v-slot:header>
+                           <v-toolbar>
+                                <v-text-field
+                                    v-model="search"
+                                    append-icon="mdi-magnify"
+                                    label="Search"
+                                    single-line
+                                    hide-details
                                 ></v-text-field>
-                            </v-toolbar>  
-                        </template>
-
-                        <template   v-slot:default="props">
+                           </v-toolbar>
+                       </template>
+                        <template v-slot:default="props">
                             <v-row>
-                               <v-col v-for="curso in props.listaInsCursos" :key="curso.nomCurso" cols="12"  sm="6" md="4" lg="3"  >
-                                    <v-card>
-                                        <v-card-title class="subheading font-weight-bold">{{ curso.nomCurso }}</v-card-title>
-
-                                        <v-divider></v-divider>
-
-                                        
-                                        
+                                <v-col v-for="item in props.items" :key="item.nomCurso" cols="12"  sm="6" md="4" lg="3">
+                                    <v-card class="ml-5" style="background-color:#FFE66D; border-style:solid; border-color:rgba(0,0,0,0.5); ">
+                                        <v-card-title class="subheading font-weight-bold">{{ item.nomCurso }}</v-card-title>
                                     </v-card>
                                 </v-col>
                             </v-row>
-                        </template> 
-
+                        </template>
+                    
                     </v-data-iterator>
                 </v-card>
             </v-col>
@@ -395,14 +399,27 @@ export default {
             dialogEliminarInsCurso: false,
 
             // listaOpcionesDeCursos:[],
-            pagina:1,
-            ordenarPor:"nomCurso",
-            buscar: '',
-            filter: {},
-            keys: [
-            'nomCurso',
-            ]
+            search: '',
+            sortBy:'nomCurso',
+            headers: [
+         
+          { text: 'id', value: 'id' },
+          { text: 'semestre', value: 'semestre' },
+          { text: 'Curso ', value: 'curso' },
+          { text: 'Nombre curso', value: 'nomCurso' },
+        ]
         }
+    },
+  _props: {
+    item: {
+      id: '',semestre: '',curso: '',nomCurso: ''
+    }
+  },
+    get props() {
+      return this._props
+    },
+    set props(value) {
+      this._props=value
     },
     created () {   
         this.obtenerEscuelas();
@@ -410,9 +427,7 @@ export default {
         this.obtenerInstanciasCursos();    
     },
     computed: {
-        filteredKeys () {
-        return this.keys.filter(key => key !== `nomCurso`)
-      },
+        
     },
     methods: {
         ...mapMutations(['calcularRolVuelta']),
