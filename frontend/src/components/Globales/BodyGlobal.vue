@@ -14,7 +14,7 @@
                     class="headline  text--center"
                     primary-title>
                         <div class="difuminado">
-                            <strong class="white--text letra">Perfil</strong>
+                            <strong class="white--text letra" style="text-shadow: #000000 3px 3px 4px;">Perfil</strong>
                         </div>
                         <v-spacer></v-spacer>
                         <v-avatar :size="$vuetify.breakpoint.smAndDown ? 120 : 180" class="borde mt">
