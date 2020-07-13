@@ -66,10 +66,11 @@ class InstanciaCursoController extends Controller
      */
     public function store(Request $request)
     {
-        $entradas = $request->only('semestre', 'curso');
+        $entradas = $request->only('semestre', 'curso', 'seccion');
         $validator = Validator::make($entradas, [
             'semestre' => ['required', 'numeric'],
             'curso' => [' required', 'numeric'],
+            'seccion' => ['required', 'string'],
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -85,10 +86,14 @@ class InstanciaCursoController extends Controller
         if(!array_key_exists ("curso" , $entradas)){
             $entradas['curso'] = null;
         }
+        if(!array_key_exists ("seccion" , $entradas)){
+            $entradas['seccion'] = null;
+        }
         try{
             $insCurso = new InstanciaCurso();
             $insCurso-> semestre=$entradas['semestre'];
             $insCurso-> curso=$entradas['curso'];
+            $insCurso-> seccion=$entradas['seccion'];
             $insCurso->save();
             return response()->json([
                 'success' => true,
@@ -155,10 +160,11 @@ class InstanciaCursoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $entradas = $request->only('semestre', 'curso');
+        $entradas = $request->only('semestre', 'curso', 'seccion');
         $validator = Validator::make($entradas, [
             'semestre' => ['nullable', 'numeric'],
             'curso' => [' nullable', 'numeric'],
+            'seccion' => [' nullable', 'string'],
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -173,6 +179,9 @@ class InstanciaCursoController extends Controller
         }
         if(!array_key_exists ("curso" , $entradas)){
             $entradas['curso'] = null;
+        }
+        if(!array_key_exists ("seccion" , $entradas)){
+            $entradas['seccion'] = null;
         }
         try{
             $insCurso = InstanciaCurso::find($id);
@@ -189,6 +198,9 @@ class InstanciaCursoController extends Controller
             }
             if($entradas['curso']!=null){
                 $insCurso->curso = $entradas['curso'];
+            }
+            if($entradas['seccion']!=null){
+                $insCurso->curso = $entradas['seccion'];
             }
             $insCurso->save();
             return response()->json([
