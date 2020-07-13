@@ -91,7 +91,7 @@
                     outlined
                     prepend-icon=""   
                     prepend-inner-icon="mdi-camera"
-                    @change="convertirImagen"
+                    
                     v-model="datosUsuarioModificar.imagen">
                     </v-file-input>
                     <v-text-field 
@@ -200,17 +200,17 @@ export default {
         /**
          * Convierte la imagen cargada a base 64.
          */
-        convertirImagen(e){
-            this.imagenMiniatura=null;
-            if(e != null){
-                let image =e;
-                let reader = new FileReader();
-                reader.readAsDataURL(image);
-                reader.onload = e =>{
-                    this.imagenMiniatura=e.target.result;
-                }
-            }  
-        },
+        // convertirImagen(e){
+        //     this.imagenMiniatura=null;
+        //     if(e != null){
+        //         let image =e;
+        //         let reader = new FileReader();
+        //         reader.readAsDataURL(image);
+        //         reader.onload = e =>{
+        //             this.imagenMiniatura=e.target.result;
+        //         }
+        //     }  
+        // },
         /**
          * Obtiene la informacino del usuario logeado.
          */
@@ -282,7 +282,7 @@ export default {
                     var url =`http://127.0.0.1:8000/api/v1/usuario/${this.datosUsuario.id}`;
                     let put ={
                         "nombre": this.datosUsuarioModificar.nombre,
-                        "foto":this.imagenMiniatura,
+                        "foto":this.datosUsuarioModificar.imagen,
                         "password": this.datosUsuarioModificar.contrasena,
                         "email" : this.datosUsuarioModificar.correo,
                     }
