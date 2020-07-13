@@ -11,8 +11,6 @@ class SemestreTableSeeder extends Seeder
      */
     public function run()
     {
-
-
         Semestre::create([
             'semestre' => 2,
             'anio' => 2019
