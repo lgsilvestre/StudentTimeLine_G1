@@ -143,12 +143,14 @@
                                                     prepend-inner-icon="fas fa-hashtag"
                                                     ></v-text-field>
 
-                                                    <v-text-field  
+                                                    <v-select   
                                                     v-model="estudianteImportar.situacion_academica"
+                                                    :items="listaSituacionAcademica"
+                                                    item-text="nombre"
                                                     label="Situacion academica" outlined
                                                     color="secondary"
                                                     prepend-inner-icon="fas fa-address-book"
-                                                    ></v-text-field>
+                                                    ></v-select >
 
                                                     <v-select 
                                                     v-model="estudianteImportar.escuela" 
@@ -328,10 +330,9 @@
                 class="elevation-1 "
                 >
                     <template v-slot:item.actions="{ item }">
-                    <v-btn color="white" fab small depressed class="mr-2 py-2">
+                    <v-btn color="white" fab small depressed class="mr-2 py-2" @click="perfilEstudiante(item)">
                         <v-icon  
                         color="primary"
-                        @click="nada(item)"
                         >
                         fas fa-edit
                         </v-icon>
@@ -343,6 +344,54 @@
             <v-col cols="12" md="1">
             </v-col>          
         </v-row>
+        <v-snackbar
+        v-model="alertError"
+        :timeout=delay
+        bottom
+        color="warning"
+        left
+        class="mb-1 pb-12 pr-0 mr-0"
+        >
+        <div>
+            <v-icon color="white" class="mr-2">
+            fas fa-exclamation-triangle
+            </v-icon>
+            <strong>{{textoError}} </strong>
+        </div>
+        <v-btn
+            color="white"
+            elevation="0"
+            x-small
+            fab
+            @click="alertError = ! alertError"
+        > 
+            <v-icon color="warning">fas fa-times</v-icon>
+        </v-btn>
+        </v-snackbar>
+        <v-snackbar
+        v-model="alertAcept"
+        :timeout=delay
+        bottom
+        color="secondary"
+        left
+        class="mb-1 pb-12 pr-0 mr-0"
+        >
+        <div>
+            <v-icon color="white" class="mr-2">
+            fas fa-check-circle
+            </v-icon>
+            <strong>{{textoAcept}}</strong>
+        </div>
+        <v-btn
+            color="white"
+            elevation="0"
+            x-small
+            fab
+            @click="alertAcept = ! alertAcept"
+        > 
+            <v-icon color="secondary">fas fa-times</v-icon>
+        </v-btn>
+        </v-snackbar>
     </v-container>
 
 </template>
@@ -576,7 +625,15 @@
             escuela:'',
         },
         cargando: true,    
-        
+        alertError: false,
+        textoError: '',
+        alertAcept: false,
+        textoAcept: '',
+        delay: 4000,
+        listaSituacionAcademica:[
+            'Regular ','Egresado ', 'Eliminado ', 'Titulado',
+            'Intercambio','Postergación','Retiro','Temporal'
+        ]
 
     }),
     computed: {
@@ -594,9 +651,6 @@
         this.obtenerEscuelas();
     },
     methods: {
-        onFileChange(e) {
-            this.import_file = e.target.files[0];
-        },
         nada(item){
             
         },
@@ -604,7 +658,6 @@
             this.botonesAgregarEstudiantes= true;
             this.containerAgregarEstudianteUnico= false;
             this.containerAgregarEstudianteImportar=false;
-            
         },
         volverYcerrarAgregarEstudiantes(){
             this.dialogAgregarEstudiante = ! this.dialogAgregarEstudiante;
@@ -622,13 +675,19 @@
             var url = 'http://127.0.0.1:8000/api/importar_excel/importar';
             axios.post(url,formData)
             .then((result)=>{
-                if (result.statusText == 'OK') {
+                if (result.data.success == true) {
                     this.resetImportarEstudiantes();
                     this.obtenerEstudiantes();
                 }
             })
-            .catch((err)=>{
-                console.log(err)
+            .catch((error)=>{
+                if (error.message == 'Network Error') {
+                    console.log(error);
+                    this.alertError = true;
+                    this.cargando = false;
+                    console.log(err)
+                    this.textoError = 'Error al importar los datos, intente más tarde'
+                }
             })
         },
         obtenerEstudiantes(){
@@ -637,9 +696,10 @@
             var url = 'http://127.0.0.1:8000/api/v1/estudiante';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
-                if (result.statusText == 'OK') {
-                    for (let index = 0; index < result.data.length; index++) {
-                    const element = result.data[index];
+                console.log(result.data);
+                if (result.data.success == true) {
+                    for (let index = 0; index < result.data.data.estudiantes.length; index++) {
+                    const element = result.data.data.estudiantes[index];
                     let estudiante = {
                         matricula: element.matricula,
                         rut: element.rut,
@@ -655,10 +715,29 @@
                     this.listaEstudiantes = this.listaEstudiantesAux;
                 }
             })
-            .catch((err)=>{
-                this.cargando = false;
-                console.log(err)
-            })
+            .catch((error)=>{
+                if (error.message == 'Network Error') {
+                    console.log(error);
+                    this.alertError = true;
+                    this.cargando = false;
+                    console.log(err)
+                    this.textoError = 'Error al cargar los datos, intente más tarde'
+                } else {
+                    if (error.response.data.success == false) {
+                        switch (error.response.data.code) {
+                        case 301:
+                            console.log(error.response.data.code +' '+ error.response.data.message);
+                            console.log(error.response.data);
+                            this.alertError = true;
+                            this.cargando = false;
+                            this.textoError = error.response.data.message;
+                            break;
+                        default:
+                            break;
+                        }
+                    }
+                } 
+            });
         },
         agregarEstudiantesUnico() {
             var url = 'http://127.0.0.1:8000/api/v1/estudiante';
@@ -679,18 +758,39 @@
                 "situacion_academica": this.estudianteImportar.situacion_academica,
                 "porcentaje_avance":0,
                 "creditos_aprobados":0,
-                "escuela": 1,
+                "escuela": this.estudianteImportar.escuela
             };
-
             axios.post(url,post,this.$store.state.config)
             .then((result)=>{
-                if (result.statusText == 'OK') {
-                    console.log('se cargo el estudiante')
+                if (result.data.success == true)  {
+                    console.log('se cargo el estudiante');
+                    this.resetUnicoEstudiante();
+                    this.alertAcept = true;
+                    this.textoAcept = 'Se agregó el estudiante correctamente '
+                    this.obtenerEstudiantes();
                 }
             })
-            .catch((err)=>{
-                console.log(err)
-            })
+            .catch((error)=>{
+                if (error.message == 'Network Error') {
+                    console.log(error);
+                    this.alertError = true;
+                    this.resetUnicoEstudiante();
+                    this.textoError = 'Error al cargar los datos, intente más tarde'
+                } else {
+                    if (error.response.data.success == false) {
+                        switch (error.response.data.code) {
+                        case 302:
+                            console.log(error.response.data.code +' '+ error.response.data.message);
+                            console.log(error.response.data);
+                            this.alertError = true;
+                            this.textoError = error.response.data.message;
+                            break;
+                        default:
+                            break;
+                        }
+                    }
+                } 
+            });
         },
         mostrarAgregarEstudiantesImportar(){
             this.botonesAgregarEstudiantes= false;
@@ -701,18 +801,41 @@
             var url = 'http://127.0.0.1:8000/api/v1/escuela';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
-                for (let index = 0; index < result.data.length; index++) {
-                const element = result.data[index];
-                let escuela = {
-                    id: element.id,
-                    nombre: element.nombre,
-                };
-                // console.log(escuela);
-                this.listaEscuelaAux[index]=escuela;
+                if (result.data.success == true) {
+                    for (let index = 0; index < result.data.data.escuelas.length; index++) {
+                        const element = result.data.data.escuelas[index];
+                        let escuela = {
+                            id: element.id,
+                            nombre: element.nombre,
+                        };
+                        // console.log(escuela);
+                        this.listaEscuelaAux[index]=escuela;
+                    }
+                    this.listaEscuela = this.listaEscuelaAux;
                 }
-                this.listaEscuela = this.listaEscuelaAux;
-            }
-            );
+            })
+            .catch((error) => {
+                if (error.message == 'Network Error') {
+                    console.log(error);
+                    this.alertError = true;
+                    this.cargando = false;
+                    this.textoError = 'Error al cargar los datos, intente más tarde'
+                } else {
+                    if (error.response.data.success == false) {
+                        switch (error.response.data.code) {
+                        case 101:
+                            console.log(error.response.data.code +' '+ error.response.data.message);
+                            console.log(error.response.data);
+                            this.alertError = true;
+                            this.cargando = false;
+                            this.textoError = error.response.data.message;
+                            break;
+                        default:
+                            break;
+                        }
+                    }
+                } 
+            });
         },
         todosLosAnhos(){
             this.todosLosAnhosVariable= false;
@@ -745,14 +868,58 @@
             this.anhov3= new Date().getFullYear();
         },
         exportarEstudiantes(){
-            if (this.anhov2 > this.anhov3) {
-                this.alertaErrorRangoAnhos = true;
-                console.log('rango mal');
-            }
+            //if (this.anhov2 > this.anhov3) {
+                //this.alertaErrorRangoAnhos = true;
+                //console.log('rango mal');
+            //}
+            var url = 'http://127.0.0.1:8000/api/v1/estudiante/exportar';
+            axios.get(url,this.$store.state.config)
+            .then((result)=>{
+                this.alertAcept = true;
+                this.textoAcept = 'Se realizó la operación correctamente'
+                
+            })
+            .catch((error) => {
+                if (error.message == 'Network Error') {
+                    console.log(error);
+                    this.alertError = true;
+                    this.textoError = 'Error, intente más tarde'
+                } else {
+                    this.alertError = true;
+                    this.textoError = 'Error, intente más tarde'
+                    if (error.response.data.success == false) {
+                        switch (error.response.data.code) {
+                        case 101:
+                            console.log(error.response.data.code +' '+ error.response.data.message);
+                            console.log(error.response.data);
+                            this.alertError = true;
+                            this.cargando = false;
+                            this.textoError = error.response.data.message;
+                            break;
+                        default:
+                            break;
+                        }
+                    }
+                } 
+            });
         },
         resetImportarEstudiantes(){
             this.file = null;
             this.dialogAgregarEstudiante= false;
+        },
+        resetUnicoEstudiante(){
+            this.estudianteImportar.matricula='';
+            this.estudianteImportar.rut="";
+            this.estudianteImportar.nombre_completo="";
+            this.estudianteImportar.correo="";
+            this.estudianteImportar.anho_ingreso="";
+            this.estudianteImportar.situacion_academica="";
+            this.estudianteImportar.escuela="";
+            this.dialogAgregarEstudiante= false;
+        },
+        perfilEstudiante(item){
+            this.$store.state.perfilEstudiante = item;
+            this.$router.push({path:'/administrador/estudiantes/'+item.rut});
         },
 
     },

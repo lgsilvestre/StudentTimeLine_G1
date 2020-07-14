@@ -15,110 +15,136 @@ use Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Mail\EmergencyCallReceived;
 use \App\Mail\SendMail;
-//use App\Mail\SendMail;
 
 class TokensController extends Controller
 {
-    public function login(Request $request)
-    {
-        $credentials = $request->only('email', 'password');
-
-        $validator = Validator::make($credentials, [
+    /**
+     * Metodo que permite iniciar sesion
+     */
+    public function login(Request $request){
+        $credenciales = $request->only('email', 'password');
+        $validator = Validator::make($credenciales, [
             'email' => 'required|email',
             'password' => 'required'
         ]);
-
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
-                'code' => 1,
+                'code' => 2,
                 'message' => 'Error en las credenciales',
-                'errors' => $validator->errors()
+                'data' => ['error'=>$validator->errors()]
             ], 422);
         }
-
         try{
-            $token = JWTAuth::attempt($credentials);
+            $token = JWTAuth::attempt($credenciales);
             if ($token) {
                 return response()->json([
-                    'token' => $token,
-                    'user' => User::where('email', $credentials['email'])->get()->first()
+                    'success' => true,
+                    'code' => 1,
+                    'message' => 'Operacion realizada con exito',
+                    'data' => ['token'=>$token,
+                            'usuario' =>User::where('email', $credenciales['email'])->get()->first()],
                 ], 200);
             } else {
                 return response()->json([
                     'success' => false,
-                    'code' => 2,
+                    'code' => 3,
                     'message' => 'Error en las credenciales',
-                    'errors' => $validator->errors()], 401);
+                    'data' => ['error'=>$validator->errors()]
+                ], 401);
             }
         //este catch permite responder directamente que problemas en la peticion SQL
         } catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
                 'success' => false,
-                'code' => 3,
-                'message' => 'Error al solicitar peticiones a la base de datos'], 401);
+                'code' => 4,
+                'message' => 'Error al solicitar peticiones a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
         }
     }
 
-    public function refreshToken()
-    {
-
+    /**
+     * Metodo que permite refrescar un token
+     */
+    public function refreshToken(){
         $token = JWTAuth::getToken();
-
         try {
             $token = JWTAuth::refresh($token);
-            return response()->json(['success' => true, 'token' => $token], 200);
+            return response()->json([
+                'success' => true,
+                'code' => 1,
+                'message' => 'Operacion realizada con exito',
+                'data' => ['token'=>$token],
+            ], 200);
         } catch (TokenExpiredException $ex) {
             // We were unable to refresh the token, our user needs to login again
             return response()->json([
-                'code' => 3, 'success' => false, 'message' => 'Necesita iniciar secion otra vez, porfavor (Expirado)!'
-            ]);
+                'success' => false,
+                'code' => 2,
+                'message' => 'Necesita iniciar secion otra vez, porfavor (Expirado)!',
+                'data' => null
+            ], 422);
         } catch (TokenBlacklistedException $ex) {
             // Blacklisted token
             return response()->json([
-                'code' => 4, 'success' => false, 'message' => 'Necesita iniciar secion otra vez, porfavor (Lista negra)!'
+                'success' => false,
+                'code' => 3,
+                'message' => 'Necesita iniciar secion otra vez, porfavor (Lista negra)!',
+                'data' => null
             ], 422);
         //este catch permite responder directamente que problemas en la peticion SQL
         } catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
                 'success' => false,
-                'code' => 5,
-                'message' => 'Error al solicitar peticiones a la base de datos'], 401);
+                'code' => 4,
+                'message' => 'Error al solicitar peticiones a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
         }
-
     }
 
+    /**
+     * Metodo que permite cerrar sesion
+     */
     public function logoutToken()
     {
         //  $this->validate($request, ['token' => 'required']);
         $token = JWTAuth::getToken();
-
         try {
             $token = JWTAuth::invalidate($token);
             return response()->json([
-                'code' => 5, 'success' => true, 'message' => "Has cerrado la sesión con exito"
+                'success' => true,
+                'code' => 1,
+                'message' => "Has cerrado la sesión con exito",
+                'data' => null
             ], 200);
         //este catch permite responder directamente que problemas en la peticion de Token
         } catch (JWTException $e) {
             return response()->json([
-                'code' => 6, 'success' => false, 'message' => 'No se a podido cerrar la sesión, por favor volver a intentar.'
+                'success' => false,
+                'code' => 2,
+                'message' => "No se a podido cerrar la sesión, por favor volver a intentar",
+                'data' => null
             ], 422);
         //este catch permite responder directamente que problemas en la peticion SQL
         } catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
                 'success' => false,
-                'code' => 5,
-                'message' => 'Error al solicitar peticiones a la base de datos'], 401);
+                'code' => 3,
+                'message' => 'Error al solicitar peticiones a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
         }
     }
 
     /**
      * Metodo que se encarga en recuperar la contraseña
      */
-    public function restartPassword(Request $request){
-        $credentials = $request->only('email');
-        $validator = Validator::make($credentials, [
-            'email' => 'required|email',
+    public function sendRestartPassword(Request $request){
+        $credenciales = $request->only('email');
+        $validator = Validator::make($credenciales, [
+            'email' => 'required|email'
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -129,25 +155,95 @@ class TokensController extends Controller
             ], 422);
         }
         try{
-            $user = User::where('email', $credentials['email'])->get()->first();
+            $user = User::where('email', $credenciales['email'])->get()->first();
+            if($user==null){
+                return response()->json([
+                    'success' => false,
+                    'code' => 3,
+                    'message' => 'Correo no existe',
+                    'data' => 'El usuario con el correo:'.$credenciales['email'].' no existe'
+                ], 401);
+            }
+            $codigo = bin2hex(random_bytes(20));
+            $details = array(
+                'usuario' => $user['nombre'],
+                'direccion' => 'http://localhost:8080/ReinicioContraseña/'.$codigo
+            );
+            \Mail::to($user['email'])->send(new SendMail($details));
+            $user->codigoRecuperacion = $codigo;
+            $user->fechaRecuperacion = date("Y-m-d H:i:s", strtotime('+24 hours'));
+            $user->save();
+            return response()->json([
+                'success' => true,
+                'code' => 1,
+                'message' => 'Se a mandado el correo exitosamente',
+                'data' => null
+            ], 200);
+        }catch(\Exception $e){
+            return response()->json([
+                'success' => false,
+                'code' => 4,
+                'message' => 'Error',
+                'data' => $e
+            ], 502);
+        }
+    }
+
+    /**
+     * Metodo que se encarga en recuperar la contraseña
+     * entradas:
+     * Correo
+     * clave
+     */
+    public function restartPassword(Request $request){
+        $credenciales = $request->only('password', 'codigo');
+        $validator = Validator::make($credenciales, [
+            'password' => 'required|string',
+            'codigo' => 'required|string'
+        ]);
+        if ($validator->fails()){
+            return response()->json([
+                'success' => false,
+                'code' => 2,
+                'message' => 'Error en el tipo de dato',
+                'data' => ['error'=>$validator->errors()]
+            ], 422);
+        }
+        try{
+            $user = User::where('codigoRecuperacion', $credenciales['codigo'])->get()->first();
             if($user==null){
                 return response()->json([
                     'success' => false,
                     'code' => 2,
                     'message' => 'Correo no existe',
-                    'data' => 'El usuario con el correo:'.$credentials['email'].' no existe'
+                    'data' => 'El usuario con el codigo: '.$credenciales['codigo'].' no existe'
                 ], 401);
             }
-            $details = [
-                'title' => 'Recuperacion de clave del sistema de gestion de ayudantes',
-                'body' => "Hace poco hemos recibido una solicitud de restablecimiento de la contraseña de su cuenta: ".$user['email']. ' ACA DEBERIA IR EL LINK PARA RECUPERAR LA CLAVE'.'    '. 
-                'Si no ha solicitado la contraseña puede simplemente ignorar este correo electrónico. No se efectuará ningún cambio en su cuenta. Recuerde, su correo y su contraseña le permiten acceder a nuestro sistema.',
-            ];
-            \Mail::to($user['email'])->send(new SendMail($details));
+            $current = date("Y-m-d H:i:s");
+            if (strtotime($current) > strtotime($user->fechaRecuperacion)) {
+                return response()->json([
+                    'success' => false,
+                    'code' => 1,
+                    'message' => 'El código de recuperación de contraseña ha expirado. Por favor intenta de nuevo.',
+                    'data' => null
+                ], 400);
+            }
+            if( $credenciales['codigo']!=$user->codigoRecuperacion){
+                return response()->json([
+                    'success' => false,
+                    'code' => 1,
+                    'message' => 'El codigo no es compatible',
+                    'data' => null
+                ], 400);
+            }
+            $user->password= bcrypt($credenciales['password']);
+            $user->codigoRecuperacion=null;
+            $user->fechaRecuperacion=null;
+            $user->save();
             return response()->json([
                 'success' => true,
                 'code' => 1,
-                'message' => 'Se a mandado el correo exitosamente',
+                'message' => 'Se a restablecido su contraseña con exito',
                 'data' => null
             ], 200);
         }catch(\Exception $e){
@@ -159,6 +255,4 @@ class TokensController extends Controller
             ], 502);
         }
     }
-
-    
 }

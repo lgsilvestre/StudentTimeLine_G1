@@ -21,11 +21,13 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('codigoRecuperacion')->nullable();
+            $table->dateTime('fechaRecuperacion')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
 
-            //referenciando a la carrera
+            //referenciando a la escuela
             
         });
         DB::statement("ALTER TABLE users ADD foto MEDIUMBLOB");

@@ -1,42 +1,37 @@
 <template>
-    <v-navigation-drawer
-    app
-    v-model="drawers.drawer"
-    right
-    premanent    
-    :mini-variant.sync="drawers.miniVarianteAdm" 
-    src="@/assets/Globales/background-panel-02.jpg"
+    <v-navigation-drawer app right v-model="drawers.drawer" :mini-variant="drawers.miniVarianteAdm"  :permanent="$vuetify.breakpoint.mdAndUp" :temporary="$vuetify.breakpoint.smAndDown"
+        src="@/assets/Globales/background-panel-02.jpg"
     >
-    <!-- Mis recomendaciones de fondo (?)  1, 2, 4, 7, 9,  -->  
-
     <!-- Lista general del navigation drawer -->
         <!-- Seccion de Mi Perfil -->
-        <v-list >
-            <v-list-item class="px-2 difuminado" active-class="activacion" to="/secretariaEscuela/perfil">
+            <v-list-item class="px-2 py-1  difuminado" active-class="activacion" to="/secretariaEscuela/perfil">
                 <!-- Imagen o Avatar -->
                 <v-list-item-avatar>
-                    <v-img src="http://www.ingenieria.utalca.cl/Repositorio/PNsAYcfZiO2QfjGDQMIyjMOAomsLch/Ruth%20Garrido.jpg"></v-img>
+                    <v-img :src="usuario.usuario.foto"
+                    ></v-img>
                 </v-list-item-avatar>    
                 <!-- Nombre del Usuario -->
                 <v-list-item-title class="white--text letra"><strong>Sria. de Escuela</strong></v-list-item-title>                       
             </v-list-item>
-
+        
             <v-divider></v-divider>
-            <v-list-item @click="profesores" class="difuminado" active-class="activacion" >
+            <v-list style=" margine-right: 0; margine-left:0;"  >
+            
+            <v-list-item class="difuminado" active-class="activacion" to="/secretariaEscuela/profesores">
                 <v-list-item-icon>
                     <v-icon color="white">fas fa-chalkboard-teacher</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title class="white--text letra"><strong>Profesores</strong></v-list-item-title>                            
             </v-list-item>
 
-            <v-list-item @click="cursos" class="difuminado" active-class="activacion">
+            <v-list-item class="difuminado" active-class="activacion" to="/secretariaEscuela/cursos">
                 <v-list-item-icon >
                     <v-icon color="white">fab fa-accusoft</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title class="white--text letra"><strong>Cursos</strong></v-list-item-title>                            
             </v-list-item>
 
-            <v-list-item @click="estudiantes" class="difuminado" active-class="activacion" to="/secretariaEscuela/estudiantes">
+            <v-list-item  class="difuminado" active-class="activacion" to="/secretariaEscuela/estudiantes">
                 <v-list-item-icon >
                     <v-icon color="white">fas fa-user-graduate</v-icon>
                 </v-list-item-icon>
@@ -56,9 +51,7 @@
                 </v-list-item-icon>
                 <v-list-item-title class="white--text letra" ><strong>Contactar</strong></v-list-item-title>                            
             </v-list-item>
-                     
         </v-list>
-
         <template v-slot:append >
         <v-list-item class=" difuminado" style="background-color: #FF6B6B" @click="unLogin">
             <v-list-item-icon >
@@ -67,7 +60,6 @@
             <v-list-item-title class="white--text letra" ><strong>Cerrar sesion</strong></v-list-item-title>
         </v-list-item>
         </template>       
-
     </v-navigation-drawer>
 </template>
 
@@ -84,13 +76,10 @@ export default {
         }
     },
     computed: {
-        ...mapState(['drawers']),
+        ...mapState(['drawers', 'usuario']),
     },
     methods: {
         ...mapMutations(['unLogin']),
-        verPerfil(){
-
-        },
         contactar(){
             
         },
