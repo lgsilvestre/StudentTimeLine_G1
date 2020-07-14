@@ -868,10 +868,40 @@
             this.anhov3= new Date().getFullYear();
         },
         exportarEstudiantes(){
-            if (this.anhov2 > this.anhov3) {
-                this.alertaErrorRangoAnhos = true;
-                console.log('rango mal');
-            }
+            //if (this.anhov2 > this.anhov3) {
+                //this.alertaErrorRangoAnhos = true;
+                //console.log('rango mal');
+            //}
+            var url = 'http://127.0.0.1:8000/api/v1/estudiante/exportar';
+            axios.get(url,this.$store.state.config)
+            .then((result)=>{
+                this.alertAcept = true;
+                this.textoAcept = 'Se realizó la operación correctamente'
+                
+            })
+            .catch((error) => {
+                if (error.message == 'Network Error') {
+                    console.log(error);
+                    this.alertError = true;
+                    this.textoError = 'Error, intente más tarde'
+                } else {
+                    this.alertError = true;
+                    this.textoError = 'Error, intente más tarde'
+                    if (error.response.data.success == false) {
+                        switch (error.response.data.code) {
+                        case 101:
+                            console.log(error.response.data.code +' '+ error.response.data.message);
+                            console.log(error.response.data);
+                            this.alertError = true;
+                            this.cargando = false;
+                            this.textoError = error.response.data.message;
+                            break;
+                        default:
+                            break;
+                        }
+                    }
+                } 
+            });
         },
         resetImportarEstudiantes(){
             this.file = null;

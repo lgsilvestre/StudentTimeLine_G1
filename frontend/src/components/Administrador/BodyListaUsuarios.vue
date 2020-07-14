@@ -134,7 +134,6 @@
                                                 <strong> Cerrar </strong>
                                                 <v-icon class="ml-1">mdi-close</v-icon>
                                             </v-btn>
-                            
                                             </v-toolbar>
                                             <v-container style="background-color: #F7FFF7;">
                                                 <v-row>
@@ -193,8 +192,8 @@
                                                             >            
                                                             <template v-slot:item.opciones="{ item }">
                                                             <!-- boton para modificar usuario seleccionado -->
-                                                                <v-btn color="white" fab small depressed class="mr-2 py-2">
-                                                                    <v-icon color="secondary" @click="restaurarUsuarioEliminado(item)" >
+                                                                <v-btn color="white" fab small depressed class="mr-2 py-2" @click="restaurarUsuarioEliminado(item)">
+                                                                    <v-icon color="secondary"  >
                                                                         fas fa-trash-restore-alt
                                                                     </v-icon>
                                                                 </v-btn>
@@ -362,14 +361,14 @@
                         :search="buscar" :loading="cargando" :items-per-page="10"  >            
                         <template v-slot:item.opciones="{ item }">
                         <!-- boton para modificar usuario seleccionado -->
-                            <v-btn color="white" fab small depressed class="mr-2 py-2">
-                                <v-icon color="primary" @click="MostrarPanelModificar(item)" >
+                            <v-btn color="white" fab small depressed class="mr-2 py-2" @click="MostrarPanelModificar(item)">
+                                <v-icon color="primary"  >
                                     fas fa-edit
                                 </v-icon>
                             </v-btn>
                         <!-- boton para eliminar usuario seleccionado -->
-                            <v-btn color="white" fab small depressed class="mr-2 py-2">
-                                <v-icon color="warning" @click="EliminarUsuario(item)" >
+                            <v-btn color="white" fab small depressed class="mr-2 py-2" @click="EliminarUsuario(item)">
+                                <v-icon color="warning"  >
                                     fas fa-trash-alt
                                 </v-icon>
                             </v-btn>

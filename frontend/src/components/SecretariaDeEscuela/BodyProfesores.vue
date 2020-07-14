@@ -223,10 +223,9 @@
                 >            
                     <template v-slot:item.opciones="{ item }">
                     <!-- boton para deshabilitar el profesor seleccionado -->
-                        <v-btn color="white" fab small depressed >
+                        <v-btn color="white" fab small depressed @click="EliminarProfesor(item)">
                             <v-icon
                                 color="warning"         
-                                @click="EliminarProfesor(item)"
                             >
                             fas fa-trash-alt
                             </v-icon>

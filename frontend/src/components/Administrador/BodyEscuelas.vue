@@ -125,18 +125,16 @@
           class="elevation-1 "
           >
             <template v-slot:item.actions="{ item }">
-              <v-btn color="white" fab small depressed class="mr-2 py-2">
+              <v-btn color="white" fab small depressed class="mr-2 py-2" @click="ModificarEscuela(item)">
                 <v-icon  
                 color="primary"
-                @click="ModificarEscuela(item)"
                 >
                 fas fa-edit
                 </v-icon>
               </v-btn>
-              <v-btn color="white" fab small depressed class="mr-2 py-2">
+              <v-btn color="white" fab small depressed class="mr-2 py-2" @click="EliminarEscuela(item)">
                 <v-icon
                 color="warning"
-                @click="EliminarEscuela(item)"
                 >
                 fas fa-trash-alt
                 </v-icon>
