@@ -63,8 +63,27 @@ class RolesAndPermissions extends Seeder
         Permission::create(['name' => 'update instancia curso']);
         Permission::create(['name' => 'delete instancia curso']);
         Permission::create(['name' => 'restore instancia curso']);
-        //---------------- asignacion de permisos ----------------
+        //Creacion de permisos sobre el crud del ayudante con curso
+        Permission::create(['name' => 'create ayudante con curso']);
+        Permission::create(['name' => 'read ayudante con curso']);
+        Permission::create(['name' => 'update ayudante con curso']);
+        Permission::create(['name' => 'delete ayudante con curso']);
+        Permission::create(['name' => 'restore ayudante con curso']);
+        //Creacion de permisos sobre el crud del categoria 
+        Permission::create(['name' => 'create categoria']);
+        Permission::create(['name' => 'read categoria']);
+        Permission::create(['name' => 'update categoria']);
+        Permission::create(['name' => 'delete categoria']);
+        Permission::create(['name' => 'restore categoria']);
+        //Creacion de permisos sobre el crud de observacion 
+        Permission::create(['name' => 'create observacion']);
+        Permission::create(['name' => 'read observacion']);
+        Permission::create(['name' => 'update observacion']);
+        Permission::create(['name' => 'delete observacion']);
+        Permission::create(['name' => 'restore observacion']);
+        
 
+        //---------------- asignacion de permisos ----------------
         //Creacion de rol y asignacion de permisos al rol de "administrador"
         $role = Role::create(['name' => 'admin']);
         //permisos CRUD de usuario, todos los permisos
@@ -91,8 +110,9 @@ class RolesAndPermissions extends Seeder
         $role->givePermissionTo('update estudiante');
         $role->givePermissionTo('delete estudiante');
         $role->givePermissionTo('restore estudiante');
-        //Puede exportar e importar
+        //Puede importar
         $role->givePermissionTo('importar estudiante');
+        //Puede exportar
         $role->givePermissionTo('exportar estudiante');
         //permisos CRUD de profesor con curso, todos los permisos
         $role->givePermissionTo('create profesor con curso');
@@ -112,8 +132,26 @@ class RolesAndPermissions extends Seeder
         $role->givePermissionTo('update instancia curso');
         $role->givePermissionTo('delete instancia curso');
         $role->givePermissionTo('restore instancia curso');
+        //permisos CRUD de instancia ayudante con curso, todos los permisos
+        $role->givePermissionTo('create ayudante con curso');
+        $role->givePermissionTo('read ayudante con curso');
+        $role->givePermissionTo('update ayudante con curso');
+        $role->givePermissionTo('delete ayudante con curso');
+        $role->givePermissionTo('restore ayudante con curso');
+        //permisos CRUD de instancia categoria, todos los permisos
+        $role->givePermissionTo('create categoria');
+        $role->givePermissionTo('read categoria');
+        $role->givePermissionTo('update categoria');
+        $role->givePermissionTo('delete categoria');
+        $role->givePermissionTo('restore categoria');
+        //permisos CRUD de instancia observacion, todos los permisos
+        $role->givePermissionTo('create observacion');
+        $role->givePermissionTo('read observacion');
+        $role->givePermissionTo('update observacion');
+        $role->givePermissionTo('delete observacion');
+        $role->givePermissionTo('restore observacion');
         
-        
+
         //Creacion de rol y asignacion de permisos al rol de "secretaria de escuela"
         $role = Role::create(['name' => 'secretaria de escuela']);
         //Solo puede modificarse asi mismo y ver los usuarios
@@ -151,7 +189,24 @@ class RolesAndPermissions extends Seeder
         $role->givePermissionTo('update instancia curso');
         $role->givePermissionTo('delete instancia curso');
         $role->givePermissionTo('restore instancia curso');
-
+        //permisos CRUD de instancia ayudante con curso, todos los permisos
+        $role->givePermissionTo('create ayudante con curso');
+        $role->givePermissionTo('read ayudante con curso');
+        $role->givePermissionTo('update ayudante con curso');
+        $role->givePermissionTo('delete ayudante con curso');
+        $role->givePermissionTo('restore ayudante con curso');
+        //permisos CRUD de instancia categoria, todos los permisos
+        $role->givePermissionTo('create categoria');
+        $role->givePermissionTo('read categoria');
+        $role->givePermissionTo('update categoria');
+        $role->givePermissionTo('delete categoria');
+        $role->givePermissionTo('restore categoria');
+        //permisos CRUD de instancia observacion, todos los permisos
+        $role->givePermissionTo('create observacion');
+        $role->givePermissionTo('read observacion');
+        $role->givePermissionTo('update observacion');
+        $role->givePermissionTo('delete observacion');
+        $role->givePermissionTo('restore observacion');
 
         //Creacion de rol y asignacion de permisos al rol de "profesor"
         $role = Role::create(['name' => 'profesor']);
@@ -171,5 +226,15 @@ class RolesAndPermissions extends Seeder
         $role->givePermissionTo('read profesor con curso');
         //Puede ver el listado de las instancias curso
         $role->givePermissionTo('read instancia curso');
+        //permisos CRUD de instancia ayudante con curso, todos los permisos
+        $role->givePermissionTo('read ayudante con curso');
+        //permisos CRUD de instancia categoria, todos los permisos
+        $role->givePermissionTo('read categoria');
+        //permisos CRUD de instancia observacion, todos los permisos
+        $role->givePermissionTo('create observacion');
+        $role->givePermissionTo('read observacion');
+        $role->givePermissionTo('update observacion');
+        $role->givePermissionTo('delete observacion');
+        $role->givePermissionTo('restore observacion');
     }
 }

@@ -35,7 +35,7 @@ Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1'], function () {
     Route::get('/estudiante/disabled','EstudianteController@disabled');
     Route::post('/estudiante/restore/{id}','EstudianteController@restore');
     Route::post('/estudiante/importar', 'ImportarExcelController@index');
-    Route::get('/estudiante/exportar', 'ExportarExcelController@index');
+    
     Route::resource('/estudiante', 'EstudianteController' );
     #Controlador de Profesor_Con_Curso
     Route::get('/profesorConCurso/disabled','ProfesorConCursoController@disabled');
@@ -54,13 +54,13 @@ Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1'], function () {
     Route::post('/ayudanteCurso/restore/{id}','AyudanteConCursoController@restore');
     Route::resource('/ayudanteCurso','AyudanteConCursoController');
     #controlador de observaciones
-    Route::get('/Observaciones/disabled','ObservacionController@disabled');
-    Route::post('/Observaciones/restore/{id}','ObservacionController@restore');
-    Route::resource('/Observaciones','ObservacionController');
+    Route::get('/observaciones/disabled','ObservacionController@disabled');
+    Route::post('/observaciones/restore/{id}','ObservacionController@restore');
+    Route::resource('/observaciones','ObservacionController');
     #controlador de categorias
-    Route::get('/Categorias/disabled','CategoriaController@disabled');
-    Route::post('/Categorias/restore/{id}','CategoriaController@restore');
-    Route::resource('/Categorias','CategoriaController');
+    Route::get('/categorias/disabled','CategoriaController@disabled');
+    Route::post('/categorias/restore/{id}','CategoriaController@restore');
+    Route::resource('/categorias','CategoriaController');
 });
 
 Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
@@ -71,4 +71,5 @@ Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
     Route::post('/auth/restartPassword', 'TokensController@restartPassword');
     Route::post('/auth/sendRestartPassword', 'TokensController@sendRestartPassword');
     Route::get('/auth/respondWithToken', 'TokensController@respondWithToken');
+    Route::get('/exportar', 'ExportarExcelController@index');
 });

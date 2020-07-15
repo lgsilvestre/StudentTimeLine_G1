@@ -26,14 +26,22 @@ class ProfesorConCursoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
-        #Podríamos retornar los nombres en lugar del id del profesor y del curso.
-        $CursosyProfesores = Profesor_Con_Curso::all();
-        return response()->json([
-            'success' => true,
-            'code' => 100,
-            'message' => "La operacion se a realizado con exito",
-            'data' => ['CursosyProfesores'=>$CursosyProfesores]
-        ], 200);
+        try{
+            $CursosyProfesores = Profesor_Con_Curso::all();
+            return response()->json([
+                'success' => true,
+                'code' => 100,
+                'message' => "La operacion se a realizado con exito",
+                'data' => ['CursosyProfesores'=>$CursosyProfesores]
+            ], 200);
+        } catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 101,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
     }
 
     /**
@@ -58,17 +66,44 @@ class ProfesorConCursoController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $profesorCurso= new Profesor_Con_curso();
-        $profesorCurso-> profesor=$request->profesor;
-        $profesorCurso-> curso=$request->curso;
-        $profesorCurso->save();
-        return response()->json([
-            'success' => true,
-            'code' => 300,
-            'message' => "Operacion realizada con exito",
-            'data' => ['profesorCurso'=>$profesorCurso]
-        ], 200);
+        $entradas = $request->only('profesor', 'curso');
+        $validator = Validator::make($entradas, [
+            'profesor' => ['required', 'numeric'],
+            'curso' => [' required', 'numeric'],
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'code' => 301,
+                'message' => 'Error en datos ingresados',
+                'data' => ['error'=>$validator->errors()]
+            ], 422);
+        }
+        if(!array_key_exists ("profesor" , $entradas)){
+            $entradas['profesor'] = null;
+        }
+        if(!array_key_exists ("curso" , $entradas)){
+            $entradas['curso'] = null;
+        }
+        try{
+            $profesorCurso= new Profesor_Con_curso();
+            $profesorCurso-> profesor=$entradas['profesor'];
+            $profesorCurso-> curso=$entradas['curso'] ;
+            $profesorCurso->save();
+            return response()->json([
+                'success' => true,
+                'code' => 300,
+                'message' => "Operacion realizada con exito",
+                'data' => ['profesorCurso'=>$profesorCurso]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 302,
+                'message' => "Error en la base de datos",
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
     }
 
     /**
@@ -97,7 +132,7 @@ class ProfesorConCursoController extends Controller
     {
         return response()->json([
             'success' => false,
-            'code' => 401,
+            'code' => 501,
             'message' => 'Este recurso está bloqueado',
             'data' => ['error'=>'El el protocolo se llama update']
         ], 426);
@@ -112,17 +147,57 @@ class ProfesorConCursoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $CursoProfesor = Profesor_Con_Curso::find($id);
-        $CursoProfesor->profesor = $request->profesor ;
-        $CursoProfesor->curso = $request->curso;
-        $CursoProfesor->save();
-        return response()->json([
-            'success' => true,
-            'code' => 600,
-            'message' => "Operacion realizada con exito",
-            'data' => ['CursoProfesor'=>$CursoProfesor]
-        ], 200);
-    }
+        $entradas = $request->only('profesor', 'curso');
+        $validator = Validator::make($entradas, [
+            'profesor' => ['nullable', 'numeric'],
+            'curso' => [' nullable', 'numeric'],
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'code' => 301,
+                'message' => 'Error en datos ingresados',
+                'data' => ['error'=>$validator->errors()]
+            ], 422);
+        }
+        if(!array_key_exists ("profesor" , $entradas)){
+            $entradas['profesor'] = null;
+        }
+        if(!array_key_exists ("curso" , $entradas)){
+            $entradas['curso'] = null;
+        }
+        try{
+            $profesorCurso = Profesor_Con_Curso::find($id);
+            if ($profesorCurso == null) {
+                return response()->json([
+                    'success' => false,
+                    'code' => 602,
+                    'message' => 'La relacion profesor Curso con el id '.$id.' no existe',
+                    'data' => null
+                ], 409);
+            }
+            if($entradas['profesor']!=null){
+                $profesorCurso-> profesor=$entradas['profesor'];
+            }
+            if($entradas['curso']!=null){
+                $profesorCurso-> curso=$entradas['curso'] ;
+            }
+            $profesorCurso->save();
+            return response()->json([
+                'success' => true,
+                'code' => 600,
+                'message' => "Operacion realizada con exito",
+                'data' => ['profesorCurso'=>$profesorCurso]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 603,
+                'message' => "Error en la base de datos",
+                'data' => ['error'=>$ex]
+            ], 409 );
+        }
+        }
 
     /**
      * Remove the specified resource from storage.
@@ -132,36 +207,81 @@ class ProfesorConCursoController extends Controller
      */
     public function destroy($id)
     {
-        //
-        $profesorCurso = Profesor_Con_Curso::find($id);
-        $profesorCurso->delete();
-        return response()->json([
-            'success' => true,
-            'code' => 700,
-            'message' => "Operacion realizada con exito",
-            'data' =>['profesorCurso'=> $profesorCurso]
-        ], 200);
+        try{
+            $profesorCurso = Profesor_Con_Curso::find($id);
+            if ($profesorCurso == null) {
+                return response()->json([
+                    'success' => false,
+                    'code' => 701,
+                    'message' => 'La relacion profesor Curso con el id '.$id.' no existe',
+                    'data' => null
+                ], 409 );
+            }else{
+                $profesorCurso->delete();
+                return response()->json([
+                    'success' => true,
+                    'code' => 700,
+                    'message' => "Operacion realizada con exito",
+                    'data' =>['profesorCurso'=> $profesorCurso]
+                ], 200);
+            }
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 702,
+                'message' => "Error en la base de datos",
+                'data' => ['error'=>$ex]
+            ], 409 );
+        }
     }
     public function disabled(){
-
-        $profesoresCursos= Profesor_Con_Curso::onlyTrashed()->get();
-        return response()->json([
-            'success' => true,
-            'code' => 800,
-            'message' => "Operacion realizada con exito",
-            'data' =>['profesoresCursos'=> $profesoresCursos]
-        ], 200);
+        try{
+            $profesoresCursos= Profesor_Con_Curso::onlyTrashed()->get();
+            return response()->json([
+                'success' => true,
+                'code' => 800,
+                'message' => "Operacion realizada con exito",
+                'data' =>['profesoresCursos'=> $profesoresCursos]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 801,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
     }
 
+    /**
+     * Metodo que se encarga de recuperar una relacion profesor curso
+     * Errores code inician 900
+     */
     public function restore($id){
-        
-        $profesorCurso= Profesor_Con_Curso::onlyTrashed()->find($id)->restore();
-        return response()->json([
-            'success' => true,
-            'code' => 900,
-            'message' => "La escuela recupero con exito",
-            'data' => ['profesorCurso'=>$profesorCurso]
-        ], 200);
+        try{
+            $profesorCurso= Profesor_Con_Curso::onlyTrashed()->find($id)->restore();
+            if($profesorCurso==false){
+                return response()->json([
+                    'success' => false,
+                    'code' => 901,
+                    'message' => "La relacion profesor Curso no se logro recuperar",
+                    'data' => ['profesorCurso'=>$profesorCurso]
+                ], 409);
+            }
+            return response()->json([
+                'success' => true,
+                'code' => 900,
+                'message' => "La relacion profesor curso se recupero con exito",
+                'data' => ['profesorCurso'=>$profesorCurso]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 902,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
     }
 
 

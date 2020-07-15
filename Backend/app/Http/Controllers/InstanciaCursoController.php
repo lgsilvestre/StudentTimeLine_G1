@@ -26,13 +26,22 @@ class InstanciaCursoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
-       $insCurso = InstanciaCurso::all();
-       return response()->json([
-            'success' => true,
-            'code' => 700,
-            'message' => "Operacion realizada con exito",
-            'data' =>['insCurso'=> $insCurso]
-        ], 200);
+        try{
+            $insCurso = InstanciaCurso::all();
+            return response()->json([
+                'success' => true,
+                'code' => 700,
+                'message' => "Operacion realizada con exito",
+                'data' =>['insCurso'=> $insCurso]
+            ], 200);
+        } catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 101,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
     }
 
     /**
@@ -57,16 +66,49 @@ class InstanciaCursoController extends Controller
      */
     public function store(Request $request)
     {
-        $insCurso = new InstanciaCurso();
-        $insCurso-> semestre=$request->semestre;
-        $insCurso-> curso=$request->curso;
-        $insCurso->save();
-        return response()->json([
-            'success' => true,
-            'code' => 300,
-            'message' => "Operacion realizada con exito",
-            'data' => ['insCurso'=>$insCurso]
-        ], 200);
+        $entradas = $request->only('semestre', 'curso', 'seccion');
+        $validator = Validator::make($entradas, [
+            'semestre' => ['required', 'numeric'],
+            'curso' => [' required', 'numeric'],
+            'seccion' => ['required', 'string'],
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'code' => 301,
+                'message' => 'Error en datos ingresados',
+                'data' => ['error'=>$validator->errors()]
+            ], 422);
+        }
+        if(!array_key_exists ("semestre" , $entradas)){
+            $entradas['semestre'] = null;
+        }
+        if(!array_key_exists ("curso" , $entradas)){
+            $entradas['curso'] = null;
+        }
+        if(!array_key_exists ("seccion" , $entradas)){
+            $entradas['seccion'] = null;
+        }
+        try{
+            $insCurso = new InstanciaCurso();
+            $insCurso-> semestre=$entradas['semestre'];
+            $insCurso-> curso=$entradas['curso'];
+            $insCurso-> seccion=$entradas['seccion'];
+            $insCurso->save();
+            return response()->json([
+                'success' => true,
+                'code' => 300,
+                'message' => "Operacion realizada con exito",
+                'data' => ['insCurso'=>$insCurso]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 302,
+                'message' => "Error en la base de datos",
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
     }
 
     /**
@@ -76,13 +118,22 @@ class InstanciaCursoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id){
-        $insCurso = InstanciaCurso::Where('semestre', '=' , $id)->get();
-        return response()->json([
-            'success' => true,
-            'code' => 400,
-            'message' => "Operacion realizada con exito",
-            'data' => ['insCurso'=>$insCurso]
-        ], 200);
+        try{
+            $insCurso = InstanciaCurso::Where('semestre', '=' , $id)->get();
+            return response()->json([
+                'success' => true,
+                'code' => 400,
+                'message' => "Operacion realizada con exito",
+                'data' => ['insCurso'=>$insCurso]
+            ], 200);
+        } catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 401,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
     }
 
     /**
@@ -109,16 +160,63 @@ class InstanciaCursoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $insCurso = InstanciaCurso::find($id);
-        $insCurso->semestre = $request->semestre;
-        $insCurso->curso = $request->curso;
-        $insCurso->save();
-        return response()->json([
-            'success' => true,
-            'code' => 600,
-            'message' => "Operacion realizada con exito",
-            'data' => ['insCurso'=>$insCurso]
-        ], 200);
+        $entradas = $request->only('semestre', 'curso', 'seccion');
+        $validator = Validator::make($entradas, [
+            'semestre' => ['nullable', 'numeric'],
+            'curso' => [' nullable', 'numeric'],
+            'seccion' => [' nullable', 'string'],
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'code' => 301,
+                'message' => 'Error en datos ingresados',
+                'data' => ['error'=>$validator->errors()]
+            ], 422);
+        }
+        if(!array_key_exists ("semestre" , $entradas)){
+            $entradas['semestre'] = null;
+        }
+        if(!array_key_exists ("curso" , $entradas)){
+            $entradas['curso'] = null;
+        }
+        if(!array_key_exists ("seccion" , $entradas)){
+            $entradas['seccion'] = null;
+        }
+        try{
+            $insCurso = InstanciaCurso::find($id);
+            if ($insCurso == null) {
+                return response()->json([
+                    'success' => false,
+                    'code' => 602,
+                    'message' => 'La instancia de escuela con el id '.$id.' no existe',
+                    'data' => null
+                ], 409);
+            }
+            if($entradas['semestre']!=null){
+                $insCurso->semestre = $entradas['semestre'];
+            }
+            if($entradas['curso']!=null){
+                $insCurso->curso = $entradas['curso'];
+            }
+            if($entradas['seccion']!=null){
+                $insCurso->curso = $entradas['seccion'];
+            }
+            $insCurso->save();
+            return response()->json([
+                'success' => true,
+                'code' => 600,
+                'message' => "Operacion realizada con exito",
+                'data' => ['insCurso'=>$insCurso]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 603,
+                'message' => "Error en la base de datos",
+                'data' => ['error'=>$ex]
+            ], 409 );
+        }
     }
 
     /**
@@ -129,37 +227,76 @@ class InstanciaCursoController extends Controller
      */
     public function destroy($id)
     {
-        $insCurso =InstanciaCurso::find($id);
-        $insCurso->delete();
-        return response()->json([
-            'success' => true,
-            'code' => 700,
-            'message' => "Operacion realizada con exito",
-            'data' =>['insCurso'=> $insCurso]
-        ], 200);
-        
+        try{
+            $insCurso =InstanciaCurso::find($id);
+            if ($insCurso == null) {
+                return response()->json([
+                    'success' => false,
+                    'code' => 701,
+                    'message' => 'La instancia de curso con el id '.$id.' no existe',
+                    'data' => null
+                ], 409 );
+            }
+            $insCurso->delete();
+            return response()->json([
+                'success' => true,
+                'code' => 700,
+                'message' => "Operacion realizada con exito",
+                'data' =>['insCurso'=> $insCurso]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 702,
+                'message' => "Error en la base de datos",
+                'data' => ['error'=>$ex]
+            ], 409 );
+        }
     }
 
     public function disabled(){
-
-        $insCursos =InstanciaCurso::onlyTrashed()->get();
-        return response()->json([
-            'success' => true,
-            'code' => 800,
-            'message' => "Operacion realizada con exito",
-            'data' =>['insCursos'=> $insCursos]
-        ], 200);
+        try{
+            $insCursos =InstanciaCurso::onlyTrashed()->get();
+            return response()->json([
+                'success' => true,
+                'code' => 800,
+                'message' => "Operacion realizada con exito",
+                'data' =>['insCursos'=> $insCursos]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 801,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
     }
 
     public function restore($id){
-        
-        $insCurso=InstanciaCurso::onlyTrashed()->find($id)->restore();
-        return response()->json([
-            'success' => true,
-            'code' => 900,
-            'message' => "La escuela recupero con exito",
-            'data' => ['insCurso'=>$insCurso]
-        ], 200);
+        try{
+            $insCurso=InstanciaCurso::onlyTrashed()->find($id)->restore();
+            if($insCurso==false){
+                return response()->json([
+                    'success' => false,
+                    'code' => 901,
+                    'message' => "La instancia de curso no se logro recuperar",
+                    'data' => ['escuela'=>$insCurso]
+                ], 409);
+            }
+            return response()->json([
+                'success' => true,
+                'code' => 900,
+                'message' => "La escuela recupero con exito",
+                'data' => ['insCurso'=>$insCurso]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 902,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
     }
-
 }
