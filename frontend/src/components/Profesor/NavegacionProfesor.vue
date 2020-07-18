@@ -4,7 +4,8 @@
 >
         <v-list-item class="px-2 py-1 difuminado" active-class="activacion" to="/profesor/perfil">
             <v-list-item-avatar >
-                <v-img src="@/assets/Profesor/unnamed.png"></v-img>
+                <v-img :src="usuario.usuario.foto"
+                ></v-img>
             </v-list-item-avatar>
             <v-list-item-title class="white--text letra"><strong>Profesor</strong></v-list-item-title>
         </v-list-item>
@@ -131,7 +132,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['drawers']),
+        ...mapState(['drawers', 'usuario']),
     },
     icons:{
         iconfont: (['mdiSvg', 'mdi','mdiSvg' , 'md' , 'fa' ,'fa4' ,'faSvg'])
@@ -144,9 +145,6 @@ export default {
         verPerfil(){
             console.log('ver perfil')
         },
-        prueba(){
-
-        }
     },
 }
 </script>

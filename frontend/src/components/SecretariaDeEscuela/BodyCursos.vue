@@ -24,7 +24,7 @@
                     v-for="(semestre, index) in listaSemestres" :key="index"
                     cols="12" sm="6" md="4" lg="3">
                     <v-card dark style="background-color:#4ECDC4; border-style:solid; border-color:rgba(0,0,0,0.5); "
-                     >
+                      >
                             <div class="d-flex flex-no-wrap justify-space-between" @click="calcularRol(semestre)">
                                 <div>
                                     <v-card-title class="black--text" > Año {{ semestre.anio }} </v-card-title>
