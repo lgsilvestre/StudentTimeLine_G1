@@ -18,7 +18,7 @@ class CreateObservacionesTable extends Migration
             $table->bigInteger('ayudante')->unsigned()->nullable();
             $table->bigInteger('estudiante')->unsigned();
             $table->bigInteger('creador')->unsigned();
-            $table->bigInteger('curso')->unsigned();
+            $table->bigInteger('curso')->unsigned()->nullable();
             $table->bigInteger('categoria')->unsigned();
             $table->bigInteger('tipo')->unsigned();
             $table->foreign('ayudante')->references('id')->on('ayudante__con__cursos');
