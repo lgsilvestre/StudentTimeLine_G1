@@ -65,13 +65,13 @@ class ObservacionController extends Controller
      */
     public function store(Request $request)
     {
-        $entradas = $request->only('ayudante', 'estudiante','titulo', 'descripcion','profesor', 'tipo','curso', 'categoria');
+        $entradas = $request->only('ayudante', 'estudiante','titulo', 'descripcion','creador', 'tipo','curso', 'categoria');
         $validator = Validator::make($entradas, [
             'ayudante' => ['required', 'numeric'],
             'estudiante' => [' required', 'numeric'],
             'titulo' => ['required', 'string'],
             'descripcion' => [' required', 'string'],
-            'profesor' => ['required', 'numeric'],
+            'creador' => ['required', 'numeric'],
             'tipo' => [' required', 'string'],
             'curso' => [' required', 'numeric'],
             'categoria' => [' required', 'numeric']
@@ -96,8 +96,8 @@ class ObservacionController extends Controller
         if(!array_key_exists ("descripcion" , $entradas)){
             $entradas['descripcion'] = null;
         }
-        if(!array_key_exists ("profesor" , $entradas)){
-            $entradas['profesor'] = null;
+        if(!array_key_exists ("creador" , $entradas)){
+            $entradas['creador'] = null;
         }
         if(!array_key_exists ("tipo" , $entradas)){
             $entradas['tipo'] = null;
@@ -114,7 +114,7 @@ class ObservacionController extends Controller
             $observacion->estudiante = $entradas['estudiante'];
             $observacion->titulo = $entradas['titulo'] ;
             $observacion->descripcion = $entradas['descripcion'];
-            $observacion->profesor = $entradas['profesor'];
+            $observacion->creador = $entradas['creador'];
             $observacion->tipo = $entradas['tipo'];
             $observacion->curso = $entradas['curso'];
             $observacion->categoria = $entradas['categoria'];
@@ -175,7 +175,7 @@ class ObservacionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $entradas = $request->only('ayudante', 'estudiante','titulo', 'descripcion','profesor', 'tipo','curso', 'categoria');
+        $entradas = $request->only('ayudante', 'estudiante','titulo', 'descripcion','creador', 'tipo','curso', 'categoria');
         $validator = Validator::make($entradas, [
             'ayudante' => ['nullable', 'numeric'],
             'estudiante' => [' nullable', 'numeric'],
@@ -206,8 +206,8 @@ class ObservacionController extends Controller
         if(!array_key_exists ("descripcion" , $entradas)){
             $entradas['descripcion'] = null;
         }
-        if(!array_key_exists ("profesor" , $entradas)){
-            $entradas['profesor'] = null;
+        if(!array_key_exists ("creador" , $entradas)){
+            $entradas['creador'] = null;
         }
         if(!array_key_exists ("tipo" , $entradas)){
             $entradas['tipo'] = null;
@@ -240,8 +240,8 @@ class ObservacionController extends Controller
             if($entradas['descripcion']!=null){
                 $observacion->descripcion = $entradas['descripcion'];
             }
-            if($entradas['profesor']!=null){
-                $observacion->profesor = $entradas['profesor'];
+            if($entradas['creador']!=null){
+                $observacion->creador = $entradas['creador'];
             }
             if($entradas['tipo']!=null){
                 $observacion->tipo = $entradas['tipo'];
