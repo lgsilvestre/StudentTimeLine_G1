@@ -27,3 +27,4 @@ export default {
     name: 'AppBar',
 
 }
+</script>
