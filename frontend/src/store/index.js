@@ -28,6 +28,14 @@ export default new Vuex.Store({
                 Authorization: ''
             }
         },
+        config2: {
+            headers: {
+                Authorization: ''
+            },
+            request: {
+                responseType: 'blob'
+            },
+        },
         cargaLogin: false,
         verificacionLogin: false,
         mensajeErrorLogin: '',
@@ -69,6 +77,7 @@ export default new Vuex.Store({
                     state.usuario = result.data.data;
                     state.tk = 'Bearer ' + state.usuario.token;
                     state.config.headers.Authorization = state.tk;
+                    state.config2.headers.Authorization = state.tk;
                     if (state.usuario.usuario.rol == "admin") {
                         //redireccionamiento hacia el usuario administrador
                         state.admin = true;
@@ -146,6 +155,7 @@ export default new Vuex.Store({
                         state.numCarreras = 7;
                         state.numEstudiantes = 1234;
                         state.config.headers.Authorization = '';
+                        state.config2.headers.Authorization = '';
                         router.push({ path: '/' });
                     }
                 })

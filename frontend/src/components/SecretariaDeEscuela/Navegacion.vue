@@ -2,15 +2,13 @@
     <v-navigation-drawer app right v-model="drawers.drawer" :mini-variant="drawers.miniVarianteAdm"  :permanent="$vuetify.breakpoint.mdAndUp" :temporary="$vuetify.breakpoint.smAndDown"
         src="@/assets/Globales/background-panel-02.jpg"
     >
-    <!-- Mis recomendaciones de fondo (?)  1, 2, 4, 7, 9,  -->  
-
     <!-- Lista general del navigation drawer -->
         <!-- Seccion de Mi Perfil -->
-        
             <v-list-item class="px-2 py-1  difuminado" active-class="activacion" to="/secretariaEscuela/perfil">
                 <!-- Imagen o Avatar -->
                 <v-list-item-avatar>
-                    <v-img src="http://www.ingenieria.utalca.cl/Repositorio/PNsAYcfZiO2QfjGDQMIyjMOAomsLch/Ruth%20Garrido.jpg"></v-img>
+                    <v-img :src="usuario.usuario.foto"
+                    ></v-img>
                 </v-list-item-avatar>    
                 <!-- Nombre del Usuario -->
                 <v-list-item-title class="white--text letra"><strong>Sria. de Escuela</strong></v-list-item-title>                       
@@ -78,13 +76,10 @@ export default {
         }
     },
     computed: {
-        ...mapState(['drawers']),
+        ...mapState(['drawers', 'usuario']),
     },
     methods: {
         ...mapMutations(['unLogin']),
-        verPerfil(){
-
-        },
         contactar(){
             
         },
