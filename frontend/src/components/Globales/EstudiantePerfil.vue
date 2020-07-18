@@ -127,31 +127,41 @@
 
                     </v-col>
                     <v-col cols="12" sm="12" md="10" style="margin-top:0;padding-top:0;" >
-                        <v-card > 
-                            
-                                <v-card-title
+                        <v-card height="200"> 
+                                <v-row>
+                                    <v-col cols="5" style="margin-top:0;padding-top:0;">
+                                        <v-card-title
                                 
-                                class="headline pt-11 pb-11 text--center primary" 
-                                primary-title>
-                                    <div >
-                                        <strong class="letra white--text" >Observaciones</strong>
-                                    </div>
-                                    <v-spacer></v-spacer>
-                                    <v-btn
-                                    elevation="2"
-                                    fab
-                                    large
-                                    bottom
-                                    left
-                                    color="warning"
-                                    >
-                                        <v-icon class="mx-2" color="white">fas fa-plus</v-icon>
-                                    </v-btn>
-                                </v-card-title>
-                                <v-container style="margin:0;padding:0;" >
-                                    <div id="chart" >
-                                        <apexchart type="donut" :options="chartOptions" :series="series" :width="$vuetify.breakpoint.lgAndDown ? 350:400" ></apexchart>
-                                    </div>
+                                        class="headline text--center primary" 
+                                        primary-title>
+                                            <div >
+                                                <strong class=" white--text" >Observaciones</strong>
+                                            </div>
+                                            <v-spacer></v-spacer>
+                                            <v-btn
+                                            elevation="2"
+                                            fab
+                                            
+                                            bottom
+                                            left
+                                            color="warning"
+                                            >
+                                                <v-icon class="mx-2" color="white">fas fa-plus</v-icon>
+                                            </v-btn>
+                                        </v-card-title>
+                                    </v-col>
+                                    <v-col cols="7">
+                                        <v-row justify="center" align="center">  
+                                            <div id="chart" >
+                                                <apexchart type="donut" :options="chartOptions" :series="series" width="300"></apexchart>
+                                            </div>
+                                        </v-row>   
+                                    </v-col>
+                                </v-row>
+                                
+                                <v-container fluid style="margin:0;padding:0;" >
+                                    
+                                    
                                 </v-container>
                                 
                             
