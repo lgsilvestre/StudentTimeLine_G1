@@ -112,14 +112,39 @@ class ProfesorConCursoController extends Controller
      * @param  \App\Profesor_Con_Curso  $profesor_Con_Curso
      * @return \Illuminate\Http\Response
      */
-    public function show(Profesor_Con_Curso $profesor_Con_Curso)
-    {
-        return response()->json([
-            'success' => false,
-            'code' => 401,
-            'message' => 'Este recurso está bloqueado',
-            'data' => ['error'=>'El el protocolo se llama index']
-        ], 426);
+    public function show($id){
+        try{
+            $cursos = Profesor_Con_Curso::Where('profesor', $id)->get();
+            if($cursos==null){
+                return response()->json([
+                    'success' => true,
+                    'code' => 401,
+                    'message' => "El profesor no tiene ningun curso asociado",
+                    'data' => ['cursos'=>$cursos]
+                ], 200);
+            }
+            foreach ($cursos as $curso){
+                $curso->profesor= $curso->getProfesor->nombre;
+                $curso->idInstanciaCurso=$curso->getCurso->curso;
+                $curso->curso= $curso->getCurso->getCurso->nombre;
+                $curso->semestre=$curso->getCurso->getSemestre->semestre;
+                $curso->anio=$curso->getCurso->getSemestre->anio;
+                $curso->seccion=$curso->getCurso->seccion;
+            }
+            return response()->json([
+                'success' => true,
+                'code' => 400,
+                'message' => "La operacion se realizo con exito",
+                'data' => ['cursos'=>$cursos]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 402,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
     }
 
     /**

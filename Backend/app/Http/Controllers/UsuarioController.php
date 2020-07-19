@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Response;
 use Validator;
 use Illuminate\Http\Request;
 use App\Escuela;
+use App\Curso;
+use App\InstanciaCurso;
+use App\Profesor_Con_Curso;
 use Image; 
 
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -208,14 +211,27 @@ class UsuarioController extends Controller
                     'data' => null
                 ], 409);
             }
-            $escuelas=Escuela::withTrashed()->orderBy('id','asc')->get();
-            $user->nombre_escuela= $escuelas[$user->escuela-1]->nombre;
-            //return response($user->foto)->header('Content-Type', 'image/png');
+            $user->escuela= $user->getEscuela->nombre;
+            if($user->escuelaAux!=null){
+                $user->escuelaAux = $user->getEscuelaAux->nombre;
+            }else{
+                $user->escuelaAux = 'no posee otra escuela';
+            }
+            $cursos = Profesor_Con_Curso::where('profesor', $id)->get();
+            foreach ($cursos as $curso){
+                $curso->curso= $curso->getCurso->nombre;
+                unset($curso['created_at']);
+                unset($curso['updated_at']);
+                unset($curso['deleted_at']);
+                $a=var_dump( $curso);
+                return $a;
+            }
             return response()->json([
                 'success' => true,
                 'code' => 500,
                 'message' => "La operacion se a realizado con exito",
-                'data' => ['usuario'=>$user]
+                'data' => ['usuario'=>$user,
+                        'cursos'=>$cursos]
             ], 200);
         //este catch permite responder directamente que problemas en la peticion SQL
         }catch(\Illuminate\Database\QueryException $ex){ 

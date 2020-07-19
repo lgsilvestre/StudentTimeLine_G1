@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Observacion;
 use Illuminate\Http\Request;
+use Validator;
 
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -69,12 +70,12 @@ class ObservacionController extends Controller
     {
         $entradas = $request->only('ayudante', 'estudiante','titulo', 'descripcion', 'tipo','curso', 'categoria');
         $validator = Validator::make($entradas, [
-            'ayudante' => ['required', 'numeric'],
+            'ayudante' => ['nullable', 'numeric'],
             'estudiante' => [' required', 'numeric'],
             'titulo' => ['required', 'string'],
             'descripcion' => [' required', 'string'],
             'tipo' => [' required', 'numeric'],
-            'curso' => [' required', 'numeric'],
+            'curso' => [' nullable', 'numeric'],
             'categoria' => [' required', 'numeric']
         ]);
         if ($validator->fails()) {
@@ -250,7 +251,6 @@ class ObservacionController extends Controller
                 $observacion->categoria = $entradas['categoria'];
             }
             $observacion->save();
-            return compact('observacion');
             return response()->json([
                 'success' => true,
                 'code' => 600,
