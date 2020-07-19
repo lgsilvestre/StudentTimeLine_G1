@@ -189,6 +189,13 @@ class EstudianteController extends Controller
                 ], 409);
             }
             $observaciones = Observacion::Where('estudiante', '=' , $estudiante['id'])->get();
+            foreach($observaciones as $obsercion){
+                $obsercion->estudiante=$obsercion->getEstudiante->nombre_completo;
+                $obsercion->creador=$obsercion->getCreador->nombre;
+                $obsercion->tipo=$obsercion->getTipo->descripcion;
+                $obsercion->curso=$obsercion->getCurso->nombre;
+                $obsercion->categoria=$obsercion->getCategoria->nombre;
+            }
             return response()->json([
                 'success' => true,
                 'code' => 600,
