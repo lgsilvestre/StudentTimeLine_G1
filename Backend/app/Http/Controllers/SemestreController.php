@@ -29,7 +29,7 @@ class SemestreController extends Controller
     public function index()
     {
         try{
-            $semestres = Semestre::all();
+            $semestres = Semestre::withTrashed()->orderBy('anio')->orderBy('semestre')->get();
             return response()->json([
                 'success' => true,
                 'code' => 100,

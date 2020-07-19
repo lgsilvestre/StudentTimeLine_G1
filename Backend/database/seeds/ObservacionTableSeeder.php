@@ -16,7 +16,7 @@ class ObservacionTableSeeder extends Seeder
             'estudiante' => '1',
             'titulo' => 'Comentario 1', 
             'descripcion' => 'Muy buen ayudante.',
-            'creador' => 7,
+            'creador' => 1,
             'tipo' =>'1',
             'curso' => 1, 
             'categoria' => 1,

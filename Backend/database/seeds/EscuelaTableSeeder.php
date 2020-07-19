@@ -14,7 +14,7 @@ class EscuelaTableSeeder extends Seeder
         //Computación, Industrial, Eléctrica, Mecánica, Obras Civiles, Minas, Mecatrónica
         $icc=Escuela::create([
             'nombre' => 'Escuela de Computación',
-            'cod_escuela' => 407
+            'cod_escuela' => 3407
 
         ]);
 

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 use App\Estudiante;
-use App\Escuela;
 use App\Observacion;
 use Illuminate\Http\Request;
 
@@ -32,9 +31,8 @@ class EstudianteController extends Controller
     public function index(){
         try{
             $estudiantes = Estudiante::all();
-            $escuelas=Escuela::orderBy('id','asc')->get();
             foreach ($estudiantes as $estudiante) {
-                $estudiante->escuela=$escuelas[$estudiante->escuela-1]->nombre;
+                $estudiante->escuela=$estudiante->getEscuela->nombre;
             }
             return response()->json([
                 'success' => true,
@@ -189,6 +187,13 @@ class EstudianteController extends Controller
                 ], 409);
             }
             $observaciones = Observacion::Where('estudiante', '=' , $estudiante['id'])->get();
+            foreach($observaciones as $observacion){
+                $observacion->estudiante=$observacion->getEstudiante->nombre_completo;
+                $observacion->creador=$observacion->getCreador->nombre;
+                $observacion->tipo=$observacion->getTipo->descripcion;
+                $observacion->curso=$observacion->getCurso->nombre;
+                $observacion->categoria=$observacion->getCategoria->nombre;
+            }
             return response()->json([
                 'success' => true,
                 'code' => 600,
@@ -257,6 +262,9 @@ class EstudianteController extends Controller
         }
         if(!array_key_exists ("escuela" , $entradas)){
             $entradas['escuela'] = null;
+        }
+        if(!array_key_exists ("foto" , $entradas)){
+            $entradas['foto'] = null;
         }
         try{
             $estudiante = Estudiante::find($id);
@@ -342,6 +350,9 @@ class EstudianteController extends Controller
     public function disabled(){
         try{
             $estudiantes = Estudiante::onlyTrashed()->get();
+            foreach ($estudiantes as $estudiante) {
+                $estudiante->escuela=$estudiante->getEscuela->nombre;
+            }
             return response()->json([
                 'success' => true,
                 'code' => 800,

@@ -500,7 +500,7 @@
         agregarEstudiantesImportar(){
             let formData = new FormData();
             formData.append('file',this.file);
-            var url = 'http://127.0.0.1:8000/api/importar_excel/importar';
+            var url = 'http://127.0.0.1:8000/api/estudiante/importar';
             axios.post(url,formData)
             .then((result)=>{
                 if (result.data.success == true) {
