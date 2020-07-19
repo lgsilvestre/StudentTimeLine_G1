@@ -14,7 +14,22 @@ class TipoObservacionController extends Controller
      */
     public function index()
     {
-        //
+        try{
+            $tipoObservaciones = TipoObservacion::all();
+            return response()->json([
+                'success' => true,
+                'code' => 100,
+                'message' => "La operacion se a realizado con exito",
+                'data' => ['tipoObservaciones'=>$tipoObservaciones]
+            ], 200);
+        } catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 101,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
     }
 
     /**
