@@ -21,7 +21,6 @@ class Escuela extends Model
     
     public function usuarios (){
         return $this-> hasMany('App\User','escuela');
-
     }
 
 }

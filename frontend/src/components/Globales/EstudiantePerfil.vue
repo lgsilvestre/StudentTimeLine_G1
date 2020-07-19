@@ -1,9 +1,18 @@
 <template>
     <v-container  fluid >
+        <div class="py-1"  style="text-align:left;">
+            <v-btn
+            color="secondary"
+            rounded
+            small
+            @click="volverEstudiantes"
+            >
+            volver<i class="fas fa-undo-alt pl-2"></i>
+            
+            </v-btn>
+        </div>
         <v-row >
-            <v-col cols="12" md="0"   >
-            </v-col>
-            <v-col  cols="12" md="5" lg="5">
+            <v-col  cols="12" md="5" xl="4">
                 <v-card elevation="1" > 
                     <v-img
                         class="mx-auto white--text align-end justify-center"
@@ -82,7 +91,7 @@
                     </v-row>
                     <v-row class="px-5">
                         <v-col cols="3">
-                            <h5 >Situacion Academica</h5>
+                            <h5 >Situacion academica</h5>
                         </v-col>
                         <v-col cols="1">
                             <h5 >:</h5>
@@ -106,19 +115,82 @@
                         <v-btn
                         color="secondary"
                         rounded
+                        @click="editarEstudiante"
                         >Editar</v-btn>
                     </div>
                     
                 </v-card>
             </v-col>
-            <v-col cols="12" md="7"  lg="1" >
-                <div class="pb-5"  style="text-align:center;">
-                    <v-btn
-                    color="secondary"
-                    rounded
-                    @click="volverEstudiantes"
-                    >volver</v-btn>
-                </div>
+            <v-col cols="12" md="7" xl="8">
+                <v-row>
+                    <v-col cols="0" sm="0" md="1"> 
+
+                    </v-col>
+                    <v-col cols="12" sm="12" md="10" style="margin-top:0;padding-top:0;" >
+                        <v-card > 
+                            
+                                <v-card-title
+                                
+                                class="headline pt-11 pb-11 text--center primary" 
+                                primary-title>
+                                    <div >
+                                        <strong class="letra white--text" >Observaciones</strong>
+                                    </div>
+                                    <v-spacer></v-spacer>
+                                    <v-btn
+                                    elevation="2"
+                                    fab
+                                    large
+                                    bottom
+                                    left
+                                    color="warning"
+                                    >
+                                        <v-icon class="mx-2" color="white">fas fa-plus</v-icon>
+                                    </v-btn>
+                                </v-card-title>
+                                <v-container style="margin:0;padding:0;" >
+                                    <div id="chart" >
+                                        <apexchart type="donut" :options="chartOptions" :series="series" :width="$vuetify.breakpoint.lgAndDown ? 350:400" ></apexchart>
+                                    </div>
+                                </v-container>
+                                
+                            
+                        </v-card>
+                        <template>
+                            <v-timeline  align-top dense>
+                                <v-timeline-item
+                                v-for="(item, i) in items"
+                                :key="i"
+                                :color="item.color"
+                                :icon="item.icon"
+                                fill-dot
+                                dense
+                                
+                                >
+                                <v-card
+                                    :color="item.color"
+                                    dark
+                                >
+                                    <v-card-title class="title">Lorem Ipsum Dolor</v-card-title>
+                                    <v-card-text class="white text--primary">
+                                    <p>Lorem ipsum dolor sit amet, no nam oblique veritus. Commune scaevola imperdiet nec ut, sed euismod convenire principes at. Est et nobis iisque percipit, an vim zril disputando voluptatibus, vix an salutandi sententiae.</p>
+                                    <v-btn
+                                        :color="item.color"
+                                        class="mx-0"
+                                        outlined
+                                    >
+                                        Button
+                                    </v-btn>
+                                    </v-card-text>
+                                </v-card>
+                                </v-timeline-item>
+                            </v-timeline>
+                        </template>
+                    </v-col>
+                    <v-col cols="0" sm="0" md="1">
+
+                    </v-col>
+                </v-row>
             </v-col>
         </v-row>
         <!-- Alertas -->
@@ -157,7 +229,7 @@
 <script>
 import { mapState,mapMutations } from 'vuex'
 import axios from 'axios'
-
+import ApexCharts from 'apexcharts'
 export default {
     data() {
         return {
@@ -167,6 +239,34 @@ export default {
             textoAcept: '',
             delay: 4000,
             mostrar: false, 
+            items: [
+            {
+            color: 'red lighten-2',
+            icon: 'mdi-star',
+            },
+            {
+            color: 'purple darken-1',
+            icon: 'mdi-book-variant',
+            },
+            {
+            color: 'green lighten-1',
+            icon: 'mdi-airballoon',
+            },
+            {
+            color: 'indigo',
+            icon: 'mdi-buffer',
+            },
+            
+            ],
+            series: [1, 1, 1, 1],
+            chartOptions: {
+                chart: {
+                type: 'donut',
+                },
+                colors: ['#4ECDC4', '#FF6B6B', '#FFE66D', '#2196F3'],
+                labels: ["Positiva", "Negativa", "Informativa", "Otro"],
+               
+            },
 
         }
     },
@@ -191,6 +291,9 @@ export default {
         },
         volverEstudiantes(){
             this.$router.push({path:'/administrador/estudiantes'});
+        },
+        editarEstudiante(){
+            console.log(this.$vuetify.breakpoint);
         },
         
     }

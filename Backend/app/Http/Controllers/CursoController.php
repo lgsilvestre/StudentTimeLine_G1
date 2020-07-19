@@ -89,19 +89,42 @@ class CursoController extends Controller
      */
     public function store(Request $request)
     {
-        //'nombre','plan','descripcion','escuela'
-        $curso = new Curso();
-        $curso->nombre = $request->nombre;
-        $curso->plan = $request->plan;
-        $curso->descripcion = $request->descripcion;
-        $curso->escuela = $request->escuela;
-        $curso->save();
-        return response()->json([
-            'success' => true,
-            'code' => 100,
-            'message' => "La operacion se a realizado con exito",
-            'data' => ['curso'=>$curso]
-        ], 200);
+        $entradas = $request->only('nombre', 'plan', 'descripcion', 'escuela');
+        $validator = Validator::make($entradas, [
+            'nombre' => ['string', 'required'],
+            'plan' => ['string', 'required'],
+            'descripcion' => ['string', 'required'],
+            'escuela' => ['numeric', 'required']
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'code' => 301,
+                'message' => 'Error en datos ingresados',
+                'data' => ['error'=>$validator->errors()]
+            ], 422);
+        }
+        try{
+            $curso = new Curso();
+            $curso->nombre = $request->nombre;
+            $curso->plan = $request->plan;
+            $curso->descripcion = $request->descripcion;
+            $curso->escuela = $request->escuela;
+            $curso->save();
+            return response()->json([
+                'success' => true,
+                'code' => 300,
+                'message' => "La operacion se a realizado con exito",
+                'data' => ['curso'=>$curso]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 302,
+                'message' => "Error en la base de datos",
+                'data' => ['error'=>$ex]
+            ], 409 );
+        }
     }
 
     /**
@@ -145,12 +168,12 @@ class CursoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $entradas = $request->only('cod_escuela', 'nombre');
+        $entradas = $request->only('nombre', 'plan', 'descripcion', 'escuela');
         $validator = Validator::make($entradas, [
-            'cod_escuela' => ['numeric', 'nullable'],
             'nombre' => ['string', 'nullable'],
-            'cod_escuela' => ['numeric', 'nullable'],
-            'nombre' => ['string', 'nullable']
+            'plan' => ['string', 'nullable'],
+            'descripcion' => ['string', 'nullable'],
+            'escuela' => ['numeric', 'nullable']
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -159,6 +182,18 @@ class CursoController extends Controller
                 'message' => 'Error en datos ingresados',
                 'data' => ['error'=>$validator->errors()]
             ], 422);
+        }
+        if(!array_key_exists ("nombre" , $entradas)){
+            $entradas['nombre'] = null;
+        }
+        if(!array_key_exists ("plan" , $entradas)){
+            $entradas['plan'] = null;
+        }
+        if(!array_key_exists ("descripcion" , $entradas)){
+            $entradas['descripcion'] = null;
+        }
+        if(!array_key_exists ("escuela" , $entradas)){
+            $entradas['escuela'] = null;
         }
         try{
             $curso = Curso::find($id);

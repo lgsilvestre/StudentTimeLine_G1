@@ -327,6 +327,7 @@
                 :items="listaEstudiantes"
                 :search="buscar"
                 :loading="cargando"
+                style="font-size: 140%;"
                 class="elevation-1 "
                 >
                     <template v-slot:item.actions="{ item }">
@@ -411,10 +412,10 @@
             { text: 'Rut', value: 'rut',sortable: true, },
             { text: 'Nombre Completo', value: 'nombre_completo',sortable: false, },
             { text: 'Correo', value: 'correo',sortable: false, },
-            { text: 'Año ingreso', value: 'anho_ingreso',sortable: true, },
-            { text: 'Situación academica', value: 'situacion_academica',sortable: false, },
+            { text: 'Ingreso', value: 'anho_ingreso',sortable: true, },
+            { text: 'Situación Acad.', value: 'situacion_academica',sortable: false, },
             { text: 'Escuela', value: 'escuela',sortable: false, },
-            { text: 'Opciones', value: 'actions', sortable: false },
+            { text: 'Ir',align: 'center', value: 'actions', sortable: false },
         ],
         buscar: '',
         botonesAgregarEstudiantes: true,
@@ -499,7 +500,7 @@
         agregarEstudiantesImportar(){
             let formData = new FormData();
             formData.append('file',this.file);
-            var url = 'http://127.0.0.1:8000/api/importar_excel/importar';
+            var url = 'http://127.0.0.1:8000/api/estudiante/importar';
             axios.post(url,formData)
             .then((result)=>{
                 if (result.data.success == true) {
