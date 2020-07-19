@@ -14,7 +14,7 @@ class Observacion extends Model
      * @var array
      */
     protected $fillable = [
-        'ayudante', 'estudiante', 'titulo', 'descripcion', 'profesor', 'tipo','curso','categoria'
+        'ayudante', 'estudiante', 'titulo', 'descripcion', 'creador', 'tipo','curso','categoria'
     ];
 
     /**

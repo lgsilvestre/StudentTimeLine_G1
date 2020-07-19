@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Estudiante;
 use App\Escuela;
+use App\Observacion;
 use Illuminate\Http\Request;
 
 use Validator;
@@ -176,13 +177,33 @@ class EstudianteController extends Controller
      * @param  \App\Estudiante  $estudiante
      * @return \Illuminate\Http\Response
      */
-    public function edit(Estudiante $estudiante){
-        return response()->json([
-            'success' => false,
-            'code' => 501,
-            'message' => 'el cliente debe usar un protocolo distinto',
-            'data' => ['error'=>'El el protocolo se llama store']
-        ], 426);
+    public function edit($id){
+        try{
+            $estudiante = Estudiante::find($id);
+            if($estudiante==null){
+                return response()->json([
+                    'success' => false,
+                    'code' => 602,
+                    'message' => 'El estudiante con el id '.$id.' no existe',
+                    'data' => null
+                ], 409);
+            }
+            $observaciones = Observacion::Where('estudiante', '=' , $estudiante['id'])->get();
+            return response()->json([
+                'success' => true,
+                'code' => 600,
+                'message' => "Operacion realizada con exito",
+                'data' => ['estudiante'=>$estudiante,
+                        'observaciones'=>$observaciones]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 604,
+                'message' => "Error en la base de datos",
+                'data' => ['error'=>$ex]
+            ], 409 );
+        }
     }
 
     /**
