@@ -127,42 +127,89 @@
 
                     </v-col>
                     <v-col cols="12" sm="12" md="10" style="margin-top:0;padding-top:0;" >
-                        <v-card height="200"> 
+                        <v-card > 
                                 <v-row>
-                                    <v-col cols="5" style="margin-top:0;padding-top:0;">
+                                    <v-col cols="12" md="5" style="margin-top:0;padding-top:0;">
                                         <v-card-title
-                                
                                         class="headline text--center primary" 
                                         primary-title>
                                             <div >
                                                 <strong class=" white--text" >Observaciones</strong>
                                             </div>
-                                            <v-spacer></v-spacer>
-                                            <v-btn
-                                            elevation="2"
-                                            fab
                                             
-                                            bottom
-                                            left
-                                            color="warning"
-                                            >
-                                                <v-icon class="mx-2" color="white">fas fa-plus</v-icon>
-                                            </v-btn>
+                                            <v-dialog v-model="dialogAgregarObservacion" persistent max-width="500px" >
+                                                <template v-slot:activator="{ on }">
+                                                    <v-btn 
+                                                    :large="$vuetify.breakpoint.smAndDown ? false : true"
+                                                    :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                                    fab bottom left v-on="on" >
+                                                        <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
+                                                    </v-btn>
+                                                </template>
+                                                <v-card class="mx-auto" max-width="500" >
+                                                    <v-card-title class="headline primary text--center" primary-title >
+                                                        <h5 class="white--text ">Agregar observacion</h5>
+                                                    </v-card-title>
+                                                        <v-container class="px-5 mt-5">
+                                                            <v-text-field  
+                                                            v-model="estudianteObservacion.titulo"
+                                                            label="Titulo" 
+                                                            outlined
+                                                            color="secondary"
+                                                            prepend-inner-icon="fas fa-check-circle"
+                                                            ></v-text-field>
+
+                                                            <v-select   
+                                                            v-model="estudianteObservacion.tipo"
+                                                            :items="tipos"
+                                                            item-text="nombre"
+                                                            label="Tipo" outlined
+                                                            color="secondary"
+                                                            prepend-inner-icon="fas fa-check-circle"
+                                                            ></v-select >
+
+                                                            <v-select 
+                                                            v-model="estudianteObservacion.categoria"
+                                                            :items="categorias"
+                                                            item-text="nombre"
+                                                            item-value="id"
+                                                            label="Categoria"
+                                                            color="secondary"
+                                                            outlined
+                                                            prepend-inner-icon="fas fa-check-circle"
+                                                            ></v-select>
+                                                            <v-textarea
+                                                            v-model="estudianteObservacion.descripcion"
+                                                            outlined
+                                                            color="secondary"
+                                                            label="Descripcion"
+                                                            ></v-textarea>
+                                                            <div class="pb-1" style="text-align:right;">  
+                                                                <v-btn 
+                                                                :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                                                rounded color="warning" @click="dialogAgregarObservacion = !dialogAgregarObservacion">
+                                                                    <h4 class="white--text">Cancelar</h4>
+                                                                </v-btn>
+                                                                <v-btn 
+                                                                :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                                                rounded color="secondary" class="ml-2"  >
+                                                                    <h4 class="white--text">Agregar</h4>
+                                                                </v-btn>
+                                                            </div>  
+                                                        </v-container>
+                                                    
+                                                </v-card>
+                                            </v-dialog> 
                                         </v-card-title>
                                     </v-col>
-                                    <v-col cols="7">
+                                    <v-col cols="12" md="7">
                                         <v-row justify="center" align="center">  
                                             <div id="chart" >
-                                                <apexchart type="donut" :options="chartOptions" :series="series" width="300"></apexchart>
+                                                <apexchart type="donut" :options="chartOptions" :series="series" ></apexchart>
                                             </div>
                                         </v-row>   
                                     </v-col>
                                 </v-row>
-                                
-                                <v-container fluid style="margin:0;padding:0;" >
-                                    
-                                    
-                                </v-container>
                                 
                             
                         </v-card>
@@ -239,10 +286,11 @@
 <script>
 import { mapState,mapMutations } from 'vuex'
 import axios from 'axios'
-import ApexCharts from 'apexcharts'
+
 export default {
     data() {
         return {
+            dialogAgregarObservacion: false,
             alertError: false,
             textoError: '',
             alertAcept: false,
@@ -268,15 +316,27 @@ export default {
             },
             
             ],
-            series: [1, 1, 1, 1],
+            series: [9, 1, 1, 1],
             chartOptions: {
                 chart: {
                 type: 'donut',
                 },
                 colors: ['#4ECDC4', '#FF6B6B', '#FFE66D', '#2196F3'],
                 labels: ["Positiva", "Negativa", "Informativa", "Otro"],
-               
+                
+                
             },
+            estudianteObservacion: {
+                estudiante:'',
+                titulo:'',
+                tipo:'',
+                categoria:'',
+                curso:'',
+                ayudante:'',
+                descripcion:'',
+            },
+            tipos:['Positiva','Negativa','Informativa','Otro'],
+            categorias:['Ayudantía','Práctica','Copia','Otro','En Observación - 1 por Tercera','En Observación - 1 por Segunda','Se Retira','Eliminado por Rendimiento','Titulado','Eliminado Art. 31 E','Eliminado Art. 31 B'],
 
         }
     },
