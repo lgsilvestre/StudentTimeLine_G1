@@ -5,6 +5,7 @@ namespace App\Imports;
 use App\Estudiante;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithStartRow;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class EstudiantesImport implements ToModel, WithStartRow
 {
@@ -16,23 +17,30 @@ class EstudiantesImport implements ToModel, WithStartRow
     public function model(array $row)
     {
         return new Estudiante([
-                'matricula'  => $row['0'],
-                'rut'  => $row['1'],
-                'nombre_completo'  => $row['2'],
-                'correo'  => $row['3'],
-                'anho_ingreso'  => $row['4'],
-                'situacion_academica'  => $row['5'],
-                'porcentaje_avance'  => $row['6'],
-                'creditos_aprobados'  => $row['7'],
-                'escuela'  => $row['8'],
+                'matricula'  => $row['MATRICULA'],
+                'rut'  => $row['RUN'],
+                'nombre_completo'  => $row['NBE_ALUMNO'],
+                'correo'  => $row['CORREO'],
+                'anho_ingreso'  => $row['ANHO_INGRESO'],
+                'situacion_academica'  => $row['SIT_ACTUAL'],
+                'porcentaje_avance'  => $row['PORC_AVANCE'],
+                'creditos_aprobados'  => $row['CRED_APROBADOS'],
+                'escuela'  => $row['COD_CARRERA'],
         ]);
     }
+
+
 
     /**
      * @return int
      */
     public function startRow(): int
     {
-        return 2;
+        return 6;
+    }
+
+    public function headingRow(): int
+    {
+        return 6;
     }
 }
