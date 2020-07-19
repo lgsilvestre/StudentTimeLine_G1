@@ -4,11 +4,10 @@
         <v-col cols="12" md="1"></v-col>
         <v-col cols="12" md="10">
             <v-card>
-                <v-img class="mx-auto white--text align-end justify-center"
-                width="100%" height="150px"       
+                <v-img class="mx-auto white--text align-end justify-center" width="100%" height="150px"       
                 src="@/assets/Globales/background-panel-08.jpg">
                     <v-card-title class="white--text" style="font-size: 200%;text-shadow: #555 2px 2px 3px;">
-                        <strong > Semestres </strong>
+                        <strong class=" font-weight-black"> Semestres </strong>
                         <v-spacer></v-spacer>
                         <v-btn class="mr-2" fab large bottom left @click="dialogAñadirSemestre =true" >
                              <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
@@ -48,8 +47,14 @@
                                                         <v-icon>fas fa-ellipsis-v</v-icon>
                                                     </v-btn>
                                                 </template>
-                                                <v-list>
+                                                <v-list v-if="semestre.deleted_at == null">
                                                     <v-list-item  v-for="(item, index) in accionesSemestre" :key="index"
+                                                    @click="acionesSobreSemestre(item,semestre)" >
+                                                        <v-list-item-title>{{ item }}</v-list-item-title>
+                                                    </v-list-item>
+                                                </v-list>
+                                                <v-list v-if="semestre.deleted_at != null">
+                                                    <v-list-item  v-for="(item, index) in accionesSemestreEliminado" :key="index"
                                                     @click="acionesSobreSemestre(item,semestre)" >
                                                         <v-list-item-title>{{ item }}</v-list-item-title>
                                                     </v-list-item>
@@ -61,7 +66,7 @@
                                             
                                             <v-card-text class=" pt-0 pl-2 pr-0 pb-0 ">
                                                 <div class="text--primary " >
-                                                    <p class="font-weight-black"  v-on="on" @click="calcularRol(semestre)"> {{ semestre.anio }} - {{semestre.semestre}}</p>
+                                                    <p class="font-weight-black"   @click="calcularRol(semestre)"> {{ semestre.anio }} - {{semestre.semestre}}</p>
                                                 </div>
                                                 
                                             </v-card-text>
@@ -207,6 +212,28 @@
         </v-card>
     </v-dialog>
 
+    <!-- dialofo para re-abrir el semestre -->
+    <v-dialog v-model="dialogReAbrirSemestre" ref="form" persistent max-width="450px">
+        <v-card class="mx-auto" max-width="450"  >
+            <v-card-title
+                class="headline primary text--center"
+                primary-title
+                >
+                <h5 class="white--text ">Cerrar Semestre</h5>
+                </v-card-title> 
+                <v-card-title class="text-justify" style="font-size: 100%;">Esta seguro que desea reabrir el siguiente semestre?</v-card-title>
+                <v-card-text>Año : {{ semestreActual_1.anio }}</v-card-text>
+                <v-card-text>Semetre : {{ semestreActual_1.semestre }}</v-card-text>
+                <div style="text-align:right;">
+                    <v-btn rounded color="warning" class=" mb-4 "  @click="dialogReAbrirSemestre = false">
+                        <h4 class="white--text">Cancelar</h4>
+                    </v-btn>
+                    <v-btn rounded color="secondary"   class=" mb-4 ml-2 mr-5" @click="reabrirSemestre()">
+                        <h4 class="white--text">Aceptar</h4>
+                    </v-btn>
+                </div> 
+        </v-card>
+    </v-dialog>
      <!-- Alertas -->
 
     <!-- Alerta de Error -->
@@ -268,6 +295,7 @@ export default {
             dialogEliminarSemestre:false,
             dialogModificarSemestre:false,
             dialogAñadirSemestre:false,
+            dialogReAbrirSemestre:false,
             /**Variables para las alertas */
             alertaError: false,
             alertaExito: false,
@@ -280,7 +308,7 @@ export default {
             unAnhoVariable: false,
             añoActual: new Date().getFullYear(),
             semestreActual: 1,
-            semestreActual_1:[{id:'',semestre:'',anio:''}],
+            semestreActual_1:[{id:'',semestre:'',anio:'',deleted_at:''}],
             rules: [
                 value => !!value || 'Requerido',
                 value => value <= new Date().getFullYear()|| 'El año no debe ser mayor al actual',
@@ -293,6 +321,7 @@ export default {
                 ],
 
             accionesSemestre: [ 'Modificar Semestre' , 'Cerrar Semestre'  ],
+            accionesSemestreEliminado:['Re-abrir semestre'],
             listaSemestres_reg:[ {sem: 1},  {sem: 2}, {sem: 3}]
         
         }
@@ -305,7 +334,6 @@ export default {
     },
     methods: {
         ...mapMutations(['calcularRol']),
-
         /**
          * Obtiene la lista de todos los 
          *   semestres registrados en la base de datos
@@ -316,17 +344,20 @@ export default {
             var url = 'http://127.0.0.1:8000/api/v1/semestre';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
-                for (let index = 0; index < result.data.data.semestres.length; index++) {
-                    const element = result.data.data.semestres[index];
-                    let semestre = {
-                        id: element.id,
-                        semestre: element.semestre,
-                        anio: element.anio,
-                    }; 
-                    
-                    this.listaSemestresAux[index]=semestre;
+                if (result.data.success==true){
+                    for (let index = 0; index < result.data.data.semestres.length; index++) {
+                        const element = result.data.data.semestres[index];
+                        //console.log(element)
+                        let semestre = {
+                            id: element.id,
+                            semestre: element.semestre,
+                            anio: element.anio,
+                            deleted_at: element.deleted_at 
+                        }; 
+                        this.listaSemestresAux[index]=semestre;
+                    }
+                    this.listaSemestres = this.listaSemestresAux;
                 }
-                this.listaSemestres = this.listaSemestresAux;
             }
             ).catch((error)=>{
                 if (error.message == 'Network Error') {
@@ -364,13 +395,15 @@ export default {
                 var url = 'http://127.0.0.1:8000/api/v1/semestre ';
             axios.post(url, post, this.$store.state.config)
             .then((result) => {
-                 console.log(result);
-                this.dialogAñadirSemestre = false;
-                this.añoActual= new Date().getFullYear();
-                this.semestreActual= 1;
-                this.textoAlertas = "Se creó el semestre con exito."
-                this.alertaExito=true;
-                this.obtenerListaDeSemestres(); 
+                console.log(result);
+                if (result.data.success==true){
+                    this.dialogAñadirSemestre = false;
+                    this.añoActual= new Date().getFullYear();
+                    this.semestreActual= 1;
+                    this.textoAlertas = "Se creó el semestre con exito."
+                    this.alertaExito=true;
+                    this.obtenerListaDeSemestres(); 
+                }
             }).catch((error)=>{
                 
                 if (error.message == 'Network Error') {
@@ -415,15 +448,17 @@ export default {
                     }
                     // console.log(post)
                     var url = `http://127.0.0.1:8000/api/v1/semestre/${this.semestreActual_1.id} `;
-                    console.log(put)
                     axios.put(url, put, this.$store.state.config)
                     .then((result) => {
-                        this.dialogModificarSemestre = false;
-                        this.añoActual= new Date().getFullYear();
-                        this.semestreActual= 1;
-                        this.textoAlertas = "Se creó el semestre con exito."
-                        this.alertaExito=true;
-                        this.obtenerListaDeSemestres();
+                        if (result.data.success==true){
+                            this.dialogModificarSemestre = false;
+                            this.añoActual= new Date().getFullYear();
+                            this.semestreActual= 1;
+                            this.textoAlertas = "Se creó el semestre con exito."
+                            this.alertaExito=true;
+                            this.obtenerListaDeSemestres();
+
+                        }
                     }).catch((error)=>{
                         
                         if (error.message == 'Network Error') {
@@ -494,6 +529,11 @@ export default {
                 this.semestreActual_1=semestre;
                 this.dialogEliminarSemestre = true;
             }
+            if(item=='Re-abrir semestre'){
+                console.log("Re-abrir semestre")
+                this.semestreActual_1=semestre;
+                this.dialogReAbrirSemestre = true;
+            }
             
         },
         /**
@@ -503,8 +543,7 @@ export default {
             var url = 'http://127.0.0.1:8000/api/v1/semestre/'+this.semestreActual_1.id;
                 axios.delete(url,this.$store.state.config)
                 .then((result)=>{
-                    console.log(result)
-                if (result.statusText=='OK') {
+                if (result.data.success==true) {
                     this.dialogEliminarSemestre= false;
                     this.obtenerListaDeSemestres();
                     this.alertaExito = true;
@@ -531,6 +570,46 @@ export default {
                                 this.textoAlertas = error.response.data.message;
                                 this.alertaError = true;
                                  this.dialogEliminarSemestre= false;
+                            }
+                        }
+                    }
+                
+            });
+        },
+        /**
+         * Reabre un semestre que halla sido cerraado.
+         */
+        reabrirSemestre(){
+             var url = 'http://127.0.0.1:8000/api/v1/semestre/restore/'+this.semestreActual_1.id;
+                axios.post(url,null,this.$store.state.config)
+                .then((result)=>{
+                if (result.data.success==true) {
+                    this.dialogReAbrirSemestre= false;
+                    this.obtenerListaDeSemestres();
+                    this.alertaExito = true;
+                    this.textoAlertas = "El semestre fue reabierto con exito "
+                }
+                }).catch((error)=>{
+                    if (error.message == 'Network Error') {
+                        console.log(error)
+                        this.textoAlertas = "Error al eliminar el semestre, intente mas tarde."
+                        this.alertaError = true;
+                    }
+                    else{
+                        if (error.response.data.success == false) {
+                            if(error.response.data.code == 901){
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
+                                this.textoAlertas = "Error en la recuperacion del semestre, contacte al administrador";
+                                this.alertaError = true;
+                                 this.dialogReAbrirSemestre= false;
+                            }
+                            if(error.response.data.code == 902){
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
+                                this.textoAlertas =  "Error en la recuperacion del semestre, contacte al administrador";
+                                this.alertaError = true;
+                                 this.dialogReAbrirSemestre= false;
                             }
                         }
                     }
