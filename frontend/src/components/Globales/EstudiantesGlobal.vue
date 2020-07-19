@@ -335,7 +335,7 @@
                         <v-icon  
                         color="primary"
                         >
-                        fas fa-edit
+                        fas fa-external-link-alt
                         </v-icon>
                     </v-btn>
                     </template>                                                         
@@ -529,6 +529,7 @@
                     for (let index = 0; index < result.data.data.estudiantes.length; index++) {
                     const element = result.data.data.estudiantes[index];
                     let estudiante = {
+                        id: element.id,
                         matricula: element.matricula,
                         rut: element.rut,
                         nombre_completo: element.nombre_completo,

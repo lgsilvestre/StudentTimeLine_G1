@@ -58,7 +58,7 @@
          </v-col>
      </v-row>
         <!-- Dialogo para agregar un semestre -->
-     <v-dialog v-model="dialogAñadirSemestre" rtransition="scroll-y-reverse-transition"  persistent max-width="500px">
+     <v-dialog v-model="dialogAñadirSemestre" transition="scroll-y-reverse-transition"  persistent max-width="500px">
          <v-card class="mx-auto" max-width="800" >
                 <v-card-title class="headline primary text--center" primary-title >
                     <h5 class="white--text ">Registrar Semestre</h5>
