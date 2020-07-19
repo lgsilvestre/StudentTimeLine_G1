@@ -14,13 +14,26 @@ class SemestreTableSeeder extends Seeder
         Semestre::create([
             'semestre' => 2,
             'anio' => 2019
-
         ]);
 
         Semestre::create([
             'semestre' => 1,
             'anio' => 2020
+        ]);
 
+        Semestre::create([
+            'semestre' => 2,
+            'anio' => 1990
+        ]);
+
+        Semestre::create([
+            'semestre' => 1,
+            'anio' => 1990
+        ]);
+
+        Semestre::create([
+            'semestre' => 1,
+            'anio' => 2001
         ]);
     }
 }
