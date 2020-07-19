@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Observacion;
 use Illuminate\Http\Request;
+use Validator;
 
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -68,23 +69,23 @@ class ObservacionController extends Controller
     public function store(Request $request)
     {
         $entradas = $request->only('ayudante', 'estudiante','titulo', 'descripcion', 'tipo','curso', 'categoria');
-        //$validator = Validator::make($entradas, [
-            //'ayudante' => ['required', 'numeric'],
-            //'estudiante' => [' required', 'numeric'],
-            //'titulo' => ['required', 'string'],
-            //'descripcion' => [' required', 'string'],
-            //'tipo' => [' required', 'numeric'],
-            //'curso' => [' required', 'numeric'],
-            //'categoria' => [' required', 'numeric']
-        //]);
-        /*if ($validator->fails()) {
+        $validator = Validator::make($entradas, [
+            'ayudante' => ['nullable', 'numeric'],
+            'estudiante' => [' required', 'numeric'],
+            'titulo' => ['required', 'string'],
+            'descripcion' => [' required', 'string'],
+            'tipo' => [' required', 'numeric'],
+            'curso' => [' nullable', 'numeric'],
+            'categoria' => [' required', 'numeric']
+        ]);
+        if ($validator->fails()) {
             return response()->json([
                 'success' => false,
                 'code' => 301,
                 'message' => 'Error en datos ingresados',
                 'data' => ['error'=>$validator->errors()]
             ], 422);
-        }*/
+        }
         if(!array_key_exists ("ayudante" , $entradas)){
             $entradas['ayudante'] = null;
         }
@@ -178,7 +179,7 @@ class ObservacionController extends Controller
     public function update(Request $request, $id)
     {
         $entradas = $request->only('ayudante', 'estudiante','titulo', 'descripcion', 'tipo','curso', 'categoria');
-        /*$validator = Validator::make($entradas, [
+        $validator = Validator::make($entradas, [
             'ayudante' => ['nullable', 'numeric'],
             'estudiante' => [' nullable', 'numeric'],
             'titulo' => ['nullable', 'string'],
@@ -194,7 +195,7 @@ class ObservacionController extends Controller
                 'message' => 'Error en datos ingresados',
                 'data' => ['error'=>$validator->errors()]
             ], 422);
-        }*/
+        }
         if(!array_key_exists ("ayudante" , $entradas)){
             $entradas['ayudante'] = null;
         }
@@ -250,7 +251,6 @@ class ObservacionController extends Controller
                 $observacion->categoria = $entradas['categoria'];
             }
             $observacion->save();
-            return compact('observacion');
             return response()->json([
                 'success' => true,
                 'code' => 600,
