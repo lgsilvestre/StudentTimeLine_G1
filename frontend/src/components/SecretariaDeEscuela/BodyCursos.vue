@@ -1,61 +1,90 @@
 <template>   
  <v-container>
      <v-row>
-         <v-col cols="12" >
-             <v-card flat   >
-                 <v-img class="mx-auto white--text align-end justify-center"
-                        width="100%" height="150px"       
-                        src="@/assets/Globales/background-panel-08.jpg">
-                        <v-card-title class="white--text" style="font-size: 200%;text-shadow: #555 2px 2px 3px;">
-                            <strong > Semestres </strong>
-                            <v-spacer></v-spacer>
-                            <v-btn class="mr-2" fab large bottom left @click="dialogAñadirSemestre =true" >
-                                <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
-                             </v-btn>
-                        </v-card-title> 
+        <v-col cols="12" md="1"></v-col>
+        <v-col cols="12" md="10">
+            <v-card>
+                <v-img class="mx-auto white--text align-end justify-center"
+                width="100%" height="150px"       
+                src="@/assets/Globales/background-panel-08.jpg">
+                    <v-card-title class="white--text" style="font-size: 200%;text-shadow: #555 2px 2px 3px;">
+                        <strong > Semestres </strong>
+                        <v-spacer></v-spacer>
+                        <v-btn class="mr-2" fab large bottom left @click="dialogAñadirSemestre =true" >
+                             <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
+                         </v-btn>
+                     </v-card-title> 
                 </v-img>
-             </v-card>
-         </v-col>
-         <v-col cols="12">
-             <v-card class="mx-auto" >
-            <v-container>
-                <v-row >
-                    <v-col
-                    v-for="(semestre, index) in listaSemestres" :key="index"
-                    cols="12" sm="6" md="4" lg="3">
-                    <v-card dark style="background-color:#4ECDC4; border-style:solid; border-color:rgba(0,0,0,0.5); "
-                      >
-                            <div class="d-flex flex-no-wrap justify-space-between" @click="calcularRol(semestre)">
-                                <div>
-                                    <v-card-title class="black--text" > Año {{ semestre.anio }} </v-card-title>
-                                    <v-card-subtitle  class="black--text"> Semestre {{semestre.semestre}}</v-card-subtitle>
-                                </div>
-                                <v-menu class="text-left" offset-y>
-                                    <template v-slot:activator="{ on, attrs }">
-                                        <v-btn color="primary" icon v-bind="attrs" v-on="on" >
-                                        <v-icon>fas fa-ellipsis-v</v-icon>
-                                        </v-btn>
-                                    </template>
-                                    <v-list>
-                                        <v-list-item
-                                        v-for="(item, index) in accionesSemestre" :key="index"
-                                        @click="acionesSobreSemestre(item,semestre)"
-                                        >
-                                        <v-list-item-title>{{ item }}</v-list-item-title>
-                                        </v-list-item>
-                                    </v-list>
-                            </v-menu>
-                            </div>
-                           
-                            
-                            
-                    </v-card>
-                    </v-col>
-                </v-row>
-            </v-container>
-        </v-card>
+                <!-- <v-container> -->
+                    <v-row>
+                        <v-col v-for="(semestre, index) in listaSemestres" :key="index" cols="12" sm="6" md="4" lg="3" >
+                            <v-card class=" ml-2 mr-2"  dark color="#F7FFF7"  style=" border-style:solid; border-color:rgba(0,0,0,0.5);" > 
+                                <v-container class="pt-0 mt-0 pb-0 ">
+                                    <v-row >
+                                        <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0" >
+                                            <v-card-title class="mt-0 pt-0 pl-0 pr-0 " >
+                                                <v-img class="mx-auto white--text align-end justify-center "
+                                                        width="100%" height="30px"       
+                                                        src="@/assets/Globales/background-panel-08.jpg"
+                                                        v-show="semestre.semestre == 1">
+                                                </v-img>
+                                                <v-img class="mx-auto white--text align-end justify-center "
+                                                        width="100%" height="30px"       
+                                                        src="@/assets/Globales/background-panel-09.jpg"
+                                                        v-show="semestre.semestre == 2">
+                                                </v-img>
+                                                <v-img class="mx-auto white--text align-end justify-center "
+                                                        width="100%" height="30px"       
+                                                        src="@/assets/Globales/background-panel-10.jpg"
+                                                        v-show="semestre.semestre == 3">
+                                                </v-img>
+                                            </v-card-title>
+                                        </v-col>
+                                            
+                                        <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0  text-right" >
+                                            <v-menu class="text-left " offset-y>
+                                                <template   v-slot:activator="{ on, attrs }">
+                                                    <v-btn tile  color="primary" small icon v-bind="attrs" v-on="on" >
+                                                        <v-icon>fas fa-ellipsis-v</v-icon>
+                                                    </v-btn>
+                                                </template>
+                                                <v-list>
+                                                    <v-list-item  v-for="(item, index) in accionesSemestre" :key="index"
+                                                    @click="acionesSobreSemestre(item,semestre)" >
+                                                        <v-list-item-title>{{ item }}</v-list-item-title>
+                                                    </v-list-item>
+                                                </v-list>
+                                            </v-menu>
+                                        </v-col>
+                                        <v-col cols="6"  class=" pt-0 pl-1 pr-0 pb-0 "  >
+                                            
+                                            
+                                            <v-card-text class=" pt-0 pl-2 pr-0 pb-0 ">
+                                                <div class="text--primary " >
+                                                    <p class="font-weight-black"  v-on="on" @click="calcularRol(semestre)"> {{ semestre.anio }} - {{semestre.semestre}}</p>
+                                                </div>
+                                                
+                                            </v-card-text>
+                                        </v-col>
+                                            
+                                            
+                                        <!-- </v-col>
+                                        <v-col cols="12">
+                                            <v-card-text>
+                                                <v-btn></v-btn>
+                                            </v-card-text>
+                                        </v-col> -->
+                                    </v-row>
+                                </v-container>
+                            </v-card>
+                        </v-col>
+                    </v-row>
+                <!-- </v-container> -->
 
-         </v-col>
+            </v-card>
+
+        </v-col>
+        <v-col cols="12" md="1"></v-col>
      </v-row>
         <!-- Dialogo para agregar un semestre -->
      <v-dialog v-model="dialogAñadirSemestre" rtransition="scroll-y-reverse-transition"  persistent max-width="500px">
