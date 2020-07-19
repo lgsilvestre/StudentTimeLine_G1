@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 use App\Estudiante;
-use App\Escuela;
 use App\Observacion;
 use Illuminate\Http\Request;
 
@@ -32,9 +31,8 @@ class EstudianteController extends Controller
     public function index(){
         try{
             $estudiantes = Estudiante::all();
-            $escuelas=Escuela::orderBy('id','asc')->get();
             foreach ($estudiantes as $estudiante) {
-                $estudiante->escuela=$escuelas[$estudiante->escuela-1]->nombre;
+                $estudiante->escuela=$estudiante->getEscuela->nombre;
             }
             return response()->json([
                 'success' => true,
@@ -189,12 +187,12 @@ class EstudianteController extends Controller
                 ], 409);
             }
             $observaciones = Observacion::Where('estudiante', '=' , $estudiante['id'])->get();
-            foreach($observaciones as $obsercion){
-                $obsercion->estudiante=$obsercion->getEstudiante->nombre_completo;
-                $obsercion->creador=$obsercion->getCreador->nombre;
-                $obsercion->tipo=$obsercion->getTipo->descripcion;
-                $obsercion->curso=$obsercion->getCurso->nombre;
-                $obsercion->categoria=$obsercion->getCategoria->nombre;
+            foreach($observaciones as $observacion){
+                $observacion->estudiante=$observacion->getEstudiante->nombre_completo;
+                $observacion->creador=$observacion->getCreador->nombre;
+                $observacion->tipo=$observacion->getTipo->descripcion;
+                $observacion->curso=$observacion->getCurso->nombre;
+                $observacion->categoria=$observacion->getCategoria->nombre;
             }
             return response()->json([
                 'success' => true,
@@ -349,6 +347,9 @@ class EstudianteController extends Controller
     public function disabled(){
         try{
             $estudiantes = Estudiante::onlyTrashed()->get();
+            foreach ($estudiantes as $estudiante) {
+                $estudiante->escuela=$estudiante->getEscuela->nombre;
+            }
             return response()->json([
                 'success' => true,
                 'code' => 800,
