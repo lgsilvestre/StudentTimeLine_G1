@@ -8,6 +8,6 @@ class InstanciaCurso extends Model
 {
     use SoftDeletes;
     protected $fillable = [
-        'semestre','curso'
+        'semestre','curso','seccion'
     ];
 }

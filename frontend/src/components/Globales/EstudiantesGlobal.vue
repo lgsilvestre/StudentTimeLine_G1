@@ -327,6 +327,7 @@
                 :items="listaEstudiantes"
                 :search="buscar"
                 :loading="cargando"
+                style="font-size: 140%;"
                 class="elevation-1 "
                 >
                     <template v-slot:item.actions="{ item }">
@@ -411,189 +412,16 @@
             { text: 'Rut', value: 'rut',sortable: true, },
             { text: 'Nombre Completo', value: 'nombre_completo',sortable: false, },
             { text: 'Correo', value: 'correo',sortable: false, },
-            { text: 'Año ingreso', value: 'anho_ingreso',sortable: true, },
-            { text: 'Situación academica', value: 'situacion_academica',sortable: false, },
+            { text: 'Ingreso', value: 'anho_ingreso',sortable: true, },
+            { text: 'Situación Acad.', value: 'situacion_academica',sortable: false, },
             { text: 'Escuela', value: 'escuela',sortable: false, },
-            { text: 'Opciones', value: 'actions', sortable: false },
+            { text: 'Ir',align: 'center', value: 'actions', sortable: false },
         ],
         buscar: '',
         botonesAgregarEstudiantes: true,
         containerAgregarEstudianteUnico:false,
         containerAgregarEstudianteImportar:false,
-        desserts:[
-            {
-                matricula: '2000407026',
-                rut: '13352079',
-                nombre_completo:'BUSTAMANTE GONZÁLEZ RODRIGO ARTURO',
-                correo:'robustamante@utalca.cl',
-                anho_ingreso:'2000',
-                situacion_academica:'REGULAR',
-                escuela:'INGENIERIA CIVIL EN COMPUTACIÓN',
-            },
-            {
-                matricula: '2000407026',
-                rut: '13352079',
-                nombre_completo:'Felipe Milla Calquin',
-                correo:'robustamante@utalca.cl',
-                anho_ingreso:'2000',
-                situacion_academica:'REGULAR',
-                escuela:'INGENIERIA CIVIL EN COMPUTACIÓN',
-            },
-            {
-                matricula: '2015407423',
-                rut: '19550773',
-                nombre_completo:'BUSTAMANTE GONZÁLEZ RODRIGO ARTURO',
-                correo:'robustamante@utalca.cl',
-                anho_ingreso:'2000',
-                situacion_academica:'REGULAR',
-                escuela:'INGENIERIA CIVIL EN COMPUTACIÓN',
-            },
-            {
-                matricula: '2000407026',
-                rut: '13352079',
-                nombre_completo:'BUSTAMANTE GONZÁLEZ RODRIGO ARTURO',
-                correo:'robustamante@utalca.cl',
-                anho_ingreso:'2015',
-                situacion_academica:'REGULAR',
-                escuela:'INGENIERIA CIVIL EN COMPUTACIÓN',
-            },
-            {
-                matricula: '2000407026',
-                rut: '13352079',
-                nombre_completo:'BUSTAMANTE GONZÁLEZ RODRIGO ARTURO',
-                correo:'robustamante@utalca.cl',
-                anho_ingreso:'2022',
-                situacion_academica:'REGULAR',
-                escuela:'INGENIERIA CIVIL EN COMPUTACIÓN',
-            },
-            {
-                matricula: '2000407026',
-                rut: '13352079',
-                nombre_completo:'BUSTAMANTE GONZÁLEZ RODRIGO ARTURO',
-                correo:'robustamante@utalca.cl',
-                anho_ingreso:'2012',
-                situacion_academica:'REGULAR',
-                escuela:'INGENIERIA CIVIL EN COMPUTACIÓN',
-            },
-            {
-                matricula: '2000407026',
-                rut: '13352079',
-                nombre_completo:'BUSTAMANTE GONZÁLEZ RODRIGO ARTURO',
-                correo:'robustamante@utalca.cl',
-                anho_ingreso:'2020',
-                situacion_academica:'REGULAR',
-                escuela:'INGENIERIA CIVIL EN COMPUTACIÓN',
-            },
-            {
-                matricula: '2000407026',
-                rut: '13352079',
-                nombre_completo:'BUSTAMANTE GONZÁLEZ RODRIGO ARTURO',
-                correo:'robustamante@utalca.cl',
-                anho_ingreso:'2000',
-                situacion_academica:'REGULAR',
-                escuela:'INGENIERIA CIVIL EN COMPUTACIÓN',
-            },
-            {
-                matricula: '2000407026',
-                rut: '13352079',
-                nombre_completo:'BUSTAMANTE GONZÁLEZ RODRIGO ARTURO',
-                correo:'robustamante@utalca.cl',
-                anho_ingreso:'2010',
-                situacion_academica:'REGULAR',
-                escuela:'INGENIERIA CIVIL EN COMPUTACIÓN',
-            },
-            {
-                matricula: '2000407026',
-                rut: '13352079',
-                nombre_completo:'BUSTAMANTE GONZÁLEZ RODRIGO ARTURO',
-                correo:'robustamante@utalca.cl',
-                anho_ingreso:'2030',
-                situacion_academica:'REGULAR',
-                escuela:'INGENIERIA CIVIL EN COMPUTACIÓN',
-            },
-            {
-                matricula: '2000407026',
-                rut: '13352079',
-                nombre_completo:'BUSTAMANTE GONZÁLEZ RODRIGO ARTURO',
-                correo:'robustamante@utalca.cl',
-                anho_ingreso:'2000',
-                situacion_academica:'REGULAR',
-                escuela:'INGENIERIA CIVIL EN COMPUTACIÓN',
-            },
-            {
-                matricula: '2000407026',
-                rut: '13352079',
-                nombre_completo:'BUSTAMANTE GONZÁLEZ RODRIGO ARTURO',
-                correo:'robustamante@utalca.cl',
-                anho_ingreso:'2000',
-                situacion_academica:'REGULAR',
-                escuela:'INGENIERIA CIVIL EN COMPUTACIÓN',
-            },
-            {
-                matricula: '2000407026',
-                rut: '13352079',
-                nombre_completo:'BUSTAMANTE GONZÁLEZ RODRIGO ARTURO',
-                correo:'robustamante@utalca.cl',
-                anho_ingreso:'2000',
-                situacion_academica:'REGULAR',
-                escuela:'INGENIERIA CIVIL EN COMPUTACIÓN',
-            },
-            {
-                matricula: '2000407026',
-                rut: '13352079',
-                nombre_completo:'BUSTAMANTE GONZÁLEZ RODRIGO ARTURO',
-                correo:'robustamante@utalca.cl',
-                anho_ingreso:'2000',
-                situacion_academica:'REGULAR',
-                escuela:'INGENIERIA CIVIL EN COMPUTACIÓN',
-            },
-            {
-                matricula: '2000407026',
-                rut: '13352079',
-                nombre_completo:'BUSTAMANTE GONZÁLEZ RODRIGO ARTURO',
-                correo:'robustamante@utalca.cl',
-                anho_ingreso:'2000',
-                situacion_academica:'REGULAR',
-                escuela:'INGENIERIA CIVIL EN COMPUTACIÓN',
-            },
-            {
-                matricula: '2000407026',
-                rut: '13352079',
-                nombre_completo:'BUSTAMANTE GONZÁLEZ RODRIGO ARTURO',
-                correo:'robustamante@utalca.cl',
-                anho_ingreso:'2000',
-                situacion_academica:'REGULAR',
-                escuela:'INGENIERIA CIVIL EN COMPUTACIÓN',
-            },
-            {
-                matricula: '2000407026',
-                rut: '13352079',
-                nombre_completo:'BUSTAMANTE GONZÁLEZ RODRIGO ARTURO',
-                correo:'robustamante@utalca.cl',
-                anho_ingreso:'2000',
-                situacion_academica:'REGULAR',
-                escuela:'INGENIERIA CIVIL EN COMPUTACIÓN',
-            },
-            {
-                matricula: '2000407026',
-                rut: '13352079',
-                nombre_completo:'BUSTAMANTE GONZÁLEZ RODRIGO ARTURO',
-                correo:'robustamante@utalca.cl',
-                anho_ingreso:'2000',
-                situacion_academica:'REGULAR',
-                escuela:'INGENIERIA CIVIL EN COMPUTACIÓN',
-            },
-            {
-                matricula: '2000407026',
-                rut: '13352079',
-                nombre_completo:'BUSTAMANTE GONZÁLEZ RODRIGO ARTURO',
-                correo:'robustamante@utalca.cl',
-                anho_ingreso:'2000',
-                situacion_academica:'REGULAR',
-                escuela:'INGENIERIA CIVIL EN COMPUTACIÓN',
-            },
-            
-        ],
+
         listaEstudiantes:[],
         listaEstudiantesAux:[],
         dessertsAux:[],
@@ -868,10 +696,41 @@
             this.anhov3= new Date().getFullYear();
         },
         exportarEstudiantes(){
-            if (this.anhov2 > this.anhov3) {
-                this.alertaErrorRangoAnhos = true;
-                console.log('rango mal');
-            }
+            //if (this.anhov2 > this.anhov3) {
+                //this.alertaErrorRangoAnhos = true;
+                //console.log('rango mal');
+            //}
+            var url = 'http://127.0.0.1:8000/api/v1/exportar';
+            axios.get(url,{responseType: 'blob'})
+            .then((result)=>{
+                console.log(result);
+                //var fileDownload = require('js-file-download');
+                //fileDownload(result.data, 'archivo.xlsx');
+                
+
+                const url = URL.createObjectURL(new Blob([result.data], {
+                    type: 'application/vnd.ms-excel'
+                }))
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'estudiante.xlsx');
+                document.body.appendChild(link);
+                link.click();
+                this.alertAcept = true;
+                this.textoAcept = 'Se realizó la operación correctamente'
+                
+            })
+            .catch((error) => {
+                if (error.message == 'Network Error') {
+                    console.log(error);
+                    this.alertError = true;
+                    this.textoError = 'Error, intente más tarde'
+                } else {
+                    console.log(error);
+                    this.alertError = true;
+                    this.textoError = 'Error, intente más tarde'
+                } 
+            });
         },
         resetImportarEstudiantes(){
             this.file = null;

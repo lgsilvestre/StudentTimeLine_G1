@@ -12,6 +12,9 @@ import InicioSesion from '@/components/Inicio/InicioSesion.vue';
 Vue.config.productionTip = false
 
 Vue.component('inicioSesion', InicioSesion);
+import VueApexCharts from 'vue-apexcharts'
+
+Vue.component('apexchart', VueApexCharts)
 new Vue({
   router,
   store,
