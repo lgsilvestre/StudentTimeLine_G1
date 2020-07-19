@@ -130,7 +130,6 @@ class ImportarExcelController extends Controller
             $credenciales = JWTAuth::parseToken()->authenticate();
             $escuela = $credenciales['escuela'];
             //'escuela'  => $row[$orden[0]],
-
             //$controller = (new UsuarioController())->store();
 
             $i=0;
