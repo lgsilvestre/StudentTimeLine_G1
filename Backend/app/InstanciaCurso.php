@@ -15,4 +15,8 @@ class InstanciaCurso extends Model
     {
         return $this->belongsTo(Curso::class, 'curso');
     }  
+    public function getSemestre()
+    {
+        return $this->belongsTo(Semestre::class, 'semestre');
+    }  
 }

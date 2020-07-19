@@ -17,4 +17,10 @@ class Profesor_Con_Curso extends Model
     {
         return $this->belongsTo(InstanciaCurso::class, 'curso');
     }  
+
+    public function getProfesor()
+    {
+        return $this->belongsTo(User::class, 'profesor');
+    } 
+
 }
