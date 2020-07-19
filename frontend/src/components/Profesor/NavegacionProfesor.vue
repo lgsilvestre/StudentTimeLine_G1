@@ -10,103 +10,36 @@
             <v-list-item-title class="white--text letra"><strong>Profesor</strong></v-list-item-title>
         </v-list-item>
         <v-divider></v-divider>
-        <v-list > 
-            <v-menu open-on-hover offset-x left>
-                <template v-slot:activator="{ on }">
-                    <v-list-item  v-on="on" class="difuminado" active-class="activacion" to="/profesor/estudiantes"> 
-                        <v-list-item-icon>
-                            <v-icon color="white">fas fa-user-graduate</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title class="white--text letra"><strong>Estudiantes</strong></v-list-item-title>
-                    </v-list-item>
-                </template>
-                <v-list>
-                    <v-list-item @click="prueba" >
-                        <v-list-item-icon>
-                            <v-icon medium>fas fa-user-graduate</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title>Listar estudiante</v-list-item-title>
-                    </v-list-item>
-                </v-list>
-            </v-menu>
-            <v-menu open-on-hover offset-x left>
-                <template v-slot:activator="{ on }">
-                    <v-list-item  v-on="on" class="difuminado" active-class="activacion">
-                        <v-list-item-icon>
-                            <v-icon color="white" >fas fa-archway</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title class="white--text letra"><strong>Observaciones</strong></v-list-item-title>
-                    </v-list-item>
-                </template>
-                <v-list>
-                    <v-list-item @click="prueba" >
-                        <v-list-item-icon>
-                            <v-icon medium>fas fa-archway</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title>Crear observación</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item @click="prueba" >
-                        <v-list-item-icon>
-                            <v-icon medium>fas fa-archway</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title>Listar observaciones</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item @click="prueba" >
-                        <v-list-item-icon>
-                            <v-icon medium>fas fa-archway</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title>Modificar observación</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item @click="prueba" >
-                        <v-list-item-icon>
-                            <v-icon medium>fas fa-archway</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title>Eliminar observación</v-list-item-title>
-                    </v-list-item>
-                </v-list>
-            </v-menu>
-            <v-menu open-on-hover offset-x left>
-                <template v-slot:activator="{ on }">
-                    <v-list-item  v-on="on" class="difuminado" active-class="activacion">
-                        <v-list-item-icon>
-                            <v-icon color="white">fab fa-accusoft</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title class="white--text letra"><strong>Cursos</strong></v-list-item-title>
-                    </v-list-item>
-                </template>
-                <v-list >
-                    <v-list-item @click="prueba" >
-                        <v-list-item-icon>
-                            <v-icon medium>fab fa-accusoft</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title>Listar cursos</v-list-item-title>
-                    </v-list-item>
-                </v-list>
-            </v-menu>
-            <v-menu open-on-hover  offset-x left>
-                <template v-slot:activator="{ on }">
-                    <v-list-item  v-on="on" class="difuminado" active-class="activacion">
-                        <v-list-item-icon>
-                            <v-icon color="white">fas fa-envelope</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title class="white--text letra"><strong>Contactar</strong></v-list-item-title>
-                    </v-list-item>
-                </template>
-                <v-list >
-                    <v-list-item @click="prueba" >
-                        <v-list-item-icon>
-                            <v-icon medium>fas fa-envelope</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title>Contactar Admin.</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item @click="prueba" >
-                        <v-list-item-icon>
-                            <v-icon medium>fas fa-envelope</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title>Contactar Sria. Escuela</v-list-item-title>
-                    </v-list-item>
-                </v-list>
-            </v-menu>
+        <v-list style=" margine-right: 0; margine-left:0;" > 
+
+            <v-list-item  v-on="on" to="/profesor/estudiantes" class="difuminado" active-class="activacion" > 
+                <v-list-item-icon>
+                    <v-icon color="white">fas fa-user-graduate</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title class="white--text letra"><strong>Estudiantes</strong></v-list-item-title>
+            </v-list-item> 
+              
+            <v-list-item  v-on="on"  class="difuminado" active-class="activacion">
+                <v-list-item-icon>
+                    <v-icon color="white" >fas fa-archway</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title class="white--text letra"><strong>Observaciones</strong></v-list-item-title>
+            </v-list-item>
+               
+            <v-list-item  v-on="on" to="/profesor/cursos"  class="difuminado" active-class="activacion">
+                <v-list-item-icon>
+                    <v-icon color="white">fab fa-accusoft</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title class="white--text letra"><strong>Cursos</strong></v-list-item-title>
+            </v-list-item>
+        
+            <v-list-item  v-on="on" class="difuminado" active-class="activacion">
+                <v-list-item-icon>
+                    <v-icon color="white">fas fa-envelope</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title class="white--text letra"><strong>Contactar</strong></v-list-item-title>
+            </v-list-item>
+                
         </v-list>
         <template v-slot:append >
         <v-list-item class=" difuminado" style="background-color: #FF6B6B" @click="unLogin">
