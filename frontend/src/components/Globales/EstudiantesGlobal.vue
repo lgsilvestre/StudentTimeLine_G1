@@ -500,15 +500,17 @@
         agregarEstudiantesImportar(){
             let formData = new FormData();
             formData.append('file',this.file);
-            var url = 'http://127.0.0.1:8000/api/estudiante/importar';
-            axios.post(url,formData)
+            var url = 'http://127.0.0.1:8000/api/v1/estudiante/importar';
+            axios.post(url,formData,this.$store.state.config)
             .then((result)=>{
+                console.log(result);
                 if (result.data.success == true) {
                     this.resetImportarEstudiantes();
                     this.obtenerEstudiantes();
                 }
             })
             .catch((error)=>{
+                console.log(error);
                 if (error.message == 'Network Error') {
                     console.log(error);
                     this.alertError = true;

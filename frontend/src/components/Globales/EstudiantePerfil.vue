@@ -534,22 +534,24 @@ export default {
             .then((result)=>{
                 console.log(result.data.data.observaciones);
                 //if (result.data.success == true) {
-                for (let index = 0; index < result.data.data.observaciones.length; index++) {
-                    const element = result.data.data.observaciones[index];
+                var contador = 0;
+                for (let index = result.data.data.observaciones.length-1; index >= 0; index--) {
+                    const element = result.data.data.observaciones[contador];
+                    contador ++;
                     var auxcolor = null;
                     var auxicono = null;
-                    if (element.tipo == 1) {
+                    if (element.tipo == "Positiva") {
                         auxcolor="secondary";
                         auxicono="fas fa-check-circle";
                         this.seriesaux[0] = this.seriesaux[0]+1;
                     }
                     else{
-                        if (element.tipo == 2) {
+                        if (element.tipo == "Negativa") {
                             auxcolor="warning";
                             auxicono="fas fa-exclamation-triangle";
                             this.seriesaux[1] = this.seriesaux[1]+1;
                         } else {
-                            if (element.tipo == 3) {
+                            if (element.tipo == "Informativa") {
                                 auxcolor="accent";
                                 auxicono="fas fa-info";
                                 this.seriesaux[2] = this.seriesaux[2]+1;
