@@ -263,6 +263,9 @@ class EstudianteController extends Controller
         if(!array_key_exists ("escuela" , $entradas)){
             $entradas['escuela'] = null;
         }
+        if(!array_key_exists ("foto" , $entradas)){
+            $entradas['foto'] = null;
+        }
         try{
             $estudiante = Estudiante::find($id);
             if($estudiante==null){
