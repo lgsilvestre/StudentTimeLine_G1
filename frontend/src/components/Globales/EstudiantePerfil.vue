@@ -527,8 +527,8 @@ export default {
             this.seriesaux =[0,0,0,0];
             this.observaciones =[];
             this.auxObservaciones =[];
-            //var url = 'http://127.0.0.1:8000/api/v1/estudiante/'+ this.$store.state.perfilEstudiante.id+'/edit';
-            var url = 'http://127.0.0.1:8000/api/v1/observacion';
+            var url = 'http://127.0.0.1:8000/api/v1/estudiante/'+ this.$store.state.perfilEstudiante.id+'/edit';
+            //var url = 'http://127.0.0.1:8000/api/v1/observacion';
 
             axios.get(url,this.$store.state.config)
             .then((result)=>{
