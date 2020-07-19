@@ -15,19 +15,20 @@ class CreateObservacionesTable extends Migration
     {
         Schema::create('observaciones', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('ayudante')->unsigned();
+            $table->bigInteger('ayudante')->unsigned()->nullable();
             $table->bigInteger('estudiante')->unsigned();
-            $table->bigInteger('profesor')->unsigned();
-            $table->bigInteger('curso')->unsigned();
+            $table->bigInteger('creador')->unsigned();
+            $table->bigInteger('curso')->unsigned()->nullable();
             $table->bigInteger('categoria')->unsigned();
+            $table->bigInteger('tipo')->unsigned();
             $table->foreign('ayudante')->references('id')->on('ayudante__con__cursos');
             $table->foreign('estudiante')->references('id')->on('estudiantes');
             $table->string('titulo');
             $table->string('descripcion');
-            $table->foreign('profesor')->references('id')->on('users');
-            $table->string('tipo');
+            $table->foreign('creador')->references('id')->on('users');
             $table->foreign('curso')->references('id')->on('cursos');
-            $table->foreign('categoria')->references('id')->on('categorias');;
+            $table->foreign('categoria')->references('id')->on('categorias');
+            $table->foreign('tipo')->references('id')->on('tipo_observacions');
             $table->timestamps();
             $table->softDeletes();
         });
