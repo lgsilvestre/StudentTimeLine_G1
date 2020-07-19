@@ -38,12 +38,12 @@
                             <v-spacer></v-spacer>
                             <v-btn class="mr-2" fab large bottom left >
                                 <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
-                             </v-btn>
+                            </v-btn>
                         </v-card-title> 
                     </v-img>
                     <v-data-iterator :items="listaInsCursos" :search="search" :sort-by="sortBy.toLowerCase()" >
-                       <template v-slot:header>
-                           <v-toolbar>
+                        <template v-slot:header>
+                            <v-toolbar>
                                 <v-text-field
                                     v-model="search"
                                     append-icon="mdi-magnify"
@@ -51,8 +51,8 @@
                                     single-line
                                     hide-details
                                 ></v-text-field>
-                           </v-toolbar>
-                       </template>
+                            </v-toolbar>
+                        </template>
                         <template v-slot:default="props">
                             <v-row>
                                 <v-col v-for="item in props.items" :key="item.nomCurso" cols="12"  sm="6" md="4" lg="3">
@@ -61,7 +61,7 @@
                                         
                                         <div class="d-flex flex-no-wrap justify-space-between">
                                             <div>
-                                               <v-card-title class="subheading font-weight-bold">{{ item.nomCurso }}</v-card-title>
+                                                <v-card-title class="subheading font-weight-bold">{{ item.nomCurso }}</v-card-title>
                                             </div>
                                             <v-menu class="text-left" offset-y>
                                                 <template v-slot:activator="{ on, attrs }">
@@ -81,7 +81,7 @@
                                         </div>
                                         
                                         
-                                       
+                                    
                                     </v-card>
                                 </v-col>
                             </v-row>
@@ -94,6 +94,7 @@
             </v-col>
         </v-row>
 
+    <!------------------>
         <!-- Dialog para mostrar la lista de los Cursos Existentes -->
         <v-dialog v-model="dialogListaCursos" fullscreen hide-overlay transition="dialog-bottom-transition">
             <v-card class="mx-auto my-10 " max-width="70%">
@@ -120,10 +121,10 @@
                             </v-img>
                             <v-data-table  :headers="colCursos" :items="listaCursos"
                                 :search="search" :loading="cargando" :items-per-page="10"  >            
-                                 <template v-slot:item.opciones="{ item }">
+                                <template v-slot:item.opciones="{ item }">
                                 <!-- boton para modificar usuario seleccionado -->
                                     <v-btn color="white" fab small depressed class="mr-2 py-2">
-                                        <v-icon color="primary" @click="modificarCurso(item)" >
+                                        <v-icon color="primary" @click="setModificarCurso(item)" >
                                             fas fa-edit
                                         </v-icon>
                                     </v-btn>
@@ -200,6 +201,55 @@
             </v-card>
         </v-dialog> 
 
+        <!-- Dialog para modificar un curso -->
+        <v-dialog v-model="dialogModificarCurso" persistent max-width="500px" transition="scroll-y-reverse-transition">
+            <v-card elevation="1">
+                <v-card-title  class="headline primary text--center" primary-title > 
+                    <h5 class="white--text ">Modificar Curso</h5>
+                </v-card-title>
+                <v-container class="px-5 mt-5">
+                    <v-text-field v-model="datosCurso.nombre" label="Nombre del Curso" outlined
+                        color="secondary"
+                        :rules="[() => !!datosCurso.nombre ||'Requerido']"
+                        prepend-inner-icon="mdi-account"
+                    ></v-text-field>
+                    <v-text-field v-model="datosCurso.plan" label="Plan" outlined
+                        color="secondary"
+                        :rules="[() => !!datosCurso.plan ||'Requerido']"
+                        prepend-inner-icon="mdi-account"
+                    ></v-text-field>
+                    <v-select  v-model="datosCurso.escuela"
+                        :items="listaEscuela"
+                        item-text="nombre"
+                        item-value="id"
+                        label="Escuela"
+                        outlined
+                        :small-chips="$vuetify.breakpoint.smAndDown ? true : false"
+                        :rules="[() => !!datosCurso.escuela ||'Requerido']"
+                        prepend-inner-icon="mdi-school"
+                    ></v-select>
+                    <v-text-field v-model="datosCurso.descripcion" label="Descripcion del Curso" outlined
+                        color="secondary"
+                        :rules="[() => !!datosCurso.descripcion ||'Requerido']"
+                        prepend-inner-icon="mdi-account"
+                    ></v-text-field>
+                    
+                    <div style="text-align:right;" class="mb-1 " >
+                        <v-btn 
+                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                        rounded color="warning"    @click="resetModificarCurso">  
+                            <h4 class="white--text">Cancelar</h4>
+                        </v-btn>
+                        <v-btn 
+                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                        rounded color="secondary" class=" ml-2"    @click="modificarCurso">
+                            <h4 class="white--text">Modificar</h4>
+                        </v-btn>
+                    </div>
+                </v-container> 
+            </v-card>                        
+        </v-dialog>
+
         <!-- Dialog para Eliminar un Curso -->
         <v-dialog v-model="dialogEliminarCurso" ref="form" persistent max-width="450px">
             <v-card class="mx-auto" max-width="450"  >
@@ -227,7 +277,7 @@
             </v-card>
         </v-dialog>
 
-
+        <!------------------>
 
         <!-- Dialog para Eliminar una Instancia de Curso -->
         <v-dialog v-model="dialogEliminarInsCurso" ref="form" persistent max-width="450px">
@@ -410,7 +460,6 @@
                 </v-icon>                
             </v-btn>
         </v-snackbar> 
-
     </v-container>
 </template>
 
@@ -718,8 +767,73 @@ export default {
             this.dialogCrearCurso = false;
         },
 
+        setModificarCurso(item){
+            this.datosCurso.id= item.id;
+            this.datosCurso.nombre = item.nombre;
+            this.datosCurso.plan = item.plan;
+            this.datosCurso.escuela = item.escuela;
+            this.datosCurso.descripcion = item.descripcion;
+            this.dialogModificarCurso = true;
+        },
+        resetModificarCurso(){
+            this.datosCurso.id= '';
+            this.datosCurso.nombre = '';
+            this.datosCurso.plan = '';
+            this.datosCurso.escuela = '';
+            this.datosCurso.descripcion = '';
+            this.dialogModificarCurso = false;
+        },
         modificarCurso(){
-            
+            console.log("inicio mod curso");
+
+            var url =`http://127.0.0.1:8000/api/v1/curso/${this.datosCurso.id}`;
+            let put ={                
+                "nombre": this.datosCurso.nombre,
+                "plan": this.datosCurso.plan,
+                "escuela": this.datosCurso.escuela,
+                "descripcion": this.datosCurso.descripcion,
+            };
+            axios.put(url,put,this.$store.state.config)
+            .then((result)=>{
+                if (result.statusText=='OK') {                
+                    this.alertaExito = true;
+                    this.textoAlertas = "Se modificó el curso con exito."
+                    this.obtenerCursos(); 
+                    this.resetModificarCurso();
+                }
+            }).catch((error)=>{                
+                if (error.message == 'Network Error') {
+                    console.log(error)
+                    this.alertaError = true;
+                    this.textoAlertas = "Error al modificar el curso, intente mas tarde."
+                }
+                else{
+                    console.log(error.response);
+                    // if(error.response.data.success == false){
+                    //     if(error.response.data.code == 601){
+                    //         console.log(error.response.data.code +' '+ error.response.data.message);
+                    //         console.log(error.response.data);
+                    //         this.textoAlertas = error.response.data.message;
+                    //         this.alertaError = true;
+                    //         this.resetModificarCurso();
+                    //     }
+                    //     if(error.response.data.code == 602){
+                    //         console.log(error.response.data.code +' '+ error.response.data.message);
+                    //         console.log(error.response.data);
+                    //         this.textoAlertas = error.response.data.message;
+                    //         this.alertaError = true;
+                    //         this.resetModificarCurso();
+                    //     }
+                    //     if(error.response.data.code == 603){
+                    //         console.log(error.response.data.code +' '+ error.response.data.message);
+                    //         console.log(error.response.data);
+                    //         this.textoAlertas = error.response.data.message;
+                    //         this.alertaError = true;
+                    //         this.resetModificarCurso();
+                    //     } 
+                    // }                
+                }                  
+            });
         },
         
         setEliminarCurso(item){
@@ -791,7 +905,7 @@ export default {
                         "curso": this.seleccionados[i].id,
                         "seccion": "A",
                     }
-                     var url = 'http://127.0.0.1:8000/api/v1/instanciaCurso';   
+                    var url = 'http://127.0.0.1:8000/api/v1/instanciaCurso';   
                     axios.post(url, post, this.$store.state.config)
                     .then((result) => {
                         ins_curso= result.data.data.insCurso.id;
@@ -825,13 +939,8 @@ export default {
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;      
                         }   
-                                       
-                    });
-                    
-                        
-                 
-                 
-                   
+                    });                                                            
+                
                 }   
                 this.seleccionados = []; 
                 this.profesorSeleccionado = '';
@@ -845,9 +954,9 @@ export default {
             
 
         },
-       
+
         agregarProfesorCurso(post2){
-             var url2 = 'http://127.0.0.1:8000/api/v1/profesorConCurso'; 
+            var url2 = 'http://127.0.0.1:8000/api/v1/profesorConCurso'; 
                     /* crear profesor con curso */
                     axios.post(url2, post2, this.$store.state.config)
                     .then((result) => {
@@ -880,7 +989,8 @@ export default {
 
 
         modificarInstanciaCurso(item){
-
+            
+            
         },
 
         setEliminarInstanciaCurso(item){
@@ -923,9 +1033,10 @@ export default {
          */
         acionesSobreInstanciaCurso(item,curso){
             if(item =='Modificar curso'){
-                console.log("Modificar Semestre")
+                console.log("Modificar Ins Curso")
                 console.log(curso)
-                
+                this.datosInsCurso = curso;
+                this.dialogModificarInsCurso = true;                
                 //  this.dialogModificarSemestre=true;
                 // this.semestreActual_1=semestre;
             }
