@@ -12,4 +12,9 @@ class Profesor_Con_Curso extends Model
     ];
 
     protected $table='profesor__con__cursos';
+
+    public function getCurso()
+    {
+        return $this->belongsTo(InstanciaCurso::class, 'curso');
+    }  
 }

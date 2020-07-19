@@ -238,6 +238,9 @@ class SemestreController extends Controller
         }
     }
     
+    /**
+     * 
+     */
     public function disabled(){
         try{
             $semestres = Semestre::onlyTrashed()->get();
@@ -257,6 +260,9 @@ class SemestreController extends Controller
         }
     }
 
+    /**
+     * 
+     */
     public function restore($id){
         try{
             $semestre = Semestre::onlyTrashed()->find($id)->restore();

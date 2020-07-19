@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Observacion;
 use Illuminate\Http\Request;
+use Validator;
 
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -250,7 +251,6 @@ class ObservacionController extends Controller
                 $observacion->categoria = $entradas['categoria'];
             }
             $observacion->save();
-            return compact('observacion');
             return response()->json([
                 'success' => true,
                 'code' => 600,

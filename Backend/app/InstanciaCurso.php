@@ -10,4 +10,9 @@ class InstanciaCurso extends Model
     protected $fillable = [
         'semestre','curso','seccion'
     ];
+
+    public function getCurso()
+    {
+        return $this->belongsTo(Curso::class, 'curso');
+    }  
 }
