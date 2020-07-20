@@ -329,6 +329,7 @@ class UsuarioController extends Controller
                     $usuario->escuelaAux = $entradas['escuelaAux'];
                 }
                 if($entradas['role']!=null){
+                    $usuario->removeRole($usuario->rol);
                     $usuario->rol = $entradas['role'];
                     $usuario->assignRole($entradas['role']);
                 }

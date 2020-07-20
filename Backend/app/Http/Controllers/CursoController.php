@@ -48,6 +48,9 @@ class CursoController extends Controller
                     'data' => ['error'=>'al momento de buscar el rol del solicitante no lo encuentra']
                 ], 409);
             }
+            foreach($cursos as $curso){
+                $curso->escuela=$curso->getEscuela->nombre;
+            }
             return response()->json([
                 'success' => true,
                 'code' => 100,

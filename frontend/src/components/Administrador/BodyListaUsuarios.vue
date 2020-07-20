@@ -64,7 +64,7 @@
                                                         prepend-inner-icon="mdi-school"
                                                     >                                
                                                     </v-select>
-                                                    <v-select
+                                                    <v-select v-show="datosUsuario.role!='Profesor'"
                                                         v-model="datosUsuario.escuelaAux"
                                                         label="Escuela Secundaria"
                                                         :items="listaEscuela"
@@ -538,7 +538,6 @@ export default {
         /* ...mapMutations(['registrarUsuario']), */
         validate () {
             if(this.$refs.form.validate()){
-                console.log("exito");
                 this.resetRegistrarUsuario();
             };
         },
@@ -549,8 +548,6 @@ export default {
             var url = 'http://127.0.0.1:8000/api/v1/usuario/disabled';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
-                console.log("OBTENER LISTA DE USUARIOS ELIMINDOS")
-                console.log(result)
                 for (let index = 0; index < result.data.data.usuarios.length; index++) {
                     const element = result.data.data.usuarios[index];
                     let usuario = {
@@ -560,8 +557,7 @@ export default {
                         imagen: element.imagen,
                         correo: element.email,   
                         escuela: element.nombre_escuela,
-                    }; 
-                    console.log(usuario)                        
+                    };                     
                     
                     this.listaUsuariosAux[index]=usuario;
                 }
@@ -594,17 +590,10 @@ export default {
         },
         restaurarUsuario(){
             this.dialogRestaurarUsuarioEliminado= false;
-            console.log("ITEM")
              var url =`http://127.0.0.1:8000/api/v1/usuario/restore/${this.datosUsuario.id}`;
-             console.log(url)
-            //  console.log("CONFIGURACION")
-            // console.log(this.$store.state.config)
             axios.post(url,null,this.$store.state.config)
             .then((result)=>{
-                console.log("USUARIO RESTAURADO")
-                console.log(result)
             if (result.data.data.usuario==true) {
-                //  console.log(result.data)
                 this.obtenerListaUsuariosEliminados();
                 this.obtenerUsuarios(); 
                 this.alertaExito = true;
@@ -754,9 +743,8 @@ export default {
             };
             if (this.datosUsuario.role == "Profesor") {
                 aux = "profesor"
+                this.datosUsuario.escuelaAux=null
             };
-            console.log("escuela: "+this.datosUsuario.escuela)
-            console.log("rol: "+ aux)
             if (this.datosUsuario.imagen == null) {
                 this.datosUsuario.imagen = null;
             }
@@ -773,8 +761,6 @@ export default {
             
             axios.post(url, post, this.$store.state.config)
             .then((result) => {
-                console.log(result);
-                console.log(result.data);
                 this.alertaExito = true;
                 this.textoAlertas = "Se creó el usuario con exito."
                 this.resetRegistrarUsuario()
@@ -814,7 +800,6 @@ export default {
                 let reader = new FileReader();
                 reader.readAsDataURL(image);
                 reader.onload = e => {                    
-                    console.log("foto :" +e.target.result);
                     this.datosUsuario.imagen = e.target.result;
                 }
             }
@@ -861,8 +846,6 @@ export default {
             this.keyDialogModificar--;
         },
         modificarUsuario(){
-            console.log('modificar usuario')
-            console.log(this.datosUsuario)
             var aux;
             if ( this.datosUsuario.role == "Administrador") {
                 aux = "admin"
@@ -883,12 +866,9 @@ export default {
                 "email":this.datosUsuario.correo,
                 "password": this.datosUsuario.contraseña,
             }
-
-            console.log(put);
             axios.put(url,put,this.$store.state.config)
             .then((result)=>{
             if (result.statusText=='OK') {
-                //  console.log(result.data)
                 this.alertaExito = true;
                 this.textoAlertas = "Se modificó el usuario con exito."
                 this.obtenerUsuarios(); 
@@ -982,7 +962,6 @@ export default {
             
         },
         EliminarUsuario(item){
-            // console.log(item.id);
             this.datosUsuario.id= item.id;
             this.datosUsuario.nombre= item.nombre;
             this.datosUsuario.escuela= item.escuela;

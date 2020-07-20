@@ -755,15 +755,7 @@ export default {
                         nombre: element.nombre,
                         plan: element.plan,
                         descripcion: element.descripcion,
-                        escuela: element.escuela,
-                        nomEscuela: '',
-                    };
-                    for (let j = 0; j < this.listaEscuela.length; j++){
-                        /* console.log("id curso: "+this.listaCursos[j].id); */
-                        if(this.listaEscuela[j].id == curso.escuela){
-                            curso.nomEscuela = this.listaEscuela[j].nombre;
-                            break;
-                        };
+                        nomEscuela: element.escuela,
                     };
                     this.listaCursosAux[index]=curso;
                 }
@@ -785,22 +777,14 @@ export default {
             var url = `http://127.0.0.1:8000/api/v1/instanciaCurso/${this.$store.infoSemestre.id}`;
             axios.get(url,this.$store.state.config)
             .then((result)=>{   
-                for (let index = 0; index < result.data.data.insCurso.length; index++) {
-                    const element = result.data.data.insCurso[index];  
+                for (let index = 0; index < result.data.data.insCursos.length; index++) {
+                    const element = result.data.data.insCursos[index];  
                     let insCurso = {
                         id: element.id,
                         semestre: element.semestre,
-                        curso: element.curso,
-                        nomCurso: '',
+                        nomCurso: element.curso,
                         seccion:element.seccion,
                     }; 
-                    for (let j = 0; j < this.listaCursos.length; j++){
-                        /* console.log("id curso: "+this.listaCursos[j].id); */
-                        if(this.listaCursos[j].id == insCurso.curso){
-                            insCurso.nomCurso = this.listaCursos[j].nombre;
-                        };
-                    };  
-
                     this.listaInsCursosAux[index]=insCurso;                                                         
                 }
                 this.listaInsCursos = this.listaInsCursosAux;  
