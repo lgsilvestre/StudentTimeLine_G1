@@ -48,11 +48,19 @@
                        </template>
                         <template v-slot:default="props">
                             <v-row>
-                                <v-col v-for="item in props.items" :key="item.nomCurso" cols="12"  sm="6" md="4" lg="3">
-                                    <v-card  class="ml-5 mr-5" style="background-color:#FFE66D; border-style:solid; border-color:rgba(0,0,0,0.5);"
-                                    width="150px" height="80px">
+                                <v-col v-for="item in props.items" :key="item.nomCurso" cols="12"  sm="6" md="4" lg="4">
+                                    <v-card   style="background-color:#F7FFF7; border-style:solid; border-color:rgba(0,0,0,0.5);"
+                                   >
                                         <v-container class="pt-0 mt-0 pb-0 ">
                                             <v-row >
+                                                <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0">
+                                                    <v-card-title class="mt-0 pt-0 pl-0 pr-0 " >
+                                                        <v-img class="mx-auto white--text align-end justify-center "
+                                                                width="100%" height="30px"       
+                                                                src="@/assets/Globales/background-panel-08.jpg" >
+                                                        </v-img>
+                                                    </v-card-title>
+                                                </v-col>
                                                 <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0  text-right" >
                                                     <v-menu class="text-left " offset-y>
                                                         <template   v-slot:activator="{ on, attrs }">
@@ -68,26 +76,14 @@
                                                         </v-list>
                                                     </v-menu>
                                                 </v-col>
-                                                <v-col cols="6"  class=" pt-0 pl-1 pr-0 pb-0 "  >
-                                                    
-                                                    
-                                                    <!-- <v-card-text class=" pt-0 pl-2 pr-0 pb-0 ">
-                                                        <div class=" text-truncate">
-                                                            {{ item.nomCurso }}
+                                                <v-col cols="12"  class=" pt-0 pl-1 pr-0 pb-0 "  >
+
+                                                    <v-card-text class=" pt-0 pl-2 pr-0 pb-0 ">
+                                                        <div class=" text-truncate"  >
+                                                            <p class="font-weight-black mb-2 text-truncate"   >Nombre: {{ item.nomCurso }}</p>
+                                                            <p class="font-weight-black"   > Seccion: {{ item.seccion}} </p>
                                                         </div>
-                                                    </v-card-text> -->
-                                                    <div class="text-xs-center d-flex align-center">
-                                                        <v-tooltip bottom>
-                                                            <template v-slot:activator="{ on }">
-                                                                <v-card-text class=" pt-0 pl-2 pr-0 pb-0 ">
-                                                                    <div class=" text-truncate" v-on="on" >
-                                                                        {{ item.nomCurso }}
-                                                                    </div>
-                                                                </v-card-text>
-                                                            </template>
-                                                            <span>{{ item.nomCurso }}</span>
-                                                        </v-tooltip>
-                                                    </div>
+                                                    </v-card-text>
                                                 </v-col>
                                             </v-row>
                                         </v-container>
@@ -457,7 +453,7 @@ export default {
             timeout: 6000,
             /* --------------- */
             datosCurso: [{id:''},{nombre:''},{plan:''},{escuela:''},{descripcion:''}],
-            datosInsCurso: [{id:''},{semestre:''},{curso:''},{nomCurso:''},{seccion:''}],
+            datosInsCurso: [{id:''},{semestre:''},{curso:''},{nomCurso:''},{seccion:''},{anio:''}],
 
             search: '',
             cargando: true,
@@ -520,7 +516,7 @@ export default {
     },
     _props: {
     item: {
-        id: '',semestre: '',curso: '',nomCurso: '',seccion:''
+        id: '',semestre: '',curso: '',nomCurso: '',seccion:'', anio:''
     }
     },
     get props() {
@@ -680,17 +676,20 @@ export default {
         //Metodo para obtener Todas las Instancias de Curso asociadas al Semestre actual.
         obtenerInstanciasCursos(){
             this.listaInsCursosAux = [];
+            var listaBrayan=[];
             var aux;            
             var url = `http://127.0.0.1:8000/api/v1/instanciaCurso/${this.$store.infoSemestre.id}`;
             axios.get(url,this.$store.state.config)
             .then((result)=>{   
                 for (let index = 0; index < result.data.data.insCurso.length; index++) {
-                    const element = result.data.data.insCurso[index];                    
+                    const element = result.data.data.insCurso[index];  
+                    console.log(element)                  
                     let insCurso = {
                         id: element.id,
                         semestre: element.semestre,
                         curso: element.curso,
                         nomCurso: '',
+                        seccion:element.seccion,
                     }; 
                     for (let j = 0; j < this.listaCursos.length; j++){
                         /* console.log("id curso: "+this.listaCursos[j].id); */
