@@ -36,7 +36,8 @@ Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1'], function () {
     Route::post('/estudiante/restore/{id}','EstudianteController@restore');
     Route::post('/estudiante/importar', 'ImportarExcelController@index');
     Route::post('/estudiante/importar', 'ImportarExcelController@importar');
-    Route::get('/estudiante/exportar', 'ExportarExcelController@index');
+    //Route::post('/estudiante/exportar', 'ExportarExcelController@index');
+    Route::post('/estudiante/exportar', 'ExportarExcelController@exportar');
     Route::resource('/estudiante', 'EstudianteController' );
     #Controlador de Profesor_Con_Curso
     Route::get('/profesorConCurso/disabled','ProfesorConCursoController@disabled');
@@ -78,4 +79,5 @@ Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
     
 });
 
-//Route::post('/estudiante/importar', 'ImportarExcelController@importar');
+Route::post('/estudiante/exportar', 'ExportarExcelController@exportar');
+//Route::post('/estudiante/exportar', 'ExportarExcelController@setRequest');

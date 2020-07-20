@@ -128,88 +128,107 @@
                     </v-col>
                     <v-col cols="12" sm="12" md="10" style="margin-top:0;padding-top:0;" >
                         <v-card > 
-                                <v-row>
-                                    <v-col cols="12" md="5" style="margin-top:0;padding-top:0;">
+                                <v-row >
+                                    <v-col cols="12" md="4" xl="3" style="padding-top:0; padding-bottom:0;">
                                         <v-card-title
-                                        class="headline text--center primary" 
+                                        class="headline text--center primary"
+                                        height="300px"
                                         primary-title>
-                                            <div >
-                                                <strong class=" white--text" >Observaciones</strong>
-                                            </div>
-                                            
-                                            <v-dialog v-model="dialogAgregarObservacion" persistent max-width="500px" >
-                                                <template v-slot:activator="{ on }">
-                                                    <v-btn 
-                                                    :large="$vuetify.breakpoint.smAndDown ? false : true"
-                                                    :small="$vuetify.breakpoint.smAndDown ? true : false"
-                                                    fab bottom left v-on="on" >
-                                                        <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
-                                                    </v-btn>
-                                                </template>
-                                                <v-card class="mx-auto" max-width="500" >
-                                                    <v-card-title class="headline primary text--center" primary-title >
-                                                        <h5 class="white--text ">Agregar observacion</h5>
-                                                    </v-card-title>
-                                                        <v-container class="px-5 mt-5">
-                                                            <v-text-field  
-                                                            v-model="estudianteObservacion.titulo"
-                                                            label="Titulo" 
-                                                            outlined
-                                                            color="secondary"
-                                                            prepend-inner-icon="fas fa-check-circle"
-                                                            ></v-text-field>
+                                            <v-row style="height:250px; "> 
+                                                <v-col cols="12" class="align-self-end ">
+                                                    <div >
+                                                        <strong class=" white--text" :style="$vuetify.breakpoint.lgAndDown ? 'font-size: 70%':'font-size: 100%'" >Observaciones</strong>
+                                                    </div>
+                                                </v-col>
+                                                <v-col cols="12" class="align-self-end ">
+                                                    <v-dialog v-model="dialogAgregarObservacion" persistent max-width="500px" >
+                                                        <template v-slot:activator="{ on }">
+                                                            
+                                                            <v-btn 
+                                                            :large="$vuetify.breakpoint.lgAndDown ? false : true"
+                                                            :small="$vuetify.breakpoint.lgAndDown ? true : false"
+                                                            fab bottom left v-on="on" >
+                                                                <v-icon  color="warning">fas fa-plus</v-icon>
+                                                            </v-btn>
+                                                            
+                                                        </template>
+                                                        <v-card class="mx-auto" max-width="500" >
+                                                            <v-card-title class="headline primary text--center" primary-title >
+                                                                <h5 class="white--text ">Agregar observacion</h5>
+                                                            </v-card-title>
+                                                                <v-container class="px-5 mt-5">
+                                                                    <v-text-field  
+                                                                    v-model="estudianteObservacion.titulo"
+                                                                    label="Titulo" 
+                                                                    outlined
+                                                                    color="secondary"
+                                                                    prepend-inner-icon="fas fa-check-circle"
+                                                                    ></v-text-field>
 
-                                                            <v-select   
-                                                            v-model="estudianteObservacion.tipo"
-                                                            :items="tipos"
-                                                            item-text="nombre"
-                                                            label="Tipo" outlined
-                                                            color="secondary"
-                                                            prepend-inner-icon="fas fa-check-circle"
-                                                            ></v-select >
+                                                                    <v-select   
+                                                                    v-model="estudianteObservacion.tipo"
+                                                                    :items="tipos"
+                                                                    item-text="nombre"
+                                                                    label="Tipo" outlined
+                                                                    color="secondary"
+                                                                    prepend-inner-icon="fas fa-check-circle"
+                                                                    ></v-select >
 
-                                                            <v-select 
-                                                            v-model="estudianteObservacion.categoria"
-                                                            :items="categorias"
-                                                            item-text="nombre"
-                                                            item-value="id"
-                                                            label="Categoria"
-                                                            color="secondary"
-                                                            outlined
-                                                            prepend-inner-icon="fas fa-check-circle"
-                                                            ></v-select>
-                                                            <v-textarea
-                                                            v-model="estudianteObservacion.descripcion"
-                                                            outlined
-                                                            color="secondary"
-                                                            label="Descripcion"
-                                                            ></v-textarea>
-                                                            <div class="pb-1" style="text-align:right;">  
-                                                                <v-btn 
-                                                                :small="$vuetify.breakpoint.smAndDown ? true : false"
-                                                                rounded color="warning" 
-                                                                @click="resetAgregarObservacion">
-                                                                    <h4 class="white--text">Cancelar</h4>
-                                                                </v-btn>
-                                                                <v-btn 
-                                                                :small="$vuetify.breakpoint.smAndDown ? true : false"
-                                                                rounded color="secondary" class="ml-2"
-                                                                :loading="cargando"  
-                                                                @click="agregarObservacion"
-                                                                >
-                                                                    <h4 class="white--text">Agregar</h4>
-                                                                </v-btn>
-                                                            </div>  
-                                                        </v-container>
+                                                                    <v-select 
+                                                                    v-model="estudianteObservacion.categoria"
+                                                                    :items="categorias"
+                                                                    item-text="nombre"
+                                                                    item-value="id"
+                                                                    label="Categoria"
+                                                                    color="secondary"
+                                                                    outlined
+                                                                    prepend-inner-icon="fas fa-check-circle"
+                                                                    ></v-select>
+                                                                    <v-textarea
+                                                                    v-model="estudianteObservacion.descripcion"
+                                                                    outlined
+                                                                    color="secondary"
+                                                                    label="Descripcion"
+                                                                    ></v-textarea>
+                                                                    <div class="pb-1" style="text-align:right;">  
+                                                                        <v-btn 
+                                                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                                                        rounded color="warning" 
+                                                                        @click="resetAgregarObservacion">
+                                                                            <h4 class="white--text">Cancelar</h4>
+                                                                        </v-btn>
+                                                                        <v-btn 
+                                                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                                                        rounded color="secondary" class="ml-2"
+                                                                        :loading="cargando"  
+                                                                        @click="agregarObservacion"
+                                                                        >
+                                                                            <h4 class="white--text">Agregar</h4>
+                                                                        </v-btn>
+                                                                    </div>  
+                                                                </v-container>
+                                                            
+                                                        </v-card>
+                                                    </v-dialog> 
                                                     
-                                                </v-card>
-                                            </v-dialog> 
+                                                    <v-btn
+                                                    fab
+                                                    :large="$vuetify.breakpoint.lgAndDown ? false : true"
+                                                    :small="$vuetify.breakpoint.lgAndDown ? true : false"
+                                                    bottom
+                                                    left
+                                                    class="ml-2"
+                                                    >
+                                                        <v-icon class="mx-2" color="secondary">fas fa-file-download</v-icon>
+                                                    </v-btn>
+                                                </v-col>
+                                            </v-row>
                                         </v-card-title>
                                     </v-col>
-                                    <v-col cols="12" md="7">
-                                        <v-row justify="center" align="center">  
+                                    <v-col cols="12" md="8" xl="9" class="align-self-center ">
+                                        <v-row justify="center" >  
                                             <div id="chart" >
-                                                <apexchart ref="realtimeChart" type="donut" :options="chartOptions" :series="series" ></apexchart>
+                                                <apexchart ref="realtimeChart" type="donut" :options="chartOptions" :series="series" :width="$vuetify.breakpoint.lgAndDown ? 300 : 380" ></apexchart>
                                             </div>
                                         </v-row>   
                                     </v-col>
@@ -534,22 +553,24 @@ export default {
             .then((result)=>{
                 console.log(result.data.data.observaciones);
                 //if (result.data.success == true) {
-                for (let index = 0; index < result.data.data.observaciones.length; index++) {
-                    const element = result.data.data.observaciones[index];
+                var contador = 0;
+                for (let index = result.data.data.observaciones.length-1; index >= 0; index--) {
+                    const element = result.data.data.observaciones[contador];
+                    contador ++;
                     var auxcolor = null;
                     var auxicono = null;
-                    if (element.tipo == 1) {
+                    if (element.tipo == "Positiva") {
                         auxcolor="secondary";
                         auxicono="fas fa-check-circle";
                         this.seriesaux[0] = this.seriesaux[0]+1;
                     }
                     else{
-                        if (element.tipo == 2) {
+                        if (element.tipo == "Negativa") {
                             auxcolor="warning";
                             auxicono="fas fa-exclamation-triangle";
                             this.seriesaux[1] = this.seriesaux[1]+1;
                         } else {
-                            if (element.tipo == 3) {
+                            if (element.tipo == "Informativa") {
                                 auxcolor="accent";
                                 auxicono="fas fa-info";
                                 this.seriesaux[2] = this.seriesaux[2]+1;
