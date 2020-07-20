@@ -200,7 +200,7 @@ class InstanciaCursoController extends Controller
                 $insCurso->curso = $entradas['curso'];
             }
             if($entradas['seccion']!=null){
-                $insCurso->curso = $entradas['seccion'];
+                $insCurso->seccion = $entradas['seccion'];
             }
             $insCurso->save();
             return response()->json([
