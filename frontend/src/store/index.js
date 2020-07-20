@@ -81,7 +81,7 @@ export default new Vuex.Store({
                         //redireccionamiento hacia el usuario administrador
                         state.admin = true;
                         state.cargaLogin = false;
-                        router.push({ path: '/administrador' });
+                        router.push({ path: '/administrador/registros' });
                     } else {
                         if (state.usuario.usuario.rol == "secretaria de escuela") {
                             //redireccionamiento hacia el usuario secretaria de escuela

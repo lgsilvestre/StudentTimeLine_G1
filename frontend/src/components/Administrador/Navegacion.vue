@@ -62,6 +62,12 @@
                 </v-list-item>
             </v-list>
         </v-menu>
+        <v-list-item  v-on="on" class="difuminado" active-class="activacion" to="/administrador/registros">
+            <v-list-item-icon >
+                <v-icon color="white">fas fa-book-open</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title class="white--text letra" ><strong>Registros</strong></v-list-item-title>
+        </v-list-item>
         <v-menu open-on-hover  offset-x left>
             <template v-slot:activator="{ on }">
                 <v-list-item  v-on="on" class="difuminado" active-class="activacion">
