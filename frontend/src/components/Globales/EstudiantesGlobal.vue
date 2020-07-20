@@ -530,6 +530,7 @@
                 if (result.data.success == true) {
                     for (let index = 0; index < result.data.data.estudiantes.length; index++) {
                     const element = result.data.data.estudiantes[index];
+                    console.log(element)
                     let estudiante = {
                         id: element.id,
                         matricula: element.matricula,

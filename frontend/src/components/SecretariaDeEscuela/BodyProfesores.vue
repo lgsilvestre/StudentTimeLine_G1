@@ -344,7 +344,7 @@ export default {
                         id: element.id,
                         nombre: element.nombre,
                         correo: element.email,   
-                        escuela: element.nombre_escuela,
+                        escuela: element.escuela,
                     };                         
                     this.listaProfesoresAux[index]=usuario;
                 }
