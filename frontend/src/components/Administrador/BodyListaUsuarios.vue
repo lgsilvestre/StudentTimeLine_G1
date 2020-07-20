@@ -65,6 +65,16 @@
                                                     >                                
                                                     </v-select>
                                                     <v-select
+                                                        v-model="datosUsuario.escuelaAux"
+                                                        label="Escuela Secundaria"
+                                                        :items="listaEscuela"
+                                                        item-text="nombre"
+                                                        item-value="id"
+                                                        outlined
+                                                        prepend-inner-icon="mdi-school"
+                                                    >                                
+                                                    </v-select>
+                                                    <v-select
                                                         v-model="datosUsuario.role"
                                                         label="Rol"
                                                         :items="roles"
@@ -118,12 +128,19 @@
                                             
                                         </v-card>
                                     </v-dialog> 
-                                    <v-btn 
-                                    :large="$vuetify.breakpoint.smAndDown ? false : true"
-                                    :small="$vuetify.breakpoint.smAndDown ? true : false"
-                                    class="ml-2" fab bottom left @click="obtenerListaUsuariosEliminados" >
-                                        <v-icon class="mx-2" color="secondary">fas fa-trash-restore-alt</v-icon>
-                                    </v-btn>
+                                    <v-tooltip bottom color="primary">
+                                        <template v-slot:activator="{ on, attrs }">
+                                            <v-btn 
+                                            :large="$vuetify.breakpoint.smAndDown ? false : true"
+                                            :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                            v-bind="attrs"
+                                            v-on="on"
+                                            class="ml-2" fab bottom left @click="obtenerListaUsuariosEliminados" >
+                                                <v-icon class="mx-2" color="secondary">fas fa-trash-restore-alt</v-icon>
+                                            </v-btn>
+                                        </template>
+                                        <span><strong>Recuperar Usuario</strong></span>
+                                    </v-tooltip>
                                     <v-dialog 
                                     v-model="dialogListaUsuariosEliminado" fullscreen   transition="dialog-bottom-transition" >
                                         <v-card class="mx-auto my-10 " max-width="100%" style="display: block; background-color:#F7FFF7;">
@@ -192,11 +209,16 @@
                                                             >            
                                                             <template v-slot:item.opciones="{ item }">
                                                             <!-- boton para modificar usuario seleccionado -->
-                                                                <v-btn color="white" fab small depressed class="mr-2 py-2" @click="restaurarUsuarioEliminado(item)">
+                                                            <v-tooltip bottom color="primary">
+                                                                <template v-slot:activator="{ on }">
+                                                                <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on" @click="restaurarUsuarioEliminado(item)">
                                                                     <v-icon color="secondary"  >
                                                                         fas fa-trash-restore-alt
                                                                     </v-icon>
                                                                 </v-btn>
+                                                                </template>
+                                                                <span><strong>Recuperar Usuario</strong></span>
+                                                            </v-tooltip>
                                                             </template>
                                                         </v-data-table>
                                                         </v-card>
@@ -257,6 +279,15 @@
                                             outlined
                                             :small-chips="$vuetify.breakpoint.smAndDown ? true : false"
                                             :rules="[() => !!datosUsuario.escuela ||'Requerido']"
+                                            prepend-inner-icon="mdi-school"
+                                        ></v-select>
+                                        <v-select  v-model="datosUsuario.escuelaAux"
+                                            :items="listaEscuela"
+                                            item-text="nombre"
+                                            item-value="id"
+                                            label="Escuela Secundaria"
+                                            outlined
+                                            :small-chips="$vuetify.breakpoint.smAndDown ? true : false"
                                             prepend-inner-icon="mdi-school"
                                         ></v-select>
 
@@ -359,19 +390,29 @@
                     <!-- propiedades tablas -->
                     <v-data-table  :headers="columnas" :items="listaUsuarios"
                         :search="buscar" :loading="cargando" :items-per-page="10"  >            
-                        <template v-slot:item.opciones="{ item }">
-                        <!-- boton para modificar usuario seleccionado -->
-                            <v-btn color="white" fab small depressed class="mr-2 py-2" @click="MostrarPanelModificar(item)">
-                                <v-icon color="primary"  >
-                                    fas fa-edit
-                                </v-icon>
-                            </v-btn>
-                        <!-- boton para eliminar usuario seleccionado -->
-                            <v-btn color="white" fab small depressed class="mr-2 py-2" @click="EliminarUsuario(item)">
-                                <v-icon color="warning"  >
-                                    fas fa-trash-alt
-                                </v-icon>
-                            </v-btn>
+                        <template v-slot:item.opciones="{ item }" >
+                            <!-- boton para modificar usuario seleccionado -->
+                            <v-tooltip bottom color="primary">
+                                <template v-slot:activator="{ on }">
+                                    <v-btn color="white" fab small depressed class="mr-2 py-2"  v-on="on" @click="MostrarPanelModificar(item)">
+                                        <v-icon color="primary"  >
+                                            fas fa-edit
+                                        </v-icon>
+                                    </v-btn>
+                                </template>
+                                <span><strong>Modificar Usuario</strong></span>
+                            </v-tooltip>
+                            <!-- boton para eliminar usuario seleccionado -->
+                            <v-tooltip bottom color="primary">
+                                <template v-slot:activator="{ on }">
+                                    <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on" @click="EliminarUsuario(item)">
+                                        <v-icon color="warning"  >
+                                            fas fa-trash-alt
+                                        </v-icon>
+                                    </v-btn>
+                                </template>
+                                <span><strong>Eliminar Usuario</strong></span>
+                            </v-tooltip>    
                         </template>
                     </v-data-table>
                 </v-card>
@@ -450,7 +491,7 @@ export default {
             buscar2: '',
             dialog: false,
             mostrar: false, 
-            datosUsuario:[ {nombre:''},{escuela:''},{role:''},{correo:''},{contrasena:''} ,{imagen:null}],  
+            datosUsuario:[ {nombre:''},{escuela:''},{escuelaAux:''},{role:''},{correo:''},{contrasena:''} ,{imagen:null}],  
             listaEscuela:[
                 { text: 'ID',align: 'start',value: 'id',sortable: false},
                 { text: 'Nombre', value: 'nombre',sortable: false, },                
@@ -723,7 +764,7 @@ export default {
                 "foto": this.datosUsuario.imagen,
                 "nombre": this.datosUsuario.nombre,
                 "escuela": this.datosUsuario.escuela,
-                "escuelaAux": this.datosUsuario.escuela,
+                "escuelaAux": this.datosUsuario.escuelaAux,
                 "rol": aux,
                 "email": this.datosUsuario.correo,
                 "password": this.datosUsuario.contrasena,

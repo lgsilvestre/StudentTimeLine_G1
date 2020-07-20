@@ -9,9 +9,14 @@
                         <v-card-title class="white--text" style="font-size: 200%;text-shadow: #555 2px 2px 3px;">
                             <strong > Semestres </strong>
                             <v-spacer></v-spacer>
-                            <v-btn class="mr-2" fab large bottom left @click="dialogAñadirSemestre =true" >
-                                <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
-                             </v-btn>
+                            <v-tooltip bottom color="primary">
+                                <template v-slot:activator="{ on }">
+                                    <v-btn class="mr-2" fab large bottom left v-on="on" @click="dialogAñadirSemestre =true" >
+                                        <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
+                                    </v-btn>
+                                </template>
+                                <span><strong>Agregar Semestre</strong></span>
+                            </v-tooltip>
                         </v-card-title> 
                 </v-img>
              </v-card>

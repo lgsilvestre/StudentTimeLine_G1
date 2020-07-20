@@ -80,6 +80,15 @@ Vue.use(VueRouter)
           admin: true
         },
       },
+      {
+        //Enrutamiento de la vista del administrador
+        path: 'registros',
+        name: 'registrosAdministrador',
+        component: () =>import ( /* webpackChunkName: "Administrador" */ '@/components/Administrador/Registros.vue'),
+        meta: {
+            admin: true
+        },
+      },
       // {
       //   //Enrutamiento de la vista del administrador
       //   path: 'escuela/deshabilitarEscuela',
