@@ -11,14 +11,12 @@ class LogTableSeeder extends Seeder
      */
     public function run()
     {
-        /*
+        $items []= array("Inicio" => "se a inicualizado el sistema de ayudantes de la universidad de talca");
+        json_encode($items);  
         Log::create([
             'titulo' => "Inicializacion del sistema",
-            'descripcion' => json([
-                'success' => "true",
-            ]),
+            'descripcion' => json_encode($items),
             'usuario' => '1'
         ]);
-        */
     }
 }

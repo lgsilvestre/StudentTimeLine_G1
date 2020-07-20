@@ -282,8 +282,8 @@ class EscuelaController extends Controller
     public function restore($id){
         try{
             $escuela=Escuela::onlyTrashed()->find($id)->get();
-            $escuela->restore();
-            if($escuela==false){
+            $resultado = $escuela->restore();
+            if($resultado==false){
                 return response()->json([
                     'success' => false,
                     'code' => 901,

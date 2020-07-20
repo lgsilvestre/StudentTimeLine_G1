@@ -8,6 +8,7 @@ use App\Estudiante;
 use DB; //Operaciones de DB
 use Log;
 use Validator;
+use App\Log;
 use Maatwebsite\Excel\HeadingRowImport;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\EstudianteController;
@@ -178,11 +179,17 @@ class ImportarExcelController extends Controller
                 }
                 $i+=1;
             }
+            $resultado = array_combine($matriculas, $resultados);
+            Log::create([
+                'titulo' => "Se han importado estudiantes",
+                'descripcion' => $resultado,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => true,
                 'code' => 1,
                 'message' => "Operacion realizada con exito",
-                'data' => ['data'=>array_combine($matriculas, $resultados)]
+                'data' => ['data'=>$resultado]
             ], 200);
         }
     }
