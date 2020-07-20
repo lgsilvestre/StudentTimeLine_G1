@@ -98,6 +98,6 @@ class Estudiante extends Model
     }
 
     public function getEscuela(){
-        return $this->belongsTo('App\Escuela','escuela');
+        return $this->belongsTo('App\Escuela','escuela')->withTrashed();
     }
 }

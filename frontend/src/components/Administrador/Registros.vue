@@ -157,6 +157,7 @@
                     }
                     this.cargando = false;
                     this.listaRegistros = this.listaRegistrosAux;
+                    this.listaRegistros.reverse();
                 }
                 ).catch((error)=>{
                     if (error.message == 'Network Error') {
