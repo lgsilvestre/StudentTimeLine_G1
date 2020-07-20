@@ -28,11 +28,8 @@
             <v-col cols="12" md="8">
                 <!-- aca ira la lista de las instancias de curso -->
                 <v-card class="justify-center">
-                    <v-img
-                        class="mx-auto white--text align-end justify-center"
-                        width="100%"
-                        height="180px"        
-                        src="@/assets/Globales/background-panel-08.jpg" >
+                    <v-img class="mx-auto white--text align-end justify-center"
+                        width="100%" height="180px"  src="@/assets/Globales/background-panel-08.jpg" >
                         <v-card-title class="white--text" style="font-size: 200%;text-shadow: #555 2px 2px 3px;">
                             <strong > Cursos </strong>
                             <v-spacer></v-spacer>
@@ -42,46 +39,54 @@
                         </v-card-title> 
                     </v-img>
                     <v-data-iterator :items="listaInsCursos" :search="search" :sort-by="sortBy.toLowerCase()" >
-                        <template v-slot:header>
-                            <v-toolbar>
-                                <v-text-field
-                                    v-model="search"
-                                    append-icon="mdi-magnify"
-                                    label="Search"
-                                    single-line
-                                    hide-details
+                       <template v-slot:header>
+                           <v-toolbar>
+                                <v-text-field v-model="search" append-icon="mdi-magnify"
+                                    label="Buscar curso" single-line  hide-details
                                 ></v-text-field>
                             </v-toolbar>
                         </template>
                         <template v-slot:default="props">
                             <v-row>
-                                <v-col v-for="item in props.items" :key="item.nomCurso" cols="12"  sm="6" md="4" lg="3">
-                                    <v-card  class="ml-5 mr-5" style="background-color:#FFE66D; border-style:solid; border-color:rgba(0,0,0,0.5);">
-                                        <!-- <v-card-title class="subheading font-weight-bold">{{ item.nomCurso }}</v-card-title> -->
-                                        
-                                        <div class="d-flex flex-no-wrap justify-space-between">
-                                            <div>
-                                                <v-card-title class="subheading font-weight-bold">{{ item.nomCurso }}</v-card-title>
-                                            </div>
-                                            <v-menu class="text-left" offset-y>
-                                                <template v-slot:activator="{ on, attrs }">
-                                                    <v-btn color="primary" icon v-bind="attrs" v-on="on" >
-                                                    <v-icon>fas fa-ellipsis-v</v-icon>
-                                                    </v-btn>
-                                                </template>
-                                                <v-list>
-                                                    <v-list-item
-                                                    v-for="(acciones, index) in listaAccionesSobreInstaciaCurso" :key="index"
-                                                    @click="acionesSobreInstanciaCurso(acciones,item)"
-                                                    >
-                                                    <v-list-item-title>{{ acciones }}</v-list-item-title>
-                                                    </v-list-item>
-                                                </v-list>
-                                        </v-menu>
-                                        </div>
-                                        
-                                        
-                                    
+                                <v-col v-for="item in props.items" :key="item.nomCurso" cols="12"  sm="6" md="4" lg="4">
+                                    <v-card   style="background-color:#F7FFF7; border-style:solid; border-color:rgba(0,0,0,0.5);"
+                                   >
+                                        <v-container class="pt-0 mt-0 pb-0 ">
+                                            <v-row >
+                                                <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0">
+                                                    <v-card-title class="mt-0 pt-0 pl-0 pr-0 " >
+                                                        <v-img class="mx-auto white--text align-end justify-center "
+                                                                width="100%" height="30px"       
+                                                                src="@/assets/Globales/background-panel-08.jpg" >
+                                                        </v-img>
+                                                    </v-card-title>
+                                                </v-col>
+                                                <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0  text-right" >
+                                                    <v-menu class="text-left " offset-y>
+                                                        <template   v-slot:activator="{ on, attrs }">
+                                                            <v-btn tile  color="primary" x-small icon v-bind="attrs" v-on="on" >
+                                                                <v-icon>fas fa-ellipsis-v</v-icon>
+                                                            </v-btn>
+                                                        </template>
+                                                        <v-list >
+                                                            <v-list-item  v-for="(acciones, index) in listaAccionesSobreInstaciaCurso" :key="index"
+                                                            @click="acionesSobreInstanciaCurso(acciones,item)" >
+                                                                <v-list-item-title>{{ acciones }}</v-list-item-title>
+                                                            </v-list-item>
+                                                        </v-list>
+                                                    </v-menu>
+                                                </v-col>
+                                                <v-col cols="12"  class=" pt-0 pl-1 pr-0 pb-0 "  >
+
+                                                    <v-card-text class=" pt-0 pl-2 pr-0 pb-0 ">
+                                                        <div class=" text-truncate"  >
+                                                            <p class="font-weight-black mb-2 text-truncate"   >Nombre: {{ item.nomCurso }}</p>
+                                                            <p class="font-weight-black"   > Seccion: {{ item.seccion}} </p>
+                                                        </div>
+                                                    </v-card-text>
+                                                </v-col>
+                                            </v-row>
+                                        </v-container>
                                     </v-card>
                                 </v-col>
                             </v-row>
@@ -355,28 +360,46 @@
         </v-dialog>
 
         <!-- Dialog para asignar cursos a un semestre -->
-        <v-dialog v-model="dialogAsignarCurso" max-width="800">
-            <v-card class="mx-auto" max-width="800" >
+        <v-dialog v-model="dialogAsignarCurso" max-width="900">
+            <v-card class="mx-auto" max-width="900" >
                 <v-card-title primary-title class="headline primary text--center">
                     <h5 class="white--text">Asignar Profesor a Cursos</h5>
                 </v-card-title>
                 
-                <v-row class="d-flex flex-wrap align-center justify-center">
-                    <v-col cols="12" lg="4">                                                 
-                        <v-card  flat dense>
-                            <v-list  class="d-flex flex-wrap" dense>
-                                <v-list-item-subtitle>Cursos Seleccionados</v-list-item-subtitle>
-                                <v-list-item
-                                    v-for="(item, i) in seleccionados"
-                                    :key="i"
-                                    >
-                                    <v-list-item-title>{{item.nombre}}</v-list-item-title>
-                                </v-list-item>
-                            </v-list>
-                        </v-card>           
+                <v-row class="d-flex flex-wrap ">
+                    <v-col cols="12" lg="6" class="mt-0 pt-0 mb-0 pb-0" >                                                  
+                        <v-card  flat dense >
+                            <v-container class="mt-3 pt-0 mb-0 pb-0">
+                                <v-row cols="6" v-for="(item, index) in seleccionados" :key="index">
+                                    <!-- <v-col  >  -->
+                                        <!-- <v-container>
+                                            <v-row> -->
+                                                <v-col cols="6" >
+                                                    <v-list-item-title>{{item.nombre}}</v-list-item-title>
+                                                </v-col>
+                                                <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0"> 
+                                                     <v-form ref="form ">
+                                                        <v-select
+                                                            v-model="secionActual"
+                                                            :items="listaDeSeccionesDisponibles"
+                                                            item-text="sec"
+                                                            dense
+                                                            outlined
+                                                            color="secondary"
+                                                    ></v-select>
+                                                 </v-form>
+                                                </v-col>
+                                            <!-- </v-row>
+                                        </v-container> -->
+                                    <!-- </v-col> -->
+                                </v-row>
+                            </v-container>
+                            
+                        </v-card>
+
                     </v-col>
                     <v-divider vertical></v-divider>
-                    <v-col cols="12" lg="6">
+                    <v-col cols="12" lg="5">
                         <v-card flat >
                             <v-card-title
                             class="headline primary text--center"
@@ -479,7 +502,7 @@ export default {
             timeout: 6000,
             /* --------------- */
             datosCurso: [{id:''},{nombre:''},{plan:''},{escuela:''},{descripcion:''}],
-            datosInsCurso: [{id:''},{semestre:''},{curso:''},{nomCurso:''}],
+            datosInsCurso: [{id:''},{semestre:''},{curso:''},{nomCurso:''},{seccion:''},{anio:''}],
 
             search: '',
             cargando: true,
@@ -536,11 +559,13 @@ export default {
                 { text: 'Nombre curso', value: 'nomCurso' },
             ],
             listaAccionesSobreInstaciaCurso: [ 'Modificar curso' , 'Cerrar curso'  ],
+            listaDeSeccionesDisponibles:['A','B','C','D','E','F','G','H'],
+            secionActual:'',
         }
     },
     _props: {
     item: {
-        id: '',semestre: '',curso: '',nomCurso: ''
+        id: '',semestre: '',curso: '',nomCurso: '',seccion:'', anio:''
     }
     },
     get props() {
@@ -706,12 +731,14 @@ export default {
             axios.get(url,this.$store.state.config)
             .then((result)=>{   
                 for (let index = 0; index < result.data.data.insCurso.length; index++) {
-                    const element = result.data.data.insCurso[index];                    
+                    const element = result.data.data.insCurso[index];  
+                    console.log(element)                  
                     let insCurso = {
                         id: element.id,
                         semestre: element.semestre,
                         curso: element.curso,
                         nomCurso: '',
+                        seccion:element.seccion,
                     }; 
                     for (let j = 0; j < this.listaCursos.length; j++){
                         /* console.log("id curso: "+this.listaCursos[j].id); */
@@ -903,9 +930,11 @@ export default {
                     let post = {
                         "semestre":this.$store.infoSemestre.id,
                         "curso": this.seleccionados[i].id,
-                        "seccion": "A",
+                        "seccion":  "A",
                     }
-                    var url = 'http://127.0.0.1:8000/api/v1/instanciaCurso';   
+                    console.log('DATOS DE UN CURSO')
+                    console.log(post)
+                     var url = 'http://127.0.0.1:8000/api/v1/instanciaCurso';   
                     axios.post(url, post, this.$store.state.config)
                     .then((result) => {
                         ins_curso= result.data.data.insCurso.id;
