@@ -27,7 +27,16 @@ const routes = [
         meta: {
             requiresAuth: true
         },
-      },
+        children:[
+            {
+                //Enrutamiento de la vista del administrador
+                path: 'escuela',
+                name: 'Escuela',
+                component: () => import(/* webpackChunkName: "Administrador" */ '@/components/Administrador/BodyEscuelas.vue'/* ruta exacta por definir dado que no esta aun creada*/),
+                meta: {
+                  admin: true
+                },
+              },
       {
         //Enrutamiento de la vista del administrador
         path: 'usuarios',
@@ -91,7 +100,6 @@ const routes = [
       //     admin: true
       //   },
       // },
-      
       // {
       //   //Enrutamiento de la vista crearObservacionAdministrador
       //   path: 'observaciones/crearObservacion',
@@ -146,31 +154,6 @@ const routes = [
       //     admin: true
       //   },
       // },
-  
-      {
-        //Enrutamiento de la vista cursosAdministrador
-        path: 'cursos',
-        name: 'cursosAdministrador',
-        component: () => import(/* webpackChunkName: "" */ '@/components/SecretariaDeEscuela/BodyCursos.vue'),
-        meta: {
-          admin: true
-        },
-      },
-      {
-        //Enrutamiento de la vista cursosAdministrador
-        path: 'cursos/:id',
-        name: 'insCursosAdministrador',
-        component: () => import(/* webpackChunkName: "" */ '@/components/SecretariaDeEscuela/BodyInsCurso.vue'),
-        meta: {
-          admin: true
-        },
-      },
-      
-      
-      
-    ]
-  },
-
             // {
             //   //Enrutamiento de la vista crearObservacionAdministrador
             //   path: 'observaciones/crearObservacion',
@@ -378,9 +361,7 @@ const routes = [
                     secretariaEscuela: true
                 },
             },
-
-        ],
-    },
+        ]},
     {
         //Enrutamiento de la vista del profesor
         path: '/profesor',
