@@ -673,7 +673,7 @@ export default {
                         role: element.rol,
                         imagen: element.imagen,
                         correo: element.email,   
-                        escuela: element.nombre_escuela,
+                        escuela: element.escuela,
                     };                         
                     
                     this.listaUsuariosAux[index]=usuario;

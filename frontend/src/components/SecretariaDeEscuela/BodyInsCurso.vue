@@ -49,7 +49,7 @@
                         <template v-slot:default="props">
                             <v-row>
                                 <v-col v-for="item in props.items" :key="item.nomCurso" cols="12"  sm="6" md="4" lg="4">
-                                    <v-card   style="background-color:#F7FFF7; border-style:solid; border-color:rgba(0,0,0,0.5);"
+                                    <v-card  class=" ml-2 mr-2"  style="background-color:#F7FFF7; border-style:solid; border-color:rgba(0,0,0,0.5);"
                                    >
                                         <v-container class="pt-0 mt-0 pb-0 ">
                                             <v-row >
@@ -683,7 +683,6 @@ export default {
             .then((result)=>{   
                 for (let index = 0; index < result.data.data.insCurso.length; index++) {
                     const element = result.data.data.insCurso[index];  
-                    console.log(element)                  
                     let insCurso = {
                         id: element.id,
                         semestre: element.semestre,
@@ -818,8 +817,6 @@ export default {
                         "curso": this.seleccionados[i].id,
                         "seccion":  "A",
                     }
-                    console.log('DATOS DE UN CURSO')
-                    console.log(post)
                      var url = 'http://127.0.0.1:8000/api/v1/instanciaCurso';   
                     axios.post(url, post, this.$store.state.config)
                     .then((result) => {
@@ -830,8 +827,6 @@ export default {
                             };
                         //SEGUNDA CONSULTA
                         if(ins_curso != 0 ){ 
-                            console.log('DATOS ENVIADOS A PROFESOR CON  CURSO')
-                            console.log(post2)
                             this.agregarProfesorCurso(post2)
                         }     
                     }).catch((error)=>{
@@ -910,6 +905,7 @@ export default {
 
         modificarInstanciaCurso(item){
 
+
         },
 
         setEliminarInstanciaCurso(item){
@@ -955,8 +951,8 @@ export default {
                 console.log("Modificar Semestre")
                 console.log(curso)
                 
-                //  this.dialogModificarSemestre=true;
-                // this.semestreActual_1=semestre;
+                  //this.dialogModificarSemestre=true;
+                 //this.semestreActual_1=semestre;
             }
             if(item=='Cerrar curso'){
                 this.datosInsCurso= curso;

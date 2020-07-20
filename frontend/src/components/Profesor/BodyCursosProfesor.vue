@@ -72,14 +72,12 @@ export default {
         obtenerListaInstanciaCursos(){
             this.listaInsCursosAux = [];
             var aux;    
+            this.listaInsCursos =[];
             var url = `http://127.0.0.1:8000/api/v1/profesorConCurso/${this.$store.state.usuario.usuario.id}`;
-            console.log(url)
             axios.get(url,this.$store.state.config)
             .then((result)=>{   
-                console.log(result)
                 for (let index = 0; index < result.data.data.cursos.length; index++) {
                     const element = result.data.data.cursos[index]; 
-                    console.log(element)    
                     let insCurso = {
                         id: element.id,
                         anio:element.anio,
