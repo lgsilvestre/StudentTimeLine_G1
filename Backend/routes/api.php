@@ -64,6 +64,8 @@ Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1'], function () {
     Route::resource('/categoria','CategoriaController');
     #controlador de tipo de observaciones
     Route::resource('/tipoObservacion','TipoObservacionController');
+    #controlador de log
+    Route::get('/log','LogController@index');
 });
 
 Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
@@ -78,4 +80,4 @@ Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
     
 });
 
-//Route::post('/estudiante/importar', 'ImportarExcelController@importar');
+Route::post('/estudiante/importar', 'ImportarExcelController@importar');
