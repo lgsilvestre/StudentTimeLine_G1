@@ -19,8 +19,8 @@ class ExportarExcelController extends Controller
     
     public function __construct()
     {
-        $this->middleware(['permission:exportar estudiantes'], ['only' => ['index']]);
-        $this->middleware(['permission:exportar estudiantes'], ['only' => ['exportar']]);
+        $this->middleware(['permission:exportar estudiante'], ['only' => ['index']]);
+        $this->middleware(['permission:exportar estudiante'], ['only' => ['exportar']]);
     }
 
     public function exportar(Request $request) 

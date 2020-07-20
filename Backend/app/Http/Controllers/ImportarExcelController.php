@@ -6,7 +6,6 @@ use App\Imports\EstudiantesImport;
 use Excel;
 use App\Estudiante;
 use DB; //Operaciones de DB
-use Log;
 use Validator;
 use App\Log;
 use Maatwebsite\Excel\HeadingRowImport;
@@ -23,7 +22,7 @@ class ImportarExcelController extends Controller
     
     public function __construct()
     {
-        $this->middleware(['permission:importar estudiantes'], ['only' => ['index']]);
+        $this->middleware(['permission:importar estudiante'], ['only' => ['index', 'importar']]);
     }
 
     function index()
