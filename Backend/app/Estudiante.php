@@ -59,6 +59,8 @@ class Estudiante extends Model
 
         return $result;
     }
- 
-   
+
+    public function getEscuela(){
+        return $this->belongsTo('App\Escuela','escuela');
+    }
 }

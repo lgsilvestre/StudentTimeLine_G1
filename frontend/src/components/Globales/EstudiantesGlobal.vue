@@ -335,7 +335,7 @@
                         <v-icon  
                         color="primary"
                         >
-                        fas fa-edit
+                        fas fa-external-link-alt
                         </v-icon>
                     </v-btn>
                     </template>                                                         
@@ -500,7 +500,7 @@
         agregarEstudiantesImportar(){
             let formData = new FormData();
             formData.append('file',this.file);
-            var url = 'http://127.0.0.1:8000/api/importar_excel/importar';
+            var url = 'http://127.0.0.1:8000/api/estudiante/importar';
             axios.post(url,formData)
             .then((result)=>{
                 if (result.data.success == true) {
@@ -529,6 +529,7 @@
                     for (let index = 0; index < result.data.data.estudiantes.length; index++) {
                     const element = result.data.data.estudiantes[index];
                     let estudiante = {
+                        id: element.id,
                         matricula: element.matricula,
                         rut: element.rut,
                         nombre_completo: element.nombre_completo,

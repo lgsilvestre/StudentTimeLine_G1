@@ -29,7 +29,7 @@ class SemestreController extends Controller
     public function index()
     {
         try{
-            $semestres = Semestre::all();
+            $semestres = Semestre::withTrashed()->orderBy('anio')->orderBy('semestre')->get();
             return response()->json([
                 'success' => true,
                 'code' => 100,
@@ -238,6 +238,9 @@ class SemestreController extends Controller
         }
     }
     
+    /**
+     * 
+     */
     public function disabled(){
         try{
             $semestres = Semestre::onlyTrashed()->get();
@@ -257,6 +260,9 @@ class SemestreController extends Controller
         }
     }
 
+    /**
+     * 
+     */
     public function restore($id){
         try{
             $semestre = Semestre::onlyTrashed()->find($id)->restore();

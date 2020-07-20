@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Response;
 use Validator;
 use Illuminate\Http\Request;
 use App\Escuela;
+use App\Curso;
+use App\InstanciaCurso;
+use App\Profesor_Con_Curso;
 use Image; 
 
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -36,13 +39,11 @@ class UsuarioController extends Controller
             $credenciales = JWTAuth::parseToken()->authenticate();
             if($credenciales->rol=="admin"){
                 $usuarios = User::all();
-                $escuelas=Escuela::withTrashed()->orderBy('id','asc')->get();
             }else if($credenciales->rol=="secretaria de escuela"){
                 $usuarios = User::Where('rol', '=' , 'profesor')->where(function ($query) use ($credenciales) {
                     return $query->where('escuela', '=' , $credenciales->escuela)
                                 ->orWhere('escuela', '=' , $credenciales->escuelaAux);
                 })->get();
-                $escuelas=Escuela::withTrashed()->orderBy('id','asc')->get();
             }else if($credenciales->rol=="profesor"){
                 return response()->json([
                     'success' => false,
@@ -58,12 +59,12 @@ class UsuarioController extends Controller
                     'data' => ['error'=>'al momento de buscar el rol del solicitante no lo encuentra']
                 ], 409);
             }
-            foreach ($usuarios as $usuario) {
-                $usuario->nombre_escuela= $escuelas[$usuario->escuela-1]->nombre;
+            foreach ($usuarios as $usuario){
+                $usuario->escuela= $usuario->getEscuela->nombre;
                 if($usuario->escuelaAux!=null){
-                    $usuario->nombre_escuelaAux= $escuelas[$usuario->escuelaAux-1]->nombre;
+                    $usuario->escuelaAux = $usuario->getEscuelaAux->nombre;
                 }else{
-                    $usuario->nombre_escuelaAux= 'no posee otra escuela';
+                    $usuario->escuelaAux = 'no posee otra escuela';
                 }
             }
             return response()->json([
@@ -210,14 +211,27 @@ class UsuarioController extends Controller
                     'data' => null
                 ], 409);
             }
-            $escuelas=Escuela::withTrashed()->orderBy('id','asc')->get();
-            $user->nombre_escuela= $escuelas[$user->escuela-1]->nombre;
-            //return response($user->foto)->header('Content-Type', 'image/png');
+            $user->escuela= $user->getEscuela->nombre;
+            if($user->escuelaAux!=null){
+                $user->escuelaAux = $user->getEscuelaAux->nombre;
+            }else{
+                $user->escuelaAux = 'no posee otra escuela';
+            }
+            $cursos = Profesor_Con_Curso::where('profesor', $id)->get();
+            foreach ($cursos as $curso){
+                $curso->curso= $curso->getCurso->nombre;
+                unset($curso['created_at']);
+                unset($curso['updated_at']);
+                unset($curso['deleted_at']);
+                $a=var_dump( $curso);
+                return $a;
+            }
             return response()->json([
                 'success' => true,
                 'code' => 500,
                 'message' => "La operacion se a realizado con exito",
-                'data' => ['usuario'=>$user]
+                'data' => ['usuario'=>$user,
+                        'cursos'=>$cursos]
             ], 200);
         //este catch permite responder directamente que problemas en la peticion SQL
         }catch(\Illuminate\Database\QueryException $ex){ 
@@ -394,13 +408,11 @@ class UsuarioController extends Controller
             $credenciales = JWTAuth::parseToken()->authenticate();
             if($credenciales->rol=="admin"){
                 $usuarios = User::onlyTrashed()->get();
-                $escuelas=Escuela::withTrashed()->orderBy('id','asc')->get();
             }else if($credenciales->rol=="secretaria de escuela"){
                 $usuarios = User::onlyTrashed()->Where('rol', '=' , 'profesor')->where(function ($query) use ($credenciales) {
                     return $query->where('escuela', '=' , $credenciales->escuela)
                                 ->orWhere('escuela', '=' , $credenciales->escuelaAux);
                 })->get();
-                $escuelas=Escuela::withTrashed()->orderBy('id','asc')->get();
             }else if($credenciales->rol=="profesor"){
                 return response()->json([
                     'success' => false,
@@ -416,12 +428,12 @@ class UsuarioController extends Controller
                     'data' => ['error'=>'al momento de buscar el rol del solicitante no lo encuentra']
                 ], 409);
             }
-            foreach ($usuarios as $usuario) {
-                $usuario->nombre_escuela= $escuelas[$usuario->escuela-1]->nombre;
+            foreach ($usuarios as $usuario){
+                $usuario->escuela= $usuario->getEscuela->nombre;
                 if($usuario->escuelaAux!=null){
-                    $usuario->nombre_escuelaAux= $escuelas[$usuario->escuelaAux-1]->nombre;
+                    $usuario->escuelaAux = $usuario->getEscuelaAux->nombre;
                 }else{
-                    $usuario->nombre_escuelaAux= 'no posee otra escuela';
+                    $usuario->escuelaAux = 'no posee otra escuela';
                 }
             }
             return response()->json([
