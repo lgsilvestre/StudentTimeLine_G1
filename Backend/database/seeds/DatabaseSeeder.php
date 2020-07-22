@@ -23,5 +23,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CategoriaTableSeeder::class);
         $this->call(TipoObservacionTableSeeder::class);
         $this->call(ObservacionTableSeeder::class);
+        $this->call(LogTableSeeder::class);
     }
 }

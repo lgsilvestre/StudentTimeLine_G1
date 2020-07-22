@@ -17,6 +17,6 @@ class Log extends Model
 
     public function getUser()
     {
-        return $this->belongsTo(User::class, 'usuario');
+        return $this->belongsTo(User::class, 'usuario')->withTrashed();
     }  
 }
