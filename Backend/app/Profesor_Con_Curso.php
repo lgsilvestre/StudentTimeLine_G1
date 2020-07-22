@@ -15,6 +15,12 @@ class Profesor_Con_Curso extends Model
 
     public function getCurso()
     {
-        return $this->belongsTo(InstanciaCurso::class, 'curso');
+        return $this->belongsTo(InstanciaCurso::class, 'curso')->withTrashed();
     }  
+
+    public function getProfesor()
+    {
+        return $this->belongsTo(User::class, 'profesor')->withTrashed();
+    } 
+
 }

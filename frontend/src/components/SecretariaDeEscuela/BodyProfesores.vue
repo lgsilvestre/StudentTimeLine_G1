@@ -34,17 +34,22 @@
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="4" sm="6" md="3" class="align-self-end" style="text-align:right;">
-                                <v-btn
-                                fab
-                                bottom
-                                left
-                                :large="$vuetify.breakpoint.smAndDown ? false : true"
-                                :small="$vuetify.breakpoint.smAndDown ? true : false"
-                                            
-                                @click="obtenerProfesoresDeshabilitados"
-                                >
-                                    <v-icon class="mx-2" color="secondary">fas fa-trash-restore-alt</v-icon>
-                                </v-btn>
+                                <v-tooltip bottom color="primary">
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn
+                                        fab
+                                        bottom
+                                        left
+                                        :large="$vuetify.breakpoint.smAndDown ? false : true"
+                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                        v-on="on"
+                                        @click="obtenerProfesoresDeshabilitados"
+                                        >
+                                            <v-icon class="mx-2" color="secondary">fas fa-trash-restore-alt</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <span><strong>Recuperar Profesor</strong></span>
+                                </v-tooltip>
                             </v-col>
                         </v-row>
                         <!-- Ventana emergente que muestra los profesores deshabilitados -->
@@ -123,15 +128,21 @@
                                                     :items-per-page="10"
                                                 >            
                                                     <template v-slot:item.opciones="{ item }">
-                                                    <!-- boton para deshabilitar el profesor seleccionado -->
-                                                        <v-btn color="white" fab small depressed >
-                                                            <v-icon
-                                                                color="secondary"         
-                                                                @click="mostrarHabilitarProfesor(item)"
-                                                            >
-                                                            fas fa-trash-restore-alt
-                                                            </v-icon>
-                                                        </v-btn>
+                                                        <!-- boton para deshabilitar el profesor seleccionado -->
+                                                        <v-tooltip bottom color="primary">
+                                                            <template v-slot:activator="{ on }">
+                                                                <v-btn color="white" fab small depressed >
+                                                                    <v-icon
+                                                                        color="secondary"  
+                                                                        v-on="on"       
+                                                                        @click="mostrarHabilitarProfesor(item)"
+                                                                    >
+                                                                    fas fa-trash-restore-alt
+                                                                    </v-icon>
+                                                                </v-btn>
+                                                            </template>
+                                                            <span><strong>Recuperar Profesor</strong></span>
+                                                        </v-tooltip>
                                                     </template>
                                                 </v-data-table>
                                             </v-card>
@@ -222,14 +233,19 @@
                     :items-per-page="10"
                 >            
                     <template v-slot:item.opciones="{ item }">
+                        <v-tooltip bottom color="primary">
+                            <template v-slot:activator="{ on }">
                     <!-- boton para deshabilitar el profesor seleccionado -->
-                        <v-btn color="white" fab small depressed @click="EliminarProfesor(item)">
-                            <v-icon
-                                color="warning"         
-                            >
-                            fas fa-trash-alt
-                            </v-icon>
-                        </v-btn>
+                                <v-btn color="white" fab small depressed v-on="on" @click="EliminarProfesor(item)">
+                                    <v-icon
+                                        color="warning"         
+                                    >
+                                    fas fa-trash-alt
+                                    </v-icon>
+                                </v-btn>
+                            </template>
+                            <span><strong>Eliminar Profesor</strong></span>
+                        </v-tooltip>
                     </template>
                 </v-data-table>
             </v-card>
@@ -344,7 +360,7 @@ export default {
                         id: element.id,
                         nombre: element.nombre,
                         correo: element.email,   
-                        escuela: element.nombre_escuela,
+                        escuela: element.escuela,
                     };                         
                     this.listaProfesoresAux[index]=usuario;
                 }

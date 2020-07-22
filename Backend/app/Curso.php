@@ -13,4 +13,8 @@ class Curso extends Model
         'nombre','plan','descripcion','escuela'
     ];
 
+    public function getEscuela(){
+        return $this->belongsTo('App\Escuela','escuela')->withTrashed();
+    }
+
 }

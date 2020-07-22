@@ -55,7 +55,7 @@
                             <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">:</h3>
                         </v-col >
                         <v-col :cols="$vuetify.breakpoint.smAndDown ? 6 : 7">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">{{datosUsuario.nombre_escuela}}</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">{{datosUsuario.escuela}}</h3>
                         </v-col>
                     </v-row>
                     <v-row class="px-5 pb-5">

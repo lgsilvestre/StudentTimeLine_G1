@@ -28,60 +28,65 @@
             <v-col cols="12" md="8">
                 <!-- aca ira la lista de las instancias de curso -->
                 <v-card class="justify-center">
-                    <v-img
-                        class="mx-auto white--text align-end justify-center"
-                        width="100%"
-                        height="180px"        
-                        src="@/assets/Globales/background-panel-08.jpg" >
+                    <v-img class="mx-auto white--text align-end justify-center"
+                        width="100%" height="180px"  src="@/assets/Globales/background-panel-08.jpg" >
                         <v-card-title class="white--text" style="font-size: 200%;text-shadow: #555 2px 2px 3px;">
                             <strong > Cursos </strong>
                             <v-spacer></v-spacer>
                             <v-btn class="mr-2" fab large bottom left >
                                 <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
-                             </v-btn>
+                            </v-btn>
                         </v-card-title> 
                     </v-img>
                     <v-data-iterator :items="listaInsCursos" :search="search" :sort-by="sortBy.toLowerCase()" >
                        <template v-slot:header>
                            <v-toolbar>
-                                <v-text-field
-                                    v-model="search"
-                                    append-icon="mdi-magnify"
-                                    label="Search"
-                                    single-line
-                                    hide-details
+                                <v-text-field v-model="search" append-icon="mdi-magnify"
+                                    label="Buscar curso" single-line  hide-details
                                 ></v-text-field>
-                           </v-toolbar>
-                       </template>
+                            </v-toolbar>
+                        </template>
                         <template v-slot:default="props">
                             <v-row>
-                                <v-col v-for="item in props.items" :key="item.nomCurso" cols="12"  sm="6" md="4" lg="3">
-                                    <v-card  class="ml-5 mr-5" style="background-color:#FFE66D; border-style:solid; border-color:rgba(0,0,0,0.5);">
-                                        <!-- <v-card-title class="subheading font-weight-bold">{{ item.nomCurso }}</v-card-title> -->
-                                        
-                                        <div class="d-flex flex-no-wrap justify-space-between">
-                                            <div>
-                                               <v-card-title class="subheading font-weight-bold">{{ item.nomCurso }}</v-card-title>
-                                            </div>
-                                            <v-menu class="text-left" offset-y>
-                                                <template v-slot:activator="{ on, attrs }">
-                                                    <v-btn color="primary" icon v-bind="attrs" v-on="on" >
-                                                    <v-icon>fas fa-ellipsis-v</v-icon>
-                                                    </v-btn>
-                                                </template>
-                                                <v-list>
-                                                    <v-list-item
-                                                    v-for="(acciones, index) in listaAccionesSobreInstaciaCurso" :key="index"
-                                                    @click="acionesSobreInstanciaCurso(acciones,item)"
-                                                    >
-                                                    <v-list-item-title>{{ acciones }}</v-list-item-title>
-                                                    </v-list-item>
-                                                </v-list>
-                                        </v-menu>
-                                        </div>
-                                        
-                                        
-                                       
+                                <v-col v-for="item in props.items" :key="item.nomCurso" cols="12"  sm="6" md="4" lg="4">
+                                    <v-card  class=" ml-2 mr-2"  style="background-color:#F7FFF7; border-style:solid; border-color:rgba(0,0,0,0.5);"
+                                   >
+                                        <v-container class="pt-0 mt-0 pb-0 ">
+                                            <v-row >
+                                                <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0">
+                                                    <v-card-title class="mt-0 pt-0 pl-0 pr-0 " >
+                                                        <v-img class="mx-auto white--text align-end justify-center "
+                                                                width="100%" height="30px"       
+                                                                src="@/assets/Globales/background-panel-08.jpg" >
+                                                        </v-img>
+                                                    </v-card-title>
+                                                </v-col>
+                                                <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0  text-right" >
+                                                    <v-menu class="text-left " offset-y>
+                                                        <template   v-slot:activator="{ on, attrs }">
+                                                            <v-btn tile  color="primary" x-small icon v-bind="attrs" v-on="on" >
+                                                                <v-icon>fas fa-ellipsis-v</v-icon>
+                                                            </v-btn>
+                                                        </template>
+                                                        <v-list >
+                                                            <v-list-item  v-for="(acciones, index) in listaAccionesSobreInstaciaCurso" :key="index"
+                                                            @click="acionesSobreInstanciaCurso(acciones,item)" >
+                                                                <v-list-item-title>{{ acciones }}</v-list-item-title>
+                                                            </v-list-item>
+                                                        </v-list>
+                                                    </v-menu>
+                                                </v-col>
+                                                <v-col cols="12"  class=" pt-0 pl-1 pr-0 pb-0 "  >
+
+                                                    <v-card-text class=" pt-0 pl-2 pr-0 pb-0 ">
+                                                        <div class=" text-truncate"  >
+                                                            <p class="font-weight-black mb-2 text-truncate"   >Nombre: {{ item.nomCurso }}</p>
+                                                            <p class="font-weight-black"   > Seccion: {{ item.seccion}} </p>
+                                                        </div>
+                                                    </v-card-text>
+                                                </v-col>
+                                            </v-row>
+                                        </v-container>
                                     </v-card>
                                 </v-col>
                             </v-row>
@@ -94,6 +99,7 @@
             </v-col>
         </v-row>
 
+    <!------------------>
         <!-- Dialog para mostrar la lista de los Cursos Existentes -->
         <v-dialog v-model="dialogListaCursos" fullscreen hide-overlay transition="dialog-bottom-transition">
             <v-card class="mx-auto my-10 " max-width="70%">
@@ -120,19 +126,29 @@
                             </v-img>
                             <v-data-table  :headers="colCursos" :items="listaCursos"
                                 :search="search" :loading="cargando" :items-per-page="10"  >            
-                                 <template v-slot:item.opciones="{ item }">
+                                <template v-slot:item.opciones="{ item }">
                                 <!-- boton para modificar usuario seleccionado -->
-                                    <v-btn color="white" fab small depressed class="mr-2 py-2">
-                                        <v-icon color="primary" @click="modificarCurso(item)" >
-                                            fas fa-edit
-                                        </v-icon>
-                                    </v-btn>
+                                    <v-tooltip bottom color="primary">
+                                        <template v-slot:activator="{ on }">
+                                            <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on">
+                                                <v-icon color="primary" @click="setModificarCurso(item)" >
+                                                    fas fa-edit
+                                                </v-icon>
+                                            </v-btn>
+                                        </template>
+                                        <span><strong>Modificar Curso</strong></span>
+                                    </v-tooltip>
                                 <!-- boton para eliminar usuario seleccionado -->
-                                    <v-btn color="white" fab small depressed class="mr-2 py-2">
-                                        <v-icon color="warning" @click="setEliminarCurso(item)" >
-                                            fas fa-trash-alt
-                                        </v-icon>
-                                    </v-btn>
+                                    <v-tooltip bottom color="primary">
+                                        <template v-slot:activator="{ on }">
+                                            <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on">
+                                                <v-icon color="warning" @click="setEliminarCurso(item)" >
+                                                    fas fa-trash-alt
+                                                </v-icon>
+                                            </v-btn>
+                                        </template>
+                                        <span><strong>Eliminar Curso</strong></span>
+                                    </v-tooltip>
                                 </template>
                             </v-data-table>
                         </v-col>
@@ -200,6 +216,55 @@
             </v-card>
         </v-dialog> 
 
+        <!-- Dialog para modificar un curso -->
+        <v-dialog v-model="dialogModificarCurso" persistent max-width="500px" transition="scroll-y-reverse-transition">
+            <v-card elevation="1">
+                <v-card-title  class="headline primary text--center" primary-title > 
+                    <h5 class="white--text ">Modificar Curso</h5>
+                </v-card-title>
+                <v-container class="px-5 mt-5">
+                    <v-text-field v-model="datosCurso.nombre" label="Nombre del Curso" outlined
+                        color="secondary"
+                        :rules="[() => !!datosCurso.nombre ||'Requerido']"
+                        prepend-inner-icon="mdi-account"
+                    ></v-text-field>
+                    <v-text-field v-model="datosCurso.plan" label="Plan" outlined
+                        color="secondary"
+                        :rules="[() => !!datosCurso.plan ||'Requerido']"
+                        prepend-inner-icon="mdi-account"
+                    ></v-text-field>
+                    <v-select  v-model="datosCurso.escuela"
+                        :items="listaEscuela"
+                        item-text="nombre"
+                        item-value="id"
+                        label="Escuela"
+                        outlined
+                        :small-chips="$vuetify.breakpoint.smAndDown ? true : false"
+                        :rules="[() => !!datosCurso.escuela ||'Requerido']"
+                        prepend-inner-icon="mdi-school"
+                    ></v-select>
+                    <v-text-field v-model="datosCurso.descripcion" label="Descripcion del Curso" outlined
+                        color="secondary"
+                        :rules="[() => !!datosCurso.descripcion ||'Requerido']"
+                        prepend-inner-icon="mdi-account"
+                    ></v-text-field>
+                    
+                    <div style="text-align:right;" class="mb-1 " >
+                        <v-btn 
+                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                        rounded color="warning"    @click="resetModificarCurso">  
+                            <h4 class="white--text">Cancelar</h4>
+                        </v-btn>
+                        <v-btn 
+                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                        rounded color="secondary" class=" ml-2"    @click="modificarCurso">
+                            <h4 class="white--text">Modificar</h4>
+                        </v-btn>
+                    </div>
+                </v-container> 
+            </v-card>                        
+        </v-dialog>
+
         <!-- Dialog para Eliminar un Curso -->
         <v-dialog v-model="dialogEliminarCurso" ref="form" persistent max-width="450px">
             <v-card class="mx-auto" max-width="450"  >
@@ -227,7 +292,50 @@
             </v-card>
         </v-dialog>
 
-
+        <!------------------>
+        <v-dialog v-model="dialogModificarInsCurso" persistent max-width="500px" transition="scroll-y-reverse-transition">
+            <v-card elevation="1">
+                <v-card-title  class="headline primary text--center" primary-title > 
+                    <h5 class="white--text ">Modificar Curso</h5>
+                </v-card-title>
+                <v-container class="px-5 mt-5">
+                    <v-select  v-model="datosInsCurso.curso"
+                        :items="listaCursos"
+                        item-text="nombre"
+                        item-value="id"
+                        label="Curso"
+                        outlined
+                        :small-chips="$vuetify.breakpoint.smAndDown ? true : false"
+                        :rules="[() => !!datosInsCurso.curso ||'Requerido']"
+                        prepend-inner-icon="mdi-school"
+                    ></v-select>
+                    <v-select  v-model="datosInsCurso.seccion"
+                        :items="listaDeSeccionesDisponibles"
+                        item-text="nombre"
+                        item-value="id"
+                        label="Seccion"
+                        outlined
+                        :small-chips="$vuetify.breakpoint.smAndDown ? true : false"
+                        :rules="[() => !!datosInsCurso.seccion ||'Requerido']"
+                        prepend-inner-icon="mdi-school"
+                    ></v-select>
+                    
+                    
+                    <div style="text-align:right;" class="mb-1 " >
+                        <v-btn 
+                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                        rounded color="warning" @click="resetModificarInstanciaCurso">  
+                            <h4 class="white--text">Cancelar</h4>
+                        </v-btn>
+                        <v-btn 
+                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                        rounded color="secondary" class=" ml-2"    @click="modificarInstanciaCurso">
+                            <h4 class="white--text">Modificar</h4>
+                        </v-btn>
+                    </div>
+                </v-container> 
+            </v-card>                        
+        </v-dialog>
 
         <!-- Dialog para Eliminar una Instancia de Curso -->
         <v-dialog v-model="dialogEliminarInsCurso" ref="form" persistent max-width="450px">
@@ -305,28 +413,46 @@
         </v-dialog>
 
         <!-- Dialog para asignar cursos a un semestre -->
-        <v-dialog v-model="dialogAsignarCurso" max-width="800">
-            <v-card class="mx-auto" max-width="800" >
+        <v-dialog v-model="dialogAsignarCurso" max-width="900">
+            <v-card class="mx-auto" max-width="900" >
                 <v-card-title primary-title class="headline primary text--center">
                     <h5 class="white--text">Asignar Profesor a Cursos</h5>
                 </v-card-title>
                 
-                <v-row class="d-flex flex-wrap align-center justify-center">
-                    <v-col cols="12" lg="4">                                                 
-                        <v-card  flat dense>
-                            <v-list  class="d-flex flex-wrap" dense>
-                                <v-list-item-subtitle>Cursos Seleccionados</v-list-item-subtitle>
-                                <v-list-item
-                                    v-for="(item, i) in seleccionados"
-                                    :key="i"
-                                    >
-                                    <v-list-item-title>{{item.nombre}}</v-list-item-title>
-                                </v-list-item>
-                            </v-list>
-                        </v-card>           
+                <v-row class="d-flex flex-wrap ">
+                    <v-col cols="12" lg="6" class="mt-0 pt-0 mb-0 pb-0" >                                                  
+                        <v-card  flat dense >
+                            <v-container class="mt-3 pt-0 mb-0 pb-0">
+                                <v-row cols="6" v-for="(item, index) in seleccionados" :key="index">
+                                    <!-- <v-col  >  -->
+                                        <!-- <v-container>
+                                            <v-row> -->
+                                                <v-col cols="6" >
+                                                    <v-list-item-title>{{item.nombre}}</v-list-item-title>
+                                                </v-col>
+                                                <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0"> 
+                                                     <v-form ref="form ">
+                                                        <v-select
+                                                            v-model="secionActual"
+                                                            :items="listaDeSeccionesDisponibles"
+                                                            item-text="sec"
+                                                            dense
+                                                            outlined
+                                                            color="secondary"
+                                                    ></v-select>
+                                                 </v-form>
+                                                </v-col>
+                                            <!-- </v-row>
+                                        </v-container> -->
+                                    <!-- </v-col> -->
+                                </v-row>
+                            </v-container>
+                            
+                        </v-card>
+
                     </v-col>
                     <v-divider vertical></v-divider>
-                    <v-col cols="12" lg="6">
+                    <v-col cols="12" lg="5">
                         <v-card flat >
                             <v-card-title
                             class="headline primary text--center"
@@ -364,6 +490,7 @@
                 </v-row>        
             </v-card>
         </v-dialog>
+
 
         <!-- Alertas -->
 
@@ -410,7 +537,6 @@
                 </v-icon>                
             </v-btn>
         </v-snackbar> 
-
     </v-container>
 </template>
 
@@ -431,6 +557,7 @@ export default {
             /* --------------- */
             datosCurso: [{id:''},{nombre:''},{plan:''},{escuela:''},{descripcion:''}],
             datosInsCurso: [{id:''},{semestre:''},{curso:''},{nomCurso:''}],
+            listaDeSeccionesDisponibles:['A','B','C','D','E','F','G','H'],
 
             search: '',
             cargando: true,
@@ -487,11 +614,13 @@ export default {
                 { text: 'Nombre curso', value: 'nomCurso' },
             ],
             listaAccionesSobreInstaciaCurso: [ 'Modificar curso' , 'Cerrar curso'  ],
+            listaDeSeccionesDisponibles:['A','B','C','D','E','F','G','H'],
+            secionActual:'',
         }
     },
     _props: {
     item: {
-        id: '',semestre: '',curso: '',nomCurso: ''
+        id: '',semestre: '',curso: '',nomCurso: '',seccion:'', anio:''
     }
     },
     get props() {
@@ -626,15 +755,7 @@ export default {
                         nombre: element.nombre,
                         plan: element.plan,
                         descripcion: element.descripcion,
-                        escuela: element.escuela,
-                        nomEscuela: '',
-                    };
-                    for (let j = 0; j < this.listaEscuela.length; j++){
-                        /* console.log("id curso: "+this.listaCursos[j].id); */
-                        if(this.listaEscuela[j].id == curso.escuela){
-                            curso.nomEscuela = this.listaEscuela[j].nombre;
-                            break;
-                        };
+                        nomEscuela: element.escuela,
                     };
                     this.listaCursosAux[index]=curso;
                 }
@@ -656,21 +777,14 @@ export default {
             var url = `http://127.0.0.1:8000/api/v1/instanciaCurso/${this.$store.infoSemestre.id}`;
             axios.get(url,this.$store.state.config)
             .then((result)=>{   
-                for (let index = 0; index < result.data.data.insCurso.length; index++) {
-                    const element = result.data.data.insCurso[index];                    
+                for (let index = 0; index < result.data.data.insCursos.length; index++) {
+                    const element = result.data.data.insCursos[index];  
                     let insCurso = {
                         id: element.id,
                         semestre: element.semestre,
-                        curso: element.curso,
-                        nomCurso: '',
+                        nomCurso: element.curso,
+                        seccion:element.seccion,
                     }; 
-                    for (let j = 0; j < this.listaCursos.length; j++){
-                        /* console.log("id curso: "+this.listaCursos[j].id); */
-                        if(this.listaCursos[j].id == insCurso.curso){
-                            insCurso.nomCurso = this.listaCursos[j].nombre;
-                        };
-                    };  
-
                     this.listaInsCursosAux[index]=insCurso;                                                         
                 }
                 this.listaInsCursos = this.listaInsCursosAux;  
@@ -705,7 +819,7 @@ export default {
                     console.log(error)
                     this.alertaError = true;
                     this.textoAlertas = "Error al crear el curso, intente mas tarde."
-                    this.resetRegistrarUsuario();
+                    this.resetCrearCurso();
                 };                        
             });
         },
@@ -718,8 +832,73 @@ export default {
             this.dialogCrearCurso = false;
         },
 
+        setModificarCurso(item){
+            this.datosCurso.id= item.id;
+            this.datosCurso.nombre = item.nombre;
+            this.datosCurso.plan = item.plan;
+            this.datosCurso.escuela = item.escuela;
+            this.datosCurso.descripcion = item.descripcion;
+            this.dialogModificarCurso = true;
+        },
+        resetModificarCurso(){
+            this.datosCurso.id= '';
+            this.datosCurso.nombre = '';
+            this.datosCurso.plan = '';
+            this.datosCurso.escuela = '';
+            this.datosCurso.descripcion = '';
+            this.dialogModificarCurso = false;
+        },
         modificarCurso(){
-            
+            console.log("inicio mod curso");
+
+            var url =`http://127.0.0.1:8000/api/v1/curso/${this.datosCurso.id}`;
+            let put ={                
+                "nombre": this.datosCurso.nombre,
+                "plan": this.datosCurso.plan,
+                "escuela": this.datosCurso.escuela,
+                "descripcion": this.datosCurso.descripcion,
+            };
+            axios.put(url,put,this.$store.state.config)
+            .then((result)=>{
+                if (result.statusText=='OK') {                
+                    this.alertaExito = true;
+                    this.textoAlertas = "Se modificó el curso con exito."
+                    this.obtenerCursos(); 
+                    this.resetModificarCurso();
+                }
+            }).catch((error)=>{                
+                if (error.message == 'Network Error') {
+                    console.log(error)
+                    this.alertaError = true;
+                    this.textoAlertas = "Error al modificar el curso, intente mas tarde."
+                }
+                else{
+                    console.log(error.response);
+                    // if(error.response.data.success == false){
+                    //     if(error.response.data.code == 601){
+                    //         console.log(error.response.data.code +' '+ error.response.data.message);
+                    //         console.log(error.response.data);
+                    //         this.textoAlertas = error.response.data.message;
+                    //         this.alertaError = true;
+                    //         this.resetModificarCurso();
+                    //     }
+                    //     if(error.response.data.code == 602){
+                    //         console.log(error.response.data.code +' '+ error.response.data.message);
+                    //         console.log(error.response.data);
+                    //         this.textoAlertas = error.response.data.message;
+                    //         this.alertaError = true;
+                    //         this.resetModificarCurso();
+                    //     }
+                    //     if(error.response.data.code == 603){
+                    //         console.log(error.response.data.code +' '+ error.response.data.message);
+                    //         console.log(error.response.data);
+                    //         this.textoAlertas = error.response.data.message;
+                    //         this.alertaError = true;
+                    //         this.resetModificarCurso();
+                    //     } 
+                    // }                
+                }                  
+            });
         },
         
         setEliminarCurso(item){
@@ -789,7 +968,7 @@ export default {
                     let post = {
                         "semestre":this.$store.infoSemestre.id,
                         "curso": this.seleccionados[i].id,
-                        "seccion": "A",
+                        "seccion":  "A",
                     }
                      var url = 'http://127.0.0.1:8000/api/v1/instanciaCurso';   
                     axios.post(url, post, this.$store.state.config)
@@ -801,8 +980,6 @@ export default {
                             };
                         //SEGUNDA CONSULTA
                         if(ins_curso != 0 ){ 
-                            console.log('DATOS ENVIADOS A PROFESOR CON  CURSO')
-                            console.log(post2)
                             this.agregarProfesorCurso(post2)
                         }     
                     }).catch((error)=>{
@@ -811,7 +988,7 @@ export default {
                             console.log(error)
                             this.alertaError = true;
                             this.textoAlertas = "Error al asignar el curso, intente mas tarde."
-                            this.resetRegistrarUsuario();
+                            this.resetAsignarCurso();
                         }
                         if(error.response.data.code == 301){
                             console.log(error.response.data.code +' '+ error.response.data.message);
@@ -825,13 +1002,8 @@ export default {
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;      
                         }   
-                                       
-                    });
-                    
-                        
-                 
-                 
-                   
+                    });                                                            
+                
                 }   
                 this.seleccionados = []; 
                 this.profesorSeleccionado = '';
@@ -845,9 +1017,9 @@ export default {
             
 
         },
-       
+
         agregarProfesorCurso(post2){
-             var url2 = 'http://127.0.0.1:8000/api/v1/profesorConCurso'; 
+            var url2 = 'http://127.0.0.1:8000/api/v1/profesorConCurso'; 
                     /* crear profesor con curso */
                     axios.post(url2, post2, this.$store.state.config)
                     .then((result) => {
@@ -861,7 +1033,7 @@ export default {
                             console.log(error)  
                             this.alertaError = true;
                             this.textoAlertas = "Error al asignar el profesor intente mas tarde."
-                            this.resetRegistrarUsuario();
+                            this.resetAsignarCurso();
                         }
                         if(error.response.data.code == 301){
                             console.log(error.response.data.code +' '+ error.response.data.message);
@@ -878,9 +1050,61 @@ export default {
                     });
         },
 
-
-        modificarInstanciaCurso(item){
-
+        resetModificarInstanciaCurso(){
+            this.datosInsCurso.semestre= '';
+            this.datosInsCurso.curso = '';
+            this.datosInsCurso.seccion = '';
+            this.dialogModificarInsCurso = false;
+        },
+        modificarInstanciaCurso(){
+            var url =`http://127.0.0.1:8000/api/v1/instanciaCurso/${this.datosInsCurso.id}`;
+            let put ={                
+                "semestre": this.datosInsCurso.semestre,
+                "curso": this.datosInsCurso.curso,
+                "seccion": this.datosInsCurso.seccion,
+            };
+            axios.put(url,put,this.$store.state.config)
+            .then((result)=>{
+                if (result.statusText=='OK') {                
+                    this.alertaExito = true;
+                    this.textoAlertas = "Se modificó el curso con exito."
+                    this.obtenerInstanciasCursos(); 
+                    this.resetModificarInstanciaCurso();
+                }
+            }).catch((error)=>{                
+                if (error.message == 'Network Error') {
+                    console.log(error);
+                    this.resetModificarInstanciaCurso();
+                    this.alertaError = true;
+                    this.textoAlertas = "Error al modificar el curso, intente mas tarde."
+                }
+                else{
+                    console.log(error.response);
+                    if(error.response.data.success == false){
+                        if(error.response.data.code == 301){
+                            console.log(error.response.data.code +' '+ error.response.data.message);
+                            console.log(error.response.data);
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true;
+                            this.resetModificarInstanciaCurso();
+                        }
+                        if(error.response.data.code == 602){
+                            console.log(error.response.data.code +' '+ error.response.data.message);
+                            console.log(error.response.data);
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true;
+                            this.resetModificarInstanciaCurso();
+                        }
+                        if(error.response.data.code == 603){
+                            console.log(error.response.data.code +' '+ error.response.data.message);
+                            console.log(error.response.data);
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true;
+                            this.resetModificarInstanciaCurso();
+                        }
+                    }           
+                }                  
+            });
         },
 
         setEliminarInstanciaCurso(item){
@@ -923,11 +1147,11 @@ export default {
          */
         acionesSobreInstanciaCurso(item,curso){
             if(item =='Modificar curso'){
-                console.log("Modificar Semestre")
+                console.log("Modificar Ins Curso")
                 console.log(curso)
                 
-                //  this.dialogModificarSemestre=true;
-                // this.semestreActual_1=semestre;
+                  //this.dialogModificarSemestre=true;
+                 //this.semestreActual_1=semestre;
             }
             if(item=='Cerrar curso'){
                 this.datosInsCurso= curso;
