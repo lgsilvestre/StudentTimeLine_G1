@@ -703,15 +703,8 @@
                 //this.alertaErrorRangoAnhos = true;
                 //console.log('rango mal');
             //}
-            let post = {
-                "tipo": 1,
-                "fechaInicio" :"2020-07-19" ,
-                "fechaFin":"2020-07-21" ,
-                "id": 1,
-                "escuela": 1
-            };
             var url = 'http://127.0.0.1:8000/api/v1/exportar';
-            axios.post(url,post,this.$store.state.config2)
+            axios.get(url,this.$store.state.config2)
             .then((result)=>{
                 console.log(result);
                 //var fileDownload = require('js-file-download');
@@ -731,7 +724,7 @@
                 
             })
             .catch((error) => {
-                console.log(error);
+                onsole.log(error);
                 if (error.message == 'Network Error') {
                     console.log(error);
                     this.alertError = true;

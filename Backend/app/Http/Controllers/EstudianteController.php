@@ -72,7 +72,6 @@ class EstudianteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request){
-        
         $entradas = $request->only('matricula', 'rut', 'nombre_completo', 'correo', 'anho_ingreso', 'situacion_academica', 'porcentaje_avance', 'creditos_aprobados', 'escuela', 'foto');
         $validator = Validator::make($entradas, [
             'matricula' => ['required','numeric'],
