@@ -5,6 +5,9 @@ use Illuminate\Http\Request;
 use App\Escuela;
 use Validator;
 
+use App\Log;
+use Tymon\JWTAuth\Facades\JWTAuth;
+
 class EscuelaController extends Controller
 {
 
@@ -90,7 +93,12 @@ class EscuelaController extends Controller
             $escuela = new Escuela();
             $escuela->cod_escuela = $entradas['cod_escuela'];
             $escuela->nombre = $entradas['nombre'];
-            $escuela = $escuela->save();
+            $escuela->save();
+            Log::create([
+                'titulo' => "Se a creado una escuela",
+                'descripcion' => $escuela,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => true,
                 'code' => 300,
@@ -182,7 +190,12 @@ class EscuelaController extends Controller
             if($entradas['nombre']!=null){
                 $escuela->nombre = $entradas['nombre'];
             }
-            $escuela-> save();
+            $escuela->save();
+            Log::create([
+                'titulo' => "Se a modificado una escuela",
+                'descripcion' => $escuela,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => true,
                 'code' => 600,
@@ -217,6 +230,11 @@ class EscuelaController extends Controller
                 ], 409 );
             }else{
                 $escuela->delete();
+                Log::create([
+                    'titulo' => "Se a eliminado una escuela",
+                    'descripcion' => $escuela,
+                    'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+                ]);
                 return response()->json([
                     'success' => true,
                     'code' => 700,
@@ -263,8 +281,9 @@ class EscuelaController extends Controller
      */
     public function restore($id){
         try{
-            $escuela=Escuela::onlyTrashed()->find($id)->restore();
-            if($escuela==false){
+            $escuela=Escuela::onlyTrashed()->find($id)->get();
+            $resultado = $escuela->restore();
+            if($resultado==false){
                 return response()->json([
                     'success' => false,
                     'code' => 901,
@@ -272,6 +291,11 @@ class EscuelaController extends Controller
                     'data' => ['escuela'=>$escuela]
                 ], 409);
             }
+            Log::create([
+                'titulo' => "Se a recuperado una escuela",
+                'descripcion' => $escuela,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => true,
                 'code' => 900,

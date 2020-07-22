@@ -14,7 +14,7 @@
                     <v-card-title class="white--text " > 
                             <v-col md="3" class="align-self-end" style="text-align:left; text-shadow: #555 2px 2px 3px; font-size:150% ;">
                                         <v-icon class="pb-2" color="white" style="font-size:100% ;">fas fa-user-graduate</v-icon>
-                                        <strong class="pl-2" style="font-size:95% ">Estudiantes</strong>
+                                        <strong  class="pl-2" style="font-size:95% ">Estudiantes</strong>
                             </v-col>
                             <v-col  md="6" class="align-self-end" style="text-align:center;">
                                 <v-text-field
@@ -331,13 +331,18 @@
                 class="elevation-1 "
                 >
                     <template v-slot:item.actions="{ item }">
-                    <v-btn color="white" fab small depressed class="mr-2 py-2" @click="perfilEstudiante(item)">
-                        <v-icon  
-                        color="primary"
-                        >
-                        fas fa-external-link-alt
-                        </v-icon>
-                    </v-btn>
+                        <v-tooltip bottom color="primary">
+                            <template v-slot:activator="{ on }">
+                                <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on" @click="perfilEstudiante(item)">
+                                    <v-icon  
+                                    color="primary"
+                                    >
+                                    fas fa-edit
+                                    </v-icon>
+                                </v-btn>
+                            </template>
+                            <span><strong>Ver Perfil</strong></span>
+                        </v-tooltip>
                     </template>                                                         
                 </v-data-table>
                 </v-card>
@@ -500,15 +505,17 @@
         agregarEstudiantesImportar(){
             let formData = new FormData();
             formData.append('file',this.file);
-            var url = 'http://127.0.0.1:8000/api/estudiante/importar';
-            axios.post(url,formData)
+            var url = 'http://127.0.0.1:8000/api/v1/estudiante/importar';
+            axios.post(url,formData,this.$store.state.config)
             .then((result)=>{
+                console.log(result);
                 if (result.data.success == true) {
                     this.resetImportarEstudiantes();
                     this.obtenerEstudiantes();
                 }
             })
             .catch((error)=>{
+                console.log(error);
                 if (error.message == 'Network Error') {
                     console.log(error);
                     this.alertError = true;
@@ -528,6 +535,7 @@
                 if (result.data.success == true) {
                     for (let index = 0; index < result.data.data.estudiantes.length; index++) {
                     const element = result.data.data.estudiantes[index];
+                    console.log(element)
                     let estudiante = {
                         id: element.id,
                         matricula: element.matricula,
@@ -702,7 +710,7 @@
                 //console.log('rango mal');
             //}
             var url = 'http://127.0.0.1:8000/api/v1/exportar';
-            axios.get(url,{responseType: 'blob'})
+            axios.get(url,this.$store.state.config2)
             .then((result)=>{
                 console.log(result);
                 //var fileDownload = require('js-file-download');
@@ -722,6 +730,7 @@
                 
             })
             .catch((error) => {
+                onsole.log(error);
                 if (error.message == 'Network Error') {
                     console.log(error);
                     this.alertError = true;

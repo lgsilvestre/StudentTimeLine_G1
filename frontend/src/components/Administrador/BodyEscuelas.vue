@@ -87,16 +87,22 @@
                     </v-container>
                   </v-card>
                 </v-dialog>
-                <v-btn
-                  class="ml-2"
-                  fab
-                  :large="$vuetify.breakpoint.smAndDown ? false : true"
-                  :small="$vuetify.breakpoint.smAndDown ? true : false"
-                  bottom
-                  left
-                  >
-                    <v-icon  color="secondary">fas fa-trash-restore-alt</v-icon>
-                </v-btn>
+                <v-tooltip bottom color="primary">
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      class="ml-2"
+                      fab
+                      :large="$vuetify.breakpoint.smAndDown ? false : true"
+                      :small="$vuetify.breakpoint.smAndDown ? true : false"
+                      bottom
+                      left
+                      v-on="on"
+                      >
+                        <v-icon  color="secondary">fas fa-trash-restore-alt</v-icon>
+                    </v-btn>
+                  </template>
+                  <span><strong>Recuperar Escuela</strong></span>
+                </v-tooltip>
               </v-col>
             </v-row>
 
@@ -125,20 +131,30 @@
           class="elevation-1 "
           >
             <template v-slot:item.actions="{ item }">
-              <v-btn color="white" fab small depressed class="mr-2 py-2" @click="ModificarEscuela(item)">
-                <v-icon  
-                color="primary"
-                >
-                fas fa-edit
-                </v-icon>
-              </v-btn>
-              <v-btn color="white" fab small depressed class="mr-2 py-2" @click="EliminarEscuela(item)">
-                <v-icon
-                color="warning"
-                >
-                fas fa-trash-alt
-                </v-icon>
-              </v-btn>
+              <v-tooltip bottom color="primary">
+                <template v-slot:activator="{ on }">
+                  <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on" @click="ModificarEscuela(item)">
+                    <v-icon  
+                    color="primary"
+                    >
+                    fas fa-edit
+                    </v-icon>
+                  </v-btn>
+                </template>
+                <span><strong>Modificar Escuela</strong></span>
+              </v-tooltip>
+              <v-tooltip bottom color="primary">
+                <template v-slot:activator="{ on }">
+                  <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on" @click="EliminarEscuela(item)">
+                    <v-icon
+                    color="warning"
+                    >
+                    fas fa-trash-alt
+                    </v-icon>
+                  </v-btn>
+                </template>
+                <span><strong>Eliminar Escuela</strong></span>
+              </v-tooltip>
             </template>                                                         
           </v-data-table>
           <v-dialog transition="scroll-y-reverse-transition" :key="keyDialogModicar" v-model="dialogModificar" persistent max-width="500px">
