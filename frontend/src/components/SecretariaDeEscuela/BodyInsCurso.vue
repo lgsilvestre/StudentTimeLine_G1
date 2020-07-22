@@ -1055,6 +1055,7 @@ export default {
             this.datosInsCurso.curso = '';
             this.datosInsCurso.seccion = '';
             this.dialogModificarInsCurso = false;
+            this.obtenerInstanciasCursos();
         },
         modificarInstanciaCurso(){
             var url =`http://127.0.0.1:8000/api/v1/instanciaCurso/${this.datosInsCurso.id}`;
@@ -1150,6 +1151,8 @@ export default {
                 console.log("Modificar Ins Curso")
                 console.log(curso)
                 
+                this.datosInsCurso = curso;
+                this.dialogModificarInsCurso = true;
                   //this.dialogModificarSemestre=true;
                  //this.semestreActual_1=semestre;
             }
