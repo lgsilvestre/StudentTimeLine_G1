@@ -15,9 +15,18 @@
                      </v-card-title> 
                 </v-img>
                 <!-- <v-container> -->
-                    <v-row>
-                        <v-col v-for="(semestre, index) in listaSemestres" :key="index" cols="12" sm="6" md="4" lg="3" >
-                            <v-card class=" ml-2 mr-2"  dark color="#F7FFF7"  style=" border-style:solid; border-color:rgba(0,0,0,0.5);" > 
+                    <v-data-iterator :items="listaSemestres" :search="search" :sort-by="sortBy.toLowerCase()">
+                        <template v-slot:header>
+                           <v-toolbar>
+                                <v-text-field v-model="search" append-icon="mdi-magnify"
+                                    label="Buscar semestre" single-line  hide-details
+                                ></v-text-field>
+                           </v-toolbar>
+                       </template>
+                       <template v-slot:default="props">
+                           <v-row>
+                               <v-col v-for="item in props.items" :key="item.nomCurso" cols="12" sm="6" md="4" lg="3">
+                                   <v-card class=" ml-2 mr-2"  dark color="#F7FFF7"  style=" border-style:solid; border-color:rgba(0,0,0,0.5);" > 
                                 <v-container class="pt-0 mt-0 pb-0 ">
                                     <v-row >
                                         <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0" >
@@ -25,17 +34,17 @@
                                                 <v-img class="mx-auto white--text align-end justify-center "
                                                         width="100%" height="30px"       
                                                         src="@/assets/Globales/background-panel-08.jpg"
-                                                        v-show="semestre.semestre == 1">
+                                                        v-show="item.semestre == 1">
                                                 </v-img>
                                                 <v-img class="mx-auto white--text align-end justify-center "
                                                         width="100%" height="30px"       
                                                         src="@/assets/Globales/background-panel-09.jpg"
-                                                        v-show="semestre.semestre == 2">
+                                                        v-show="item.semestre == 2">
                                                 </v-img>
                                                 <v-img class="mx-auto white--text align-end justify-center "
                                                         width="100%" height="30px"       
                                                         src="@/assets/Globales/background-panel-10.jpg"
-                                                        v-show="semestre.semestre == 3">
+                                                        v-show="item.semestre == 3">
                                                 </v-img>
                                             </v-card-title>
                                         </v-col>
@@ -47,39 +56,43 @@
                                                         <v-icon>fas fa-ellipsis-v</v-icon>
                                                     </v-btn>
                                                 </template>
-                                                <v-list v-if="semestre.deleted_at == null">
-                                                    <v-list-item  v-for="(item, index) in accionesSemestre" :key="index"
-                                                    @click="acionesSobreSemestre(item,semestre)" >
-                                                        <v-list-item-title>{{ item }}</v-list-item-title>
+                                                <v-list v-if="item.deleted_at == null">
+                                                    <v-list-item  v-for="(accion, index) in accionesSemestre" :key="index"
+                                                    @click="acionesSobreSemestre(accion,semestre)" >
+                                                        <v-list-item-title>{{ accion }}</v-list-item-title>
                                                     </v-list-item>
                                                 </v-list>
-                                                <v-list v-if="semestre.deleted_at != null">
-                                                    <v-list-item  v-for="(item, index) in accionesSemestreEliminado" :key="index"
-                                                    @click="acionesSobreSemestre(item,semestre)" >
-                                                        <v-list-item-title>{{ item }}</v-list-item-title>
+                                                <v-list v-if="item.deleted_at != null">
+                                                    <v-list-item  v-for="(accion, index) in accionesSemestreEliminado" :key="index"
+                                                    @click="acionesSobreSemestre(accion,semestre)" >
+                                                        <v-list-item-title>{{ accion }}</v-list-item-title>
                                                     </v-list-item>
                                                 </v-list>
                                             </v-menu>
                                         </v-col>
                                         <v-col cols="6"  class=" pt-0 pl-1 pr-0 pb-0 "  >
-                                            <v-card-text class=" pt-0 pl-2 pr-0 pb-0 " v-if="semestre.deleted_at == null">
+                                            <v-card-text class=" pt-0 pl-2 pr-0 pb-0 " v-if="item.deleted_at == null">
                                                 <div class="text--primary " >
                                                     <!-- <p class="font-weight-black"   @click="calcularRol(semestre)"> {{ semestre.anio }} - {{semestre.semestre}}</p> -->
-                                                    <a   @click="calcularRol(semestre)">{{ semestre.anio }} - {{semestre.semestre}}</a>
+                                                    <a   @click="calcularRol(item)">{{ item.anio }} - {{item.semestre}}</a>
                                                 </div>
                                             </v-card-text>
-                                            <v-card-text class=" pt-0 pl-2 pr-0 pb-0 " v-if="semestre.deleted_at != null">
+                                            <v-card-text class=" pt-0 pl-2 pr-0 pb-0 " v-if="item.deleted_at != null">
                                                 <div class="text--primary "  >
                                                      <!-- <p class="font-weight-black"  > {{ semestre.anio }} # {{semestre.semestre}}</p> -->
-                                                    <a   @click="calcularRol(semestre)">{{ semestre.anio }} - {{semestre.semestre}}</a>
+                                                    <a   @click="calcularRol(item)">{{ item.anio }} - {{item.semestre}}</a>
                                                 </div>
                                             </v-card-text>
                                         </v-col>
                                     </v-row>
                                 </v-container>
                             </v-card>
-                        </v-col>
-                    </v-row>
+                               </v-col>
+                           </v-row>
+
+                       </template>
+
+                    </v-data-iterator>
                 <!-- </v-container> -->
 
             </v-card>
@@ -319,9 +332,30 @@ export default {
 
             accionesSemestre: [ 'Modificar Semestre' , 'Cerrar Semestre'  ],
             accionesSemestreEliminado:['Re-abrir semestre'],
-            listaSemestres_reg:[ {sem: 1},  {sem: 2}, {sem: 3}]
+            listaSemestres_reg:[ {sem: 1},  {sem: 2}, {sem: 3}],
+
+            //busqueda
+            search: '',
+            sortBy:'anio',
+            headers: [
+                { text: 'id', value: 'id' },
+                { text: 'semestre', value: 'semestre' },
+                { text: 'Anio ', value: 'anio' },
+                { text: 'deleted_at curso', value: 'deleted_at' },
+            ],
         
         }
+    },
+    _props: {
+    item: {
+        id: '',semestre: '',anio: '',deleted_at: ''
+    }
+    },
+    get props() {
+        return this._props
+    },
+    set props(value) {
+        this._props=value
     },
     beforeMount(){
         /**
@@ -331,6 +365,7 @@ export default {
     },
     methods: {
         ...mapMutations(['calcularRol']),
+        
         /**
          * Obtiene la lista de todos los 
          *   semestres registrados en la base de datos

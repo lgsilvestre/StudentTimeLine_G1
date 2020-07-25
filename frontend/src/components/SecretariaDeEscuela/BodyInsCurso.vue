@@ -38,6 +38,7 @@
                              </v-btn>
                         </v-card-title> 
                     </v-img>
+
                     <v-data-iterator :items="listaInsCursos" :search="search" :sort-by="sortBy.toLowerCase()" >
                        <template v-slot:header>
                            <v-toolbar>
@@ -49,8 +50,7 @@
                         <template v-slot:default="props">
                             <v-row>
                                 <v-col v-for="item in props.items" :key="item.nomCurso" cols="12"  sm="6" md="4" lg="4">
-                                    <v-card  class=" ml-2 mr-2"  style="background-color:#F7FFF7; border-style:solid; border-color:rgba(0,0,0,0.5);"
-                                   >
+                                    <v-card  class=" ml-2 mr-2"  style="background-color:#F7FFF7; border-style:solid; border-color:rgba(0,0,0,0.5);" >
                                         <v-container class="pt-0 mt-0 pb-0 ">
                                             <v-row >
                                                 <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0">
@@ -455,7 +455,6 @@ export default {
             datosCurso: [{id:''},{nombre:''},{plan:''},{escuela:''},{descripcion:''}],
             datosInsCurso: [{id:''},{semestre:''},{curso:''},{nomCurso:''},{seccion:''},{anio:''}],
 
-            search: '',
             cargando: true,
             seleccionados: [],
             profesorSeleccionado: '',
