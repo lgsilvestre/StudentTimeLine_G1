@@ -35,7 +35,7 @@
                             <v-spacer></v-spacer>
                             <v-btn class="mr-2" fab large bottom left >
                                 <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
-                             </v-btn>
+                            </v-btn>
                         </v-card-title> 
                     </v-img>
 
@@ -45,8 +45,8 @@
                                 <v-text-field v-model="search" append-icon="mdi-magnify"
                                     label="Buscar curso" single-line  hide-details
                                 ></v-text-field>
-                           </v-toolbar>
-                       </template>
+                            </v-toolbar>
+                        </template>
                         <template v-slot:default="props">
                             <v-row>
                                 <v-col v-for="item in props.items" :key="item.nomCurso" cols="12"  sm="6" md="4" lg="4">
@@ -99,6 +99,7 @@
             </v-col>
         </v-row>
 
+    <!------------------>
         <!-- Dialog para mostrar la lista de los Cursos Existentes -->
         <v-dialog v-model="dialogListaCursos" fullscreen hide-overlay transition="dialog-bottom-transition">
             <v-card class="mx-auto my-10 " max-width="70%">
@@ -125,19 +126,29 @@
                             </v-img>
                             <v-data-table  :headers="colCursos" :items="listaCursos"
                                 :search="search" :loading="cargando" :items-per-page="10"  >            
-                                 <template v-slot:item.opciones="{ item }">
+                                <template v-slot:item.opciones="{ item }">
                                 <!-- boton para modificar usuario seleccionado -->
-                                    <v-btn color="white" fab small depressed class="mr-2 py-2">
-                                        <v-icon color="primary" @click="modificarCurso(item)" >
-                                            fas fa-edit
-                                        </v-icon>
-                                    </v-btn>
+                                    <v-tooltip bottom color="primary">
+                                        <template v-slot:activator="{ on }">
+                                            <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on">
+                                                <v-icon color="primary" @click="setModificarCurso(item)" >
+                                                    fas fa-edit
+                                                </v-icon>
+                                            </v-btn>
+                                        </template>
+                                        <span><strong>Modificar Curso</strong></span>
+                                    </v-tooltip>
                                 <!-- boton para eliminar usuario seleccionado -->
-                                    <v-btn color="white" fab small depressed class="mr-2 py-2">
-                                        <v-icon color="warning" @click="setEliminarCurso(item)" >
-                                            fas fa-trash-alt
-                                        </v-icon>
-                                    </v-btn>
+                                    <v-tooltip bottom color="primary">
+                                        <template v-slot:activator="{ on }">
+                                            <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on">
+                                                <v-icon color="warning" @click="setEliminarCurso(item)" >
+                                                    fas fa-trash-alt
+                                                </v-icon>
+                                            </v-btn>
+                                        </template>
+                                        <span><strong>Eliminar Curso</strong></span>
+                                    </v-tooltip>
                                 </template>
                             </v-data-table>
                         </v-col>
@@ -205,6 +216,55 @@
             </v-card>
         </v-dialog> 
 
+        <!-- Dialog para modificar un curso -->
+        <v-dialog v-model="dialogModificarCurso" persistent max-width="500px" transition="scroll-y-reverse-transition">
+            <v-card elevation="1">
+                <v-card-title  class="headline primary text--center" primary-title > 
+                    <h5 class="white--text ">Modificar Curso</h5>
+                </v-card-title>
+                <v-container class="px-5 mt-5">
+                    <v-text-field v-model="datosCurso.nombre" label="Nombre del Curso" outlined
+                        color="secondary"
+                        :rules="[() => !!datosCurso.nombre ||'Requerido']"
+                        prepend-inner-icon="mdi-account"
+                    ></v-text-field>
+                    <v-text-field v-model="datosCurso.plan" label="Plan" outlined
+                        color="secondary"
+                        :rules="[() => !!datosCurso.plan ||'Requerido']"
+                        prepend-inner-icon="mdi-account"
+                    ></v-text-field>
+                    <v-select  v-model="datosCurso.escuela"
+                        :items="listaEscuela"
+                        item-text="nombre"
+                        item-value="id"
+                        label="Escuela"
+                        outlined
+                        :small-chips="$vuetify.breakpoint.smAndDown ? true : false"
+                        :rules="[() => !!datosCurso.escuela ||'Requerido']"
+                        prepend-inner-icon="mdi-school"
+                    ></v-select>
+                    <v-text-field v-model="datosCurso.descripcion" label="Descripcion del Curso" outlined
+                        color="secondary"
+                        :rules="[() => !!datosCurso.descripcion ||'Requerido']"
+                        prepend-inner-icon="mdi-account"
+                    ></v-text-field>
+                    
+                    <div style="text-align:right;" class="mb-1 " >
+                        <v-btn 
+                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                        rounded color="warning"    @click="resetModificarCurso">  
+                            <h4 class="white--text">Cancelar</h4>
+                        </v-btn>
+                        <v-btn 
+                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                        rounded color="secondary" class=" ml-2"    @click="modificarCurso">
+                            <h4 class="white--text">Modificar</h4>
+                        </v-btn>
+                    </div>
+                </v-container> 
+            </v-card>                        
+        </v-dialog>
+
         <!-- Dialog para Eliminar un Curso -->
         <v-dialog v-model="dialogEliminarCurso" ref="form" persistent max-width="450px">
             <v-card class="mx-auto" max-width="450"  >
@@ -232,7 +292,50 @@
             </v-card>
         </v-dialog>
 
-
+        <!------------------>
+        <v-dialog v-model="dialogModificarInsCurso" persistent max-width="500px" transition="scroll-y-reverse-transition">
+            <v-card elevation="1">
+                <v-card-title  class="headline primary text--center" primary-title > 
+                    <h5 class="white--text ">Modificar Curso</h5>
+                </v-card-title>
+                <v-container class="px-5 mt-5">
+                    <v-select  v-model="datosInsCurso.curso"
+                        :items="listaCursos"
+                        item-text="nombre"
+                        item-value="id"
+                        label="Curso"
+                        outlined
+                        :small-chips="$vuetify.breakpoint.smAndDown ? true : false"
+                        :rules="[() => !!datosInsCurso.curso ||'Requerido']"
+                        prepend-inner-icon="mdi-school"
+                    ></v-select>
+                    <v-select  v-model="datosInsCurso.seccion"
+                        :items="listaDeSeccionesDisponibles"
+                        item-text="nombre"
+                        item-value="id"
+                        label="Seccion"
+                        outlined
+                        :small-chips="$vuetify.breakpoint.smAndDown ? true : false"
+                        :rules="[() => !!datosInsCurso.seccion ||'Requerido']"
+                        prepend-inner-icon="mdi-school"
+                    ></v-select>
+                    
+                    
+                    <div style="text-align:right;" class="mb-1 " >
+                        <v-btn 
+                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                        rounded color="warning" @click="resetModificarInstanciaCurso">  
+                            <h4 class="white--text">Cancelar</h4>
+                        </v-btn>
+                        <v-btn 
+                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                        rounded color="secondary" class=" ml-2"    @click="modificarInstanciaCurso">
+                            <h4 class="white--text">Modificar</h4>
+                        </v-btn>
+                    </div>
+                </v-container> 
+            </v-card>                        
+        </v-dialog>
 
         <!-- Dialog para Eliminar una Instancia de Curso -->
         <v-dialog v-model="dialogEliminarInsCurso" ref="form" persistent max-width="450px">
@@ -388,6 +491,7 @@
             </v-card>
         </v-dialog>
 
+
         <!-- Alertas -->
 
         <v-snackbar v-model="alertaError" :timeout="timeout"
@@ -433,7 +537,6 @@
                 </v-icon>                
             </v-btn>
         </v-snackbar> 
-
     </v-container>
 </template>
 
@@ -453,7 +556,8 @@ export default {
             timeout: 6000,
             /* --------------- */
             datosCurso: [{id:''},{nombre:''},{plan:''},{escuela:''},{descripcion:''}],
-            datosInsCurso: [{id:''},{semestre:''},{curso:''},{nomCurso:''},{seccion:''},{anio:''}],
+            datosInsCurso: [{id:''},{semestre:''},{curso:''},{nomCurso:''}],
+            listaDeSeccionesDisponibles:['A','B','C','D','E','F','G','H'],
 
             cargando: true,
             seleccionados: [],
@@ -650,15 +754,7 @@ export default {
                         nombre: element.nombre,
                         plan: element.plan,
                         descripcion: element.descripcion,
-                        escuela: element.escuela,
-                        nomEscuela: '',
-                    };
-                    for (let j = 0; j < this.listaEscuela.length; j++){
-                        /* console.log("id curso: "+this.listaCursos[j].id); */
-                        if(this.listaEscuela[j].id == curso.escuela){
-                            curso.nomEscuela = this.listaEscuela[j].nombre;
-                            break;
-                        };
+                        nomEscuela: element.escuela,
                     };
                     this.listaCursosAux[index]=curso;
                 }
@@ -680,22 +776,14 @@ export default {
             var url = `http://127.0.0.1:8000/api/v1/instanciaCurso/${this.$store.infoSemestre.id}`;
             axios.get(url,this.$store.state.config)
             .then((result)=>{   
-                for (let index = 0; index < result.data.data.insCurso.length; index++) {
-                    const element = result.data.data.insCurso[index];  
+                for (let index = 0; index < result.data.data.insCursos.length; index++) {
+                    const element = result.data.data.insCursos[index];  
                     let insCurso = {
                         id: element.id,
                         semestre: element.semestre,
-                        curso: element.curso,
-                        nomCurso: '',
+                        nomCurso: element.curso,
                         seccion:element.seccion,
                     }; 
-                    for (let j = 0; j < this.listaCursos.length; j++){
-                        /* console.log("id curso: "+this.listaCursos[j].id); */
-                        if(this.listaCursos[j].id == insCurso.curso){
-                            insCurso.nomCurso = this.listaCursos[j].nombre;
-                        };
-                    };  
-
                     this.listaInsCursosAux[index]=insCurso;                                                         
                 }
                 this.listaInsCursos = this.listaInsCursosAux;  
@@ -730,7 +818,7 @@ export default {
                     console.log(error)
                     this.alertaError = true;
                     this.textoAlertas = "Error al crear el curso, intente mas tarde."
-                    this.resetRegistrarUsuario();
+                    this.resetCrearCurso();
                 };                        
             });
         },
@@ -743,8 +831,73 @@ export default {
             this.dialogCrearCurso = false;
         },
 
+        setModificarCurso(item){
+            this.datosCurso.id= item.id;
+            this.datosCurso.nombre = item.nombre;
+            this.datosCurso.plan = item.plan;
+            this.datosCurso.escuela = item.escuela;
+            this.datosCurso.descripcion = item.descripcion;
+            this.dialogModificarCurso = true;
+        },
+        resetModificarCurso(){
+            this.datosCurso.id= '';
+            this.datosCurso.nombre = '';
+            this.datosCurso.plan = '';
+            this.datosCurso.escuela = '';
+            this.datosCurso.descripcion = '';
+            this.dialogModificarCurso = false;
+        },
         modificarCurso(){
-            
+            console.log("inicio mod curso");
+
+            var url =`http://127.0.0.1:8000/api/v1/curso/${this.datosCurso.id}`;
+            let put ={                
+                "nombre": this.datosCurso.nombre,
+                "plan": this.datosCurso.plan,
+                "escuela": this.datosCurso.escuela,
+                "descripcion": this.datosCurso.descripcion,
+            };
+            axios.put(url,put,this.$store.state.config)
+            .then((result)=>{
+                if (result.statusText=='OK') {                
+                    this.alertaExito = true;
+                    this.textoAlertas = "Se modificó el curso con exito."
+                    this.obtenerCursos(); 
+                    this.resetModificarCurso();
+                }
+            }).catch((error)=>{                
+                if (error.message == 'Network Error') {
+                    console.log(error)
+                    this.alertaError = true;
+                    this.textoAlertas = "Error al modificar el curso, intente mas tarde."
+                }
+                else{
+                    console.log(error.response);
+                    // if(error.response.data.success == false){
+                    //     if(error.response.data.code == 601){
+                    //         console.log(error.response.data.code +' '+ error.response.data.message);
+                    //         console.log(error.response.data);
+                    //         this.textoAlertas = error.response.data.message;
+                    //         this.alertaError = true;
+                    //         this.resetModificarCurso();
+                    //     }
+                    //     if(error.response.data.code == 602){
+                    //         console.log(error.response.data.code +' '+ error.response.data.message);
+                    //         console.log(error.response.data);
+                    //         this.textoAlertas = error.response.data.message;
+                    //         this.alertaError = true;
+                    //         this.resetModificarCurso();
+                    //     }
+                    //     if(error.response.data.code == 603){
+                    //         console.log(error.response.data.code +' '+ error.response.data.message);
+                    //         console.log(error.response.data);
+                    //         this.textoAlertas = error.response.data.message;
+                    //         this.alertaError = true;
+                    //         this.resetModificarCurso();
+                    //     } 
+                    // }                
+                }                  
+            });
         },
         
         setEliminarCurso(item){
@@ -834,7 +987,7 @@ export default {
                             console.log(error)
                             this.alertaError = true;
                             this.textoAlertas = "Error al asignar el curso, intente mas tarde."
-                            this.resetRegistrarUsuario();
+                            this.resetAsignarCurso();
                         }
                         if(error.response.data.code == 301){
                             console.log(error.response.data.code +' '+ error.response.data.message);
@@ -848,13 +1001,8 @@ export default {
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;      
                         }   
-                                       
-                    });
-                    
-                        
-                 
-                 
-                   
+                    });                                                            
+                
                 }   
                 this.seleccionados = []; 
                 this.profesorSeleccionado = '';
@@ -868,9 +1016,9 @@ export default {
             
 
         },
-       
+
         agregarProfesorCurso(post2){
-             var url2 = 'http://127.0.0.1:8000/api/v1/profesorConCurso'; 
+            var url2 = 'http://127.0.0.1:8000/api/v1/profesorConCurso'; 
                     /* crear profesor con curso */
                     axios.post(url2, post2, this.$store.state.config)
                     .then((result) => {
@@ -884,7 +1032,7 @@ export default {
                             console.log(error)  
                             this.alertaError = true;
                             this.textoAlertas = "Error al asignar el profesor intente mas tarde."
-                            this.resetRegistrarUsuario();
+                            this.resetAsignarCurso();
                         }
                         if(error.response.data.code == 301){
                             console.log(error.response.data.code +' '+ error.response.data.message);
@@ -901,10 +1049,61 @@ export default {
                     });
         },
 
-
-        modificarInstanciaCurso(item){
-
-
+        resetModificarInstanciaCurso(){
+            this.datosInsCurso.semestre= '';
+            this.datosInsCurso.curso = '';
+            this.datosInsCurso.seccion = '';
+            this.dialogModificarInsCurso = false;
+        },
+        modificarInstanciaCurso(){
+            var url =`http://127.0.0.1:8000/api/v1/instanciaCurso/${this.datosInsCurso.id}`;
+            let put ={                
+                "semestre": this.datosInsCurso.semestre,
+                "curso": this.datosInsCurso.curso,
+                "seccion": this.datosInsCurso.seccion,
+            };
+            axios.put(url,put,this.$store.state.config)
+            .then((result)=>{
+                if (result.statusText=='OK') {                
+                    this.alertaExito = true;
+                    this.textoAlertas = "Se modificó el curso con exito."
+                    this.obtenerInstanciasCursos(); 
+                    this.resetModificarInstanciaCurso();
+                }
+            }).catch((error)=>{                
+                if (error.message == 'Network Error') {
+                    console.log(error);
+                    this.resetModificarInstanciaCurso();
+                    this.alertaError = true;
+                    this.textoAlertas = "Error al modificar el curso, intente mas tarde."
+                }
+                else{
+                    console.log(error.response);
+                    if(error.response.data.success == false){
+                        if(error.response.data.code == 301){
+                            console.log(error.response.data.code +' '+ error.response.data.message);
+                            console.log(error.response.data);
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true;
+                            this.resetModificarInstanciaCurso();
+                        }
+                        if(error.response.data.code == 602){
+                            console.log(error.response.data.code +' '+ error.response.data.message);
+                            console.log(error.response.data);
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true;
+                            this.resetModificarInstanciaCurso();
+                        }
+                        if(error.response.data.code == 603){
+                            console.log(error.response.data.code +' '+ error.response.data.message);
+                            console.log(error.response.data);
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true;
+                            this.resetModificarInstanciaCurso();
+                        }
+                    }           
+                }                  
+            });
         },
 
         setEliminarInstanciaCurso(item){
@@ -947,7 +1146,7 @@ export default {
          */
         acionesSobreInstanciaCurso(item,curso){
             if(item =='Modificar curso'){
-                console.log("Modificar Semestre")
+                console.log("Modificar Ins Curso")
                 console.log(curso)
                 
                   //this.dialogModificarSemestre=true;

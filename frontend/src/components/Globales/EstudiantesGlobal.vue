@@ -331,13 +331,18 @@
                 class="elevation-1 "
                 >
                     <template v-slot:item.actions="{ item }">
-                    <v-btn color="white" fab small depressed class="mr-2 py-2" @click="perfilEstudiante(item)">
-                        <v-icon  
-                        color="primary"
-                        >
-                        fas fa-external-link-alt
-                        </v-icon>
-                    </v-btn>
+                        <v-tooltip bottom color="primary">
+                            <template v-slot:activator="{ on }">
+                                <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on" @click="perfilEstudiante(item)">
+                                    <v-icon  
+                                    color="primary"
+                                    >
+                                    fas fa-edit
+                                    </v-icon>
+                                </v-btn>
+                            </template>
+                            <span><strong>Ver Perfil</strong></span>
+                        </v-tooltip>
                     </template>                                                         
                 </v-data-table>
                 </v-card>

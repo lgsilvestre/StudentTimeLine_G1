@@ -11,6 +11,7 @@ use App\Curso;
 use App\InstanciaCurso;
 use App\Profesor_Con_Curso;
 use Image; 
+use App\Log;
 
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -158,7 +159,12 @@ class UsuarioController extends Controller
             $user ->email=$entradas['email'];
             $user ->password=bcrypt($entradas['password']);
             $user->foto=$entradas['foto'];
-            $user = $user->save();
+            $user->save();
+            Log::create([
+                'titulo' => "Se a creado un usuario",
+                'descripcion' => $user,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => true,
                 'code' => 300,
@@ -202,8 +208,8 @@ class UsuarioController extends Controller
      */
     public function edit($id){
         try{
-            $user = User::find($id);
-            if($user==null){
+            $usuario = User::find($id);
+            if($usuario==null){
                 return response()->json([
                     'success' => false,
                     'code' => 501,
@@ -211,11 +217,11 @@ class UsuarioController extends Controller
                     'data' => null
                 ], 409);
             }
-            $user->escuela= $user->getEscuela->nombre;
-            if($user->escuelaAux!=null){
-                $user->escuelaAux = $user->getEscuelaAux->nombre;
+            $usuario->escuela= $usuario->getEscuela->nombre;
+            if($usuario->escuelaAux!=null){
+                $usuario->escuelaAux = $usuario->getEscuelaAux->nombre;
             }else{
-                $user->escuelaAux = 'no posee otra escuela';
+                $usuario->escuelaAux = 'no posee otra escuela';
             }
             $cursos = Profesor_Con_Curso::where('profesor', $id)->get();
             foreach ($cursos as $curso){
@@ -223,14 +229,12 @@ class UsuarioController extends Controller
                 unset($curso['created_at']);
                 unset($curso['updated_at']);
                 unset($curso['deleted_at']);
-                $a=var_dump( $curso);
-                return $a;
             }
             return response()->json([
                 'success' => true,
                 'code' => 500,
                 'message' => "La operacion se a realizado con exito",
-                'data' => ['usuario'=>$user,
+                'data' => ['usuario'=>$usuario,
                         'cursos'=>$cursos]
             ], 200);
         //este catch permite responder directamente que problemas en la peticion SQL
@@ -325,6 +329,7 @@ class UsuarioController extends Controller
                     $usuario->escuelaAux = $entradas['escuelaAux'];
                 }
                 if($entradas['role']!=null){
+                    $usuario->removeRole($usuario->rol);
                     $usuario->rol = $entradas['role'];
                     $usuario->assignRole($entradas['role']);
                 }
@@ -343,6 +348,11 @@ class UsuarioController extends Controller
                 }
             }
             $usuario->save();
+            Log::create([
+                'titulo' => "Se a modificado a un usuario",
+                'descripcion' => $usuario,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]); 
             return response()->json([
                 'success' => true,
                 'code' => 600,
@@ -370,8 +380,8 @@ class UsuarioController extends Controller
      */
     public function destroy($id){
         try{
-            $user = User::find($id);
-            if($user==null){
+            $usuario = User::find($id);
+            if($usuario==null){
                 return response()->json([
                     'success' => false,
                     'code' => 701,
@@ -379,12 +389,17 @@ class UsuarioController extends Controller
                     'data' => null
                 ], 409 );
             }
-            $user->delete();
+            $usuario->delete();
+            Log::create([
+                'titulo' => "Se a eliminado a un usuario",
+                'descripcion' => $usuario,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]); 
             return response()->json([
                 'success' => true,
                 'code' => 700,
                 'message' => "Operacion realizada con exito",
-                'data' => ['usuario'=>$user]
+                'data' => ['usuario'=>$usuario]
             ], 200);
         //----- Mecanismos anticaidas y reporte de errores -----
         //catch que se encarga en responder que paso en la sentencia sql
@@ -460,13 +475,36 @@ class UsuarioController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function restore($id){
-        $usuario=User::onlyTrashed()->find($id)->restore();
-        return response()->json([
-            'success' => true,
-            'code' => 900,
-            'message' => "el usuario se recupero con exito",
-            'data' => ['usuario'=>$usuario]
-        ], 200);
+        try{
+            $usuario=User::onlyTrashed()->find($id)->get();
+            $respuesta = $usuario->restore();
+            if($respuesta==false){
+                return response()->json([
+                    'success' => false,
+                    'code' => 901,
+                    'message' => "El usuario no se logro recuperar",
+                    'data' => ['usuario'=>$usuario]
+                ], 409);
+            }
+            Log::create([
+                'titulo' => "Se a recuperado a un usuario",
+                'descripcion' => $usuario,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]); 
+            return response()->json([
+                'success' => true,
+                'code' => 900,
+                'message' => "El usuario recupero con exito",
+                'data' => ['usuario'=>$usuario]
+            ], 200);
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 902,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
     }
 
 

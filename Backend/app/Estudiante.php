@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use DB;
-use App\Estudiante;
 
 class Estudiante extends Model
 {
@@ -99,6 +98,6 @@ class Estudiante extends Model
     }
 
     public function getEscuela(){
-        return $this->belongsTo('App\Escuela','escuela');
+        return $this->belongsTo('App\Escuela','escuela')->withTrashed();
     }
 }

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Curso;
 use Illuminate\Http\Request;
 use Validator;
-
+use App\Log;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class CursoController extends Controller
@@ -47,6 +47,9 @@ class CursoController extends Controller
                     'message' => 'Error que no deberia pasar en index',
                     'data' => ['error'=>'al momento de buscar el rol del solicitante no lo encuentra']
                 ], 409);
+            }
+            foreach($cursos as $curso){
+                $curso->escuela=$curso->getEscuela->nombre;
             }
             return response()->json([
                 'success' => true,
@@ -111,6 +114,11 @@ class CursoController extends Controller
             $curso->descripcion = $request->descripcion;
             $curso->escuela = $request->escuela;
             $curso->save();
+            Log::create([
+                'titulo' => "Se a creado una curso",
+                'descripcion' => $curso,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => true,
                 'code' => 300,
@@ -218,6 +226,11 @@ class CursoController extends Controller
                 $curso->escuela = $entradas['escuela'];
             }
             $curso-> save();
+            Log::create([
+                'titulo' => "Se a modificado una curso",
+                'descripcion' => $curso,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => true,
                 'code' => 600,
@@ -250,15 +263,20 @@ class CursoController extends Controller
                     'message' => 'El curso con el id '.$id.' no existe',
                     'data' => null
                 ], 409 );
-            }else{
-                $curso->delete();
-                return response()->json([
-                    'success' => true,
-                    'code' => 700,
-                    'message' => "Operacion realizada con exito",
-                    'data' =>['curso'=> $curso]
-                ], 200);
             }
+            $curso->delete();
+            Log::create([
+                'titulo' => "Se a eliminado una curso",
+                'descripcion' => $curso,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
+            return response()->json([
+                'success' => true,
+                'code' => 700,
+                'message' => "Operacion realizada con exito",
+                'data' =>['curso'=> $curso]
+            ], 200);
+            
         }catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
                 'success' => false,
@@ -298,19 +316,25 @@ class CursoController extends Controller
      */
     public function restore($id){
         try{
-            $curso=Curso::onlyTrashed()->find($id)->restore();
-            if($curso==false){
+            $curso=Curso::onlyTrashed()->find($id)->get();
+            $respuesta = $curso->restore();
+            if($respuesta==false){
                 return response()->json([
                     'success' => false,
                     'code' => 901,
-                    'message' => "La escuela no se logro recuperar",
+                    'message' => "El curso no se logro recuperar",
                     'data' => ['curso'=>$curso]
                 ], 409);
             }
+            Log::create([
+                'titulo' => "Se a recuperado una curso",
+                'descripcion' => $curso,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => true,
                 'code' => 900,
-                'message' => "La escuela recupero con exito",
+                'message' => "El curso se recupero con exito",
                 'data' => ['curso'=>$curso]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
