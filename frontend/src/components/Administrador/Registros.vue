@@ -12,8 +12,8 @@
                         src="@/assets/Globales/fondo3.jpg"
                     >
                         <v-card-title>
-                            <v-col md="3" class="align-self-end" style="text-align:left; text-shadow: #555 2px 2px 3px; font-size:150% ;">
-                                <v-icon class="pb-2" color="white" style="font-size:100% ;">fas fa-book-open</v-icon>
+                            <v-row>
+                                <v-col md="6" class="align-self-end" style="text-align:left;text-shadow: #000000 3px 3px 4px;; font-size:150% ;">
                                 <strong class="pl-2" style="font-size:95% ">Registros</strong>
                             </v-col>
                             <v-col  md="6" class="align-self-end" style="text-align:center;">
@@ -32,6 +32,8 @@
                                     background-color="white"
                                 ></v-text-field>
                             </v-col>
+                            </v-row>
+                            
                         </v-card-title>
                     </v-img>
                     <v-data-table
