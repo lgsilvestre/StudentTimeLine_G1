@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Estudiante;
 use App\Observacion;
+use App\Ayudante_Con_Curso;
 use Illuminate\Http\Request;
 
 use Validator;
@@ -176,8 +177,10 @@ class EstudianteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id){
+      
         try{
             $estudiante = Estudiante::find($id);
+            #verificamos si el estudiante existe, si no exise, con el if que pregunta si es null, 
             if($estudiante==null){
                 return response()->json([
                     'success' => false,
@@ -186,7 +189,9 @@ class EstudianteController extends Controller
                     'data' => null
                 ], 409);
             }
+            #si no es null, busca todas las observaciones de dicho estudiante
             $observaciones = Observacion::Where('estudiante', '=' , $estudiante['id'])->get();
+            #luego recorro las observaciones
             foreach($observaciones as $observacion){
                 $observacion->estudiante=$observacion->getEstudiante->nombre_completo;
                 $observacion->creador=$observacion->getCreador->nombre;
@@ -196,12 +201,21 @@ class EstudianteController extends Controller
                 }
                 $observacion->categoria=$observacion->getCategoria->nombre;
             }
+            #variable en que se guardaran todas las instancias en que el alumno es ayudante
+            $ayudanteEnCursos= Ayudante_Con_Curso::Where('estudiante', '=' , $estudiante['id'] )->get();
+            foreach($ayudanteEnCursos as $ayudanteEn){
+                $ayudanteEn->nombreCurso = $ayudanteEn->getInstanciacurso->getCurso->nombre;
+
+            }
+            
+
             return response()->json([
                 'success' => true,
                 'code' => 600,
                 'message' => "Operacion realizada con exito",
                 'data' => ['estudiante'=>$estudiante,
-                        'observaciones'=>$observaciones]
+                        'observaciones'=>$observaciones,
+                        'cursos'=>$ayudanteEnCursos]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
