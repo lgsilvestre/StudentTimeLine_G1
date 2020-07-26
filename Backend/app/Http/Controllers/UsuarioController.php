@@ -179,6 +179,7 @@ class UsuarioController extends Controller{
             $usuario ->password=bcrypt($entradas['password']);
             $usuario->foto=$entradas['foto'];
             $usuario->save();
+            unset($usuario['foto']);
             Log::create([
                 'titulo' => "Creacion de un usuario",
                 'accion' => "Crear usuario",
@@ -417,6 +418,7 @@ class UsuarioController extends Controller{
                 }
             }
             $usuario->save();
+            unset($usuario['foto']);
             Log::create([
                 'titulo' => "Modificacion de un usuario",
                 'accion' => "Modificar usuario",
