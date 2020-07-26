@@ -12,19 +12,19 @@
             height="180px"
             src="@/assets/Globales/fondo3.jpg"
           >
-          <v-card-title class="white--text" > 
-            <v-row>
-              <v-col sm="6" md="3" class="align-self-end" style="text-shadow: #000000 3px 3px 4px;">
-                <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" > Escuelas</strong>
+          
+          <v-card-title class="white--text" style="padding:0;"> 
+            <v-row class="px-5">
+              <v-col cols="12" class="pt-1">
+                <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" > Escuelas</strong>
               </v-col>
-              <v-col sm="0" md="6" class="align-self-end d-none d-md-flex" style="text-align:center;">
+              <v-col cols="7" sm="9" md="9" class="align-self-end" >
                 <v-text-field
                 v-model="buscar"
                 append-icon="mdi-magnify"
                 label="Buscar"
                 hide-details
                 outlined
-                class="px-5 pb-2"
                 clearable
                 dense
                 solo
@@ -33,12 +33,12 @@
                 background-color="white"
                 ></v-text-field>
               </v-col>
-              <v-col sm="6" md="3" class="align-self-end" style="text-align:right;">
+              <v-col  cols="5" sm="3" md="3" class="align-self-end" style="text-align:right;">
                 <v-dialog transition="scroll-y-reverse-transition" v-model="dialog" persistent max-width="500px" :key="keyDialog">
                   <template v-slot:activator="{ on }">
                     <v-btn
                     fab
-                    :large="$vuetify.breakpoint.smAndDown ? false : true"
+
                     :small="$vuetify.breakpoint.smAndDown ? true : false"
                     bottom
                     left
@@ -52,7 +52,7 @@
                     class="headline primary text--center"
                     primary-title
                     >
-                    <h5 class="white--text ">Crear una escuela</h5>
+                    <h5 class="white--text ">Agregar una escuela</h5>
                     </v-card-title>
                     <v-container class="px-5 mt-5" color="primary">
                       <v-text-field 
@@ -92,7 +92,6 @@
                     <v-btn
                       class="ml-2"
                       fab
-                      :large="$vuetify.breakpoint.smAndDown ? false : true"
                       :small="$vuetify.breakpoint.smAndDown ? true : false"
                       bottom
                       left
@@ -105,24 +104,8 @@
                 </v-tooltip>
               </v-col>
             </v-row>
-
-            
           </v-card-title>
           </v-img>
-          <v-text-field
-          v-model="buscar"
-          append-icon="mdi-magnify"
-          label="Buscar"
-          hide-details
-          outlined
-          class="px-5 py-2 d-sm-flex d-md-none"
-          clearable
-          dense
-          solo
-          rounded
-          color="secondary"
-          background-color="white"
-          ></v-text-field>
           <v-data-table
           :headers="headers"
           :items="desserts"

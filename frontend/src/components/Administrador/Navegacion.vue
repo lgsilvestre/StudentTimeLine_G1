@@ -52,25 +52,6 @@
             <v-list-item-title class="white--text letra" > <strong>Observaciones</strong></v-list-item-title>
         </v-list-item>
         
-       
-        <v-menu open-on-hover  offset-x left>
-            <template v-slot:activator="{ on }">
-                <v-list-item  v-on="on" class="difuminado" active-class="activacion">
-                    <v-list-item-icon>
-                        <v-icon color="white">fas fa-envelope</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title class="white--text letra"> <strong>Contactar</strong></v-list-item-title>
-                </v-list-item>
-            </template>
-            <v-list>
-                <v-list-item v-for="(item, index) in itemsContactar" :key="index" @click="CrearEscuela" >
-                    <v-list-item-icon>
-                        <v-icon> {{ item.icon }} </v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>{{ item.title }}</v-list-item-title>
-                </v-list-item>
-            </v-list>
-        </v-menu>
     </v-list>
     <template v-slot:append >
         <v-list-item class=" difuminado" style="background-color: #FF6B6B" @click="unLogin">

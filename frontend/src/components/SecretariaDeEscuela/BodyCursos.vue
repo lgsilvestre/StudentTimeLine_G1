@@ -1,9 +1,12 @@
 <template>   
- <v-container>
-     <v-row>
-         <v-col cols="12" >
-             <v-card flat   >
-                 <v-img class="mx-auto white--text align-end justify-center"
+    <v-container>
+    <v-row>
+        <v-col cols="0" sm="1">
+
+        </v-col>
+        <v-col  cols="12" sm="10" >
+            <v-card flat   elevation="1">
+                <v-img class="mx-auto white--text align-end justify-center"
                         width="100%" height="150px"       
                         src="@/assets/Globales/background-panel-08.jpg">
                         <v-card-title class="white--text" style="font-size: 200%;text-shadow: #555 2px 2px 3px;">
@@ -90,7 +93,9 @@
             </v-card>
 
         </v-col>
-        <v-col cols="12" md="1"></v-col>
+        <v-col cols="0" sm="1">
+
+        </v-col>
      </v-row>
         <!-- Dialogo para agregar un semestre -->
      <v-dialog v-model="dialogAñadirSemestre" rtransition="scroll-y-reverse-transition"  persistent max-width="500px">

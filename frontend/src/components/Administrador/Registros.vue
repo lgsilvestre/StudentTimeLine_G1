@@ -11,19 +11,18 @@
                         height="180px"
                         src="@/assets/Globales/fondo3.jpg"
                     >
-                        <v-card-title>
-                            <v-row>
-                                <v-col md="6" class="align-self-end" style="text-align:left;text-shadow: #000000 3px 3px 4px;; font-size:150% ;">
-                                <strong class="pl-2" style="font-size:95% ">Registros</strong>
+                        <v-card-title class="white--text" style="padding:0;">
+                            <v-row class="px-5">  
+                            <v-col cols="12" class="pt-1" >
+                                <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" > Registros</strong>
                             </v-col>
-                            <v-col  md="6" class="align-self-end" style="text-align:center;">
+                            <v-col  cols="7" sm="9" md="9" class="align-self-end" >
                                 <v-text-field
                                     v-model="buscar"
                                     append-icon="mdi-magnify"
                                     label="Buscar"
                                     hide-details
                                     outlined
-                                    class="px-5 pb-2"
                                     clearable
                                     dense
                                     solo
@@ -31,6 +30,23 @@
                                     color="secondary"
                                     background-color="white"
                                 ></v-text-field>
+                            </v-col>
+                            <v-col  cols="5" sm="3" md="3" class="align-self-end" style="text-align:right;">
+                                <v-tooltip bottom color="primary">
+                                <template v-slot:activator="{ on }">
+                                    <v-btn
+                                    class="ml-2"
+                                    fab
+                                    :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                    bottom
+                                    left
+                                    v-on="on"
+                                    >
+                                        <v-icon  color="secondary">fas fa-envelope</v-icon>
+                                    </v-btn>
+                                </template>
+                                <span><strong>Contactar</strong></span>
+                                </v-tooltip>
                             </v-col>
                             </v-row>
                             
