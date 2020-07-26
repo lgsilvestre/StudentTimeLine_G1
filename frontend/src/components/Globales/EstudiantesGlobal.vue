@@ -33,7 +33,7 @@
                                 
                             </v-col>
                             <v-col  cols="5" sm="3" md="3" class="align-self-end" style="text-align:right;">
-                                <v-dialog v-model="dialogAgregarEstudiante" persistent max-width="500px">
+                                <v-tooltip bottom color="primary">
                                     <template v-slot:activator="{ on }">
                                         <v-btn
                                         fab
@@ -47,6 +47,9 @@
                                             <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
                                         </v-btn>
                                     </template>
+                                    <span><strong>Importar Estudiante</strong></span>
+                                </v-tooltip>
+                                <v-dialog v-model="dialogAgregarEstudiante" persistent max-width="500px">
                                     <v-card elevation="1">
                                         <v-card-title
                                         class="headline primary text--center"
@@ -215,6 +218,7 @@
                                         </v-form> 
                                     </v-card>
                                 </v-dialog>
+                                
                                 <v-tooltip bottom color="primary">
                                     <template v-slot:activator="{ on }" >
                                         <v-btn
@@ -229,6 +233,9 @@
                                             <v-icon class="mx-2" color="secondary">fas fa-file-download</v-icon>
                                         </v-btn>                                        
                                     </template>
+                                    <span><strong>Exportar Lista de Estudiantes</strong></span>
+                                </v-tooltip>
+                                <v-dialog v-model="dialogExportar" persistent max-width="600px">
                                     <v-card elevation="1">
                                         <v-card-title
                                         class="headline primary text--center"

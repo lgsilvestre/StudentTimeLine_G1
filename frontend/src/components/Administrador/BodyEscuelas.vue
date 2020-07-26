@@ -34,7 +34,7 @@
                 ></v-text-field>
               </v-col>
               <v-col  cols="5" sm="3" md="3" class="align-self-end" style="text-align:right;">
-                <v-dialog transition="scroll-y-reverse-transition" v-model="dialog" persistent max-width="500px" :key="keyDialog">
+                <v-tooltip bottom color="primary">
                   <template v-slot:activator="{ on }">
                     <v-btn
                     fab

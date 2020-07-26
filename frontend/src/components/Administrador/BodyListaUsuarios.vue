@@ -29,9 +29,7 @@
                                     ></v-text-field>
                                 </v-col>
                                 <v-col  cols="5" sm="3" md="3" class="align-self-end" style="text-align:right;">
-                                    
-                                    <!-- Formulario Registrar Usuario -->
-                                    <v-dialog v-model="dialog" persistent max-width="500px" :key="keyDialogCreacion">
+                                    <v-tooltip bottom color="primary">
                                         <template v-slot:activator="{ on }">
                                             <v-btn 
                                             :small="$vuetify.breakpoint.smAndDown ? true : false"
@@ -44,7 +42,6 @@
                                     </v-tooltip>
                                     <!-- Formulario Registrar Usuario -->
                                     <v-dialog v-model="dialog" persistent max-width="500px" :key="keyDialogCreacion">
-                                        
                                         <v-card class="mx-auto" max-width="500" >
                                             <v-card-title class="headline primary text--center" primary-title >
                                                 <h5 class="white--text ">Registrar Usuario</h5>
