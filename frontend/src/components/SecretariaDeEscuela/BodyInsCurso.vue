@@ -428,12 +428,12 @@
                                         <!-- <v-container>
                                             <v-row> -->
                                                 <v-col cols="6" >
-                                                    <v-list-item-title>{{item.nombre}}</v-list-item-title>
+                                                    <v-list-item-title> {{item.nombre}}</v-list-item-title>
                                                 </v-col>
                                                 <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0"> 
                                                      <v-form ref="form ">
                                                         <v-select
-                                                            v-model="secionActual"
+                                                            v-model="item.seccion"
                                                             :items="listaDeSeccionesDisponibles"
                                                             item-text="sec"
                                                             dense
@@ -806,8 +806,6 @@ export default {
             
             axios.post(url, post, this.$store.state.config)
             .then((result) => {
-                console.log(result);
-                console.log(result.data);
                 this.alertaExito = true;
                 this.textoAlertas = "Se creó el curso con exito."
                 this.resetCrearCurso();
@@ -967,11 +965,13 @@ export default {
                     let post = {
                         "semestre":this.$store.infoSemestre.id,
                         "curso": this.seleccionados[i].id,
-                        "seccion":  "A",
+                        "seccion":  this.seleccionados[i].seccion,
                     }
                      var url = 'http://127.0.0.1:8000/api/v1/instanciaCurso';   
                     axios.post(url, post, this.$store.state.config)
                     .then((result) => {
+                        this.dialogAsignarCurso=false;
+                        this.dialogAgregarCursoSemestre=false;
                         ins_curso= result.data.data.insCurso.id;
                         let post2 = {
                             "profesor" :  profe_Selec,
@@ -984,22 +984,27 @@ export default {
                     }).catch((error)=>{
                         console.log( error.response.data);
                         if (error.message == 'Network Error') {
-                            console.log(error)
                             this.alertaError = true;
                             this.textoAlertas = "Error al asignar el curso, intente mas tarde."
                             this.resetAsignarCurso();
+                            this.dialogAsignarCurso=false;
+                            this.dialogAgregarCursoSemestre=false;
                         }
                         if(error.response.data.code == 301){
                             console.log(error.response.data.code +' '+ error.response.data.message);
                             console.log(error.response.data);
                             this.alertaError = true;      
                             this.textoAlertas = error.response.data.message;
+                            this.dialogAsignarCurso=false;
+                            this.dialogAgregarCursoSemestre=false;
                         } 
                         if(error.response.data.code == 302){
                             console.log(error.response.data.code +' '+ error.response.data.message);
                             console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
-                            this.alertaError = true;      
+                            this.alertaError = true;  
+                            this.dialogAsignarCurso=false;    
+                            this.dialogAgregarCursoSemestre=false;
                         }   
                     });                                                            
                 
