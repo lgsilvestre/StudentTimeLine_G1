@@ -15,7 +15,10 @@ class LogTableSeeder extends Seeder
         json_encode($items);  
         Log::create([
             'titulo' => "Inicializacion del sistema",
-            'descripcion' => json_encode($items),
+            'accion' => "Inicializacion",
+            'tipo' => "Informativa",
+            'descripcion' => "Se inicializo el sistema de gestion de ayudantes",
+            'data' => json_encode($items),
             'usuario' => '1'
         ]);
     }

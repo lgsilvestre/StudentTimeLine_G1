@@ -13,10 +13,13 @@ class CreateLogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('logs', function (Blueprint $table) {
+        Schema::create('logs', function (Blueprint $table){
             $table->id();
             $table->string('titulo');
-            $table->json('descripcion');
+            $table->string('accion');
+            $table->string('tipo');
+            $table->json('data');
+            $table->string('descripcion');
             $table->bigInteger('usuario')->unsigned();
             $table->foreign('usuario')->references('id')->on('users');
             $table->timestamps();

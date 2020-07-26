@@ -745,9 +745,6 @@ export default {
                 aux = "profesor"
                 this.datosUsuario.escuelaAux=null
             };
-            if (this.datosUsuario.imagen == null) {
-                this.datosUsuario.imagen = null;
-            }
             let post = {
                 "foto": this.datosUsuario.imagen,
                 "nombre": this.datosUsuario.nombre,
@@ -758,7 +755,7 @@ export default {
                 "password": this.datosUsuario.contrasena,
             }
             var url = 'http://127.0.0.1:8000/api/v1/usuario';
-            
+            console.log(post);
             axios.post(url, post, this.$store.state.config)
             .then((result) => {
                 this.alertaExito = true;
