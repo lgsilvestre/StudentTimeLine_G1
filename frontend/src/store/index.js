@@ -29,11 +29,9 @@ export default new Vuex.Store({
             }
         },
         config2: {
+            responseType: 'blob',
             headers: {
                 Authorization: ''
-            },
-            request: {
-                responseType: 'blob'
             },
         },
         cargaLogin: false,

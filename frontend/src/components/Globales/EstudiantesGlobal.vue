@@ -700,8 +700,17 @@
                 //this.alertaErrorRangoAnhos = true;
                 //console.log('rango mal');
             //}
-            var url = 'http://127.0.0.1:8000/api/v1/exportar';
-            axios.get(url,{responseType: 'blob'})
+            let post = {
+                "tipo": 1,
+                "fechaInicio" :"2020-07-19" ,
+                "fechaFin":"2020-07-21" ,
+                "id": 1,
+                "escuela": 1
+            };
+            var url = 'http://127.0.0.1:8000/api/v1/estudiante/exportar';
+            axios.post(url,post,this.$store.state.config2)
+            //var url = 'http://127.0.0.1:8000/api/v1/exportar';
+            //axios.get(url,this.$store.state.config2, {responseType: 'blob'})
             .then((result)=>{
                 console.log(result);
                 //var fileDownload = require('js-file-download');
@@ -721,6 +730,7 @@
                 
             })
             .catch((error) => {
+                console.log(error);
                 if (error.message == 'Network Error') {
                     console.log(error);
                     this.alertError = true;

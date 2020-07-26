@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use DB;
-use App\Estudiante;
 
 class Estudiante extends Model
 {
@@ -32,14 +31,13 @@ class Estudiante extends Model
         $escuela = $request->escuela;
         $idEstudiante = $request->id;
 
-        dump($tipo);
+        /*dump($tipo);
         dump($fechaInicio);
         dump($fechaFin);
         dump($escuela);
-        dump($idEstudiante);
+        dump($idEstudiante);*/
 
         if($tipo == 1){
-            dump('es tipo 1');
             return collect(DB::table('estudiantes')
                         ->select('matricula','rut','nombre_completo','correo','anho_ingreso','situacion_academica','porcentaje_avance','creditos_aprobados','escuela', DB::Raw('COUNT(observaciones.id) AS cant_observaciones'))
                         ->join('observaciones', 'estudiantes.id','=', 'observaciones.estudiante')
@@ -47,24 +45,17 @@ class Estudiante extends Model
                         ->get());
         }
         elseif($tipo == 2){
-            dump('es tipo 2');
             return collect(DB::table('estudiantes')
                     ->join('observaciones', 'estudiantes.id','=', 'observaciones.estudiante')
                     ->whereBetween('observaciones.created_at',[$fechaInicio,$fechaFin])
                     ->get());
         }
         elseif($tipo == 3){ #ESTA ES PARA RETORNAR PDF NO EXCEL
-            dump('es tipo 3');
             return collect(DB::table('estudiantes')
                     ->join('observaciones', 'estudiantes.id','=', 'observaciones.estudiante')
                     ->where('estudiantes.id','=',$idEstudiante)
                     ->get());
         }
-
-        //return collect(DB::select('select matricula, rut, nombre_completo, correo, anho_ingreso, situacion_academica, porcentaje_avance, creditos_aprobados, escuela from ' . $this->getTable() .' where escuela = '.$escuela)); 
-        //$estudiantes = Estudiante::Where('escuela',$escuela)->get();
-        //return collect(DB::select('select matricula, rut, nombre_completo, correo, anho_ingreso, situacion_academica, porcentaje_avance, creditos_aprobados, escuela 
-        //from escuelas, observaciones ' where escuela = '.$escuela)); 
     }
 
     public function getTableColumns()
