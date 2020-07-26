@@ -387,24 +387,24 @@ class CursoController extends Controller
      */
     public function restore($id){
         try{
-            $curso=Curso::onlyTrashed()->find($id)->get();
-            $resultado = $curso->restore();
-            if($resultado==false){
+            $curso=Curso::onlyTrashed()->where('id',$id)->first();
+            if($curso==null){
                 Log::create([
                     'titulo' => "Error al recuperar un curso",
                     'accion' => "Recuperar curso",
                     'tipo' => "Error",
-                    'descripcion' => "Por algun motivo no se pudo recuperar el curso",
-                    'data' =>  $resultado,
+                    'descripcion' => "El curso no el id:".$id." no existe o no se encuentra eliminada",
+                    'data' =>  $curso,
                     'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
                 ]);
                 return response()->json([
                     'success' => false,
                     'code' => 901,
-                    'message' => "El curso no se logro recuperar",
+                    'message' => "El curso no el id:".$id." no existe o no se encuentra eliminada",
                     'data' => ['curso'=>$curso]
                 ], 409);
             }
+            Curso::onlyTrashed()->where('id',$id)->restore();
             Log::create([
                 'titulo' => "Recuperacion de un curso",
                 'accion' => "Recuperar curso",

@@ -179,6 +179,7 @@ class UsuarioController extends Controller{
             $usuario ->password=bcrypt($entradas['password']);
             $usuario->foto=$entradas['foto'];
             $usuario->save();
+            unset($usuario['foto']);
             Log::create([
                 'titulo' => "Creacion de un usuario",
                 'accion' => "Crear usuario",
@@ -417,6 +418,7 @@ class UsuarioController extends Controller{
                 }
             }
             $usuario->save();
+            unset($usuario['foto']);
             Log::create([
                 'titulo' => "Modificacion de un usuario",
                 'accion' => "Modificar usuario",
@@ -478,6 +480,7 @@ class UsuarioController extends Controller{
                 ], 409 );
             }
             $usuario->delete();
+            unset($usuario['foto']);
             Log::create([
                 'titulo' => "Eliminacion de un usuario",
                 'accion' => "Eliminar usuario",
@@ -569,9 +572,9 @@ class UsuarioController extends Controller{
      */
     public function restore($id){
         try{
-            $usuario=User::onlyTrashed()->find($id)->get();
-            $respuesta = $usuario->restore();
-            if($respuesta==false){
+            $usuario=User::onlyTrashed()->where('id',$id)->first();
+            unset($usuario['foto']);
+            if($usuario==null){
                 Log::create([
                     'titulo' => "Error al recuperar un usuario",
                     'accion' => "Recuperar usuario",
@@ -587,6 +590,7 @@ class UsuarioController extends Controller{
                     'data' => ['usuario'=>$usuario]
                 ], 409);
             }
+            User::onlyTrashed()->where('id',$id)->restore();
             Log::create([
                 'titulo' => "Recuperacion de un usuario",
                 'accion' => "Recuperar usuario",

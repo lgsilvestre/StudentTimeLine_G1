@@ -362,24 +362,24 @@ class EscuelaController extends Controller
      */
     public function restore($id){
         try{
-            $escuela=Escuela::onlyTrashed()->find($id)->get();
-            $resultado = $escuela->restore();
-            if($resultado==false){
+            $escuela=Escuela::onlyTrashed()->where('id',$id)->first();
+            if($escuela==null){
                 Log::create([
                     'titulo' => "Error al recuperar una escuela",
                     'accion' => "Recuperar escuela",
                     'tipo' => "Error",
-                    'descripcion' => "Por algun motivo no se pudo recuperar la escuela",
-                    'data' =>  $resultado,
+                    'descripcion' => "La escuela no el id:".$id." no existe o no se encuentra eliminada",
+                    'data' =>  $escuela,
                     'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
                 ]);
                 return response()->json([
                     'success' => false,
                     'code' => 901,
-                    'message' => "La escuela no se logro recuperar",
+                    'message' => "La escuela no el id:".$id." no existe o no se encuentra eliminada",
                     'data' => ['escuela'=>$escuela]
                 ], 409);
             }
+            Escuela::onlyTrashed()->where('id',$id)->restore();
             Log::create([
                 'titulo' => "Recuperacion de una escuela",
                 'accion' => "Recuperar escuela",
