@@ -480,6 +480,7 @@ class UsuarioController extends Controller{
                 ], 409 );
             }
             $usuario->delete();
+            unset($usuario['foto']);
             Log::create([
                 'titulo' => "Eliminacion de un usuario",
                 'accion' => "Eliminar usuario",
@@ -573,6 +574,7 @@ class UsuarioController extends Controller{
         try{
             $usuario=User::onlyTrashed()->find($id)->get();
             $respuesta = $usuario->restore();
+            unset($usuario['foto']);
             if($respuesta==false){
                 Log::create([
                     'titulo' => "Error al recuperar un usuario",
