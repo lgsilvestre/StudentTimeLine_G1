@@ -734,7 +734,7 @@
                 
             })
             .catch((error) => {
-                onsole.log(error);
+                console.log(error);
                 if (error.message == 'Network Error') {
                     console.log(error);
                     this.alertError = true;
