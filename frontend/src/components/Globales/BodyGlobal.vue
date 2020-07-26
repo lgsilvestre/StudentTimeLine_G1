@@ -26,47 +26,47 @@
                     </v-img>
                     <v-divider></v-divider>
                     <v-row class="px-5 mt-5">
-                        <v-col cols="4">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">Nombre</h3>
+                        <v-col cols="3">
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">Nombre</h3>
                         </v-col>
                         <v-col cols="1">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">:</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">:</h3>
                         </v-col >
-                        <v-col :cols="$vuetify.breakpoint.smAndDown ? 6 : 7">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">{{ datosUsuario.nombre}}</h3>
+                        <v-col :cols="$vuetify.breakpoint.smAndDown ? 7 : 8">
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">{{ datosUsuario.nombre}}</h3>
                         </v-col>
                     </v-row>
                     <v-row class="px-5">
-                        <v-col cols="4">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">Rol</h3>
+                        <v-col cols="3">
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">Rol</h3>
                         </v-col>
                         <v-col cols="1">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">:</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">:</h3>
                         </v-col >
-                        <v-col :cols="$vuetify.breakpoint.smAndDown ? 6 : 7">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">{{ datosUsuario.rol}}</h3>
+                        <v-col :cols="$vuetify.breakpoint.smAndDown ? 7 : 8">
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">{{ datosUsuario.rol}}</h3>
                         </v-col>
                     </v-row>
                     <v-row class="px-5">
-                        <v-col cols="4">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">Escuela</h3>
+                        <v-col cols="3">
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">Escuela</h3>
                         </v-col>
                         <v-col cols="1">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">:</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">:</h3>
                         </v-col >
-                        <v-col :cols="$vuetify.breakpoint.smAndDown ? 6 : 7">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">{{datosUsuario.escuela}}</h3>
+                        <v-col :cols="$vuetify.breakpoint.smAndDown ? 7 : 8">
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">{{datosUsuario.escuela}}</h3>
                         </v-col>
                     </v-row>
                     <v-row class="px-5 pb-5">
-                        <v-col cols="4">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">Correo</h3>
+                        <v-col cols="3">
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">Correo</h3>
                         </v-col>
                         <v-col cols="1">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">:</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">:</h3>
                         </v-col >
-                        <v-col :cols="$vuetify.breakpoint.smAndDown ? 6 : 7">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 100%' : 'font-size: 125%' ">{{ datosUsuario.email}}</h3>
+                        <v-col :cols="$vuetify.breakpoint.smAndDown ? 7 : 8">
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">{{ datosUsuario.email}}</h3>
                         </v-col>
                     </v-row>
                     
@@ -111,7 +111,9 @@
                     @click:prepend-inner="mostrar = !mostrar"
                     ></v-text-field>
                     <div style="text-align:right;">
-                        <v-btn rounded color="primary" class="mb-4 ml-2"    type="submit">
+                        <v-btn 
+                        :loading="cargando"
+                        rounded color="primary" class="mb-4 ml-2"    type="submit">
                             <h4 class="white--text">Modificar</h4>
                         </v-btn>
                     </div>
@@ -167,6 +169,7 @@ export default {
             textoAcept: '',
             delay: 4000,
             mostrar: false, 
+            cargando: false,
             datosUsuarioModificar:[ {nombre:null},{correo:null},{contrasena:null} ,{imagen:null}],
             datosUsuario:[], 
             datosUsuarioAux:[],
@@ -267,6 +270,7 @@ export default {
         modificarUsuario(e){
             // validamos que el correo puede ser null o segun la regla establecida
             // validar correo alumno.talca.cl
+            this.cargando = true;
             if(/.+@alumnos.utalca.cl/.test(this.datosUsuarioModificar.correo)|| /.+@utalca.cl/.test(this.datosUsuarioModificar.correo) ||/.+@alumnos.cl/.test(this.datosUsuarioModificar.correo) || this.datosUsuarioModificar.correo == null || this.datosUsuarioModificar.correo == ''){
                 if(this.datosUsuarioModificar.contrasena == null || this.datosUsuarioModificar.contrasena =='' || this.datosUsuarioModificar.contrasena.length >= 8 ){
                     //conversion del rol, para guardarla en la base de datos.
@@ -292,6 +296,7 @@ export default {
                     if (result.data.success == true){
                         this.obtenerUsuario();
                         this.resetModificacionUsuario();
+                        this.cargando = false;
                         this.alertAcept = true;
                         var mensaje=result.data.message;
                         this.textoAcept=mensaje;
@@ -303,6 +308,7 @@ export default {
                         this.resetModificacionUsuario();
                         if (error.message == 'Network Error') {
                             console.log(error);
+                            this.cargando = false;
                             this.alertError = true;
                             var mensaje=result.data.message;
                             this.textoError=mensaje;
@@ -312,6 +318,7 @@ export default {
                             case 601:
                                 console.log(error.response.data.code +' '+ error.response.data.message);
                                 console.log(error.response.data);
+                                this.cargando = false;
                                 this.alertError = true;
                                 var mensaje=result.data.message;
                                 this.textoError=mensaje;
@@ -320,6 +327,7 @@ export default {
                             case 602:
                                 console.log(error.response.data.code +' '+ error.response.data.message);
                                 console.log(error.response.data);
+                                this.cargando = false;
                                 this.alertError = true;
                                 var mensaje=result.data.message;
                                 this.textoError=mensaje;
@@ -327,6 +335,7 @@ export default {
                             case 603:
                                 console.log(error.response.data.code +' '+ error.response.data.message);
                                 console.log(error.response.data);
+                                this.cargando = false;
                                 this.alertError = true;
                                 var mensaje=result.data.message;
                                 this.textoError=mensaje;
@@ -334,6 +343,7 @@ export default {
                             case 604:
                                 console.log(error.response.data.code +' '+ error.response.data.message);
                                 console.log(error.response.data);
+                                this.cargando = false;
                                 this.alertError = true;
                                 var mensaje=result.data.message;
                                 this.textoError=mensaje;
@@ -345,12 +355,14 @@ export default {
                         }
                     });
                 }else{
+                    this.cargando = false;
                     this.alertaError= true;
                     this.aletaText='La contraseña es incorrecta.';
                 }
                 // this.resetModificacionUsuario();
             }else{
                 console.log('el correo es invalido00000'+correo)
+                this.cargando = false;
                 this.alertaError = true;
                 this.aletaText='el correo es invalido.';
             }

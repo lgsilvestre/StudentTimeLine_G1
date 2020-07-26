@@ -29,7 +29,12 @@
           <v-btn class="ma-2" fab elevation="3" small dark color="white"
             @click="drawel"
             >
-            <v-icon color="primary">mdi-format-list-bulleted</v-icon>
+            <v-icon color="primary" 
+            :class="icono== true ? 'd-flex':'d-none'"
+            >fas fa-list-ul</v-icon>
+            <v-icon color="primary" 
+            :class="icono== true ? 'd-none':'d-flex'"
+            >fas fa-ellipsis-v</v-icon>
           </v-btn>
         </div>
     </v-app-bar>
@@ -43,7 +48,7 @@ import {mapMutations} from 'vuex';
     },
     data () {
       return {
-
+        icono:false,
       }
     },
     methods:{
@@ -52,11 +57,15 @@ import {mapMutations} from 'vuex';
         if(this.$vuetify.breakpoint.name == 'sm' || this.$vuetify.breakpoint.name == 'xs'){
             this.$store.state.drawers.drawer = !this.$store.state.drawers.drawer;
             this.$store.state.drawers.miniVarianteAdm = false;
+            console.log(this.icono);
+            this.icono=true;
         }
         else{
             this.$store.state.drawers.drawer = true;
             this.$store.state.drawers.miniVarianteAdm = !this.$store.state.drawers.miniVarianteAdm;
-            this.$store.state.drawerProfesor = !this.$store.state.drawerProfesor;
+            this.$store.state.drawerProfesor = !this.$store.state.drawerProfesor;     
+            this.icono=this.$store.state.drawerProfesor;
+
         }
       },
     }
