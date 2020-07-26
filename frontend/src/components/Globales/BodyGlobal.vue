@@ -79,7 +79,7 @@
                 <v-card-title  class="headline primary text--center" primary-title > 
                     <h5 class="white--text ">Editar Perfil</h5>
                 </v-card-title>
-                <v-form  @submit.prevent="modificarUsuario" class=" px-8 mt-7" >
+                <v-form ref="form"  @submit.prevent="modificarUsuario" class=" px-8 mt-7" >
                     <v-text-field v-model="datosUsuarioModificar.nombre" label="Nombre de usuario" outlined
                     color="secondary"
                     :rules="[() => !!datosUsuario.nombre ]"
@@ -100,7 +100,9 @@
                     outlined
                     color="secondary"
                     prepend-inner-icon="mdi-email"
+                    :rules="reglasCorreo"
                     hint="ejemplo@utalca.cl"
+     
                     ></v-text-field>
                     <v-text-field v-model="datosUsuarioModificar.contrasena" label="Contraseña "
                     :prepend-inner-icon= "mostrar ? 'mdi-eye' : 'mdi-eye-off'"
@@ -111,9 +113,10 @@
                     @click:prepend-inner="mostrar = !mostrar"
                     ></v-text-field>
                     <div style="text-align:right;">
-                        <v-btn 
-                        :loading="cargando"
-                        rounded color="primary" class="mb-4 ml-2"    type="submit">
+                        <v-btn rounded color="primary" class="mb-4 ml-2" @click="reset"  > 
+                            Restablecer
+                        </v-btn>
+                        <v-btn  :loading="cargando" rounded color="primary" class="mb-4 ml-2"    type="submit">
                             <h4 class="white--text">Modificar</h4>
                         </v-btn>
                     </div>
@@ -140,7 +143,7 @@
         </v-snackbar>
         <!-- alerta de error en la modificacion -->
         <v-snackbar v-model="alertError" :timeout=delay bottom
-        color="secondary" left class="mb-1 pb-12 pr-0 mr-0">
+        color="warning" left class="mb-1 pb-12 pr-0 mr-0">
             <div>
                 <v-icon color="white" class="mr-2">
                     fas fa-exclamation-triangle
@@ -170,7 +173,7 @@ export default {
             delay: 4000,
             mostrar: false, 
             cargando: false,
-            datosUsuarioModificar:[ {nombre:null},{correo:null},{contrasena:null} ,{imagen:null}],
+            datosUsuarioModificar:[ {nombre:null},{correo:null},{contrasena:''} ,{imagen:null}],
             datosUsuario:[], 
             datosUsuarioAux:[],
             roles: ['Administrador', 'Secretaría de Escuela', 'Profesor'],   
@@ -188,6 +191,9 @@ export default {
             //prueba de imagen
             imagenMiniatura:null,
             correo:'',
+            reglasCorreo:[
+                v => /.+@utalca.cl/.test(v) || /.+@alumnos.utalca.cl/.test(v) || 'Correo invalido', 
+            ]
             
             
         }
@@ -200,6 +206,63 @@ export default {
         this.obtenerUsuario();
     },
     methods:{
+        reset () {
+        this.$refs.form.reset();
+      },
+      /**
+       * Valida que el correo ingresado por el usuario
+       * contenga @utalca.cl o @alumnos.utalca.cl
+       */
+      validarCorreo(correoElectronico){
+          if(correoElectronico != null){
+               var utalca = correoElectronico.indexOf("@utalca.cl");
+                var al_utalca =correoElectronico.indexOf("@alumnos.utalca.cl");
+                if(utalca == -1 && al_utalca ==-1){
+                    return false;
+                }
+                return true;
+          }
+          return false;
+      },
+      /**
+       * Valida que la contraseña del usuario
+       * sea de un largo mayor o igual a 8 caracteres.
+       */
+      validarContrasena(contrasena){
+          if(contrasena != null){
+              if(contrasena.length >= 8){
+                  return true;
+              }
+              return false;
+          }
+          return false;
+      },
+      /**
+       * Valida que el nombre del usuario no 
+       * contenga numeros
+       */
+      validarNombre(nombre){
+          if(nombre!=null){
+
+              var val0= nombre.indexOf("0"); 
+              var val1= nombre.indexOf("1");
+              var val2= nombre.indexOf("2");  
+              var val3= nombre.indexOf("3"); 
+              var val4= nombre.indexOf("4"); 
+              var val5= nombre.indexOf("5"); 
+              var val6= nombre.indexOf("6"); 
+              var val7= nombre.indexOf("7"); 
+              var val8= nombre.indexOf("8");
+              var val9= nombre.indexOf("9");
+                 if(val0 >= 0 || val1  >= 0 || val2  >= 0 || val3  >= 0 || val4  >= 0 || val5  >= 0 || val6  >= 0 
+              || val7  >= 0 || val8  >= 0 || val9  >= 0 ){
+                  console.log("nombre es invalido puto")
+                    return false;
+                }
+                return true;
+          }
+          return false;
+      },
         /**
          * Convierte la imagen cargada a base 64.
          */
@@ -267,31 +330,37 @@ export default {
         /**
          * Modica la informacion del usuario logeado.
          */
-        modificarUsuario(e){
+        modificarUsuario(){
             // validamos que el correo puede ser null o segun la regla establecida
             // validar correo alumno.talca.cl
             this.cargando = true;
-            if(/.+@alumnos.utalca.cl/.test(this.datosUsuarioModificar.correo)|| /.+@utalca.cl/.test(this.datosUsuarioModificar.correo) ||/.+@alumnos.cl/.test(this.datosUsuarioModificar.correo) || this.datosUsuarioModificar.correo == null || this.datosUsuarioModificar.correo == ''){
-                if(this.datosUsuarioModificar.contrasena == null || this.datosUsuarioModificar.contrasena =='' || this.datosUsuarioModificar.contrasena.length >= 8 ){
-                    //conversion del rol, para guardarla en la base de datos.
-                    if (this.datosUsuarioModificar.correo == null) {
-                        this.datosUsuarioModificar.correo = null;
-                    }
-                    if (this.datosUsuarioModificar.nombre == null) {
-                        this.datosUsuarioModificar.nombre =null;
-                    }
-                    if (this.datosUsuarioModificar.contrasena == null) {
-                        this.datosUsuarioModificar.contrasena =null;
-                    }
-                    var url =`http://127.0.0.1:8000/api/v1/usuario/${this.datosUsuario.id}`;
-                    let put ={
-                        "nombre": this.datosUsuarioModificar.nombre,
-                        "foto":this.imagenMiniatura,
-                        "password": this.datosUsuarioModificar.contrasena,
-                        "email" : this.datosUsuarioModificar.correo,
-                    }
-                    console.log(put);
-                    axios.put(url,put,this.$store.state.config)
+           var validarCorreo= this.validarCorreo(this.datosUsuarioModificar.correo);
+           var validarContrasena =this.validarContrasena(this.datosUsuarioModificar.contrasena);
+           var nombreValido = this.validarNombre(this.datosUsuarioModificar.nombre);
+           if(validarCorreo == true || validarContrasena == true || nombreValido == true || this.datosUsuarioModificar.imagen!= null){
+               var correo=this.datosUsuarioModificar.correo;
+               var contrana=this.datosUsuarioModificar.contrasena;
+               var nombre = this.datosUsuarioModificar.nombre;
+               if(validarCorreo == false){
+                   correo = '';
+                //    console.log("correo invalido")
+               }
+               if(validarContrasena == false){
+                   contrana='';
+                //    console.log("contraseña invalido")
+               }
+               if(nombreValido == false){
+                   nombre = '';
+                //    console.log("nombre invalido")
+               }
+                var url =`http://127.0.0.1:8000/api/v1/usuario/${this.datosUsuario.id}`;
+                let put ={
+                    "nombre": nombre,
+                    "foto":this.imagenMiniatura,
+                    "password": contrana,
+                    "email" : correo,
+                }
+                axios.put(url,put,this.$store.state.config)
                     .then((result)=>{
                     if (result.data.success == true){
                         this.obtenerUsuario();
@@ -300,7 +369,7 @@ export default {
                         this.alertAcept = true;
                         var mensaje=result.data.message;
                         this.textoAcept=mensaje;
-                        console.log('se modifico correctamente');
+                        this.reset();
                     }
                     }).catch((error)=>{
                         console.log(error);
@@ -310,8 +379,9 @@ export default {
                             console.log(error);
                             this.cargando = false;
                             this.alertError = true;
-                            var mensaje=result.data.message;
+                            var mensaje="La modificación del perfil fue realizada con exito";
                             this.textoError=mensaje;
+                            this.reset();
                         } else {
                         if (error.response.data.success == false) {
                             switch (error.response.data.code) {
@@ -322,7 +392,7 @@ export default {
                                 this.alertError = true;
                                 var mensaje=result.data.message;
                                 this.textoError=mensaje;
-                                //this.textoError = error.response.data.message;
+                                this.reset();
                                 break;
                             case 602:
                                 console.log(error.response.data.code +' '+ error.response.data.message);
@@ -331,6 +401,7 @@ export default {
                                 this.alertError = true;
                                 var mensaje=result.data.message;
                                 this.textoError=mensaje;
+                                this.reset();
                                 break;
                             case 603:
                                 console.log(error.response.data.code +' '+ error.response.data.message);
@@ -347,6 +418,7 @@ export default {
                                 this.alertError = true;
                                 var mensaje=result.data.message;
                                 this.textoError=mensaje;
+                                this.reset()
                                 break;
                             default:
                                 break;
@@ -354,18 +426,15 @@ export default {
                         }
                         }
                     });
-                }else{
-                    this.cargando = false;
-                    this.alertaError= true;
-                    this.aletaText='La contraseña es incorrecta.';
-                }
-                // this.resetModificacionUsuario();
-            }else{
-                console.log('el correo es invalido00000'+correo)
-                this.cargando = false;
-                this.alertaError = true;
-                this.aletaText='el correo es invalido.';
-            }
+
+           }
+        if(validarCorreo == false && validarContrasena == false && nombreValido == false){
+            this.cargando = false;
+            this.alertError = true;
+            var mensaje='Datos ingresados invalidos';
+            this.textoError=mensaje;
+            this.reset();
+        }
             
 
     },
