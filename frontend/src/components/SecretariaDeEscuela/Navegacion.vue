@@ -11,7 +11,7 @@
                     ></v-img>
                 </v-list-item-avatar>    
                 <!-- Nombre del Usuario -->
-                <v-list-item-title class="white--text letra"><strong>Sria. de Escuela</strong></v-list-item-title>                       
+                <v-list-item-title class="white--text letra pl-2"><strong>Perfil</strong></v-list-item-title>                       
             </v-list-item>
         
             <v-divider></v-divider>
@@ -25,23 +25,23 @@
             </v-list-item>
 
             <v-list-item class="difuminado" active-class="activacion" to="/secretariaEscuela/cursos">
-                <v-list-item-icon >
-                    <v-icon color="white">fab fa-accusoft</v-icon>
+                <v-list-item-icon class="pl-1">
+                    <v-icon color="white">fas fa-book</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title class="white--text letra"><strong>Cursos</strong></v-list-item-title>                            
             </v-list-item>
 
             <v-list-item  class="difuminado" active-class="activacion" to="/secretariaEscuela/estudiantes">
-                <v-list-item-icon >
+                <v-list-item-icon class="pl-1">
                     <v-icon color="white">fas fa-user-graduate</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title class="white--text letra"><strong>Estudiantes</strong></v-list-item-title>                            
             </v-list-item>
 
             <v-list-item @click="observaciones" class="difuminado" active-class="activacion">
-                <v-list-item-icon >
-                    <v-icon color="white">fas fa-archway</v-icon>
-                </v-list-item-icon>
+                <v-list-item-icon>
+                    <v-icon color="white">fas fa-book-open</v-icon>
+                </v-list-item-icon> 
                 <v-list-item-title class="white--text letra"><strong>Observaciones</strong></v-list-item-title>                            
             </v-list-item>
 
@@ -89,7 +89,7 @@ export default {
 
 <style scoped>
     .difuminado{
-        text-shadow: #555 2px 2px 3px;
+        text-shadow: #000000 2px 2px 3px;
     }
     .letra{
         font-size: 125%;

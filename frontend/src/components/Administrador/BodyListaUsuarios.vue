@@ -7,20 +7,19 @@
                     <v-img class="mx-auto white--text align-end justify-center"
                         width="100%" height="180px"       
                         src="@/assets/Globales/fondo3.jpg" >                    
-                        <v-card-title class="white--text">     
+                        <v-card-title class="white--text" style="padding:0;">     
                             <!-- Titulo -->
-                            <v-row>
-                                <v-col sm="6" md="3" class="align-self-end" style="text-shadow: #000000 3px 3px 4px;">
-                                    <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;' "> Usuarios </strong>
+                            <v-row class="px-5 ">
+                                <v-col cols="12" class="pt-1" >
+                                    <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" > Usuarios</strong>
                                 </v-col>
-                                <v-col sm="0" md="6" class="align-self-end d-none d-md-flex" style="text-align:center;">
+                                <v-col  cols="7" sm="9" md="9" class="align-self-end" >
                                     <v-text-field
                                     v-model="buscar"
                                     append-icon="mdi-magnify"
                                     label="Buscar"
                                     hide-details
                                     outlined
-                                    class="px-5 pb-2"
                                     clearable
                                     dense
                                     solo
@@ -29,11 +28,12 @@
                                     background-color="white"
                                     ></v-text-field>
                                 </v-col>
-                                <v-col sm="6" md="3" class="align-self-end" style="text-align:right;">
-                                    <v-tooltip bottom color="primary">
+                                <v-col  cols="5" sm="3" md="3" class="align-self-end" style="text-align:right;">
+                                    
+                                    <!-- Formulario Registrar Usuario -->
+                                    <v-dialog v-model="dialog" persistent max-width="500px" :key="keyDialogCreacion">
                                         <template v-slot:activator="{ on }">
                                             <v-btn 
-                                            :large="$vuetify.breakpoint.smAndDown ? false : true"
                                             :small="$vuetify.breakpoint.smAndDown ? true : false"
                                             @click="dialog = true"
                                             fab bottom left v-on="on" >
@@ -136,7 +136,6 @@
                                     <v-tooltip bottom color="primary">
                                         <template v-slot:activator="{ on, attrs }">
                                             <v-btn 
-                                            :large="$vuetify.breakpoint.smAndDown ? false : true"
                                             :small="$vuetify.breakpoint.smAndDown ? true : false"
                                             v-bind="attrs"
                                             v-on="on"
@@ -161,25 +160,22 @@
                                                 <v-row>
                                                     <v-col cols="12" md="1"></v-col>
                                                     <v-col cols="12" md="10" >
-                                                        <v-card elevation="1">
+                                                        <v-card elevation="1 " >
                                                         <v-img class="mx-auto white--text align-end justify-center"  
                                                             width="100%" height="180px"       
                                                             src="@/assets/Globales/fondo3.jpg" >     
-                                                            <v-row>
-                                                                <v-col cols="12" md="6">
-                                                                    <v-card-title class="white--text" style="text-shadow: #000000 3px 3px 4px;">     
-                                                                        <!-- Titulo -->
-                                                                        <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'"> Usuarios Eliminados </strong>
-                                                                    </v-card-title>
+                                                            <v-card-title class="white--text" style="padding:0;">
+                                                            <v-row class="px-5">
+                                                                <v-col cols="12"  >
+                                                                    <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" > Usuarios Eliminados</strong>
                                                                 </v-col>
-                                                                <v-col cols="12" md="6" class="align-self-end d-none d-md-flex">
+                                                                <v-col  cols="7" sm="9" md="9" class="align-self-end" >
                                                                     <v-text-field
                                                                     v-model="buscar2"
                                                                     append-icon="mdi-magnify"
                                                                     label="Buscar"
                                                                     hide-details
                                                                     outlined
-                                                                    class="px-5 pb-2"
                                                                     clearable
                                                                     dense
                                                                     solo
@@ -187,8 +183,26 @@
                                                                     color="secondary"
                                                                     background-color="white"
                                                                     ></v-text-field>
-                                                                </v-col>              
+                                                                </v-col> 
+                                                                <v-col  cols="5" sm="3" md="3" class="align-self-end" style="text-align:right;">
+                                                                    <v-tooltip bottom color="primary">
+                                                                    <template v-slot:activator="{ on }">
+                                                                        <v-btn
+                                                                        class="ml-2"
+                                                                        fab
+                                                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                                                        bottom
+                                                                        left
+                                                                        v-on="on"
+                                                                        >
+                                                                            <v-icon  color="secondary">fas fa-envelope</v-icon>
+                                                                        </v-btn>
+                                                                    </template>
+                                                                    <span><strong>Contactar</strong></span>
+                                                                    </v-tooltip>
+                                                                </v-col>             
                                                             </v-row> 
+                                                            </v-card-title>
                                                         </v-img>
                                                         <v-text-field
                                                         v-model="buscar2"
@@ -236,7 +250,7 @@
                                             
                                         </v-card>
                                     </v-dialog>
-                                    <v-dialog  v-model="dialogRestaurarUsuarioEliminado" ref="form" persistent max-width="450px">
+                                    <v-dialog  v-model="dialogRestaurarUsuarioEliminado" ref="form" persistent max-width="500px">
                                         <v-card class="mx-auto" max-width="500"  >
                                             <v-card-title class="headline primary text--center" primary-title >
                                                 <h5 class="white--text ">Restaurar Usuario</h5>
@@ -378,20 +392,7 @@
                             </v-dialog>                
                         </v-card-title>                                                                                   
                     </v-img>
-                    <v-text-field
-                    v-model="buscar"
-                    append-icon="mdi-magnify"
-                    label="Buscar"
-                    hide-details
-                    outlined
-                    class="px-5 py-2 d-sm-flex d-md-none"
-                    clearable
-                    dense
-                    solo
-                    rounded
-                    color="secondary"
-                    background-color="white"
-                    ></v-text-field>
+
                     <!-- propiedades tablas -->
                     <v-data-table  :headers="columnas" :items="listaUsuarios"
                         :search="buscar" :loading="cargando" :items-per-page="10"  >            

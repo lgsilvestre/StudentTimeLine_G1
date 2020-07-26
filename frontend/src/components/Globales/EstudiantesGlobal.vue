@@ -11,19 +11,18 @@
                     height="180px"
                     src="@/assets/Globales/fondo3.jpg"
                     >
-                    <v-card-title class="white--text " > 
-                            <v-col md="3" class="align-self-end" style="text-align:left; text-shadow: #555 2px 2px 3px; font-size:150% ;">
-                                        <v-icon class="pb-2" color="white" style="font-size:100% ;">fas fa-user-graduate</v-icon>
-                                        <strong  class="pl-2" style="font-size:95% ">Estudiantes</strong>
+                    <v-card-title class="white--text" style="padding:0;" > 
+                        <v-row class="px-5"> 
+                            <v-col cols="12" class="pt-1">
+                                <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" >Estudiantes</strong>
                             </v-col>
-                            <v-col  md="6" class="align-self-end" style="text-align:center;">
+                            <v-col cols="7" sm="9" md="9" class="align-self-end" >
                                 <v-text-field
                                     v-model="buscar"
                                     append-icon="mdi-magnify"
                                     label="Buscar"
                                     hide-details
                                     outlined
-                                    class="px-5 pb-2"
                                     clearable
                                     dense
                                     solo
@@ -33,12 +32,12 @@
                                 ></v-text-field>
                                 
                             </v-col>
-                            <v-col  md="3" class="align-self-end" style="text-align:right;">
-                                <v-tooltip bottom color="primary">
+                            <v-col  cols="5" sm="3" md="3" class="align-self-end" style="text-align:right;">
+                                <v-dialog v-model="dialogAgregarEstudiante" persistent max-width="500px">
                                     <template v-slot:activator="{ on }">
                                         <v-btn
                                         fab
-                                        large
+                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
                                         bottom
                                         left
                                         v-on="on"
@@ -48,11 +47,7 @@
                                             <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
                                         </v-btn>
                                     </template>
-                                     <span><strong>Importar Estudiante</strong></span>
-                                </v-tooltip>
-                                <v-dialog v-model="dialogAgregarEstudiante" persistent max-width="500px">
-                                    
-                                    <v-card elevation="1" shaped>
+                                    <v-card elevation="1">
                                         <v-card-title
                                         class="headline primary text--center"
                                         primary-title
@@ -110,8 +105,8 @@
                                                 </v-row>
 
                                             </v-container>
-                                            <v-container v-if="containerAgregarEstudianteUnico">
-                                                <v-form  class=" px-10 pt-8 "  >
+                                            <v-container class="px-5 mt-5" color="primary" v-if="containerAgregarEstudianteUnico">
+                                                
                                                     <v-text-field  
                                                     v-model="estudianteImportar.matricula"
                                                     label="Matricula" outlined
@@ -175,25 +170,26 @@
                                                     ></v-select>
                                                     <div style="text-align:right;" class="mb-1">
                                                         <v-btn rounded color="warning" 
+                                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
                                                         @click="volverYcerrarAgregarEstudiantes"
                                                         >
                                                             <h4 class="white--text">Cancelar</h4>
                                                         </v-btn>
                                                         <v-btn 
                                                         @click="agregarEstudiantesUnico"
+                                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
                                                         rounded color="secondary" class="ml-2"   >
                                                             <h4 class="white--text">Aceptar</h4>
                                                         </v-btn>
                                                     </div>
-                                                </v-form> 
+                                                
                                             </v-container>
-                                            <v-container v-if="containerAgregarEstudianteImportar" class="px-10">
+                                            <v-container v-if="containerAgregarEstudianteImportar" class="px-5 mt-5">
                                                 <v-file-input 
                                                 id="file" 
                                                 v-model="file"
                                                 ref="file" 
                                                 type="file"
-                                                class="pt-5"
                                                 label="Seleccione un archivo"
                                                 color="secondary"
                                                 outlined
@@ -203,12 +199,13 @@
                                                 </v-file-input>
                                                 <div style="text-align:right;" class="mb-1">
                                                     <v-btn rounded color="warning" 
-                                                    
+                                                    :small="$vuetify.breakpoint.smAndDown ? true : false"
                                                     @click="volverYcerrarAgregarEstudiantes"
                                                     >
                                                         <h4 class="white--text">Cancelar</h4>
                                                     </v-btn>
                                                     <v-btn rounded color="secondary" class="ml-2"   
+                                                    :small="$vuetify.breakpoint.smAndDown ? true : false"
                                                     @click="agregarEstudiantesImportar">
                                                         <h4 class="white--text">Aceptar</h4>
                                                     </v-btn>
@@ -222,8 +219,8 @@
                                     <template v-slot:activator="{ on }" >
                                         <v-btn
                                         fab
-                                        large
                                         bottom
+                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
                                         left
                                         v-on="on"
                                         class="ml-2"
@@ -232,16 +229,14 @@
                                             <v-icon class="mx-2" color="secondary">fas fa-file-download</v-icon>
                                         </v-btn>                                        
                                     </template>
-                                    <span><strong>Exportar Lista de Estudiantes</strong></span>
-                                </v-tooltip>
-                                <v-dialog v-model="dialogExportar" persistent max-width="600px">                                    
-                                    <v-card elevation="1" shaped>
+                                    <v-card elevation="1">
                                         <v-card-title
                                         class="headline primary text--center"
                                         primary-title
                                         >
-                                        <h5 class="white--text ">Ingrese el periodo de datos que desea exportar:</h5>
+                                        <strong class="white--text "> Exportar estudiantes</strong>
                                         </v-card-title>
+                                        <h4 class="px-5 pt-6">Ingrese el periodo de datos que desea exportar:</h4>
                                         <v-container class="pt-0">
                                             <v-row class="justify-right px-5">
                                                 <v-col cols="1"> 
@@ -315,18 +310,19 @@
                                             </v-row>
                                             <v-alert 
                                             v-model="alertaErrorRangoAnhos"
-                                            
                                             dismissible
                                             type="error">
                                             El año de inicio no puede ser mayor al del final
                                             </v-alert>
-                                            <div style="text-align:right;" class="mb-2 mr-5">
+                                            <div style="text-align:right;" class="mb-1 mr-5">
                                                 <v-btn rounded color="warning" 
+                                                :small="$vuetify.breakpoint.smAndDown ? true : false"
                                                 @click="resetYCerrarExportar"
                                                 >
                                                     <h4 class="white--text">Cancelar</h4>
                                                 </v-btn>
                                                 <v-btn rounded color="secondary" class="ml-2"  
+                                                :small="$vuetify.breakpoint.smAndDown ? true : false"
                                                 @click="exportarEstudiantes" >
                                                     <h4 class="white--text">Aceptar</h4>
                                                 </v-btn>
@@ -336,6 +332,7 @@
                                     </v-card>
                                 </v-dialog>
                             </v-col>
+                        </v-row>
                     </v-card-title>
                     </v-img>
                 <v-data-table
@@ -353,7 +350,7 @@
                                     <v-icon  
                                     color="primary"
                                     >
-                                    fas fa-edit
+                                    fas fa-external-link-alt
                                     </v-icon>
                                 </v-btn>
                             </template>
@@ -550,7 +547,7 @@
             var url = 'http://127.0.0.1:8000/api/v1/estudiante/importar';
             axios.post(url,formData,this.$store.state.config)
             .then((result)=>{
-                console.log(result);
+                //console.log(result);
                 if (result.data.success == true) {
                     this.resetImportarEstudiantes();
                     this.obtenerEstudiantes();
@@ -573,11 +570,11 @@
             var url = 'http://127.0.0.1:8000/api/v1/estudiante';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
-                console.log(result.data);
+               //console.log(result.data);
                 if (result.data.success == true) {
                     for (let index = 0; index < result.data.data.estudiantes.length; index++) {
                     const element = result.data.data.estudiantes[index];
-                    console.log(element)
+                    //console.log(element)
                     let estudiante = {
                         id: element.id,
                         matricula: element.matricula,
@@ -751,33 +748,24 @@
                 //this.alertaErrorRangoAnhos = true;
                 //console.log('rango mal');
             //}
-            let post = {
-                "tipo": 1,
-                "fechaInicio" :"2020-07-19" ,
-                "fechaFin":"2020-07-21" ,
-                "id": 1,
-                "escuela": 1
-            };
-            var url = 'http://127.0.0.1:8000/api/v1/estudiante/exportar';
-            axios.post(url,post,this.$store.state.config2)
-            //var url = 'http://127.0.0.1:8000/api/v1/exportar';
-            //axios.get(url,this.$store.state.config2, {responseType: 'blob'})
+            var url = 'http://127.0.0.1:8000/api/v1/estudiante/exportar ';
+            axios.post(url,null,this.$store.state.config)
             .then((result)=>{
                 console.log(result);
                 //var fileDownload = require('js-file-download');
                 //fileDownload(result.data, 'archivo.xlsx');
                 
 
-                const url = URL.createObjectURL(new Blob([result.data], {
-                    type: 'application/vnd.ms-excel'
-                }))
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', 'estudiante.xlsx');
-                document.body.appendChild(link);
-                link.click();
-                this.alertAcept = true;
-                this.textoAcept = 'Se realizó la operación correctamente'
+                // const url = URL.createObjectURL(new Blob([result.data], {
+                //     type: 'application/vnd.ms-excel'
+                // }))
+                // const link = document.createElement('a');
+                // link.href = url;
+                // link.setAttribute('download', 'estudiante.xlsx');
+                // document.body.appendChild(link);
+                // link.click();
+                // this.alertAcept = true;
+                // this.textoAcept = 'Se realizó la operación correctamente'
                 
             })
             .catch((error) => {
@@ -809,7 +797,18 @@
         },
         perfilEstudiante(item){
             this.$store.state.perfilEstudiante = item;
-            this.$router.push({path:'/administrador/estudiantes/'+item.rut});
+            if (this.$store.state.usuario.usuario.rol == "admin") {
+                this.$router.push({path:'/administrador/estudiantes/'+item.rut});
+            } else {
+                if (this.$store.state.usuario.usuario.rol == "secretaria de escuela") {
+                    this.$router.push({path:'/secretariaEscuela/estudiantes/'+item.rut});
+                } else {
+                    if (this.$store.state.usuario.usuario.rol == "profesor") {
+                        this.$router.push({path:'/profesor/estudiantes/'+item.rut});
+                    }
+                }
+            }
+            
         },
 
     },
