@@ -1,16 +1,14 @@
 <template>
     <v-container  fluid >
-        <div class="py-1"  style="text-align:left;">
-            <v-btn
-            color="secondary"
-            rounded
-            small
-            @click="volverEstudiantes"
-            >
-            volver<i class="fas fa-undo-alt pl-2"></i>
-            
-            </v-btn>
-        </div>
+
+        <v-btn 
+        block
+        
+        @click="volverEstudiantes"
+        >
+            <v-icon class="pr-2" color="primary"> fas fa-arrow-circle-left</v-icon> 
+            volver
+        </v-btn>
         <v-row >
             <v-col  cols="12" md="5" xl="4">
                 <v-card elevation="1" > 

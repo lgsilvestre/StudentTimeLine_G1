@@ -1,109 +1,128 @@
 <template>
     <v-container >
-        <v-row class="justify-center">
-            <v-col cols="12" md="3" >
-                <v-card  max-width="300" shaped >
-                    <v-list rounded dense>
-                        <v-list-item class="difuminado"  active-class="activacion" @click="calcularRolVuelta">
-                        <v-list-item-icon><v-icon color="primary"> fas fa-arrow-circle-left</v-icon> </v-list-item-icon>
-                        <v-list-item-title> Volver </v-list-item-title>
-                    </v-list-item>      
-                    <v-divider></v-divider>
-                    <v-subheader><strong>Acciones sobre curso</strong></v-subheader>
+        <v-row >
 
-                    <v-list-item class="difuminado" active-class="activacion" @click="dialogListaCursos = true">
-                        <v-list-item-title> Lista de Cursos</v-list-item-title>
-                    </v-list-item>
+        <v-col cols="0" sm="1">
 
-                    <v-list-item  class="difuminado" active-class="activacion" @click="dialogCrearCurso = true">
-                        <v-list-item-title> Crear Curso</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item  class="difuminado" active-class="activacion" @click="dialogAgregarCursoSemestre = true">
-                        <v-list-item-title> Agregar Curso al Semestre</v-list-item-title>
-                    </v-list-item>
-                    </v-list>
-                </v-card>               
-            </v-col>    
+        </v-col>
+        <v-col  cols="12" sm="10" >
+        <v-btn 
+        block
+        
+        @click="calcularRolVuelta"
+        >
+            <v-icon class="pr-2" color="primary"> fas fa-arrow-circle-left</v-icon> 
+            volver
+        </v-btn>
+        <!-- aca ira la lista de las instancias de curso -->
+        <v-card class="justify-center mt-2" >
+            <v-img class="mx-auto white--text align-end justify-center"
+                width="100%" height="180px"  src="@/assets/Globales/fondo3.jpg" >
+                <v-card-title class="white--text" style="padding:0;">
+                    <v-row class="px-5">
+                        <v-col cols="12" class="pt-1">
+                            <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" >Cursos {{semestre}}</strong>
+                        </v-col>
+                        <v-col cols="7" sm="9" md="9" class="align-self-end" >
+                            <v-text-field
+                            v-model="search"
+                            append-icon="mdi-magnify"
+                            label="Buscar"
+                            hide-details
+                            outlined
+                            clearable
+                            dense
+                            solo
+                            rounded
+                            color="secondary"
+                            background-color="white"
+                            ></v-text-field>
                         
-            <v-col cols="12" md="8">
-                <!-- aca ira la lista de las instancias de curso -->
-                <v-card class="justify-center">
-                    <v-img class="mx-auto white--text align-end justify-center"
-                        width="100%" height="180px"  src="@/assets/Globales/background-panel-08.jpg" >
-                        <v-card-title class="white--text" style="font-size: 200%;text-shadow: #555 2px 2px 3px;">
-                            <strong > Cursos </strong>
-                            <v-spacer></v-spacer>
-                            <v-btn class="mr-2" fab large bottom left >
+                        </v-col>
+                        <v-col  cols="5" sm="3" md="3" class="align-self-end" style="text-align:right;">
+                            <v-btn 
+                            :small="$vuetify.breakpoint.smAndDown ? true : false"
+                            @click="dialogAgregarCursoSemestre = true"
+                            fab bottom left >
                                 <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
                             </v-btn>
-                        </v-card-title> 
-                    </v-img>
+                            <v-btn
+                            class="ml-2"
+                            fab
+                            @click="dialogListaCursos = true"
+                            :small="$vuetify.breakpoint.smAndDown ? true : false"
+                            bottom
+                            left
+                            >
+                                <v-icon  color="secondary">fas fa-book</v-icon>
+                            </v-btn>
+                        </v-col>
+                    </v-row>
+                </v-card-title> 
+            </v-img>
 
-                    <v-data-iterator :items="listaInsCursos" :search="search" :sort-by="sortBy.toLowerCase()" >
-                       <template v-slot:header>
-                           <v-toolbar>
-                                <v-text-field v-model="search" append-icon="mdi-magnify"
-                                    label="Buscar curso" single-line  hide-details
-                                ></v-text-field>
-                            </v-toolbar>
-                        </template>
-                        <template v-slot:default="props">
-                            <v-row>
-                                <v-col v-for="item in props.items" :key="item.nomCurso" cols="12"  sm="6" md="4" lg="4">
-                                    <v-card  class=" ml-2 mr-2"  style="background-color:#F7FFF7; border-style:solid; border-color:rgba(0,0,0,0.5);" >
-                                        <v-container class="pt-0 mt-0 pb-0 ">
-                                            <v-row >
-                                                <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0">
-                                                    <v-card-title class="mt-0 pt-0 pl-0 pr-0 " >
-                                                        <v-img class="mx-auto white--text align-end justify-center "
-                                                                width="100%" height="30px"       
-                                                                src="@/assets/Globales/background-panel-08.jpg" >
-                                                        </v-img>
-                                                    </v-card-title>
-                                                </v-col>
-                                                <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0  text-right" >
-                                                    <v-menu class="text-left " offset-y>
-                                                        <template   v-slot:activator="{ on, attrs }">
-                                                            <v-btn tile  color="primary" x-small icon v-bind="attrs" v-on="on" >
-                                                                <v-icon>fas fa-ellipsis-v</v-icon>
-                                                            </v-btn>
-                                                        </template>
-                                                        <v-list >
-                                                            <v-list-item  v-for="(acciones, index) in listaAccionesSobreInstaciaCurso" :key="index"
-                                                            @click="acionesSobreInstanciaCurso(acciones,item)" >
-                                                                <v-list-item-title>{{ acciones }}</v-list-item-title>
-                                                            </v-list-item>
-                                                        </v-list>
-                                                    </v-menu>
-                                                </v-col>
-                                                <v-col cols="12"  class=" pt-0 pl-1 pr-0 pb-0 "  >
+            <v-data-iterator :items="listaInsCursos" :search="search" :sort-by="sortBy.toLowerCase()" class="px-2 py-2" :loading="cargando">
+                <template v-slot:default="props">
+                    <v-row>
+                        <v-col v-for="item in props.items" :key="item.nomCurso" cols="12"  sm="6" md="4" lg="4">
+                            <v-card  class="mx-1" style="background-color:#F7FFF7; border-style:solid; border-color:rgba(0,0,0,0.5);" >
+                                <v-container class="pt-0 mt-0 pb-0 ">
+                                    <v-row >
+                                        <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0">
+                                            <v-card-title class="mt-0 pt-0 pl-0 pr-0 " >
+                                                <v-img class="mx-auto white--text align-end justify-center "
+                                                        width="100%" height="30px"       
+                                                        src="@/assets/Globales/background-panel-08.jpg" >
+                                                </v-img>
+                                            </v-card-title>
+                                        </v-col>
+                                        <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0  text-right" >
+                                            <v-menu class="text-left " offset-y>
+                                                <template   v-slot:activator="{ on, attrs }">
+                                                    <v-btn tile  color="primary" x-small icon v-bind="attrs" v-on="on" >
+                                                        <v-icon>fas fa-ellipsis-v</v-icon>
+                                                    </v-btn>
+                                                </template>
+                                                <v-list >
+                                                    <v-list-item  v-for="(acciones, index) in listaAccionesSobreInstaciaCurso" :key="index"
+                                                    @click="acionesSobreInstanciaCurso(acciones,item)" >
+                                                        <v-list-item-title>{{ acciones }}</v-list-item-title>
+                                                    </v-list-item>
+                                                </v-list>
+                                            </v-menu>
+                                        </v-col>
+                                        <v-col cols="12"  class=" pt-0 pl-1 pr-0 pb-0 "  >
 
-                                                    <v-card-text class=" pt-0 pl-2 pr-0 pb-0 ">
-                                                        <div class=" text-truncate"  >
-                                                            <p class="font-weight-black mb-2 text-truncate"   >Nombre: {{ item.nomCurso }}</p>
-                                                            <p class="font-weight-black"   > Seccion: {{ item.seccion}} </p>
-                                                        </div>
-                                                    </v-card-text>
-                                                </v-col>
-                                            </v-row>
-                                        </v-container>
-                                    </v-card>
-                                </v-col>
-                            </v-row>
-                        </template>
-                    
-                    </v-data-iterator>
-                </v-card>
-            </v-col>
-            <v-col cols="12" md="1">                        
-            </v-col>
+                                            <v-card-text class=" pt-0 pl-2 pr-0 pb-0 ">
+                                                <div class=" text-truncate"  >
+                                                    <p class="font-weight-black mb-2 text-truncate"   >Nombre: {{ item.nomCurso }}</p>
+                                                    <p class="font-weight-black"   > Seccion: {{ item.seccion}} </p>
+                                                </div>
+                                            </v-card-text>
+                                        </v-col>
+                                    </v-row>
+                                </v-container>
+                            </v-card>
+                        </v-col>
+                    </v-row>
+                </template>
+            
+            </v-data-iterator>
+        </v-card>
+        </v-col>
+        <v-col cols="0" sm="1">
+
+        </v-col>
         </v-row>
+            
+            
+        
 
     <!------------------>
         <!-- Dialog para mostrar la lista de los Cursos Existentes -->
         <v-dialog v-model="dialogListaCursos" fullscreen hide-overlay transition="dialog-bottom-transition">
-            <v-card class="mx-auto my-10 " max-width="70%">
-                <v-toolbar color="primary">
+            <v-card class="mx-auto my-10 " max-width="100%" style="display: block; background-color:#F7FFF7;">
+                <v-toolbar dark color="primary">
                     <v-btn icon dark @click="dialogListaCursos = false">
                         <v-icon>mdi-close</v-icon>
                     </v-btn>
@@ -122,6 +141,13 @@
 
                                     <!-- Titulo -->
                                     <strong> Lista Cursos Existentes </strong>
+                                    <v-spacer></v-spacer>
+                                    <v-btn 
+                                    :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                    @click="dialogCrearCurso = true"
+                                    fab bottom left >
+                                        <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
+                                    </v-btn>
                                 </v-card-title>
                             </v-img>
                             <v-data-table  :headers="colCursos" :items="listaCursos"
@@ -156,141 +182,141 @@
                     </v-row>                    
                 </v-container>                            
             </v-card>
-        </v-dialog>
+            <!-- Dialog para crear un Curso -->
+            <v-dialog v-model="dialogCrearCurso" persistent max-width="500px">            
+                <v-card class="mx-auto" max-width="800" shaped >
+                    <v-card-title class="headline primary text--center" primary-title >
+                        <h5 class="white--text ">Crear Curso</h5>
+                    </v-card-title>
+                    <v-card-text class="px-12 mt-10" >
+                        <v-form  ref="form" >
+                            <v-text-field
+                                class="mx-2"
+                                v-model="datosCurso.nombre"
+                                label="Nombre del Curso"
+                                :rules="[() => !!datosCurso.nombre ||'Requerido']"
+                                outlined
+                                prepend-inner-icon="mdi-account"
+                            ></v-text-field>
+                            <v-text-field
+                                class="mx-2"
+                                v-model="datosCurso.plan"
+                                label="Plan al que Pertenece el Curso"
+                                :rules="[() => !!datosCurso.plan ||'Requerido']"
+                                outlined
+                                prepend-inner-icon="mdi-account"
+                            ></v-text-field>
+                            <v-select
+                                class="mx-2"
+                                v-model="datosCurso.escuela"
+                                label="Escuela"
+                                :items="listaEscuela"
+                                item-text="nombre"
+                                item-value="id"
+                                :rules="[() => !!datosCurso.escuela ||'Requerido']"
+                                outlined
+                                prepend-inner-icon="mdi-school"
+                            ></v-select>
+                            <v-text-field
+                                class="mx-2"
+                                v-model="datosCurso.descripcion"
+                                label="Descripcion"
+                                :rules="[() => !!datosCurso.descripcion ||'Requerido']"
+                                outlined
+                                prepend-inner-icon="mdi-account"
+                            ></v-text-field>
+                            
+                            <v-container  style="text-align:right;">
+                                <v-btn rounded color="warning" @click="resetCrearCurso()">
+                                    <h4 class="white--text">Cancelar</h4>
+                                </v-btn>
+                                <v-btn rounded color="secondary" class="ml-2 mr'5" @click="crearCurso()" >
+                                    <h4 class="white--text">Registrar</h4>
+                                </v-btn>
+                            </v-container>  
+                        </v-form>
+                    </v-card-text>
+                </v-card>
+            </v-dialog> 
 
-        <!-- Dialog para crear un Curso -->
-
-        <v-dialog v-model="dialogCrearCurso" persistent max-width="500px">            
-            <v-card class="mx-auto" max-width="800" shaped >
-                <v-card-title class="headline primary text--center" primary-title >
-                    <h5 class="white--text ">Crear Curso</h5>
-                </v-card-title>
-                <v-card-text class="px-12 mt-10" >
-                    <v-form  ref="form" >
-                        <v-text-field
-                            class="mx-2"
-                            v-model="datosCurso.nombre"
-                            label="Nombre del Curso"
+            <!-- Dialog para modificar un curso -->
+            <v-dialog v-model="dialogModificarCurso" persistent max-width="500px" transition="scroll-y-reverse-transition">
+                <v-card elevation="1">
+                    <v-card-title  class="headline primary text--center" primary-title > 
+                        <h5 class="white--text ">Modificar Curso</h5>
+                    </v-card-title>
+                    <v-container class="px-5 mt-5">
+                        <v-text-field v-model="datosCurso.nombre" label="Nombre del Curso" outlined
+                            color="secondary"
                             :rules="[() => !!datosCurso.nombre ||'Requerido']"
-                            outlined
                             prepend-inner-icon="mdi-account"
                         ></v-text-field>
-                        <v-text-field
-                            class="mx-2"
-                            v-model="datosCurso.plan"
-                            label="Plan al que Pertenece el Curso"
+                        <v-text-field v-model="datosCurso.plan" label="Plan" outlined
+                            color="secondary"
                             :rules="[() => !!datosCurso.plan ||'Requerido']"
-                            outlined
                             prepend-inner-icon="mdi-account"
                         ></v-text-field>
-                        <v-select
-                            class="mx-2"
-                            v-model="datosCurso.escuela"
-                            label="Escuela"
+                        <v-select  v-model="datosCurso.escuela"
                             :items="listaEscuela"
                             item-text="nombre"
                             item-value="id"
-                            :rules="[() => !!datosCurso.escuela ||'Requerido']"
+                            label="Escuela"
                             outlined
+                            :small-chips="$vuetify.breakpoint.smAndDown ? true : false"
+                            :rules="[() => !!datosCurso.escuela ||'Requerido']"
                             prepend-inner-icon="mdi-school"
                         ></v-select>
-                        <v-text-field
-                            class="mx-2"
-                            v-model="datosCurso.descripcion"
-                            label="Descripcion"
+                        <v-text-field v-model="datosCurso.descripcion" label="Descripcion del Curso" outlined
+                            color="secondary"
                             :rules="[() => !!datosCurso.descripcion ||'Requerido']"
-                            outlined
                             prepend-inner-icon="mdi-account"
                         ></v-text-field>
                         
-                        <v-container  style="text-align:right;">
-                            <v-btn rounded color="warning" @click="resetCrearCurso()">
+                        <div style="text-align:right;" class="mb-1 " >
+                            <v-btn 
+                            :small="$vuetify.breakpoint.smAndDown ? true : false"
+                            rounded color="warning"    @click="resetModificarCurso">  
                                 <h4 class="white--text">Cancelar</h4>
                             </v-btn>
-                            <v-btn rounded color="secondary" class="ml-2 mr'5" @click="crearCurso()" >
-                                <h4 class="white--text">Registrar</h4>
+                            <v-btn 
+                            :small="$vuetify.breakpoint.smAndDown ? true : false"
+                            rounded color="secondary" class=" ml-2"    @click="modificarCurso">
+                                <h4 class="white--text">Modificar</h4>
                             </v-btn>
-                        </v-container>  
-                    </v-form>
-                </v-card-text>
-            </v-card>
-        </v-dialog> 
+                        </div>
+                    </v-container> 
+                </v-card>                        
+            </v-dialog>
 
-        <!-- Dialog para modificar un curso -->
-        <v-dialog v-model="dialogModificarCurso" persistent max-width="500px" transition="scroll-y-reverse-transition">
-            <v-card elevation="1">
-                <v-card-title  class="headline primary text--center" primary-title > 
-                    <h5 class="white--text ">Modificar Curso</h5>
-                </v-card-title>
-                <v-container class="px-5 mt-5">
-                    <v-text-field v-model="datosCurso.nombre" label="Nombre del Curso" outlined
-                        color="secondary"
-                        :rules="[() => !!datosCurso.nombre ||'Requerido']"
-                        prepend-inner-icon="mdi-account"
-                    ></v-text-field>
-                    <v-text-field v-model="datosCurso.plan" label="Plan" outlined
-                        color="secondary"
-                        :rules="[() => !!datosCurso.plan ||'Requerido']"
-                        prepend-inner-icon="mdi-account"
-                    ></v-text-field>
-                    <v-select  v-model="datosCurso.escuela"
-                        :items="listaEscuela"
-                        item-text="nombre"
-                        item-value="id"
-                        label="Escuela"
-                        outlined
-                        :small-chips="$vuetify.breakpoint.smAndDown ? true : false"
-                        :rules="[() => !!datosCurso.escuela ||'Requerido']"
-                        prepend-inner-icon="mdi-school"
-                    ></v-select>
-                    <v-text-field v-model="datosCurso.descripcion" label="Descripcion del Curso" outlined
-                        color="secondary"
-                        :rules="[() => !!datosCurso.descripcion ||'Requerido']"
-                        prepend-inner-icon="mdi-account"
-                    ></v-text-field>
-                    
-                    <div style="text-align:right;" class="mb-1 " >
-                        <v-btn 
-                        :small="$vuetify.breakpoint.smAndDown ? true : false"
-                        rounded color="warning"    @click="resetModificarCurso">  
-                            <h4 class="white--text">Cancelar</h4>
-                        </v-btn>
-                        <v-btn 
-                        :small="$vuetify.breakpoint.smAndDown ? true : false"
-                        rounded color="secondary" class=" ml-2"    @click="modificarCurso">
-                            <h4 class="white--text">Modificar</h4>
-                        </v-btn>
-                    </div>
-                </v-container> 
-            </v-card>                        
+            <!-- Dialog para Eliminar un Curso -->
+            <v-dialog v-model="dialogEliminarCurso" ref="form" persistent max-width="450px">
+                <v-card class="mx-auto" max-width="450"  >
+                    <v-card-title
+                        class="headline primary text--center"
+                        primary-title
+                        >
+                        <h5 class="white--text ">Eliminar Curso</h5>
+                        </v-card-title> 
+                        <!-- <v-container fluid class=" text-left"> -->
+                        <v-card-title class="text-justify" style="font-size: 100%;">Esta seguro que desea eliminar el siguiente Curso?</v-card-title>
+                        <v-card-text>Nombre : {{ this.datosCurso.nombre }}</v-card-text>
+                        <v-card-text>Plan : {{ this.datosCurso.plan }}</v-card-text>
+                        <v-card-text>Escuela : {{ this.datosCurso.escuela }}</v-card-text>
+                        <v-card-text>Descripcion : {{ this.datosCurso.descripcion }}</v-card-text>
+                        <!-- </v-container > -->
+                        <div style="text-align:right;">
+                            <v-btn rounded color="warning" class=" mb-4 "  @click="dialogEliminarCurso = false">
+                                <h4 class="white--text">Cancelar</h4>
+                            </v-btn>
+                            <v-btn rounded color="secondary"   class=" mb-4 ml-2 mr-5" @click="eliminarCurso()">
+                                <h4 class="white--text">Eliminar</h4>
+                            </v-btn>
+                        </div> 
+                </v-card>
+            </v-dialog>
         </v-dialog>
 
-        <!-- Dialog para Eliminar un Curso -->
-        <v-dialog v-model="dialogEliminarCurso" ref="form" persistent max-width="450px">
-            <v-card class="mx-auto" max-width="450"  >
-                <v-card-title
-                    class="headline primary text--center"
-                    primary-title
-                    >
-                    <h5 class="white--text ">Eliminar Curso</h5>
-                    </v-card-title> 
-                    <!-- <v-container fluid class=" text-left"> -->
-                    <v-card-title class="text-justify" style="font-size: 100%;">Esta seguro que desea eliminar el siguiente Curso?</v-card-title>
-                    <v-card-text>Nombre : {{ this.datosCurso.nombre }}</v-card-text>
-                    <v-card-text>Plan : {{ this.datosCurso.plan }}</v-card-text>
-                    <v-card-text>Escuela : {{ this.datosCurso.escuela }}</v-card-text>
-                    <v-card-text>Descripcion : {{ this.datosCurso.descripcion }}</v-card-text>
-                    <!-- </v-container > -->
-                    <div style="text-align:right;">
-                        <v-btn rounded color="warning" class=" mb-4 "  @click="dialogEliminarCurso = false">
-                            <h4 class="white--text">Cancelar</h4>
-                        </v-btn>
-                        <v-btn rounded color="secondary"   class=" mb-4 ml-2 mr-5" @click="eliminarCurso()">
-                            <h4 class="white--text">Eliminar</h4>
-                        </v-btn>
-                    </div> 
-            </v-card>
-        </v-dialog>
+        
 
         <!------------------>
         <v-dialog v-model="dialogModificarInsCurso" persistent max-width="500px" transition="scroll-y-reverse-transition">
@@ -363,16 +389,16 @@
 
         <!-- Dialog para mostrar la lista de los Cursos Existentes -->
         <v-dialog v-model="dialogAgregarCursoSemestre" fullscreen hide-overlay transition="dialog-bottom-transition">
+            <v-card class="mx-auto my-10 " max-width="100%" style="display: block; background-color:#F7FFF7;">
                 <v-toolbar dark color="primary">
                 <v-spacer></v-spacer>
-                <v-btn  depressed color="primary" @click="dialogAgregarCursoSemestre = false">
-                    <v-icon>mdi-close</v-icon>
-                    
-                <v-toolbar-title>Cerrar</v-toolbar-title>
+                <v-btn  
+                rounded depressed color="primary" @click="dialogAgregarCursoSemestre = false">
+                    <strong> Cerrar </strong>
+                    <v-icon class="ml-1">mdi-close</v-icon>
                 </v-btn>
-                
                 </v-toolbar>
-                <v-card> 
+                <v-container style="background-color: #F7FFF7;">
                     <v-row>
                         <v-col cols="12" md="1">
                         </v-col>
@@ -386,9 +412,41 @@
                                     height="180px"       
                                     src="@/assets/Globales/fondo3.jpg"        
                                 >
-                                <v-card-title class="white--text" style="font-size: 200%;text-shadow: #555 2px 2px 3px;">     
-                                    <v-icon class="mx-3" color="white">fas fa-chalkboard-teacher</v-icon> 
-                                    <strong>Cursos</strong>
+                                <v-card-title class="white--text" style="padding:0;">
+                                    <v-row class="px-5">  
+                                        <v-col cols="12" class="pt-1">
+                                            <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" >Cursos</strong>
+                                        </v-col> 
+                                        <v-col cols="7" sm="9" md="9" class="align-self-end" >
+                                        <v-text-field
+                                        v-model="buscarAsignarCursos"
+                                        append-icon="mdi-magnify"
+                                        label="Buscar"
+                                        hide-details
+                                        outlined
+                                        clearable
+                                        dense
+                                        solo
+                                        rounded
+                                        color="secondary"
+                                        background-color="white"
+                                        ></v-text-field>
+                                        </v-col> 
+                                        <v-col  cols="5" sm="3" md="3" class="align-self-end" style="text-align:right;"> 
+                                            <v-tooltip bottom color="primary">
+                                                <template v-slot:activator="{ on }">
+                                                    <v-btn 
+                                                    :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                                    class="mr-2" fab 
+                                                    bottom left v-on="on" @click="asignarCursos" >
+                                                        <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
+                                                    </v-btn>
+                                                </template>
+                                                <span><strong>Asignar Cursos</strong></span>
+                                            </v-tooltip>
+                                        </v-col>
+                                    </v-row>
+
                                 </v-card-title>
                                 </v-img>  
                                 <v-data-table
@@ -396,98 +454,80 @@
                                     :headers="colCursos2"
                                     :items="listaCursos"
                                     :loading="cargando"
+                                    :search="buscarAsignarCursos"
                                     :items-per-page="10"
                                     show-select
                                     item-key="id"                                    
                                 >                                             
                                 </v-data-table>
-                                <div class="text-end mb-2 pb-2 mx-2">
-                                    <v-btn color="primary" tile class="mr-2" @click="asignarCursos">Asignar Cursos</v-btn>                                    
-                                </div>
+                                
                             </v-card>
                         </v-col>
                         <v-col cols="12" md="1">
                         </v-col>
                     </v-row>
-                </v-card>
+                </v-container>
+            </v-card>
         </v-dialog>
 
         <!-- Dialog para asignar cursos a un semestre -->
-        <v-dialog v-model="dialogAsignarCurso" max-width="900">
-            <v-card class="mx-auto" max-width="900" >
+        <v-dialog v-model="dialogAsignarCurso" max-width="500">
+            <v-card class="mx-auto" max-width="500" >
                 <v-card-title primary-title class="headline primary text--center">
                     <h5 class="white--text">Asignar Profesor a Cursos</h5>
                 </v-card-title>
-                
-                <v-row class="d-flex flex-wrap ">
-                    <v-col cols="12" lg="6" class="mt-0 pt-0 mb-0 pb-0" >                                                  
-                        <v-card  flat dense >
-                            <v-container class="mt-3 pt-0 mb-0 pb-0">
-                                <v-row cols="6" v-for="(item, index) in seleccionados" :key="index">
-                                    <!-- <v-col  >  -->
-                                        <!-- <v-container>
-                                            <v-row> -->
-                                                <v-col cols="6" >
-                                                    <v-list-item-title> {{item.nombre}}</v-list-item-title>
-                                                </v-col>
-                                                <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0"> 
-                                                     <v-form ref="form ">
-                                                        <v-select
-                                                            v-model="item.seccion"
-                                                            :items="listaDeSeccionesDisponibles"
-                                                            item-text="sec"
-                                                            dense
-                                                            outlined
-                                                            color="secondary"
-                                                    ></v-select>
-                                                 </v-form>
-                                                </v-col>
-                                            <!-- </v-row>
-                                        </v-container> -->
-                                    <!-- </v-col> -->
-                                </v-row>
+                <v-container class="px-5 mt-5">
+                    <v-row v-for="(item, index) in seleccionados" :key="index">
+                        <v-col cols="6" >
+                            <v-list-item-title> {{item.nombre}}</v-list-item-title>
+                        </v-col>
+                        <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0"> 
+                            <v-form ref="form ">
+                            <v-select
+                                v-model="item.seccion"
+                                :items="listaDeSeccionesDisponibles"
+                                item-text="sec"
+                                dense
+                                outlined
+                                color="secondary"
+                            ></v-select>
+                            </v-form>
+                        </v-col>
+                    </v-row>
+                    <v-card flat >
+                        <v-card-title
+                        class="headline primary text--center"
+                        primary-title
+                        >
+                        <h5 class="white--text ">Seleccionar Profesor</h5>
+                        </v-card-title>
+                            <v-form>
+                            <v-container class="pt-10 px-5">
+                                <v-select
+                                    class="mx-2"
+                                    v-model="profesorSeleccionado"
+                                    label="Profesor"
+                                    :items="listaProfesores"
+                                    item-text="nombre"
+                                    item-value="id"
+                                    :rules="[() => !!profesorSeleccionado ||'Requerido']"
+                                    outlined
+                                    prepend-inner-icon="mdi-school"
+                                >                                
+                                </v-select>                           
                             </v-container>
-                            
-                        </v-card>
-
-                    </v-col>
-                    <v-divider vertical></v-divider>
-                    <v-col cols="12" lg="5">
-                        <v-card flat >
-                            <v-card-title
-                            class="headline primary text--center"
-                            primary-title
-                            >
-                            <h5 class="white--text ">Seleccionar Profesor</h5>
-                            </v-card-title>
-                                <v-form>
-                                <v-container class="pt-10 px-5">
-                                    <v-select
-                                        class="mx-2"
-                                        v-model="profesorSeleccionado"
-                                        label="Profesor"
-                                        :items="listaProfesores"
-                                        item-text="nombre"
-                                        item-value="id"
-                                        :rules="[() => !!profesorSeleccionado ||'Requerido']"
-                                        outlined
-                                        prepend-inner-icon="mdi-school"
-                                    >                                
-                                    </v-select>                           
-                                </v-container>
-                            </v-form> 
-                            <v-spacer></v-spacer>
-                            <v-container  style="text-align:right;">
-                                <v-btn rounded color="warning" @click="resetAsignarCurso()">
-                                    <h4 class="white--text">Cancelar</h4>
-                                </v-btn>
-                                <v-btn rounded color="secondary" class="ml-2 mr'5" @click="asignarCursoASementre()" >
-                                    <h4 class="white--text">Asignar</h4>
-                                </v-btn>
-                            </v-container>                        
-                        </v-card>
-                    </v-col>   
-                </v-row>        
+                        </v-form> 
+                        <v-spacer></v-spacer>
+                        <v-container  style="text-align:right;">
+                            <v-btn rounded color="warning" @click="resetAsignarCurso()">
+                                <h4 class="white--text">Cancelar</h4>
+                            </v-btn>
+                            <v-btn rounded color="secondary" class="ml-2 mr'5" @click="asignarCursoASementre()" >
+                                <h4 class="white--text">Asignar</h4>
+                            </v-btn>
+                        </v-container>                        
+                    </v-card>
+                </v-container>
             </v-card>
         </v-dialog>
 
@@ -559,7 +599,7 @@ export default {
             datosInsCurso: [{id:''},{semestre:''},{curso:''},{nomCurso:''}],
             listaDeSeccionesDisponibles:['A','B','C','D','E','F','G','H'],
 
-            cargando: true,
+            cargando: false,
             seleccionados: [],
             profesorSeleccionado: '',
             colInsCursos:[
@@ -605,6 +645,7 @@ export default {
 
             // listaOpcionesDeCursos:[],
             search: '',
+            buscarAsignarCursos:'',
             sortBy:'nomCurso',
             headers: [
                 { text: 'id', value: 'id' },
@@ -615,6 +656,8 @@ export default {
             listaAccionesSobreInstaciaCurso: [ 'Modificar curso' , 'Cerrar curso'  ],
             listaDeSeccionesDisponibles:['A','B','C','D','E','F','G','H'],
             secionActual:'',
+            semestre:null,
+            
         }
     },
     _props: {
@@ -628,11 +671,13 @@ export default {
     set props(value) {
         this._props=value
     },
-    created () {   
+    beforeMount(){
+        this.cargando=true;
         this.obtenerProfesores();
         this.obtenerEscuelas();
         this.obtenerCursos();        
-        this.obtenerInstanciasCursos();    
+        this.obtenerInstanciasCursos();  
+        this.semestre =  this.$route.params.id;
     },
     computed: {
         
@@ -641,7 +686,6 @@ export default {
         ...mapMutations(['calcularRolVuelta']),
         
         obtenerProfesores(){
-            this.cargando = true;
             this.listaProfesoresAux = [];
             var aux;
             var url = 'http://127.0.0.1:8000/api/v1/usuario';
@@ -657,13 +701,11 @@ export default {
                     };                         
                     this.listaProfesoresAux[index]=usuario;
                 }
-                this.cargando = false;
                 this.listaProfesores = this.listaProfesoresAux;
             }
             ).catch((error)=>{
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
-                    this.cargando = false;
                     this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
                 }
                 else{
@@ -698,7 +740,6 @@ export default {
             ).catch((error)=>{
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
-                    this.cargando = false;
                     this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
                 }
                 else{
@@ -741,7 +782,6 @@ export default {
 
         //Metodo para obtener Todos los Cursos existentes.
         obtenerCursos(){
-            this.cargando = true;
             this.listaCursosAux = [];
             var aux;
             var url = `http://127.0.0.1:8000/api/v1/curso`;
@@ -758,11 +798,9 @@ export default {
                     };
                     this.listaCursosAux[index]=curso;
                 }
-                this.listaCursos = this.listaCursosAux;  
-                this.cargando = false;                   
+                this.listaCursos = this.listaCursosAux;                    
             }
-            ).catch((error)=>{
-                this.cargando = false;   
+            ).catch((error)=>{ 
                 console.log(error.response)
             });
         },
@@ -770,6 +808,7 @@ export default {
 
         //Metodo para obtener Todas las Instancias de Curso asociadas al Semestre actual.
         obtenerInstanciasCursos(){
+            this.cargando=true;
             this.listaInsCursosAux = [];
             var listaBrayan=[];
             var aux;            

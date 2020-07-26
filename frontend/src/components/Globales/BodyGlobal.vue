@@ -79,7 +79,7 @@
                 <v-card-title  class="headline primary text--center" primary-title > 
                     <h5 class="white--text ">Editar Perfil</h5>
                 </v-card-title>
-                <v-form  @submit.prevent="modificarUsuario" class=" px-8 mt-7" >
+                <v-form  @submit.prevent="modificarUsuario" class=" px-5 mt-7" >
                     <v-text-field v-model="datosUsuarioModificar.nombre" label="Nombre de usuario" outlined
                     color="secondary"
                     :rules="[() => !!datosUsuario.nombre ]"
