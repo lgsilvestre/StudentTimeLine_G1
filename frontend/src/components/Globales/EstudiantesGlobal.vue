@@ -34,7 +34,7 @@
                                 
                             </v-col>
                             <v-col  md="3" class="align-self-end" style="text-align:right;">
-                                <v-dialog v-model="dialogAgregarEstudiante" persistent max-width="500px">
+                                <v-tooltip bottom color="primary">
                                     <template v-slot:activator="{ on }">
                                         <v-btn
                                         fab
@@ -43,10 +43,15 @@
                                         left
                                         v-on="on"
                                         v-show="admin || secretariaEscuela"
+                                        @click="dialogAgregarEstudiante = true"
                                         >
                                             <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
                                         </v-btn>
                                     </template>
+                                     <span><strong>Importar Estudiante</strong></span>
+                                </v-tooltip>
+                                <v-dialog v-model="dialogAgregarEstudiante" persistent max-width="500px">
+                                    
                                     <v-card elevation="1" shaped>
                                         <v-card-title
                                         class="headline primary text--center"
@@ -111,6 +116,7 @@
                                                     v-model="estudianteImportar.matricula"
                                                     label="Matricula" outlined
                                                     color="secondary"
+                                                    :rules="reglasMatricula"
                                                     prepend-inner-icon="fas fa-graduation-cap"
                                                     ></v-text-field>
 
@@ -118,6 +124,7 @@
                                                     v-model="estudianteImportar.rut"
                                                     label="Rut" outlined
                                                     color="secondary"
+                                                    :rules="reglasRut"
                                                     prepend-inner-icon="fas fa-address-card"
                                                     ></v-text-field>
 
@@ -125,6 +132,7 @@
                                                     v-model="estudianteImportar.nombre_completo"
                                                     label="Nombre completo" outlined
                                                     color="secondary"
+                                                    :rules="reglasNombre"
                                                     prepend-inner-icon="mdi-account"
                                                     ></v-text-field>
 
@@ -132,6 +140,7 @@
                                                     v-model="estudianteImportar.correo"
                                                     label="Correo Electronico"
                                                     outlined
+                                                    :rules="reglasEmail"
                                                     color="secondary"
                                                     prepend-inner-icon="mdi-email"
                                                     ></v-text-field>
@@ -140,6 +149,7 @@
                                                     v-model="estudianteImportar.anho_ingreso"
                                                     label="Año ingreso" outlined
                                                     color="secondary"
+                                                    :rules="reglasAnio"
                                                     prepend-inner-icon="fas fa-hashtag"
                                                     ></v-text-field>
 
@@ -149,6 +159,7 @@
                                                     item-text="nombre"
                                                     label="Situacion academica" outlined
                                                     color="secondary"
+                                                    :rules="[() => !!estudianteImportar.situacion_academica ||'Requerido']"
                                                     prepend-inner-icon="fas fa-address-book"
                                                     ></v-select >
 
@@ -159,6 +170,7 @@
                                                     item-value="id"
                                                     label="Escuela"
                                                     outlined
+                                                    :rules="[() => !!estudianteImportar.escuela ||'Requerido']"
                                                     prepend-inner-icon="fas fa-book"
                                                     ></v-select>
                                                     <div style="text-align:right;" class="mb-1">
@@ -206,8 +218,8 @@
                                         </v-form> 
                                     </v-card>
                                 </v-dialog>
-                                <v-dialog v-model="dialogExportar" persistent max-width="600px">
-                                    <template v-slot:activator="{ on}" >
+                                <v-tooltip bottom color="primary">
+                                    <template v-slot:activator="{ on }" >
                                         <v-btn
                                         fab
                                         large
@@ -215,10 +227,14 @@
                                         left
                                         v-on="on"
                                         class="ml-2"
+                                        @click="dialogExportar = true"
                                         >
                                             <v-icon class="mx-2" color="secondary">fas fa-file-download</v-icon>
-                                        </v-btn>
+                                        </v-btn>                                        
                                     </template>
+                                    <span><strong>Exportar Lista de Estudiantes</strong></span>
+                                </v-tooltip>
+                                <v-dialog v-model="dialogExportar" persistent max-width="600px">                                    
                                     <v-card elevation="1" shaped>
                                         <v-card-title
                                         class="headline primary text--center"
@@ -439,11 +455,37 @@
         anhov3: new Date().getFullYear(),
         alertaErrorRangoAnhos: false,
         dialogExportar: false,
+
+        //reglas
         rules: [
         value => !!value || 'Requerido',
         value => value <= new Date().getFullYear()|| 'El año no debe ser mayor al actual',
         value => value >= 1981 || 'El año no debe ser menor a 1981',
         ],
+        reglasMatricula: [
+            v => !!v || 'Requerido',
+            v => (v && v.length == 10) || 'Matricula debe tener 10 digitos',
+            v => /^[0-9]+$/.test(v) || 'Solo numeros',
+        ],
+        reglasRut: [
+            v => !!v || 'Requerido',            
+            v => /^\d{1,2}\.\d{3}\.\d{3}[-][0-9kK]{1}$/.test(v) || 'Rut ingresado no valido',
+        ],
+        reglasNombre: [
+            v => !!v || 'Requerido',
+            v => (v && v.length <= 10) || 'El nombre debe tener maximo 40',
+        ],
+        reglasEmail: [
+                v => !!v || 'Correo es Requerido',
+                v => /.+@alumnos.utalca.cl/.test(v) || 'Correo ingresado debe ser valido',
+        ],     
+        reglasAnio: [
+            v => !!v || 'Requerido',
+            v => (v && v.length == 4) || 'Año debe tener 4 digitos.',
+            v => /^[0-9]+$/.test(v) || 'Solo numeros',
+        ],   
+
+
         //archivo
         file: null,
         import_file: '',

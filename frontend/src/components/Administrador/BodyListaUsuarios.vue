@@ -30,17 +30,21 @@
                                     ></v-text-field>
                                 </v-col>
                                 <v-col sm="6" md="3" class="align-self-end" style="text-align:right;">
-                                    
-                                    <!-- Formulario Registrar Usuario -->
-                                    <v-dialog v-model="dialog" persistent max-width="500px" :key="keyDialogCreacion">
+                                    <v-tooltip bottom color="primary">
                                         <template v-slot:activator="{ on }">
                                             <v-btn 
                                             :large="$vuetify.breakpoint.smAndDown ? false : true"
                                             :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                            @click="dialog = true"
                                             fab bottom left v-on="on" >
                                                 <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
                                             </v-btn>
                                         </template>
+                                        <span><strong>Registrar Usuario</strong></span>
+                                    </v-tooltip>
+                                    <!-- Formulario Registrar Usuario -->
+                                    <v-dialog v-model="dialog" persistent max-width="500px" :key="keyDialogCreacion">
+                                        
                                         <v-card class="mx-auto" max-width="500" >
                                             <v-card-title class="headline primary text--center" primary-title >
                                                 <h5 class="white--text ">Registrar Usuario</h5>
@@ -128,6 +132,7 @@
                                             
                                         </v-card>
                                     </v-dialog> 
+                                    
                                     <v-tooltip bottom color="primary">
                                         <template v-slot:activator="{ on, attrs }">
                                             <v-btn 
@@ -593,14 +598,14 @@ export default {
              var url =`http://127.0.0.1:8000/api/v1/usuario/restore/${this.datosUsuario.id}`;
             axios.post(url,null,this.$store.state.config)
             .then((result)=>{
-            if (result.data.data.usuario==true) {
+            if (result.data.success == true) {
                 this.obtenerListaUsuariosEliminados();
                 this.obtenerUsuarios(); 
                 this.alertaExito = true;
                 this.textoAlertas = result.data.message
             }
             }).catch((error)=>{
-                                
+                console.log(error);
                 // if (error.message == 'Network Error') {
                 //     console.log(error)
                 //     this.alertaError = true;

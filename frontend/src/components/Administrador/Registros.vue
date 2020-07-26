@@ -46,7 +46,7 @@
                         class="elevation-1 "
                     >
                         <template v-slot:expanded-item="{ headers, item }">
-                            <td :colspan="headers.length">{{ item.descripcion }}</td>
+                            <td :colspan="headers.length">{{ item.data }}</td>
                         </template>
                     </v-data-table>
                 
@@ -118,7 +118,10 @@
             /* Variables Tabla */
             headers: [
             { text: 'Titulo',align: 'start',value: 'titulo',sortable: true},
-            { text: 'Usuario', value: 'usuario',sortable: true },
+            { text: 'Accion', value: 'accion',sortable: true },
+            { text: 'Tipo', value: 'tipo',sortable: true },
+            { text: 'Descripcion', value: 'descripcion',sortable: true },
+            { text: 'Usuario', value: 'usuario',sortable: true },            
             { text: 'Fecha', value: 'created_at',sortable: true },
             { text: '', value: 'data-table-expand'},            
             ],
@@ -148,8 +151,11 @@
                         let log = {
                             id: element.id,
                             titulo: element.titulo,
+                            accion: element.accion,
+                            tipo: element.tipo,
                             descripcion: element.descripcion,   
                             usuario: element.usuario,
+                            data: element.data,
                             created_at: element.created_at,
                             updated_at: element.updated_at,
                         };                         

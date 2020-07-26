@@ -117,6 +117,12 @@
                         rounded
                         @click="editarEstudiante"
                         >Editar</v-btn>
+                        <v-btn
+                        color="secondary"
+                        class="ml-2"
+                        rounded
+                        @click="dialogSolicitud = true"
+                        >Solicitar Ayudante</v-btn>
                     </div>
                     
                 </v-card>
@@ -386,6 +392,75 @@
             
             </v-card>
         </v-dialog>
+        <v-dialog v-model="dialogSolicitud" persistent max-width="500px" >
+
+            <!-- 
+                id Estudiante
+                id instancia curso (mostrar solo los cursos del profe)
+                nota
+                horas 
+                meses
+
+             -->
+            <v-card class="mx-auto" max-width="500" >
+                <v-card-title class="headline primary text--center" primary-title >
+                    <h5 class="white--text ">Crear Solicitud de Ayudante</h5>
+                </v-card-title>
+                <v-container class="px-5 mt-5">
+                    <v-text-field
+                        v-model="perfilEstudiante.nombre_completo"
+                        label="Nombre Estudiante"             
+                        :disabled="true"           
+                        outlined
+                        prepend-inner-icon="mdi-account"
+                    ></v-text-field>
+                    <v-select
+                        v-model="datosSolicitud.curso"
+                        label="Curso"
+                        :items="listaCursos"
+                        item-text="nombre"
+                        item-value="id"
+                        :rules="[() => !!datosSolicitud.curso ||'Requerido']"
+                        outlined
+                        prepend-inner-icon="mdi-school"
+                    >                                
+                    </v-select>                    
+                    <v-text-field
+                        v-model="datosSolicitud.nota"
+                        prepend-inner-icon="mdi-school"                        
+                        label="Nota Aprobación del Módulo"
+                        outlined                       
+                    >
+                    </v-text-field>
+                    <v-text-field
+                        v-model="datosSolicitud.meses"
+                        prepend-inner-icon="mdi-school"
+                        label="N° Meses de Trabajo"
+                        outlined                           
+                    >
+                    </v-text-field> 
+                    <v-text-field
+                        v-model="datosSolicitud.horas"
+                        prepend-inner-icon="mdi-school"
+                        label="N° Horas Mensuales"
+                        outlined                           
+                    >
+                    </v-text-field>                  
+                    <div class="pb-1" style="text-align:right;">  
+                        <v-btn 
+                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                        rounded color="warning" @click="resetDialogSolicitud()">
+                            <h4 class="white--text">Cancelar</h4>
+                        </v-btn>
+                        <v-btn 
+                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                        rounded color="secondary" class="ml-2" @click="enviarSolicitud()" >
+                            <h4 class="white--text">Registrar</h4>
+                        </v-btn>
+                    </div>  
+                </v-container>
+            </v-card>
+        </v-dialog>
         <!-- Alertas -->
         <!-- alerta de exito de la modificacion -->
         <v-snackbar v-model="alertAcept" :timeout=delay
@@ -429,6 +504,7 @@ export default {
             dialogAgregarObservacion: false,
             dialogModificarObservacion: false,
             dialogEliminarObservacion: false,
+            dialogSolicitud: false,
             alertError: false,
             textoError: '',
             alertAcept: false,
@@ -438,6 +514,8 @@ export default {
             cargando:false,
             observaciones:[],
             auxObservaciones:[],
+            listaCursos: [],
+            listaCursosAux: [],
             items: [
             {
             color: 'red lighten-2',
@@ -508,13 +586,14 @@ export default {
                 ayudante:'',
                 descripcion:'',
             },
+            datosSolicitud: { estudiante:'', curso:'', nota:'', horas:'',meses:''},
             tipos:['Positiva','Negativa','Informativa','Otro'],
             categorias:['Ayudantía','Práctica','Copia','Otro','En Observación - 1 por Tercera','En Observación - 1 por Segunda','Se Retira','Eliminado por Rendimiento','Titulado','Eliminado Art. 31 E','Eliminado Art. 31 B'],
 
         }
     },
     computed:{
-        ...mapState(['perfilEstudiante']), 
+        ...mapState(['perfilEstudiante','usuario']), 
         
     },
     beforeMount(){
@@ -646,6 +725,32 @@ export default {
                 } 
             });
         },
+
+        obtenerCursosUsuario(){
+            this.listaCursosAux = [];
+            // var url =`http://127.0.0.1:8000/api/v1/instanciacurso/${this.$store.state.usuario.usuario.id}`;
+            
+            axios.get(url,this.$store.state.config)
+            .then((result)=>{   
+                for (let index = 0; index < result.data.data.insCursos.length; index++) {
+                    const element = result.data.data.insCursos[index];  
+                    let insCurso = {
+                        id: element.id,
+                        semestre: element.semestre,
+                        nomCurso: element.curso,
+                        seccion:element.seccion,
+                    }; 
+                    this.listaCursosAux[index]=insCurso;                                                         
+                }
+                this.listaCursos = this.listaCursosAux;              
+            }
+            ).catch((error)=>{
+                this.cargando = false;
+                console.log(error.response)
+            });
+
+        },
+
         agregarObservacion(){
             this.dessertsAux = [];
             var url = 'http://127.0.0.1:8000/api/v1/observacion';
@@ -937,9 +1042,18 @@ export default {
             };
         },
 
+        resetDialogSolicitud(){
+            this.dialogSolicitud = false;
+            this.datosSolicitud.estudiante = '';
+            this.datosSolicitud.curso = '';
+            this.datosSolicitud.nota = '';
+            this.datosSolicitud.meses = '';
+            this.datosSolicitud.horas = '';
+        },
 
-        
-        
+        enviarSolicitud(){
+            
+        },
     }
 }
 </script>
