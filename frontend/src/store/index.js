@@ -33,7 +33,6 @@ export default new Vuex.Store({
             headers: {
                 Authorization: '',
             },
-            
         },
         cargaLogin: false,
         verificacionLogin: false,

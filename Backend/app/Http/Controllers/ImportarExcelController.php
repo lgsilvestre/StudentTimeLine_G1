@@ -178,10 +178,14 @@ class ImportarExcelController extends Controller
                 $i+=1;
             }
             $resultado = array_combine($matriculas, $resultados);
+            $credenciales = JWTAuth::parseToken()->authenticate();
             Log::create([
                 'titulo' => "Se han importado estudiantes",
-                'descripcion' => $resultado,
-                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+                'accion' => "Importar estudiantes",
+                'tipo' => "Informativo",
+                'descripcion' => "Se han importado estudiantes en la escuela:".$credenciales['escuela'],
+                'data' => $resultado,
+                'usuario' =>  $credenciales['id']
             ]);
             return response()->json([
                 'success' => true,
