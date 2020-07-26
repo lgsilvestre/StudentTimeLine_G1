@@ -226,20 +226,28 @@
                                         </v-card-title>
                                     </v-col>
                                     <v-col cols="12" md="8" xl="9" class="align-self-center ">
-                                        <v-row justify="center" >  
+                                        <v-overlay :absolute="true" :value="cargando">
+                                            <v-progress-circular indeterminate size="64">
+                                            </v-progress-circular>
+                                        </v-overlay>  
+                                        <v-row justify="center" v-if="validacionObservaciones">
                                             <div id="chart" >
                                                 <apexchart ref="realtimeChart" type="donut" :options="chartOptions" :series="series" :width="$vuetify.breakpoint.lgAndDown ? 300 : 380" ></apexchart>
                                             </div>
-                                        </v-row>   
+                                        </v-row>
+                                        <v-row justify="center" v-if="validacionObservacionesFalse == false">
+                                            <h3>No existen observaciones</h3>
+                                        </v-row>     
                                     </v-col>
                                 </v-row>
                                 
                             
                         </v-card>
-                        <template>
-                            <v-timeline  align-top dense>
+                            <v-timeline  align-top dense v-show="validacionObservaciones">
+                                
                                 <v-timeline-item
                                 v-for="(observacion, i) in observaciones"
+
                                 :key="i"
                                 :color="observacion.color"
                                 :icon="observacion.icono"
@@ -282,7 +290,7 @@
                                 </v-card>
                                 </v-timeline-item>
                             </v-timeline>
-                        </template>
+                        
                     </v-col>
                     <v-col cols="0" sm="0" md="1">
 
@@ -436,6 +444,8 @@ export default {
             delay: 4000,
             mostrar: false, 
             cargando:false,
+            validacionObservaciones: false,
+            validacionObservacionesFalse: true,
             observaciones:[],
             auxObservaciones:[],
             items: [
@@ -536,7 +546,17 @@ export default {
             }  
         },
         volverEstudiantes(){
-            this.$router.push({path:'/administrador/estudiantes'});
+            if (this.$store.state.usuario.usuario.rol == "admin") {
+                this.$router.push({path:'/administrador/estudiantes'});
+            } else {
+                if (this.$store.state.usuario.usuario.rol == "secretaria de escuela") {
+                    this.$router.push({path:'/secretariaEscuela/estudiantes'});
+                } else {
+                    if (this.$store.state.usuario.usuario.rol == "profesor") {
+                        this.$router.push({path:'/profesor/estudiantes'});
+                    }
+                }
+            }
         },
         editarEstudiante(){
             console.log(this.$vuetify.breakpoint);
@@ -621,6 +641,14 @@ export default {
                     };
 
                     this.auxObservaciones[index]=observacion;
+                }
+                if (contador>0) {
+                    this.validacionObservaciones=true;
+                    this.validacionObservacionesFalse = true;
+                }
+                else{
+                    this.validacionObservacionesFalse = false;
+                    this.validacionObservaciones=false;
                 }
                 this.cargando =false;
                 this.observaciones = this.auxObservaciones;

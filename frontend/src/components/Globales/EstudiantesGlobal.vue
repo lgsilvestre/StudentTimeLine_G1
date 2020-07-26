@@ -762,7 +762,18 @@
         },
         perfilEstudiante(item){
             this.$store.state.perfilEstudiante = item;
-            this.$router.push({path:'/administrador/estudiantes/'+item.rut});
+            if (this.$store.state.usuario.usuario.rol == "admin") {
+                this.$router.push({path:'/administrador/estudiantes/'+item.rut});
+            } else {
+                if (this.$store.state.usuario.usuario.rol == "secretaria de escuela") {
+                    this.$router.push({path:'/secretariaEscuela/estudiantes/'+item.rut});
+                } else {
+                    if (this.$store.state.usuario.usuario.rol == "profesor") {
+                        this.$router.push({path:'/profesor/estudiantes/'+item.rut});
+                    }
+                }
+            }
+            
         },
 
     },
