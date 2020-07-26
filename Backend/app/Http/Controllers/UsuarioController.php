@@ -2,17 +2,10 @@
 
 namespace App\Http\Controllers;
 use App\User;
-use App\Images;
-use Illuminate\Support\Facades\Response;
 use Validator;
 use Illuminate\Http\Request;
-use App\Escuela;
-use App\Curso;
-use App\InstanciaCurso;
 use App\Profesor_Con_Curso;
-use Image; 
 use App\Log;
-use File;
 
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -52,7 +45,7 @@ class UsuarioController extends Controller{
                     'accion' => "listar usuario",
                     'tipo' => "Error",
                     'descripcion' => "Un profesor solicito este metodo y no puede, revise el sistema de seguridad del programa",
-                    'data' => $ex,
+                    'data' => null,
                     'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
                 ]);
                 return response()->json([
