@@ -63,13 +63,13 @@
                                                 </template>
                                                 <v-list v-if="item.deleted_at == null">
                                                     <v-list-item  v-for="(accion, index) in accionesSemestre" :key="index"
-                                                    @click="acionesSobreSemestre(accion,semestre)" >
+                                                    @click="acionesSobreSemestre(accion,item)" >
                                                         <v-list-item-title>{{ accion }}</v-list-item-title>
                                                     </v-list-item>
                                                 </v-list>
                                                 <v-list v-if="item.deleted_at != null">
                                                     <v-list-item  v-for="(accion, index) in accionesSemestreEliminado" :key="index"
-                                                    @click="acionesSobreSemestre(accion,semestre)" >
+                                                    @click="acionesSobreSemestre(accion,item)" >
                                                         <v-list-item-title>{{ accion }}</v-list-item-title>
                                                     </v-list-item>
                                                 </v-list>
@@ -554,21 +554,22 @@ export default {
         /**
          * Procesa la lista de acciones que puede tener un semestre
          */
-        acionesSobreSemestre(item,semestre){
-            if(item =='Modificar Semestre'){
+        acionesSobreSemestre(acciones,item){
+            if(acciones =='Modificar Semestre'){
                 console.log("Modificar Semestre")
-                 this.dialogModificarSemestre=true;
-                this.semestreActual_1=semestre;
-                this.añoActual=semestre.anio;
+                
+                this.dialogModificarSemestre=true;
+                this.semestreActual_1=item;
+                this.añoActual=item.anio;
             }
-            if(item=='Cerrar Semestre'){
+            if(acciones=='Cerrar Semestre'){
                 console.log("Eliminar semestre")
-                this.semestreActual_1=semestre;
+                this.semestreActual_1=item;
                 this.dialogEliminarSemestre = true;
             }
-            if(item=='Re-abrir semestre'){
+            if(acciones=='Re-abrir semestre'){
                 console.log("Re-abrir semestre")
-                this.semestreActual_1=semestre;
+                this.semestreActual_1=item;
                 this.dialogReAbrirSemestre = true;
             }
             

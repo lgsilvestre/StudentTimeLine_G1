@@ -508,7 +508,7 @@
             var url = 'http://127.0.0.1:8000/api/v1/estudiante/importar';
             axios.post(url,formData,this.$store.state.config)
             .then((result)=>{
-                console.log(result);
+                //console.log(result);
                 if (result.data.success == true) {
                     this.resetImportarEstudiantes();
                     this.obtenerEstudiantes();
@@ -531,11 +531,11 @@
             var url = 'http://127.0.0.1:8000/api/v1/estudiante';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
-                console.log(result.data);
+               //console.log(result.data);
                 if (result.data.success == true) {
                     for (let index = 0; index < result.data.data.estudiantes.length; index++) {
                     const element = result.data.data.estudiantes[index];
-                    console.log(element)
+                    //console.log(element)
                     let estudiante = {
                         id: element.id,
                         matricula: element.matricula,
@@ -709,24 +709,24 @@
                 //this.alertaErrorRangoAnhos = true;
                 //console.log('rango mal');
             //}
-            var url = 'http://127.0.0.1:8000/api/v1/exportar';
-            axios.get(url,this.$store.state.config2)
+            var url = 'http://127.0.0.1:8000/api/v1/estudiante/exportar ';
+            axios.post(url,null,this.$store.state.config)
             .then((result)=>{
                 console.log(result);
                 //var fileDownload = require('js-file-download');
                 //fileDownload(result.data, 'archivo.xlsx');
                 
 
-                const url = URL.createObjectURL(new Blob([result.data], {
-                    type: 'application/vnd.ms-excel'
-                }))
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', 'estudiante.xlsx');
-                document.body.appendChild(link);
-                link.click();
-                this.alertAcept = true;
-                this.textoAcept = 'Se realizó la operación correctamente'
+                // const url = URL.createObjectURL(new Blob([result.data], {
+                //     type: 'application/vnd.ms-excel'
+                // }))
+                // const link = document.createElement('a');
+                // link.href = url;
+                // link.setAttribute('download', 'estudiante.xlsx');
+                // document.body.appendChild(link);
+                // link.click();
+                // this.alertAcept = true;
+                // this.textoAcept = 'Se realizó la operación correctamente'
                 
             })
             .catch((error) => {
