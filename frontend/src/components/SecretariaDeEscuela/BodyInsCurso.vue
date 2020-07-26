@@ -123,35 +123,62 @@
         <v-dialog v-model="dialogListaCursos" fullscreen hide-overlay transition="dialog-bottom-transition">
             <v-card class="mx-auto my-10 " max-width="100%" style="display: block; background-color:#F7FFF7;">
                 <v-toolbar dark color="primary">
-                    <v-btn icon dark @click="dialogListaCursos = false">
-                        <v-icon>mdi-close</v-icon>
+                    <v-spacer></v-spacer>
+                    <v-btn 
+                    rounded depressed color="primary" @click="dialogListaCursos = false">
+                        <strong> Cerrar </strong>
+                        <v-icon class="ml-1">mdi-close</v-icon>
                     </v-btn>
-                    <v-toolbar-title class="white--text"> <strong>Volver</strong></v-toolbar-title>
+                    
                 </v-toolbar>
-
-                <v-container>
+                <v-container style="background-color: #F7FFF7;">
                     <v-row>
                         <v-col cols="12" md="1"></v-col>
                         <v-col cols="12" md="10">
+                            <v-card elevation="1 " >
                             <v-img class="mx-auto white--text align-end justify-center"
                                 width="100%" height="180px"       
                                 src="@/assets/Globales/fondo3.jpg" >                    
-                                <v-card-title class="white--text" style="font-size: 200%;text-shadow: #555 2px 2px 3px;">     
-                                    <v-icon class="mx-3" color="white">fas fa-users</v-icon>    
-
-                                    <!-- Titulo -->
-                                    <strong> Lista Cursos Existentes </strong>
-                                    <v-spacer></v-spacer>
-                                    <v-btn 
-                                    :small="$vuetify.breakpoint.smAndDown ? true : false"
-                                    @click="dialogCrearCurso = true"
-                                    fab bottom left >
-                                        <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
-                                    </v-btn>
+                                <v-card-title class="white--text" style="padding:0;">     
+                                    <v-row class="px-5">
+                                        <v-col cols="12"  >
+                                            <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" >Cursos Existentes</strong>
+                                        </v-col>
+                                        <v-col  cols="7" sm="9" md="9" class="align-self-end" >
+                                            <v-text-field
+                                            v-model="buscarCursos"
+                                            append-icon="mdi-magnify"
+                                            label="Buscar"
+                                            hide-details
+                                            outlined
+                                            clearable
+                                            dense
+                                            solo
+                                            rounded
+                                            color="secondary"
+                                            background-color="white"
+                                            ></v-text-field>
+                                        </v-col>
+                                        <v-col  cols="5" sm="3" md="3" class="align-self-end" style="text-align:right;">
+                                            <v-tooltip bottom color="primary">
+                                            <template v-slot:activator="{ on }">
+                                            <v-btn 
+                                            :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                            @click="dialogCrearCurso = true"
+                                            fab bottom left 
+                                            v-on="on"
+                                            >
+                                                <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
+                                            </v-btn>
+                                            </template>
+                                            <span><strong>Crear nuevo curso</strong></span>
+                                            </v-tooltip>
+                                        </v-col>
+                                    </v-row>
                                 </v-card-title>
                             </v-img>
                             <v-data-table  :headers="colCursos" :items="listaCursos"
-                                :search="search" :loading="cargando" :items-per-page="10"  >            
+                                :search="buscarCursos" :loading="cargando" :items-per-page="10"  >            
                                 <template v-slot:item.opciones="{ item }">
                                 <!-- boton para modificar usuario seleccionado -->
                                     <v-tooltip bottom color="primary">
@@ -177,21 +204,21 @@
                                     </v-tooltip>
                                 </template>
                             </v-data-table>
+                            </v-card>
                         </v-col>
                         <v-col cols="12" md="1"></v-col>
                     </v-row>                    
                 </v-container>                            
             </v-card>
             <!-- Dialog para crear un Curso -->
-            <v-dialog v-model="dialogCrearCurso" persistent max-width="500px">            
-                <v-card class="mx-auto" max-width="800" shaped >
+            <v-dialog v-model="dialogCrearCurso" persistent max-width="500px" :key="KeyDialogCrearCurso">            
+                <v-card class="mx-auto" max-width="500" >
                     <v-card-title class="headline primary text--center" primary-title >
                         <h5 class="white--text ">Crear Curso</h5>
                     </v-card-title>
-                    <v-card-text class="px-12 mt-10" >
+                    <v-container class="px-5 mt-5" >
                         <v-form  ref="form" >
                             <v-text-field
-                                class="mx-2"
                                 v-model="datosCurso.nombre"
                                 label="Nombre del Curso"
                                 :rules="[() => !!datosCurso.nombre ||'Requerido']"
@@ -199,7 +226,6 @@
                                 prepend-inner-icon="mdi-account"
                             ></v-text-field>
                             <v-text-field
-                                class="mx-2"
                                 v-model="datosCurso.plan"
                                 label="Plan al que Pertenece el Curso"
                                 :rules="[() => !!datosCurso.plan ||'Requerido']"
@@ -207,7 +233,6 @@
                                 prepend-inner-icon="mdi-account"
                             ></v-text-field>
                             <v-select
-                                class="mx-2"
                                 v-model="datosCurso.escuela"
                                 label="Escuela"
                                 :items="listaEscuela"
@@ -218,7 +243,6 @@
                                 prepend-inner-icon="mdi-school"
                             ></v-select>
                             <v-text-field
-                                class="mx-2"
                                 v-model="datosCurso.descripcion"
                                 label="Descripcion"
                                 :rules="[() => !!datosCurso.descripcion ||'Requerido']"
@@ -226,16 +250,16 @@
                                 prepend-inner-icon="mdi-account"
                             ></v-text-field>
                             
-                            <v-container  style="text-align:right;">
+                            <div class="pb-1" style="text-align:right;">
                                 <v-btn rounded color="warning" @click="resetCrearCurso()">
                                     <h4 class="white--text">Cancelar</h4>
                                 </v-btn>
-                                <v-btn rounded color="secondary" class="ml-2 mr'5" @click="crearCurso()" >
-                                    <h4 class="white--text">Registrar</h4>
+                                <v-btn rounded color="secondary" class="ml-2" @click="crearCurso()" >
+                                    <h4 class="white--text">Aceptar</h4>
                                 </v-btn>
-                            </v-container>  
+                            </div>  
                         </v-form>
-                    </v-card-text>
+                    </v-container>
                 </v-card>
             </v-dialog> 
 
@@ -474,60 +498,57 @@
         <v-dialog v-model="dialogAsignarCurso" max-width="500">
             <v-card class="mx-auto" max-width="500" >
                 <v-card-title primary-title class="headline primary text--center">
-                    <h5 class="white--text">Asignar Profesor a Cursos</h5>
+                    <h5 class="white--text">Asignar Cursos</h5>
                 </v-card-title>
-                <v-container class="px-5 mt-5">
-                    <v-row v-for="(item, index) in seleccionados" :key="index">
-                        <v-col cols="6" >
-                            <v-list-item-title> {{item.nombre}}</v-list-item-title>
-                        </v-col>
-                        <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0"> 
-                            <v-form ref="form ">
-                            <v-select
-                                v-model="item.seccion"
-                                :items="listaDeSeccionesDisponibles"
-                                item-text="sec"
-                                dense
-                                outlined
-                                color="secondary"
-                            ></v-select>
-                            </v-form>
-                        </v-col>
-                    </v-row>
-                    <v-card flat >
-                        <v-card-title
-                        class="headline primary text--center"
-                        primary-title
-                        >
-                        <h5 class="white--text ">Seleccionar Profesor</h5>
-                        </v-card-title>
-                            <v-form>
-                            <v-container class="pt-10 px-5">
+                <v-container class="px-5">
+                    <v-form>
+                        <v-row v-for="(item, index) in seleccionados" :key="index">
+                            <v-col cols="6" v-if="index==0">
+                                <strong><h3>Curso</h3></strong>
+                            </v-col>
+                            <v-col cols="6" v-if="index==0">
+                                <strong><h3>Sección</h3></strong>
+                            </v-col>
+                            <v-col cols="6" >
+                                <v-list-item-title> {{item.nombre}}</v-list-item-title>
+                            </v-col>
+                            <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0"> 
                                 <v-select
-                                    class="mx-2"
-                                    v-model="profesorSeleccionado"
-                                    label="Profesor"
-                                    :items="listaProfesores"
-                                    item-text="nombre"
-                                    item-value="id"
-                                    :rules="[() => !!profesorSeleccionado ||'Requerido']"
+                                    v-model="item.seccion"
+                                    :items="listaDeSeccionesDisponibles"
+                                    item-text="sec"
+                                    label="Sección"
+                                    dense
                                     outlined
-                                    prepend-inner-icon="mdi-school"
-                                >                                
-                                </v-select>                           
-                            </v-container>
-                        </v-form> 
-                        <v-spacer></v-spacer>
-                        <v-container  style="text-align:right;">
+                                    color="secondary"
+                                ></v-select>
+                            </v-col>
+                        </v-row>
+                        <v-divider></v-divider>
+                        <strong ><h3 class="pt-5">Eliga el profesor: </h3></strong>
+                        <v-select
+                            class="pt-3"
+                            v-model="profesorSeleccionado"
+                            label="Profesor"
+                            :items="listaProfesores"
+                            item-text="nombre"
+                            item-value="id"
+                            :rules="[() => !!profesorSeleccionado ||'Requerido']"
+                            outlined
+                            prepend-inner-icon="mdi-school"
+                        >                                
+                        </v-select>                           
+                        <div style="text-align:right;"  class="mb-1">
                             <v-btn rounded color="warning" @click="resetAsignarCurso()">
                                 <h4 class="white--text">Cancelar</h4>
                             </v-btn>
-                            <v-btn rounded color="secondary" class="ml-2 mr'5" @click="asignarCursoASementre()" >
+                            <v-btn rounded color="secondary" class="ml-2 " @click="asignarCursoASementre()" >
                                 <h4 class="white--text">Asignar</h4>
                             </v-btn>
-                        </v-container>                        
-                    </v-card>
+                        </div> 
+                    </v-form> 
                 </v-container>
+                
             </v-card>
         </v-dialog>
 
@@ -646,6 +667,7 @@ export default {
             // listaOpcionesDeCursos:[],
             search: '',
             buscarAsignarCursos:'',
+            buscarCursos:'',
             sortBy:'nomCurso',
             headers: [
                 { text: 'id', value: 'id' },
@@ -657,7 +679,7 @@ export default {
             listaDeSeccionesDisponibles:['A','B','C','D','E','F','G','H'],
             secionActual:'',
             semestre:null,
-            
+            KeyDialogCrearCurso: 0,
         }
     },
     _props: {
@@ -848,7 +870,8 @@ export default {
                 this.alertaExito = true;
                 this.textoAlertas = "Se creó el curso con exito."
                 this.resetCrearCurso();
-                this.obtenerCursos();  
+                this.obtenerCursos(); 
+                this.KeyDialogCrearCurso ++; 
             }).catch((error)=>{
                 console.log(error);
                 if (error.message == 'Network Error') {
@@ -856,6 +879,7 @@ export default {
                     this.alertaError = true;
                     this.textoAlertas = "Error al crear el curso, intente mas tarde."
                     this.resetCrearCurso();
+                    this.KeyDialogCrearCurso ++;
                 };                        
             });
         },
@@ -866,6 +890,7 @@ export default {
             this.datosCurso.escuela ="";
             this.datosCurso.descripcion ="";
             this.dialogCrearCurso = false;
+            this.KeyDialogCrearCurso ++;
         },
 
         setModificarCurso(item){
@@ -1006,7 +1031,7 @@ export default {
                         "curso": this.seleccionados[i].id,
                         "seccion":  this.seleccionados[i].seccion,
                     }
-                     var url = 'http://127.0.0.1:8000/api/v1/instanciaCurso';   
+                    var url = 'http://127.0.0.1:8000/api/v1/instanciaCurso';   
                     axios.post(url, post, this.$store.state.config)
                     .then((result) => {
                         this.dialogAsignarCurso=false;

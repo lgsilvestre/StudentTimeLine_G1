@@ -159,7 +159,7 @@
                                                             src="@/assets/Globales/fondo3.jpg" >     
                                                             <v-card-title class="white--text" style="padding:0;">
                                                             <v-row class="px-5">
-                                                                <v-col cols="12" class="pt-1" >
+                                                                <v-col cols="12"  >
                                                                     <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" > Usuarios Eliminados</strong>
                                                                 </v-col>
                                                                 <v-col  cols="7" sm="9" md="9" class="align-self-end" >
@@ -243,7 +243,7 @@
                                             
                                         </v-card>
                                     </v-dialog>
-                                    <v-dialog  v-model="dialogRestaurarUsuarioEliminado" ref="form" persistent max-width="450px">
+                                    <v-dialog  v-model="dialogRestaurarUsuarioEliminado" ref="form" persistent max-width="500px">
                                         <v-card class="mx-auto" max-width="500"  >
                                             <v-card-title class="headline primary text--center" primary-title >
                                                 <h5 class="white--text ">Restaurar Usuario</h5>
@@ -385,20 +385,7 @@
                             </v-dialog>                
                         </v-card-title>                                                                                   
                     </v-img>
-                    <v-text-field
-                    v-model="buscar"
-                    append-icon="mdi-magnify"
-                    label="Buscar"
-                    hide-details
-                    outlined
-                    class="px-5 py-2 d-sm-flex d-md-none"
-                    clearable
-                    dense
-                    solo
-                    rounded
-                    color="secondary"
-                    background-color="white"
-                    ></v-text-field>
+
                     <!-- propiedades tablas -->
                     <v-data-table  :headers="columnas" :items="listaUsuarios"
                         :search="buscar" :loading="cargando" :items-per-page="10"  >            
