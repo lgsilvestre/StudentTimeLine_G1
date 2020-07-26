@@ -342,15 +342,15 @@ export default {
                var contrana=this.datosUsuarioModificar.contrasena;
                var nombre = this.datosUsuarioModificar.nombre;
                if(validarCorreo == false){
-                   correo = '';
+                   correo = null;
                 //    console.log("correo invalido")
                }
                if(validarContrasena == false){
-                   contrana='';
+                   contrana=null;
                 //    console.log("contraseña invalido")
                }
                if(nombreValido == false){
-                   nombre = '';
+                   nombre = null;
                 //    console.log("nombre invalido")
                }
                 var url =`http://127.0.0.1:8000/api/v1/usuario/${this.datosUsuario.id}`;
@@ -372,6 +372,7 @@ export default {
                         this.reset();
                     }
                     }).catch((error)=>{
+                        console.log("SE CALLO")
                         console.log(error);
                         console.log(error.response.data);
                         this.resetModificacionUsuario();
@@ -391,7 +392,7 @@ export default {
                                 this.cargando = false;
                                 this.alertError = true;
                                 var mensaje=result.data.message;
-                                this.textoError=mensaje;
+                                this.textoError="Error en los datos ingresados";
                                 this.reset();
                                 break;
                             case 602:
@@ -400,7 +401,7 @@ export default {
                                 this.cargando = false;
                                 this.alertError = true;
                                 var mensaje=result.data.message;
-                                this.textoError=mensaje;
+                                this.textoError="El usuario no existe.";
                                 this.reset();
                                 break;
                             case 603:
@@ -408,18 +409,18 @@ export default {
                                 console.log(error.response.data);
                                 this.cargando = false;
                                 this.alertError = true;
-                                var mensaje=result.data.message;
-                                this.textoError=mensaje;
+                                this.textoError="El usuario no tiene los permisos necesarios para realizar esta operacion.";
                                 break;
                             case 604:
                                 console.log(error.response.data.code +' '+ error.response.data.message);
                                 console.log(error.response.data);
                                 this.cargando = false;
                                 this.alertError = true;
-                                var mensaje=result.data.message;
+                                var mensaje="Error en la base de datos";
                                 this.textoError=mensaje;
                                 this.reset()
                                 break;
+                            
                             default:
                                 break;
                             }
