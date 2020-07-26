@@ -7,38 +7,55 @@
         <v-col  cols="12" sm="10" >
             <v-card flat   elevation="1">
                 <v-img class="mx-auto white--text align-end justify-center"
-                        width="100%" height="150px"       
-                        src="@/assets/Globales/background-panel-08.jpg">
-                        <v-card-title class="white--text" style="font-size: 200%;text-shadow: #555 2px 2px 3px;">
-                            <strong > Semestres </strong>
-                            <v-spacer></v-spacer>
+                width="100%" height="180px"       
+                src="@/assets/Globales/fondo3.jpg">
+                <v-card-title class="white--text" style="padding:0;">
+                    <v-row class="px-5">
+                        <v-col cols="12" class="pt-1">
+                            <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" >Semestres</strong>
+                        </v-col>
+                        <v-col cols="7" sm="9" md="9" class="align-self-end" >
+                            <v-text-field
+                            v-model="search"
+                            append-icon="mdi-magnify"
+                            label="Buscar"
+                            hide-details
+                            outlined
+                            clearable
+                            dense
+                            solo
+                            rounded
+                            color="secondary"
+                            background-color="white"
+                            ></v-text-field>
+                        </v-col>
+                        <v-col  cols="5" sm="3" md="3" class="align-self-end" style="text-align:right;">
                             <v-tooltip bottom color="primary">
                                 <template v-slot:activator="{ on }">
-                                    <v-btn class="mr-2" fab large bottom left v-on="on" @click="dialogAñadirSemestre =true" >
+                                    <v-btn 
+                                    :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                    class="mr-2" fab 
+                                    bottom left v-on="on" @click="dialogAñadirSemestre =true" >
                                         <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
                                     </v-btn>
                                 </template>
                                 <span><strong>Agregar Semestre</strong></span>
                             </v-tooltip>
-                        </v-card-title> 
+                        </v-col>
+                    </v-row>
+                    
+                </v-card-title> 
                 </v-img>
                 <!-- <v-container> -->
-                    <v-data-iterator :items="listaSemestres" :search="search" :sort-by="sortBy.toLowerCase()">
-                        <template v-slot:header>
-                           <v-toolbar>
-                                <v-text-field v-model="search" append-icon="mdi-magnify"
-                                    label="Buscar semestre" single-line  hide-details
-                                ></v-text-field>
-                           </v-toolbar>
-                       </template>
+                    <v-data-iterator :items="listaSemestres" :search="search" :sort-by="sortBy.toLowerCase()" class="px-2 py-2" :loading="cargando">
                        <template v-slot:default="props">
-                           <v-row>
+                           <v-row >
                                <v-col v-for="item in props.items" :key="item.nomCurso" cols="12" sm="6" md="4" lg="3">
-                                   <v-card class=" ml-2 mr-2"  dark color="#F7FFF7"  style=" border-style:solid; border-color:rgba(0,0,0,0.5);" > 
+                                   <v-card class="mx-1"  dark color="#F7FFF7"  style=" border-style:solid; border-color:rgba(0,0,0,0.5);" > 
                                 <v-container class="pt-0 mt-0 pb-0 ">
                                     <v-row >
                                         <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0" >
-                                            <v-card-title class="mt-0 pt-0 pl-0 pr-0 " >
+                                            <v-card-title style="padding:0;" >
                                                 <v-img class="mx-auto white--text align-end justify-center "
                                                         width="100%" height="30px"       
                                                         src="@/assets/Globales/background-panel-08.jpg"
@@ -57,7 +74,7 @@
                                             </v-card-title>
                                         </v-col>
                                             
-                                        <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0  text-right" >
+                                        <v-col cols="12" class=" pt-1 pl-0 pr-0 pb-0  text-right" >
                                             <v-menu class="text-left " offset-y>
                                                 <template   v-slot:activator="{ on, attrs }">
                                                     <v-btn  fab  color="primary" x-small icon v-bind="attrs" v-on="on" >
@@ -78,11 +95,11 @@
                                                 </v-list>
                                             </v-menu>
                                         </v-col>
-                                        <v-col cols="6"  class=" pt-0 pl-1 pr-0 pb-0 "  >
+                                        <v-col cols="6"  class=" pt-0 pl-1 pr-0 pb-1 "  >
                                             <v-card-text class=" pt-0 pl-2 pr-0 pb-0 " v-if="item.deleted_at == null">
                                                 <div class="text--primary " >
                                                     <!-- <p class="font-weight-black"   @click="calcularRol(semestre)"> {{ semestre.anio }} - {{semestre.semestre}}</p> -->
-                                                    <a   @click="calcularRol(item)">{{ item.anio }} - {{item.semestre}}</a>
+                                                    <strong style=" font-size: 115%;">  <a   @click="calcularRol(item)">{{ item.anio }} - {{item.semestre}}</a> </strong>
                                                 </div>
                                             </v-card-text>
                                             <v-card-text class=" pt-0 pl-2 pr-0 pb-0 " v-if="item.deleted_at != null">
@@ -112,7 +129,7 @@
      </v-row>
         <!-- Dialogo para agregar un semestre -->
      <v-dialog v-model="dialogAñadirSemestre" rtransition="scroll-y-reverse-transition"  persistent max-width="500px">
-         <v-card class="mx-auto" max-width="800" >
+         <v-card class="mx-auto" max-width="500" >
                 <v-card-title class="headline primary text--center" primary-title >
                     <h5 class="white--text ">Registrar Semestre</h5>
                 </v-card-title>
@@ -321,9 +338,10 @@ export default {
             alertaExito: false,
             textoAlertas: '',
             timeout: 6000,
+
             /**Variables para trabjar con los semetres */
             date: new Date().toISOString().substr(0, 10),
-            listaSemestres:[{id:'',semestre:'',anio:''}],
+            listaSemestres:[],
             listaSemestresAux:[],
             unAnhoVariable: false,
             añoActual: new Date().getFullYear(),
@@ -345,6 +363,7 @@ export default {
             listaSemestres_reg:[ {sem: 1},  {sem: 2}, {sem: 3}],
 
             //busqueda
+            cargando: false,
             search: '',
             sortBy:'anio',
             headers: [
@@ -362,10 +381,10 @@ export default {
     }
     },
     get props() {
-        return this._props
+        return this._props;
     },
     set props(value) {
-        this._props=value
+        this._props=value;
     },
     beforeMount(){
         /**
@@ -381,7 +400,8 @@ export default {
          *   semestres registrados en la base de datos
          */
         obtenerListaDeSemestres(){
-             this.listaSemestresAux = [];
+            this.cargando = true;
+            this.listaSemestresAux = [];
             var aux;
             var url = 'http://127.0.0.1:8000/api/v1/semestre';
             axios.get(url,this.$store.state.config)
@@ -398,12 +418,16 @@ export default {
                         }; 
                         this.listaSemestresAux[index]=semestre;
                     }
+                    this.cargando = false;
                     this.listaSemestres = this.listaSemestresAux;
                 }
             }
             ).catch((error)=>{
-                if (error.message == 'Network Error') {
+                if (error.message == "Network Error") {
                     console.log(error);
+                    this.textoAlertas = "Error al comunicarse con el servidor, intente más tarde";
+                    this.alertaError = true;
+                    this.cargando = false;
                     // state.mensajeErrorLogin= 'Error al comunicarse con el servidor, intente más tarde';
                 } else {
                     if (error.response.data.success == false) {
@@ -414,8 +438,9 @@ export default {
                                 mensaje= error.response.data.message;
                                 this.textoAlertas = mensaje;
                                 this.alertaError = true;  
+                                this.cargando = false;
                                 break;
-                            
+                            default:
                                 break;
                         }
                     }
