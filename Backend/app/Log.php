@@ -8,7 +8,7 @@ class Log extends Model
 {
 
     protected $fillable = [
-        'titulo', 'accion', 'tipo', 'descripcion', 'data ','usuario'
+        'titulo', 'accion', 'tipo', 'descripcion', 'data','usuario'
     ];
 
     protected $casts = [

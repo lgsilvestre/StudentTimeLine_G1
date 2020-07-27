@@ -18,7 +18,7 @@ class CreateLogsTable extends Migration
             $table->string('titulo');
             $table->string('accion');
             $table->string('tipo');
-            $table->json('data');
+            $table->json('data')->nullable();
             $table->string('descripcion');
             $table->bigInteger('usuario')->unsigned();
             $table->foreign('usuario')->references('id')->on('users');

@@ -2,17 +2,10 @@
 
 namespace App\Http\Controllers;
 use App\User;
-use App\Images;
-use Illuminate\Support\Facades\Response;
 use Validator;
 use Illuminate\Http\Request;
-use App\Escuela;
-use App\Curso;
-use App\InstanciaCurso;
 use App\Profesor_Con_Curso;
-use Image; 
 use App\Log;
-use File;
 
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -24,7 +17,7 @@ class UsuarioController extends Controller{
     public function __construct()
     {
         $this->middleware(['permission:create user'], ['only' => ['create', 'store']]);
-        $this->middleware(['permission:read user'], ['only' => 'index']);
+        $this->middleware(['permission:read user'], ['only' => ['index', 'edit']]);
         $this->middleware(['permission:update user'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete user'], ['only' => 'delete']);
         $this->middleware(['permission:restore user'], ['only' => 'disabled', 'restore']);
@@ -52,7 +45,7 @@ class UsuarioController extends Controller{
                     'accion' => "listar usuario",
                     'tipo' => "Error",
                     'descripcion' => "Un profesor solicito este metodo y no puede, revise el sistema de seguridad del programa",
-                    'data' => $ex,
+                    'data' => null,
                     'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
                 ]);
                 return response()->json([
@@ -186,6 +179,7 @@ class UsuarioController extends Controller{
             $usuario ->password=bcrypt($entradas['password']);
             $usuario->foto=$entradas['foto'];
             $usuario->save();
+            unset($usuario['foto']);
             Log::create([
                 'titulo' => "Creacion de un usuario",
                 'accion' => "Crear usuario",
@@ -424,6 +418,7 @@ class UsuarioController extends Controller{
                 }
             }
             $usuario->save();
+            unset($usuario['foto']);
             Log::create([
                 'titulo' => "Modificacion de un usuario",
                 'accion' => "Modificar usuario",
@@ -485,6 +480,7 @@ class UsuarioController extends Controller{
                 ], 409 );
             }
             $usuario->delete();
+            unset($usuario['foto']);
             Log::create([
                 'titulo' => "Eliminacion de un usuario",
                 'accion' => "Eliminar usuario",
@@ -576,9 +572,9 @@ class UsuarioController extends Controller{
      */
     public function restore($id){
         try{
-            $usuario=User::onlyTrashed()->find($id)->get();
-            $respuesta = $usuario->restore();
-            if($respuesta==false){
+            $usuario=User::onlyTrashed()->where('id',$id)->first();
+            unset($usuario['foto']);
+            if($usuario==null){
                 Log::create([
                     'titulo' => "Error al recuperar un usuario",
                     'accion' => "Recuperar usuario",
@@ -594,6 +590,7 @@ class UsuarioController extends Controller{
                     'data' => ['usuario'=>$usuario]
                 ], 409);
             }
+            User::onlyTrashed()->where('id',$id)->restore();
             Log::create([
                 'titulo' => "Recuperacion de un usuario",
                 'accion' => "Recuperar usuario",
