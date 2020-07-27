@@ -248,42 +248,44 @@
                                             <v-row class="justify-right px-5">
                                                 <v-col cols="1"> 
                                                     <v-radio-group column class="pt-0 mt-0">
-                                                        <v-radio
+                                                        <!-- <v-radio
                                                             class="pb-2 mt-3"
                                                             color="secondary"
                                                             @mousedown="todosLosAnhos"                                                        
                                                         >
-                                                        </v-radio>
+                                                        </v-radio> -->
                                                         <v-radio
-                                                            class="pb-2 mt-6"
+                                                            class="pb-2 mt-5"
                                                             color="warning"
                                                             @mousedown="unAnho" 
                                                         ></v-radio>
                                                         <v-radio
-                                                            class="pb-2 mt-6"
+                                                            class="pb-2 mt-11"
                                                             color="accent"
                                                             @mousedown="rangoAnhos" 
                                                         ></v-radio>
                                                     </v-radio-group>
                                                 </v-col>
-                                                <v-col cols="5" class="mt-3">
-                                                    <h4 class="mb-10">Todos los años </h4>
-                                                    <h4 class="mb-10">Ingrese el año a exportar :</h4>
-                                                    <h4 >Ingrese el rango de años  :</h4>
+                                                <v-col cols="5" class="mt-5">
+                                                    <!-- <h4 class="mb-10">Todos los años </h4> -->
+                                                    <h4 class="mb-10">Por Escuela :</h4>
+                                                    <h4 class="pt-5" >Ingrese el rango de años  :</h4>
                                             
                                                 </v-col>
                                                 <v-col cols="6">
-                                                    <v-row class="mt-12 pt-5 mb-0 pb-0">
-                                                        <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
-                                                            <v-text-field
-                                                            v-model="anhov1"
-                                                            dense
-                                                            outlined
-                                                            color="secondary"
-                                                            :disabled="unAnhoVariable"
-                                                            :rules="rules"
-                                                            type="number"
-                                                            ></v-text-field>
+                                                    <v-row class="mt-1 pt-1 mb-0 pb-0">
+                                                        <v-col cols="12" class="mt-0 pt-0 mb-0 pb-0 ">
+                                                            <v-select   
+                                                                v-model="escuelaExportar"
+                                                                :items="listaEscuela"
+                                                                item-text="nombre"
+                                                                item-value="id"
+                                                                label="Escuela" 
+                                                                :disabled="unAnhoVariable"
+                                                                outlined
+                                                                dense
+                                                                color="secondary"
+                                                                ></v-select >
                                                         </v-col>
                                                     </v-row>
                                                     <v-row class="mt-0 pt-0 mb-0 pb-0">
@@ -451,10 +453,11 @@
         listaEstudiantesAux:[],
         dessertsAux:[],
         listaEscuelaAux:[],
-        todosLosAnhosVariable: true,
+        listaEscuela:[],
+        // todosLosAnhosVariable: true,
         unAnhoVariable: true,
         rangoAnhosVariable: true,
-        anhov1: new Date().getFullYear(),
+        // anhov1: new Date().getFullYear(),
         anhov2: new Date().getFullYear(),
         anhov3: new Date().getFullYear(),
         alertaErrorRangoAnhos: false,
@@ -512,7 +515,8 @@
         listaSituacionAcademica:[
             'Regular ','Egresado ', 'Eliminado ', 'Titulado',
             'Intercambio','Postergación','Retiro','Temporal'
-        ]
+        ],
+        escuelaExportar:'',
 
     }),
     computed: {
@@ -522,6 +526,7 @@
     },
     beforeMount(){
         this.obtenerEstudiantes();
+        this.obtenerEscuelas();
     },
     //beforeCreate(){
         //this.obtenerEstudiantes();
@@ -755,33 +760,62 @@
                 //this.alertaErrorRangoAnhos = true;
                 //console.log('rango mal');
             //}
+            // console.log("==================")
+            // console.log("AÑO DE EXPORTACION ini "+this.anhov2)
+            // console.log("AÑO DE EXPORTACION  fin"+this.anhov3)
+
+            // console.log("Por escuela "+this.unAnhoVariable)
+            // console.log("Rango de años "+this.rangoAnhosVariable)
+            //exportamos la informacion de las observaciones de todos los años.
+           
+            if(this.unAnhoVariable == false){
+                var escuela= this.escuelaExportar;
+                // console.log("Exportar por escuela" + escuela)
+                this.exportar(1,0,0,0,escuela);
+                
+
+            }
+            if(this.rangoAnhosVariable == false && this.anhov2 < this.anhov3 ){
+                console.log("Exportar por ranfo de fechas")
+                var anioIni=this.anhov2
+                var anioFin=this.anhov3
+                this.exportar(2,anioIni,anioFin,0,0);
+
+            }
+        },
+        exportar(tipo, anioIni,anioFin,idEstudiante,escuela){
+            var fechaIni=anioFin+"-01-01";
+            var fechaTet =anioFin+"-01-01";
+            if(anioIni == 0 || anioFin== 0){
+                fechaIni = 0
+                fechaTet=0;;
+            }
             let post = {
-                "tipo": 1,
-                "fechaInicio" :"2020-07-19" ,
-                "fechaFin":"2020-07-21" ,
-                "id": 1,
-                "escuela": 1
-            };
+                    "tipo": tipo,
+                    "fechaInicio" : fechaIni ,
+                    "fechaFin": fechaTet ,
+                    "id": idEstudiante,
+                    "escuela": escuela
+                };
+                console.log(post)
             var url = 'http://127.0.0.1:8000/api/v1/estudiante/exportar';
             axios.post(url,post,this.$store.state.config2)
-            //var url = 'http://127.0.0.1:8000/api/v1/exportar';
-            //axios.get(url,this.$store.state.config2, {responseType: 'blob'})
             .then((result)=>{
                 console.log(result);
                 //var fileDownload = require('js-file-download');
                 //fileDownload(result.data, 'archivo.xlsx');
                 
 
-                // const url = URL.createObjectURL(new Blob([result.data], {
-                //     type: 'application/vnd.ms-excel'
-                // }))
-                // const link = document.createElement('a');
-                // link.href = url;
-                // link.setAttribute('download', 'estudiante.xlsx');
-                // document.body.appendChild(link);
-                // link.click();
-                // this.alertAcept = true;
-                // this.textoAcept = 'Se realizó la operación correctamente'
+                const url = URL.createObjectURL(new Blob([result.data], {
+                    type: 'application/vnd.ms-excel'
+                }))
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'estudiante.xlsx');
+                document.body.appendChild(link);
+                link.click();
+                this.alertAcept = true;
+                this.textoAcept = 'Se realizó la operación correctamente'
                 
             })
             .catch((error) => {
