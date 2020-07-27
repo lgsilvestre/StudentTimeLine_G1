@@ -213,6 +213,7 @@ class EstudianteController extends Controller
                     foreach($ayudanteEnCursos as $ayudanteEn){
                         if($ayudanteEn->curso == $curso->curso){
                             $ayudanteEn->nombreCurso = $ayudanteEn->getInstanciacurso->getCurso->nombre;
+                            $ayudanteEn->seccion = $ayudanteEn->getInstanciacurso->seccion;
                             $cursos[]=$ayudanteEn;
                         }      
                     }
