@@ -40,22 +40,33 @@
                         
                         </v-col>
                         <v-col  cols="5" sm="3" md="3" class="align-self-end" style="text-align:right;">
-                            <v-btn 
-                            :small="$vuetify.breakpoint.smAndDown ? true : false"
-                            @click="dialogAgregarCursoSemestre = true"
-                            fab bottom left >
-                                <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
-                            </v-btn>
-                            <v-btn
-                            class="ml-2"
-                            fab
-                            @click="dialogListaCursos = true"
-                            :small="$vuetify.breakpoint.smAndDown ? true : false"
-                            bottom
-                            left
-                            >
-                                <v-icon  color="secondary">fas fa-book</v-icon>
-                            </v-btn>
+                            <v-tooltip bottom color="primary">
+                                <template v-slot:activator="{ on }">
+                                    <v-btn 
+                                    :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                    @click="dialogAgregarCursoSemestre = true"
+                                    fab bottom left v-on="on">
+                                        <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
+                                    </v-btn>
+                                </template>
+                                <span><strong>Asignar Curso</strong></span>
+                            </v-tooltip>
+                            <v-tooltip bottom color="primary">
+                                <template v-slot:activator="{ on }">                                    
+                                    <v-btn
+                                    class="ml-2"
+                                    fab
+                                    @click="dialogListaCursos = true"
+                                    :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                    bottom
+                                    left
+                                    v-on="on"
+                                    >
+                                        <v-icon  color="secondary">fas fa-book</v-icon>
+                                    </v-btn>
+                                </template>
+                                <span><strong>Lista de Cursos</strong></span>
+                            </v-tooltip>
                         </v-col>
                     </v-row>
                 </v-card-title> 
@@ -519,6 +530,7 @@
                                     item-text="sec"
                                     label="Sección"
                                     dense
+                                    :rules="[() => !!item.seccion ||'Requerido']"
                                     outlined
                                     color="secondary"
                                 ></v-select>
@@ -1209,6 +1221,7 @@ export default {
             this.datosInsCurso.curso = '';
             this.datosInsCurso.seccion = '';
             this.dialogModificarInsCurso = false;
+            this.obtenerInstanciasCursos();
         },
         modificarInstanciaCurso(){
             var url =`http://127.0.0.1:8000/api/v1/instanciaCurso/${this.datosInsCurso.id}`;
@@ -1304,7 +1317,9 @@ export default {
                 console.log("Modificar Ins Curso")
                 console.log(curso)
                 
-                this.dialogModificarInsCurso=true;
+                this.datosInsCurso = curso;
+                this.dialogModificarInsCurso = true;
+                  //this.dialogModificarSemestre=true;
                  //this.semestreActual_1=semestre;
             }
             if(item=='Cerrar curso'){
