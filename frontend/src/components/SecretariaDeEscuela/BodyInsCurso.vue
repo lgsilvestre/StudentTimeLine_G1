@@ -69,17 +69,17 @@
                                 <v-container class="pt-0 mt-0 pb-0 ">
                                     <v-row >
                                         <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0">
-                                            <v-card-title class="mt-0 pt-0 pl-0 pr-0 " >
+                                            <v-card-title style="padding:0;"  >
                                                 <v-img class="mx-auto white--text align-end justify-center "
                                                         width="100%" height="30px"       
                                                         src="@/assets/Globales/background-panel-08.jpg" >
                                                 </v-img>
                                             </v-card-title>
                                         </v-col>
-                                        <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0  text-right" >
+                                        <v-col cols="12" class=" pt-1 pl-0 pr-0 pb-0  text-right" >
                                             <v-menu class="text-left " offset-y>
                                                 <template   v-slot:activator="{ on, attrs }">
-                                                    <v-btn tile  color="primary" x-small icon v-bind="attrs" v-on="on" >
+                                                    <v-btn icon fab color="primary" x-small v-bind="attrs" v-on="on" >
                                                         <v-icon>fas fa-ellipsis-v</v-icon>
                                                     </v-btn>
                                                 </template>
@@ -96,7 +96,7 @@
                                             <v-card-text class=" pt-0 pl-2 pr-0 pb-0 ">
                                                 <div class=" text-truncate"  >
                                                     <p class="font-weight-black mb-2 text-truncate"   >Nombre: {{ item.nomCurso }}</p>
-                                                    <p class="font-weight-black"   > Seccion: {{ item.seccion}} </p>
+                                                    <p class="font-weight-black"   > Sección: {{ item.seccion}} </p>
                                                 </div>
                                             </v-card-text>
                                         </v-col>
@@ -536,8 +536,71 @@
                             :rules="[() => !!profesorSeleccionado ||'Requerido']"
                             outlined
                             prepend-inner-icon="mdi-school"
-                        >                                
-                        </v-select>                           
+                        > 
+                        </v-select> 
+                        <v-select
+                            v-if="contadorProfesores>1"
+                            v-model="profesorSeleccionado2"
+                            label="Profesor"
+                            :items="listaProfesores"
+                            item-text="nombre"
+                            item-value="id"
+                            :rules="[() => !!profesorSeleccionado2 ||'Requerido']"
+                            outlined
+                            prepend-inner-icon="mdi-school"
+                        >                               
+                        </v-select>
+                        <v-select
+                            v-if="contadorProfesores>2"
+                            v-model="profesorSeleccionado3"
+                            label="Profesor"
+                            :items="listaProfesores"
+                            item-text="nombre"
+                            item-value="id"
+                            :rules="[() => !!profesorSeleccionado3 ||'Requerido']"
+                            outlined
+                            prepend-inner-icon="mdi-school"
+                        >                               
+                        </v-select> 
+                        <v-select
+                            v-if="contadorProfesores>3"
+                            v-model="profesorSeleccionado4"
+                            label="Profesor"
+                            :items="listaProfesores"
+                            item-text="nombre"
+                            item-value="id"
+                            :rules="[() => !!profesorSeleccionado4 ||'Requerido']"
+                            outlined
+                            prepend-inner-icon="mdi-school"
+                        >                               
+                        </v-select> 
+                        <v-select
+                            v-if="contadorProfesores>4"
+                            v-model="profesorSeleccionado5"
+                            label="Profesor"
+                            :items="listaProfesores"
+                            item-text="nombre"
+                            item-value="id"
+                            :rules="[() => !!profesorSeleccionado5 ||'Requerido']"
+                            outlined
+                            prepend-inner-icon="mdi-school"
+                        >                               
+                        </v-select>   
+                        <div style="text-align:left;" >
+                            <v-btn 
+                            x-small
+                            fab color="primary" 
+                            @click="sumarProfesor"
+                            >
+                                <h4 class="white--text">+</h4>
+                            </v-btn>
+                            <v-btn 
+                            @click="restarProfesor"
+                            x-small
+                            fab color="primary" class="ml-1" >
+                                <h4 class="white--text">-</h4>
+                            </v-btn>
+                        </div>                        
                         <div style="text-align:right;"  class="mb-1">
                             <v-btn rounded color="warning" @click="resetAsignarCurso()">
                                 <h4 class="white--text">Cancelar</h4>
@@ -623,6 +686,11 @@ export default {
             cargando: false,
             seleccionados: [],
             profesorSeleccionado: '',
+            profesorSeleccionado2: '',
+            profesorSeleccionado3: '',
+            profesorSeleccionado4: '',
+            profesorSeleccionado5: '',
+            contadorProfesores:1,
             colInsCursos:[
                 {text:'ID', value:'id'},
                 // {text:'Semestre', value:'semestre'},
@@ -706,7 +774,25 @@ export default {
     },
     methods: {
         ...mapMutations(['calcularRolVuelta']),
-        
+
+        sumarProfesor(){
+            if (this.contadorProfesores < 5) {
+                this.contadorProfesores ++;
+            }
+            else{
+                //alerta de no se pueden crear mas profesores
+            }
+        },
+        restarProfesor(){
+            if (this.contadorProfesores > 1) {
+                this.contadorProfesores --;
+            }
+            else{
+                //alerta de no se pueden tener menos profes
+            }
+
+        },
+
         obtenerProfesores(){
             this.listaProfesoresAux = [];
             var aux;
@@ -1218,7 +1304,7 @@ export default {
                 console.log("Modificar Ins Curso")
                 console.log(curso)
                 
-                  //this.dialogModificarSemestre=true;
+                this.dialogModificarInsCurso=true;
                  //this.semestreActual_1=semestre;
             }
             if(item=='Cerrar curso'){
