@@ -31,24 +31,17 @@ class Estudiante extends Model
         $escuela = $request->escuela;
         $idEstudiante = $request->id;
 
-        /*dump($tipo);
-        dump($fechaInicio);
-        dump($fechaFin);
-        dump($escuela);
-        dump($idEstudiante);*/
-        //$data = new collection();
-
-        if($tipo == 1){
+        if($tipo == 1)
+        {
             $data = collect(DB::table('estudiantes')
                 ->select('matricula','rut','nombre_completo','correo','anho_ingreso','situacion_academica','porcentaje_avance','creditos_aprobados','escuelas.nombre')
                 ->join('escuelas', 'escuelas.id','=', 'estudiantes.escuela')
                 ->where('estudiantes.escuela','=',$escuela)
                 ->get());
-            //dd($data);
             return $data;
         }
-        elseif($tipo == 2){
-
+        elseif($tipo == 2)
+        {
             $data = collect(DB::table('estudiantes')
                     ->select('matricula','rut','nombre_completo','correo','anho_ingreso','situacion_academica','porcentaje_avance','creditos_aprobados','escuelas.nombre', DB::Raw('COUNT(observaciones.id) AS cant_observaciones'))
                     ->join('escuelas', 'escuelas.id','=', 'estudiantes.escuela')
@@ -56,10 +49,11 @@ class Estudiante extends Model
                     ->groupBy('matricula','rut','nombre_completo','correo','anho_ingreso','situacion_academica','porcentaje_avance','creditos_aprobados','escuelas.nombre')
                     ->whereBetween('observaciones.created_at',[$fechaInicio,$fechaFin])
                     ->get());
-            //dd($data);
             return $data;
         }
-        elseif($tipo == 3){ #ESTA ES PARA RETORNAR PDF NO EXCEL
+        elseif($tipo == 3)
+        {
+            /*
             $data = collect(DB::table('estudiantes')
                     ->select('matricula','rut','nombre_completo','correo','anho_ingreso','situacion_academica','porcentaje_avance','creditos_aprobados','escuelas.nombre', 'users.nombre', 'cursos.nombre', 'categorias.nombre','observaciones.titulo', 'observaciones.descripcion', 'observaciones.tipo')
                     ->join('escuelas', 'escuelas.id','=', 'estudiantes.escuela')
@@ -68,44 +62,58 @@ class Estudiante extends Model
                     ->join('cursos', 'observaciones.curso','=', 'cursos.id')
                     ->join('categorias', 'observaciones.categoria','=', 'categorias.id')
                     ->where('estudiantes.id','=',$idEstudiante)
+                    ->get());*/
+            $data = collect(DB::table('observaciones')
+                    ->select('users.nombre AS profesor', 'cursos.nombre AS curso', 'categorias.nombre AS categoria','observaciones.titulo', 'observaciones.descripcion', 'observaciones.tipo')
+                    ->join('users', 'users.id','=', 'observaciones.profesor')
+                    ->join('cursos', 'observaciones.curso','=', 'cursos.id')
+                    ->join('categorias', 'observaciones.categoria','=', 'categorias.id')
+                    ->where('observaciones.estudiante','=',$idEstudiante)
                     ->get());
-                    
-            //dd($data);
             return $data;
         }
     }
 
+    public function obtenerInfoEstudiante(Request $request)
+    {
+        $idEstudiante = $request->id;
+
+        $estudiante = collect(DB::table('estudiantes')
+                ->select('matricula','rut','nombre_completo','correo','anho_ingreso','situacion_academica','porcentaje_avance','creditos_aprobados','escuelas.nombre AS escuela')
+                ->join('escuelas', 'escuelas.id','=', 'estudiantes.escuela')
+                ->where('estudiantes.id','=',$idEstudiante)
+                ->get());
+        return $estudiante;
+    }
+
     public function getTableColumns(Request $request)
     {
-        $tipo = $request->tipo;
+        /*$tipo = $request->tipo;
         $query = "SELECT column_name 
         FROM information_schema.columns 
         WHERE table_name = 'estudiantes'
-        AND table_schema = 'backend'";
-
-        /*$data = array(
-            "column_name" => ["hello", "hola"]
-        );
-        dd($data);*/
+        AND table_schema = 'backend'";*/
         
-        if($tipo == 1){
+        if($tipo == 1)
+        {
             $columnas = array("nombre_columna" => ['matricula', 'rut', 'nombre_completo', 'correo', 'anho_ingreso', 'situacion_academica','porcentaje_avance', 'creditos_aprobados', 'escuela']);
             return $columnas;
         }
-        elseif($tipo == 2){
+        elseif($tipo == 2)
+        {
             $columnas = array("nombre_columna" => ['matricula', 'rut', 'nombre_completo', 'correo', 'anho_ingreso', 'situacion_academica','porcentaje_avance', 'creditos_aprobados', 'escuela', 'cant_observaciones']);
             return $columnas;
         }
-        elseif($tipo == 3){
-            $columnas = array("nombre_columna" => ['matricula', 'rut', 'nombre_completo', 'correo', 'anho_ingreso', 'situacion_academica','porcentaje_avance', 'creditos_aprobados', 'escuela', 'profesor', 'curso',
-             'categoria', 'titulo', 'descripcion', 'tipo']);
+        elseif($tipo == 3)
+        {
+            $columnas = array("nombre_columna" => ['matricula', 'rut', 'nombre_completo', 'correo', 'anho_ingreso', 'situacion_academica','porcentaje_avance', 'creditos_aprobados', 'escuela']);
             return $columnas;
         }
+        
         /*
         $result = DB::select($query);
         //Tengo que transformar las filas a columnas
-        $result = $this->transposeData($result);
-        dd($result);*/
+        $result = $this->transposeData($result);*/
         
         return $result;
     }
@@ -123,7 +131,6 @@ class Estudiante extends Model
                 $result[$row2][$row] = $column2;
             }
         }
-
         return $result;
     }
  
