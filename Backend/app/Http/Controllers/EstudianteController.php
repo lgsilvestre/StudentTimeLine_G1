@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 use App\Estudiante;
 use App\Observacion;
+use App\Ayudante_Con_Curso;
+use App\Profesor_Con_Curso;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Http\Request;
 
 use Validator;
@@ -176,8 +179,10 @@ class EstudianteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id){
+      
         try{
             $estudiante = Estudiante::find($id);
+            
             if($estudiante==null){
                 return response()->json([
                     'success' => false,
@@ -186,7 +191,7 @@ class EstudianteController extends Controller
                     'data' => null
                 ], 409);
             }
-            $observaciones = Observacion::Where('estudiante', '=' , $estudiante['id'])->get();
+            $observaciones = Observacion::Where('estudiante', '=' , $estudiante['id'])->get(); 
             foreach($observaciones as $observacion){
                 $observacion->estudiante=$observacion->getEstudiante->nombre_completo;
                 $observacion->creador=$observacion->getCreador->nombre;
@@ -196,12 +201,32 @@ class EstudianteController extends Controller
                 }
                 $observacion->categoria=$observacion->getCategoria->nombre;
             }
+         
+
+            $credenciales = JWTAuth::parseToken()->authenticate();
+            $cursos =[];
+            if($credenciales->rol=="profesor"){
+                $ayudanteEnCursos= Ayudante_Con_Curso::Where('estudiante', '=' , $estudiante['id'] )->get();
+                $cursosProfesor= Profesor_Con_Curso::Where('profesor', '=' ,$credenciales->id)->get();            
+
+                foreach($cursosProfesor as $curso){
+                    foreach($ayudanteEnCursos as $ayudanteEn){
+                        if($ayudanteEn->curso == $curso->curso){
+                            $ayudanteEn->nombreCurso = $ayudanteEn->getInstanciacurso->getCurso->nombre;
+                            $ayudanteEn->seccion = $ayudanteEn->getInstanciacurso->seccion;
+                            $cursos[]=$ayudanteEn;
+                        }      
+                    }
+                }
+            }
+
             return response()->json([
                 'success' => true,
                 'code' => 600,
                 'message' => "Operacion realizada con exito",
                 'data' => ['estudiante'=>$estudiante,
-                        'observaciones'=>$observaciones]
+                        'observaciones'=>$observaciones,
+                        'cursos'=>$cursos]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([

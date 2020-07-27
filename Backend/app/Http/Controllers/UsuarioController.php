@@ -2,28 +2,22 @@
 
 namespace App\Http\Controllers;
 use App\User;
-use App\Images;
-use Illuminate\Support\Facades\Response;
 use Validator;
 use Illuminate\Http\Request;
-use App\Escuela;
-use App\Curso;
-use App\InstanciaCurso;
 use App\Profesor_Con_Curso;
-use Image; 
 use App\Log;
 
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class UsuarioController extends Controller
-{
+class UsuarioController extends Controller{
+
     /**
      * Metodo que se encarga de bloquear las rutas del controlador Usuario
      */
     public function __construct()
     {
         $this->middleware(['permission:create user'], ['only' => ['create', 'store']]);
-        $this->middleware(['permission:read user'], ['only' => 'index']);
+        $this->middleware(['permission:read user'], ['only' => ['index', 'edit']]);
         $this->middleware(['permission:update user'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete user'], ['only' => 'delete']);
         $this->middleware(['permission:restore user'], ['only' => 'disabled', 'restore']);
@@ -46,19 +40,20 @@ class UsuarioController extends Controller
                                 ->orWhere('escuela', '=' , $credenciales->escuelaAux);
                 })->get();
             }else if($credenciales->rol=="profesor"){
+                Log::create([
+                    'titulo' => "Error de acceso",
+                    'accion' => "listar usuario",
+                    'tipo' => "Error",
+                    'descripcion' => "Un profesor solicito este metodo y no puede, revise el sistema de seguridad del programa",
+                    'data' => null,
+                    'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+                ]);
                 return response()->json([
                     'success' => false,
                     'code' => 101,
                     'message' => 'No tiene los permisos necesarios para realizar esta operacion',
                     'data' => ['error'=>'No deberia llegar aca']
                 ], 403);
-            }else{
-                return response()->json([
-                    'success' => false,
-                    'code' => 102,
-                    'message' => 'Error que no deberia pasar en index',
-                    'data' => ['error'=>'al momento de buscar el rol del solicitante no lo encuentra']
-                ], 409);
             }
             foreach ($usuarios as $usuario){
                 $usuario->escuela= $usuario->getEscuela->nombre;
@@ -77,6 +72,14 @@ class UsuarioController extends Controller
         //----- Mecanismos anticaidas y reporte de errores -----
         //este catch permite responder directamente que problemas en la peticion SQL
         } catch(\Illuminate\Database\QueryException $ex){ 
+            Log::create([
+                'titulo' => "Error en la base de datos",
+                'accion' => "listar usuario",
+                'tipo' => "Error",
+                'descripcion' => "Al momento de listar los usuarios, hubo un problema en la base de datos",
+                'data' => $ex,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => false,
                 'code' => 103,
@@ -121,6 +124,14 @@ class UsuarioController extends Controller
         ]);
         //respuesta cuando falla
         if ($validator->fails()) {
+            Log::create([
+                'titulo' => "Error en los datos ingresados",
+                'accion' => "Crear usuario",
+                'tipo' => "Error",
+                'descripcion' => "Los datos ingresados para realizar la creacion de un usuario fueron incorrectos",
+                'data' => $validator->errors(),
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => false,
                 'code' => 301,
@@ -147,33 +158,53 @@ class UsuarioController extends Controller
             $entradas['password'] = null;
         }
         if(!array_key_exists ("foto" , $entradas)){
-            $entradas['foto'] = null;
+            // Nombre de la imagen
+            $path = 'image.png';
+            // Extensión de la imagen
+            $type = pathinfo($path, PATHINFO_EXTENSION);
+            // Cargando la imagen
+            $data = file_get_contents(public_path('img\image.png'));
+            // Decodificando la imagen en base64
+            $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+            $entradas['foto'] = $base64;
         }
         try{
-            $user = new User();
-            $user ->nombre=$entradas['nombre'];
-            $user ->escuela=$entradas['escuela'];
-            $user ->escuelaAux=$entradas['escuelaAux'];
-            $user ->rol=$entradas['rol'];
-            $user->assignRole($entradas['rol']);
-            $user ->email=$entradas['email'];
-            $user ->password=bcrypt($entradas['password']);
-            $user->foto=$entradas['foto'];
-            $user->save();
+            $usuario = new User();
+            $usuario ->nombre=$entradas['nombre'];
+            $usuario ->escuela=$entradas['escuela'];
+            $usuario ->escuelaAux=$entradas['escuelaAux'];
+            $usuario ->rol=$entradas['rol'];
+            $usuario->assignRole($entradas['rol']);
+            $usuario ->email=$entradas['email'];
+            $usuario ->password=bcrypt($entradas['password']);
+            $usuario->foto=$entradas['foto'];
+            $usuario->save();
+            unset($usuario['foto']);
             Log::create([
-                'titulo' => "Se a creado un usuario",
-                'descripcion' => $user,
+                'titulo' => "Creacion de un usuario",
+                'accion' => "Crear usuario",
+                'tipo' => "Informativa",
+                'descripcion' => "Se creo un usuario en la base de datos",
+                'data' =>  $usuario,
                 'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
             ]);
             return response()->json([
                 'success' => true,
                 'code' => 300,
                 'message' => "Operacion realizada con exito",
-                'data' => ['usuario'=>$user]
+                'data' => ['usuario'=>$usuario]
             ], 200);
         //----- Mecanismos anticaidas y reporte de errores -----
         //este catch permite responder directamente que problemas en la peticion SQL
         }catch(\Illuminate\Database\QueryException $ex){ 
+            Log::create([
+                'titulo' => "Error en la base de datos",
+                'accion' => "Crear usuario",
+                'tipo' => "Error",
+                'descripcion' => "Al momento de crear un usuario, hubo un problema en la base de datos ",
+                'data' =>  $ex,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => false,
                 'code' => 302,
@@ -210,6 +241,14 @@ class UsuarioController extends Controller
         try{
             $usuario = User::find($id);
             if($usuario==null){
+                Log::create([
+                    'titulo' => "Usuario no encontrado",
+                    'accion' => "Edit usuario",
+                    'tipo' => "Error",
+                    'descripcion' => "El usuario con el id:'.$id.' que se intenta modificar no existe, cabe decir que esto no deberia pasar",
+                    'data' => $usuario,
+                    'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+                ]);
                 return response()->json([
                     'success' => false,
                     'code' => 501,
@@ -239,6 +278,14 @@ class UsuarioController extends Controller
             ], 200);
         //este catch permite responder directamente que problemas en la peticion SQL
         }catch(\Illuminate\Database\QueryException $ex){ 
+            Log::create([
+                'titulo' => "Error en la base de datos",
+                'accion' => "Edit usuario",
+                'tipo' => "Error",
+                'descripcion' => "Al momento de utilizar edit de usuario, hubo un problema en la base de datos ",
+                'data' =>  $ex,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => false,
                 'code' => 502,
@@ -263,11 +310,18 @@ class UsuarioController extends Controller
             'escuela' => ['numeric', 'nullable'],
             'escuelaAux' => ['numeric', 'nullable'],
             'role' => ['string', 'nullable'],
-            //'foto' => ['file'],
             'email' => ['email', 'nullable'],
             'password' => ['string', 'nullable']
         ]);
-        if ($validator->fails()) {
+        if ($validator->fails()){
+            Log::create([
+                'titulo' => "Error en los datos ingresados",
+                'accion' => "Modificar usuario",
+                'tipo' => "Error",
+                'descripcion' => "Los datos ingresados para realizar la modificacion de un usuario fueron incorrectos",
+                'data' => $validator->errors(),
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => false,
                 'code' => 601,
@@ -299,6 +353,14 @@ class UsuarioController extends Controller
         try{
             $usuario = User::find($id);
             if($usuario==null){
+                Log::create([
+                    'titulo' => "Usuario no encontrado",
+                    'accion' => "Modificar usuario",
+                    'tipo' => "Error",
+                    'descripcion' => "El usuario con la id:'.$id.' que se intenta modificar no existe, cabe decir que esto no deberia pasar",
+                    'data' => $usuario,
+                    'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+                ]);
                 return response()->json([
                     'success' => false,
                     'code' => 602,
@@ -337,8 +399,16 @@ class UsuarioController extends Controller
             //Usuario secretaria de escuela o profesor
             if($credenciales->rol == "secretaria de escuela" || $credenciales->rol == "profesor"){
                 if($entradas['escuela']!=null || $entradas['role']!=null ||  $entradas['escuelaAux']!=null){
-                    $credenciales = JWTAuth::invalidate($credenciales);
+                    Log::create([
+                        'titulo' => "Se intento inyectar codigo",
+                        'accion' => "Modificar usuario",
+                        'tipo' => "Intento de hackeo",
+                        'descripcion' => "Intentaron de algun modo intentar cambiar parametros que con esos permisos son imposibles",
+                        'data' => ['error'=>"Intento modificar 3 variables que con ese permiso seria imposible, se elimino el token"],
+                        'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+                    ]);
                     //mandar correo por intento de haking
+                    $credenciales = JWTAuth::invalidate($credenciales);
                     return response()->json([
                         'success' => false,
                         'code' => 603,
@@ -348,11 +418,15 @@ class UsuarioController extends Controller
                 }
             }
             $usuario->save();
+            unset($usuario['foto']);
             Log::create([
-                'titulo' => "Se a modificado a un usuario",
-                'descripcion' => $usuario,
+                'titulo' => "Modificacion de un usuario",
+                'accion' => "Modificar usuario",
+                'tipo' => "Informativa",
+                'descripcion' => "Un usuario modifico datos con exito",
+                'data' => $usuario,
                 'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
-            ]); 
+            ]);
             return response()->json([
                 'success' => true,
                 'code' => 600,
@@ -362,6 +436,14 @@ class UsuarioController extends Controller
         //Mecanismos anticaidas y reporte de errores
         //este catch permite responder directamente que problemas en la peticion SQL
         }catch(\Illuminate\Database\QueryException $ex){ 
+            Log::create([
+                'titulo' => "Error en la base de datos",
+                'accion' => "Modificar usuario",
+                'tipo' => "Error",
+                'descripcion' => "Al momento de modificar un usuario, hubo un problema en la base de datos ",
+                'data' =>  $ex,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => false,
                 'code' => 604,
@@ -382,6 +464,14 @@ class UsuarioController extends Controller
         try{
             $usuario = User::find($id);
             if($usuario==null){
+                Log::create([
+                    'titulo' => "Error eliminar un usuario",
+                    'accion' => "Eliminar usuario",
+                    'tipo' => "Error",
+                    'descripcion' => "El usuario con la id:'.$id.' que se intenta eliminar no existe, cabe decir que esto no deberia pasar",
+                    'data' =>  $usuario,
+                    'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+                ]);
                 return response()->json([
                     'success' => false,
                     'code' => 701,
@@ -390,11 +480,15 @@ class UsuarioController extends Controller
                 ], 409 );
             }
             $usuario->delete();
+            unset($usuario['foto']);
             Log::create([
-                'titulo' => "Se a eliminado a un usuario",
-                'descripcion' => $usuario,
+                'titulo' => "Eliminacion de un usuario",
+                'accion' => "Eliminar usuario",
+                'tipo' => "Informativa",
+                'descripcion' => "Se elimino un usuario con exito",
+                'data' => $usuario,
                 'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
-            ]); 
+            ]);
             return response()->json([
                 'success' => true,
                 'code' => 700,
@@ -404,6 +498,14 @@ class UsuarioController extends Controller
         //----- Mecanismos anticaidas y reporte de errores -----
         //catch que se encarga en responder que paso en la sentencia sql
         }catch(\Illuminate\Database\QueryException $ex){ 
+            Log::create([
+                'titulo' => "Error en la base de datos",
+                'accion' => "Eliminar usuario",
+                'tipo' => "Error",
+                'descripcion' => "Al momento de eliminar un usuario, hubo un problema en la base de datos",
+                'data' =>  $ex,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => false,
                 'code' => 702,
@@ -428,20 +530,6 @@ class UsuarioController extends Controller
                     return $query->where('escuela', '=' , $credenciales->escuela)
                                 ->orWhere('escuela', '=' , $credenciales->escuelaAux);
                 })->get();
-            }else if($credenciales->rol=="profesor"){
-                return response()->json([
-                    'success' => false,
-                    'code' => 801,
-                    'message' => 'No tiene los permisos necesarios para realizar esta operacion',
-                    'data' => ['error'=>'No deberia llegar aca']
-                ], 403);
-            }else{
-                return response()->json([
-                    'success' => false,
-                    'code' => 802,
-                    'message' => 'Error que no deberia pasar en index',
-                    'data' => ['error'=>'al momento de buscar el rol del solicitante no lo encuentra']
-                ], 409);
             }
             foreach ($usuarios as $usuario){
                 $usuario->escuela= $usuario->getEscuela->nombre;
@@ -460,6 +548,14 @@ class UsuarioController extends Controller
         //----- Mecanismos anticaidas y reporte de errores -----
         //este catch permite responder directamente que problemas en la peticion SQL
         } catch(\Illuminate\Database\QueryException $ex){ 
+            Log::create([
+                'titulo' => "Error en la base de datos",
+                'accion' => "listar usuarios eliminados",
+                'tipo' => "Error",
+                'descripcion' => "Al momento de listar los usuarios eliminadas, hubo un problema en la base de datos",
+                'data' => $ex,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => false,
                 'code' => 803,
@@ -476,9 +572,17 @@ class UsuarioController extends Controller
      */
     public function restore($id){
         try{
-            $usuario=User::onlyTrashed()->find($id)->get();
-            $respuesta = $usuario->restore();
-            if($respuesta==false){
+            $usuario=User::onlyTrashed()->where('id',$id)->first();
+            unset($usuario['foto']);
+            if($usuario==null){
+                Log::create([
+                    'titulo' => "Error al recuperar un usuario",
+                    'accion' => "Recuperar usuario",
+                    'tipo' => "Error",
+                    'descripcion' => "Por algun motivo no se pudo recuperar el usuario",
+                    'data' =>  $usuario,
+                    'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+                ]);
                 return response()->json([
                     'success' => false,
                     'code' => 901,
@@ -486,11 +590,15 @@ class UsuarioController extends Controller
                     'data' => ['usuario'=>$usuario]
                 ], 409);
             }
+            User::onlyTrashed()->where('id',$id)->restore();
             Log::create([
-                'titulo' => "Se a recuperado a un usuario",
-                'descripcion' => $usuario,
+                'titulo' => "Recuperacion de un usuario",
+                'accion' => "Recuperar usuario",
+                'tipo' => "Informativa",
+                'descripcion' => "Se recupero un usuario con exito",
+                'data' =>  $usuario,
                 'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
-            ]); 
+            ]);
             return response()->json([
                 'success' => true,
                 'code' => 900,
@@ -498,6 +606,14 @@ class UsuarioController extends Controller
                 'data' => ['usuario'=>$usuario]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
+            Log::create([
+                'titulo' => "Error en la base de datos",
+                'accion' => "Recuperar usuario",
+                'tipo' => "Error",
+                'descripcion' => "Al momento de recuperar un usuario, hubo un problema en la base de datos ",
+                'data' =>  $ex,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => false,
                 'code' => 902,

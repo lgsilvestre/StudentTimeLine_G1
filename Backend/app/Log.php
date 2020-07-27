@@ -8,11 +8,11 @@ class Log extends Model
 {
 
     protected $fillable = [
-        'titulo', 'descripcion','usuario'
+        'titulo', 'accion', 'tipo', 'descripcion', 'data','usuario'
     ];
 
     protected $casts = [
-        'descripcion' => 'array'
+        'data' => 'array'
     ];
 
     public function getUser()
