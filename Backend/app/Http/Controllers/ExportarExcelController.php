@@ -26,13 +26,13 @@ class ExportarExcelController extends Controller
 
     public function exportar(Request $request)
     {
-        /*$request = new Request([
+        $request = new Request([
             'tipo'=> 3,
             'fechaInicio'=> '2020-07-19',
             'fechaFin'=>'2020-07-21',
-            'id'=>1,
-            'escuela'=> 2
-        ]);*/
+            'id'=> 1,
+            'escuela'=> 1
+        ]);
         return Excel::download(new DataEstudiantes($request) , 'estudiantes.xlsx');
     }   
 }
@@ -50,7 +50,9 @@ class DataEstudiantes implements FromCollection
     {
         $estudiante = new Estudiante();
 
-        $columnas = $estudiante->getTableColumns();
+        $columnas = $estudiante->getTableColumns($this->request);
+        
+        //dd($columnas);
 
         $estudiantes = $estudiante->filtrarExportar($this->request);
     
