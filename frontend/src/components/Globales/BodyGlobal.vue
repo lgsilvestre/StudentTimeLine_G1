@@ -372,7 +372,6 @@ export default {
                         this.reset();
                     }
                     }).catch((error)=>{
-                        console.log("SE CALLO")
                         console.log(error);
                         console.log(error.response.data);
                         this.resetModificacionUsuario();
@@ -429,7 +428,7 @@ export default {
                     });
 
            }
-        if(validarCorreo == false && validarContrasena == false && nombreValido == false){
+        if(validarCorreo == false && validarContrasena == false && nombreValido == false && this.datosUsuarioModificar.imagen== null){
             this.cargando = false;
             this.alertError = true;
             var mensaje='Datos ingresados invalidos';
