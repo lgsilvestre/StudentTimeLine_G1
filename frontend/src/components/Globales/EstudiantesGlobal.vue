@@ -207,6 +207,8 @@
                                         </v-form> 
                                     </v-card>
                                 </v-dialog>
+
+                                <!-- Dialog exportar observaciones -->
                                 <v-dialog v-model="dialogExportar" persistent max-width="600px">
                                     <template v-slot:activator="{ on}" >
                                         <v-btn fab bottom
@@ -270,27 +272,52 @@
                                                     <v-row class="mt-0 pt-0 mb-0 pb-0">
                                                         
                                                         <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
-                                                            
-                                                            <v-text-field
-                                                            v-model="anhov2"
-                                                            dense
-                                                            outlined
-                                                            color="secondary"
-                                                            :disabled="rangoAnhosVariable"
-                                                            :rules="rules"
-                                                            type="number"
-                                                            ></v-text-field>
+                                                            <v-menu ref="menu" v-model="menu" :close-on-content-click="false"
+                                                            transition="scale-transition"
+                                                            offset-y
+                                                            min-width="290px"
+                                                            :disabled="rangoAnhosVariable"> 
+                                                                <template v-slot:activator="{ on, attrs }">
+                                                                    <v-text-field v-model="fechaIni" 
+                                                                    readonly v-bind="attrs" v-on="on" >
+                                                                    </v-text-field>
+                                                                </template>
+                                                                <v-date-picker
+                                                                ref="picker"
+                                                                v-model="fechaIni"
+                                                                :max="new Date().toISOString().substr(0, 10)"
+                                                                min="1950-01-01"
+                                                                @change="save"
+                                                                @input="menu = false"
+                                                                
+                                                                ></v-date-picker>
+
+                                                            </v-menu>
+                                                           
                                                         </v-col>
-                                                        <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
-                                                            <v-text-field
-                                                            v-model="anhov3"
-                                                            dense
-                                                            color="secondary"
-                                                            :disabled="rangoAnhosVariable"
-                                                            :rules="rules"
-                                                            outlined
-                                                            type="number"
-                                                            ></v-text-field>
+                                                        <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">  
+                                                            <v-menu ref="menu2" v-model="menu2" :close-on-content-click="false"
+                                                            transition="scale-transition"
+                                                            offset-y
+                                                            min-width="290px"
+                                                            :disabled="rangoAnhosVariable"> 
+                                                                <template v-slot:activator="{ on, attrs }">
+                                                                    <v-text-field v-model="fechaTer" 
+                                                                    readonly v-bind="attrs" v-on="on" >
+                                                                    </v-text-field>
+                                                                </template>
+                                                                <v-date-picker
+                                                                ref="picker"
+                                                                v-model="fechaTer"
+                                                                :max="new Date().toISOString().substr(0, 10)"
+                                                                min="1950-01-01"
+                                                                @change="save"
+                                                                @input="menu2 = false"
+                                                                
+                                                                ></v-date-picker>
+
+                                                            </v-menu>
+                                                           
                                                         </v-col>
                                                     </v-row>
                                                     
@@ -433,12 +460,7 @@
         dessertsAux:[],
         listaEscuelaAux:[],
         listaEscuela:[],
-        // todosLosAnhosVariable: true,
-        unAnhoVariable: true,
-        rangoAnhosVariable: true,
-        // anhov1: new Date().getFullYear(),
-        anhov2: new Date().getFullYear(),
-        anhov3: new Date().getFullYear(),
+        
         alertaErrorRangoAnhos: false,
         dialogExportar: false,
         rules: [
@@ -470,24 +492,53 @@
             'Intercambio','Postergación','Retiro','Temporal'
         ],
         escuelaExportar:'',
+        // todosLosAnhosVariable: true,
+        unAnhoVariable: true,
+        rangoAnhosVariable: true,
+        // anhov1: new Date().getFullYear(),
+        anhov2: new Date().getFullYear(),
+        anhov3: new Date().getFullYear(),
+        //mis varaibles para trabjar las fechas.
+        
+        // date: new Date().toISOString().substr(0, 10),
+        // dateFormatted: formatDate(new Date().toISOString().substr(0, 10)),
+        // menu1: false,
+        // menu2: false,
+        
+         fechaIni: new Date().toISOString().substr(0, 10),
+        menu: false,
+
+        menu2:false,
+        fechaTer: new Date().toISOString().substr(0, 10),
+
+
 
     }),
     computed: {
-        ...mapState(['admin','secretariaEscuela'])
+        ...mapState(['admin','secretariaEscuela']),
+    //     computedDateFormatted () {
+    //     return this.formatDate(this.date)
+    //   },
     },
-    watch: {
+     watch: {
+         menu (val) {
+        val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
+      },
     },
     beforeMount(){
         this.obtenerEstudiantes();
         this.obtenerEscuelas();
     },
-    //beforeCreate(){
-        //this.obtenerEstudiantes();
-    //},
     created () {
         this.obtenerEscuelas();
     },
     methods: {
+
+         save (date) {
+        this.$refs.menu.save(date)
+      },
+      
+
         nada(item){
             
         },
@@ -704,21 +755,25 @@
         },
         resetYCerrarExportar(){
             this.dialogExportar = false;
-            this.anhov1= new Date().getFullYear();
-            this.anhov2= new Date().getFullYear();
-            this.anhov3= new Date().getFullYear();
+            //this.anhov1= new Date().getFullYear();
+            //this.anhov2= new Date().getFullYear();
+            //this.anhov3= new Date().getFullYear();
+            this.fechaIni= new Date().toISOString().substr(0, 10);
+            this.fechaTer=new Date().toISOString().substr(0, 10);
         },
         exportarEstudiantes(){
-            //if (this.anhov2 > this.anhov3) {
-                //this.alertaErrorRangoAnhos = true;
-                //console.log('rango mal');
-            //}
+           //console.log("FECHAS INICIO"+ this.fechaIni)
+            //console.log("FECHAS termino"+ this.fechaTer)
+            // if (this.fechaTer > this.fechaIni) {
+            //     this.alertaErrorRangoAnhos = true;
+            //     console.log('El rango de fechas introduccido es incorrecto');
+            // }
             // console.log("==================")
             // console.log("AÑO DE EXPORTACION ini "+this.anhov2)
             // console.log("AÑO DE EXPORTACION  fin"+this.anhov3)
 
-            // console.log("Por escuela "+this.unAnhoVariable)
-            // console.log("Rango de años "+this.rangoAnhosVariable)
+            console.log("Por escuela "+this.unAnhoVariable)
+            console.log("Rango de años "+this.rangoAnhosVariable)
             //exportamos la informacion de las observaciones de todos los años.
            
             if(this.unAnhoVariable == false){
@@ -728,25 +783,24 @@
                 
 
             }
-            if(this.rangoAnhosVariable == false && this.anhov2 < this.anhov3 ){
+            if(this.rangoAnhosVariable == false && this.fechaTer > this.fechaIni ){
                 console.log("Exportar por ranfo de fechas")
-                var anioIni=this.anhov2
-                var anioFin=this.anhov3
-                this.exportar(2,anioIni,anioFin,0,0);
+                
+                this.exportar(2,this.fechaIni,this.fechaTer ,0,0);
 
             }
         },
-        exportar(tipo, anioIni,anioFin,idEstudiante,escuela){
-            var fechaIni=anioFin+"-01-01";
-            var fechaTet =anioFin+"-01-01";
-            if(anioIni == 0 || anioFin== 0){
+        exportar(tipo, fechaIni,fechaTer,idEstudiante,escuela){
+            var fechaIni=fechaIni;
+            var fechaTet =fechaTer;
+            if(fechaIni == 0 || fechaTet== 0){
                 fechaIni = 0
                 fechaTet=0;;
             }
             let post = {
                     "tipo": tipo,
-                    "fechaInicio" : fechaIni ,
-                    "fechaFin": fechaTet ,
+                    "fechaInicio" : '13-05-2020' ,
+                    "fechaFin": '28-07-2020' ,
                     "id": idEstudiante,
                     "escuela": escuela
                 };
@@ -769,6 +823,7 @@
                 link.click();
                 this.alertAcept = true;
                 this.textoAcept = 'Se realizó la operación correctamente'
+                this.dialogExportar=false;
                 
             })
             .catch((error) => {
