@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Estudiante;
 use App\Observacion;
 use App\Ayudante_Con_Curso;
+use App\Profesor_Con_Curso;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Http\Request;
 
 use Validator;
@@ -180,7 +182,7 @@ class EstudianteController extends Controller
       
         try{
             $estudiante = Estudiante::find($id);
-            #verificamos si el estudiante existe, si no exise, con el if que pregunta si es null, 
+            
             if($estudiante==null){
                 return response()->json([
                     'success' => false,
@@ -189,9 +191,7 @@ class EstudianteController extends Controller
                     'data' => null
                 ], 409);
             }
-            #si no es null, busca todas las observaciones de dicho estudiante
-            $observaciones = Observacion::Where('estudiante', '=' , $estudiante['id'])->get();
-            #luego recorro las observaciones
+            $observaciones = Observacion::Where('estudiante', '=' , $estudiante['id'])->get(); 
             foreach($observaciones as $observacion){
                 $observacion->estudiante=$observacion->getEstudiante->nombre_completo;
                 $observacion->creador=$observacion->getCreador->nombre;
@@ -201,13 +201,24 @@ class EstudianteController extends Controller
                 }
                 $observacion->categoria=$observacion->getCategoria->nombre;
             }
-            #variable en que se guardaran todas las instancias en que el alumno es ayudante
-            $ayudanteEnCursos= Ayudante_Con_Curso::Where('estudiante', '=' , $estudiante['id'] )->get();
-            foreach($ayudanteEnCursos as $ayudanteEn){
-                $ayudanteEn->nombreCurso = $ayudanteEn->getInstanciacurso->getCurso->nombre;
+         
 
+            $credenciales = JWTAuth::parseToken()->authenticate();
+            $cursos =[];
+            if($credenciales->rol=="profesor"){
+                $ayudanteEnCursos= Ayudante_Con_Curso::Where('estudiante', '=' , $estudiante['id'] )->get();
+                $cursosProfesor= Profesor_Con_Curso::Where('profesor', '=' ,$credenciales->id)->get();            
+
+                foreach($cursosProfesor as $curso){
+                    foreach($ayudanteEnCursos as $ayudanteEn){
+                        if($ayudanteEn->curso == $curso->curso){
+                            $ayudanteEn->nombreCurso = $ayudanteEn->getInstanciacurso->getCurso->nombre;
+                            $ayudanteEn->seccion = $ayudanteEn->getInstanciacurso->seccion;
+                            $cursos[]=$ayudanteEn;
+                        }      
+                    }
+                }
             }
-            
 
             return response()->json([
                 'success' => true,
@@ -215,7 +226,7 @@ class EstudianteController extends Controller
                 'message' => "Operacion realizada con exito",
                 'data' => ['estudiante'=>$estudiante,
                         'observaciones'=>$observaciones,
-                        'cursos'=>$ayudanteEnCursos]
+                        'cursos'=>$cursos]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([

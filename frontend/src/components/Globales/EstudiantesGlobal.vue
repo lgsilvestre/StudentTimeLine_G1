@@ -11,19 +11,18 @@
                     height="180px"
                     src="@/assets/Globales/fondo3.jpg"
                     >
-                    <v-card-title class="white--text " > 
-                            <v-col md="3" class="align-self-end" style="text-align:left; text-shadow: #555 2px 2px 3px; font-size:150% ;">
-                                        <v-icon class="pb-2" color="white" style="font-size:100% ;">fas fa-user-graduate</v-icon>
-                                        <strong  class="pl-2" style="font-size:95% ">Estudiantes</strong>
+                    <v-card-title class="white--text" style="padding:0;" > 
+                        <v-row class="px-5"> 
+                            <v-col cols="12" class="pt-1">
+                                <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" >Estudiantes</strong>
                             </v-col>
-                            <v-col  md="6" class="align-self-end" style="text-align:center;">
+                            <v-col cols="7" sm="9" md="9" class="align-self-end" >
                                 <v-text-field
                                     v-model="buscar"
                                     append-icon="mdi-magnify"
                                     label="Buscar"
                                     hide-details
                                     outlined
-                                    class="px-5 pb-2"
                                     clearable
                                     dense
                                     solo
@@ -33,21 +32,25 @@
                                 ></v-text-field>
                                 
                             </v-col>
-                            <v-col  md="3" class="align-self-end" style="text-align:right;">
-                                <v-dialog v-model="dialogAgregarEstudiante" persistent max-width="500px">
+                            <v-col  cols="5" sm="3" md="3" class="align-self-end" style="text-align:right;">
+                                <v-tooltip bottom color="primary">
                                     <template v-slot:activator="{ on }">
                                         <v-btn
                                         fab
-                                        large
+                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
                                         bottom
                                         left
                                         v-on="on"
                                         v-show="admin || secretariaEscuela"
+                                        @click="dialogAgregarEstudiante = true"
                                         >
                                             <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
                                         </v-btn>
                                     </template>
-                                    <v-card elevation="1" shaped>
+                                    <span><strong>Importar Estudiante</strong></span>
+                                </v-tooltip>
+                                <v-dialog v-model="dialogAgregarEstudiante" persistent max-width="500px">
+                                    <v-card elevation="1">
                                         <v-card-title
                                         class="headline primary text--center"
                                         primary-title
@@ -105,12 +108,13 @@
                                                 </v-row>
 
                                             </v-container>
-                                            <v-container v-if="containerAgregarEstudianteUnico">
-                                                <v-form  class=" px-10 pt-8 "  >
+                                            <v-container class="px-5 mt-5" color="primary" v-if="containerAgregarEstudianteUnico">
+                                                
                                                     <v-text-field  
                                                     v-model="estudianteImportar.matricula"
                                                     label="Matricula" outlined
                                                     color="secondary"
+                                                    :rules="reglasMatricula"
                                                     prepend-inner-icon="fas fa-graduation-cap"
                                                     ></v-text-field>
 
@@ -118,6 +122,7 @@
                                                     v-model="estudianteImportar.rut"
                                                     label="Rut" outlined
                                                     color="secondary"
+                                                    :rules="reglasRut"
                                                     prepend-inner-icon="fas fa-address-card"
                                                     ></v-text-field>
 
@@ -125,6 +130,7 @@
                                                     v-model="estudianteImportar.nombre_completo"
                                                     label="Nombre completo" outlined
                                                     color="secondary"
+                                                    :rules="reglasNombre"
                                                     prepend-inner-icon="mdi-account"
                                                     ></v-text-field>
 
@@ -132,6 +138,7 @@
                                                     v-model="estudianteImportar.correo"
                                                     label="Correo Electronico"
                                                     outlined
+                                                    :rules="reglasEmail"
                                                     color="secondary"
                                                     prepend-inner-icon="mdi-email"
                                                     ></v-text-field>
@@ -140,6 +147,7 @@
                                                     v-model="estudianteImportar.anho_ingreso"
                                                     label="Año ingreso" outlined
                                                     color="secondary"
+                                                    :rules="reglasAnio"
                                                     prepend-inner-icon="fas fa-hashtag"
                                                     ></v-text-field>
 
@@ -149,6 +157,7 @@
                                                     item-text="nombre"
                                                     label="Situacion academica" outlined
                                                     color="secondary"
+                                                    :rules="[() => !!estudianteImportar.situacion_academica ||'Requerido']"
                                                     prepend-inner-icon="fas fa-address-book"
                                                     ></v-select >
 
@@ -159,29 +168,31 @@
                                                     item-value="id"
                                                     label="Escuela"
                                                     outlined
+                                                    :rules="[() => !!estudianteImportar.escuela ||'Requerido']"
                                                     prepend-inner-icon="fas fa-book"
                                                     ></v-select>
                                                     <div style="text-align:right;" class="mb-1">
                                                         <v-btn rounded color="warning" 
+                                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
                                                         @click="volverYcerrarAgregarEstudiantes"
                                                         >
                                                             <h4 class="white--text">Cancelar</h4>
                                                         </v-btn>
                                                         <v-btn 
                                                         @click="agregarEstudiantesUnico"
+                                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
                                                         rounded color="secondary" class="ml-2"   >
                                                             <h4 class="white--text">Aceptar</h4>
                                                         </v-btn>
                                                     </div>
-                                                </v-form> 
+                                                
                                             </v-container>
-                                            <v-container v-if="containerAgregarEstudianteImportar" class="px-10">
+                                            <v-container v-if="containerAgregarEstudianteImportar" class="px-5 mt-5">
                                                 <v-file-input 
                                                 id="file" 
                                                 v-model="file"
                                                 ref="file" 
                                                 type="file"
-                                                class="pt-5"
                                                 label="Seleccione un archivo"
                                                 color="secondary"
                                                 outlined
@@ -191,12 +202,13 @@
                                                 </v-file-input>
                                                 <div style="text-align:right;" class="mb-1">
                                                     <v-btn rounded color="warning" 
-                                                    
+                                                    :small="$vuetify.breakpoint.smAndDown ? true : false"
                                                     @click="volverYcerrarAgregarEstudiantes"
                                                     >
                                                         <h4 class="white--text">Cancelar</h4>
                                                     </v-btn>
                                                     <v-btn rounded color="secondary" class="ml-2"   
+                                                    :small="$vuetify.breakpoint.smAndDown ? true : false"
                                                     @click="agregarEstudiantesImportar">
                                                         <h4 class="white--text">Aceptar</h4>
                                                     </v-btn>
@@ -206,66 +218,74 @@
                                         </v-form> 
                                     </v-card>
                                 </v-dialog>
-                                <v-dialog v-model="dialogExportar" persistent max-width="600px">
-                                    <template v-slot:activator="{ on}" >
+                                
+                                <v-tooltip bottom color="primary">
+                                    <template v-slot:activator="{ on }" >
                                         <v-btn
                                         fab
-                                        large
                                         bottom
+                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
                                         left
                                         v-on="on"
                                         class="ml-2"
+                                        @click="dialogExportar = true"
                                         >
                                             <v-icon class="mx-2" color="secondary">fas fa-file-download</v-icon>
-                                        </v-btn>
+                                        </v-btn>                                        
                                     </template>
-                                    <v-card elevation="1" shaped>
+                                    <span><strong>Exportar Lista de Estudiantes</strong></span>
+                                </v-tooltip>
+                                <v-dialog v-model="dialogExportar" persistent max-width="600px">
+                                    <v-card elevation="1">
                                         <v-card-title
                                         class="headline primary text--center"
                                         primary-title
                                         >
-                                        <h5 class="white--text ">Ingrese el periodo de datos que desea exportar:</h5>
+                                        <strong class="white--text "> Exportar estudiantes</strong>
                                         </v-card-title>
+                                        <h4 class="px-5 pt-6">Ingrese el periodo de datos que desea exportar:</h4>
                                         <v-container class="pt-0">
                                             <v-row class="justify-right px-5">
                                                 <v-col cols="1"> 
                                                     <v-radio-group column class="pt-0 mt-0">
-                                                        <v-radio
+                                                        <!-- <v-radio
                                                             class="pb-2 mt-3"
                                                             color="secondary"
                                                             @mousedown="todosLosAnhos"                                                        
                                                         >
-                                                        </v-radio>
+                                                        </v-radio> -->
                                                         <v-radio
-                                                            class="pb-2 mt-6"
+                                                            class="pb-2 mt-5"
                                                             color="warning"
                                                             @mousedown="unAnho" 
                                                         ></v-radio>
                                                         <v-radio
-                                                            class="pb-2 mt-6"
+                                                            class="pb-2 mt-11"
                                                             color="accent"
                                                             @mousedown="rangoAnhos" 
                                                         ></v-radio>
                                                     </v-radio-group>
                                                 </v-col>
-                                                <v-col cols="5" class="mt-3">
-                                                    <h4 class="mb-10">Todos los años </h4>
-                                                    <h4 class="mb-10">Ingrese el año a exportar :</h4>
-                                                    <h4 >Ingrese el rango de años  :</h4>
+                                                <v-col cols="5" class="mt-5">
+                                                    <!-- <h4 class="mb-10">Todos los años </h4> -->
+                                                    <h4 class="mb-10">Por Escuela :</h4>
+                                                    <h4 class="pt-5" >Ingrese el rango de años  :</h4>
                                             
                                                 </v-col>
                                                 <v-col cols="6">
-                                                    <v-row class="mt-12 pt-5 mb-0 pb-0">
-                                                        <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
-                                                            <v-text-field
-                                                            v-model="anhov1"
-                                                            dense
-                                                            outlined
-                                                            color="secondary"
-                                                            :disabled="unAnhoVariable"
-                                                            :rules="rules"
-                                                            type="number"
-                                                            ></v-text-field>
+                                                    <v-row class="mt-1 pt-1 mb-0 pb-0">
+                                                        <v-col cols="12" class="mt-0 pt-0 mb-0 pb-0 ">
+                                                            <v-select   
+                                                                v-model="escuelaExportar"
+                                                                :items="listaEscuela"
+                                                                item-text="nombre"
+                                                                item-value="id"
+                                                                label="Escuela" 
+                                                                :disabled="unAnhoVariable"
+                                                                outlined
+                                                                dense
+                                                                color="secondary"
+                                                                ></v-select >
                                                         </v-col>
                                                     </v-row>
                                                     <v-row class="mt-0 pt-0 mb-0 pb-0">
@@ -299,18 +319,19 @@
                                             </v-row>
                                             <v-alert 
                                             v-model="alertaErrorRangoAnhos"
-                                            
                                             dismissible
                                             type="error">
                                             El año de inicio no puede ser mayor al del final
                                             </v-alert>
-                                            <div style="text-align:right;" class="mb-2 mr-5">
+                                            <div style="text-align:right;" class="mb-1 mr-5">
                                                 <v-btn rounded color="warning" 
+                                                :small="$vuetify.breakpoint.smAndDown ? true : false"
                                                 @click="resetYCerrarExportar"
                                                 >
                                                     <h4 class="white--text">Cancelar</h4>
                                                 </v-btn>
                                                 <v-btn rounded color="secondary" class="ml-2"  
+                                                :small="$vuetify.breakpoint.smAndDown ? true : false"
                                                 @click="exportarEstudiantes" >
                                                     <h4 class="white--text">Aceptar</h4>
                                                 </v-btn>
@@ -320,6 +341,7 @@
                                     </v-card>
                                 </v-dialog>
                             </v-col>
+                        </v-row>
                     </v-card-title>
                     </v-img>
                 <v-data-table
@@ -337,7 +359,7 @@
                                     <v-icon  
                                     color="primary"
                                     >
-                                    fas fa-edit
+                                    fas fa-external-link-alt
                                     </v-icon>
                                 </v-btn>
                             </template>
@@ -431,19 +453,46 @@
         listaEstudiantesAux:[],
         dessertsAux:[],
         listaEscuelaAux:[],
-        todosLosAnhosVariable: true,
+        listaEscuela:[],
+        // todosLosAnhosVariable: true,
         unAnhoVariable: true,
         rangoAnhosVariable: true,
-        anhov1: new Date().getFullYear(),
+        // anhov1: new Date().getFullYear(),
         anhov2: new Date().getFullYear(),
         anhov3: new Date().getFullYear(),
         alertaErrorRangoAnhos: false,
         dialogExportar: false,
+
+        //reglas
         rules: [
         value => !!value || 'Requerido',
         value => value <= new Date().getFullYear()|| 'El año no debe ser mayor al actual',
         value => value >= 1981 || 'El año no debe ser menor a 1981',
         ],
+        reglasMatricula: [
+            v => !!v || 'Requerido',
+            v => (v && v.length == 10) || 'Matricula debe tener 10 digitos',
+            v => /^[0-9]+$/.test(v) || 'Solo numeros',
+        ],
+        reglasRut: [
+            v => !!v || 'Requerido',            
+            v => /^\d{1,2}\.\d{3}\.\d{3}[-][0-9kK]{1}$/.test(v) || 'Rut ingresado no valido',
+        ],
+        reglasNombre: [
+            v => !!v || 'Requerido',
+            v => (v && v.length <= 10) || 'El nombre debe tener maximo 40',
+        ],
+        reglasEmail: [
+                v => !!v || 'Correo es Requerido',
+                v => /.+@alumnos.utalca.cl/.test(v) || 'Correo ingresado debe ser valido',
+        ],     
+        reglasAnio: [
+            v => !!v || 'Requerido',
+            v => (v && v.length == 4) || 'Año debe tener 4 digitos.',
+            v => /^[0-9]+$/.test(v) || 'Solo numeros',
+        ],   
+
+
         //archivo
         file: null,
         import_file: '',
@@ -466,7 +515,8 @@
         listaSituacionAcademica:[
             'Regular ','Egresado ', 'Eliminado ', 'Titulado',
             'Intercambio','Postergación','Retiro','Temporal'
-        ]
+        ],
+        escuelaExportar:'',
 
     }),
     computed: {
@@ -476,6 +526,7 @@
     },
     beforeMount(){
         this.obtenerEstudiantes();
+        this.obtenerEscuelas();
     },
     //beforeCreate(){
         //this.obtenerEstudiantes();
@@ -508,7 +559,7 @@
             var url = 'http://127.0.0.1:8000/api/v1/estudiante/importar';
             axios.post(url,formData,this.$store.state.config)
             .then((result)=>{
-                console.log(result);
+                //console.log(result);
                 if (result.data.success == true) {
                     this.resetImportarEstudiantes();
                     this.obtenerEstudiantes();
@@ -531,11 +582,11 @@
             var url = 'http://127.0.0.1:8000/api/v1/estudiante';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
-                console.log(result.data);
+               //console.log(result.data);
                 if (result.data.success == true) {
                     for (let index = 0; index < result.data.data.estudiantes.length; index++) {
                     const element = result.data.data.estudiantes[index];
-                    console.log(element)
+                    //console.log(element)
                     let estudiante = {
                         id: element.id,
                         matricula: element.matricula,
@@ -709,17 +760,46 @@
                 //this.alertaErrorRangoAnhos = true;
                 //console.log('rango mal');
             //}
+            // console.log("==================")
+            // console.log("AÑO DE EXPORTACION ini "+this.anhov2)
+            // console.log("AÑO DE EXPORTACION  fin"+this.anhov3)
+
+            // console.log("Por escuela "+this.unAnhoVariable)
+            // console.log("Rango de años "+this.rangoAnhosVariable)
+            //exportamos la informacion de las observaciones de todos los años.
+           
+            if(this.unAnhoVariable == false){
+                var escuela= this.escuelaExportar;
+                // console.log("Exportar por escuela" + escuela)
+                this.exportar(1,0,0,0,escuela);
+                
+
+            }
+            if(this.rangoAnhosVariable == false && this.anhov2 < this.anhov3 ){
+                console.log("Exportar por ranfo de fechas")
+                var anioIni=this.anhov2
+                var anioFin=this.anhov3
+                this.exportar(2,anioIni,anioFin,0,0);
+
+            }
+        },
+        exportar(tipo, anioIni,anioFin,idEstudiante,escuela){
+            var fechaIni=anioFin+"-01-01";
+            var fechaTet =anioFin+"-01-01";
+            if(anioIni == 0 || anioFin== 0){
+                fechaIni = 0
+                fechaTet=0;;
+            }
             let post = {
-                "tipo": 1,
-                "fechaInicio" :"2020-07-19" ,
-                "fechaFin":"2020-07-21" ,
-                "id": 1,
-                "escuela": 1
-            };
+                    "tipo": tipo,
+                    "fechaInicio" : fechaIni ,
+                    "fechaFin": fechaTet ,
+                    "id": idEstudiante,
+                    "escuela": escuela
+                };
+                console.log(post)
             var url = 'http://127.0.0.1:8000/api/v1/estudiante/exportar';
             axios.post(url,post,this.$store.state.config2)
-            //var url = 'http://127.0.0.1:8000/api/v1/exportar';
-            //axios.get(url,this.$store.state.config2, {responseType: 'blob'})
             .then((result)=>{
                 console.log(result);
                 //var fileDownload = require('js-file-download');
@@ -767,7 +847,18 @@
         },
         perfilEstudiante(item){
             this.$store.state.perfilEstudiante = item;
-            this.$router.push({path:'/administrador/estudiantes/'+item.rut});
+            if (this.$store.state.usuario.usuario.rol == "admin") {
+                this.$router.push({path:'/administrador/estudiantes/'+item.rut});
+            } else {
+                if (this.$store.state.usuario.usuario.rol == "secretaria de escuela") {
+                    this.$router.push({path:'/secretariaEscuela/estudiantes/'+item.rut});
+                } else {
+                    if (this.$store.state.usuario.usuario.rol == "profesor") {
+                        this.$router.push({path:'/profesor/estudiantes/'+item.rut});
+                    }
+                }
+            }
+            
         },
 
     },
