@@ -439,18 +439,18 @@ export default {
             
 
     },
-        resetModificacionUsuario(){
-            this.datosUsuarioModificar.nombre=null;
-            this.datosUsuarioModificar.correo=null;
-            this.datosUsuarioModificar.contrasena=null;
-            this.datosUsuarioModificar.imagen=null;
-            this.imagenMiniatura=null;
-            this.alertError= false;
-            this.textoError= '';
-            this.alertAcept= false;
-            this.textoAcept= '';
-            
-        },
+    resetModificacionUsuario(){
+        this.datosUsuarioModificar.nombre=null;
+        this.datosUsuarioModificar.correo=null;
+        this.datosUsuarioModificar.contrasena=null;
+        this.datosUsuarioModificar.imagen=null;
+        this.imagenMiniatura=null;
+        this.alertError= false;
+        this.textoError= '';
+        this.alertAcept= false;
+        this.textoAcept= '';
+        
+    },
     }
 }
 </script>
