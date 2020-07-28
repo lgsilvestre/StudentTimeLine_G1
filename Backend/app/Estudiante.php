@@ -94,28 +94,27 @@ class Estudiante extends Model
         WHERE table_name = 'estudiantes'
         AND table_schema = 'backend'";*/
         
-        if($tipo == 1)
+        if($request->tipo == 1)
         {
             $columnas = array("nombre_columna" => ['matricula', 'rut', 'nombre_completo', 'correo', 'anho_ingreso', 'situacion_academica','porcentaje_avance', 'creditos_aprobados', 'escuela']);
             return $columnas;
         }
-        elseif($tipo == 2)
+        elseif($request->tipo == 2)
         {
             $columnas = array("nombre_columna" => ['matricula', 'rut', 'nombre_completo', 'correo', 'anho_ingreso', 'situacion_academica','porcentaje_avance', 'creditos_aprobados', 'escuela', 'cant_observaciones']);
             return $columnas;
         }
-        elseif($tipo == 3)
+        elseif($request->tipo == 3)
         {
             $columnas = array("nombre_columna" => ['matricula', 'rut', 'nombre_completo', 'correo', 'anho_ingreso', 'situacion_academica','porcentaje_avance', 'creditos_aprobados', 'escuela']);
             return $columnas;
         }
-        
         /*
         $result = DB::select($query);
         //Tengo que transformar las filas a columnas
         $result = $this->transposeData($result);*/
         
-        return $result;
+        return null;
     }
 
     //Filas a colummnas

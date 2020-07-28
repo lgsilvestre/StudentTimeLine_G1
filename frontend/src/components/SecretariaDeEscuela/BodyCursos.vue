@@ -48,10 +48,10 @@
                 </v-img>
                 <!-- <v-container> -->
                     <v-data-iterator :items="listaSemestres" :search="search" :sort-by="sortBy.toLowerCase()" class="px-2 py-2" :loading="cargando">
-                       <template v-slot:default="props">
-                           <v-row >
-                               <v-col v-for="item in props.items" :key="item.nomCurso" cols="12" sm="6" md="4" lg="3">
-                                   <v-card class="mx-1"  dark color="#F7FFF7"  style=" border-style:solid; border-color:rgba(0,0,0,0.5);" > 
+                        <template v-slot:default="props">
+                            <v-row >
+                                <v-col v-for="item in props.items" :key="item.nomCurso" cols="12" sm="6" md="4" lg="3">
+                                <v-card class="mx-1"  dark color="#F7FFF7"  style=" border-style:solid; border-color:rgba(0,0,0,0.5);" > 
                                 <v-container class="pt-0 mt-0 pb-0 ">
                                     <v-row >
                                         <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0" >
@@ -103,19 +103,29 @@
                                                 </div>
                                             </v-card-text>
                                             <v-card-text class=" pt-0 pl-2 pr-0 pb-0 " v-if="item.deleted_at != null">
-                                                <div class="text--primary "  >
-                                                     <!-- <p class="font-weight-black"  > {{ semestre.anio }} # {{semestre.semestre}}</p> -->
-                                                    <a   @click="calcularRol(item)">{{ item.anio }} - {{item.semestre}}</a>
-                                                </div>
+                                                    <!-- <p class="font-weight-black"  > {{ semestre.anio }} # {{semestre.semestre}}</p> -->
+                                                    <strong style=" font-size: 115%;"> <a   @click="calcularRol(item)">{{ item.anio }} - {{item.semestre}}</a> </strong>
                                             </v-card-text>
                                         </v-col>
+                                        <v-col cols="6"  class=" pt-0 pl-0 pr-1 pb-0 " >
+                                            <div style="text-align:right;" v-if="item.deleted_at != null">
+                                            <v-chip
+                                            color="warning"
+                                            outlined
+                                            pill
+                                            x-small
+                                            >CERRADO
+                                            </v-chip>
+                                            </div>
+                                        </v-col>
+
                                     </v-row>
                                 </v-container>
                             </v-card>
-                               </v-col>
-                           </v-row>
+                            </v-col>
+                        </v-row>
 
-                       </template>
+                </template>
 
                     </v-data-iterator>
                 <!-- </v-container> -->
