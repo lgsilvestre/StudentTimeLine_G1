@@ -11,20 +11,19 @@
                     height="180px"       
                     src="@/assets/Globales/fondo3.jpg"        
                     >                    
-                    <v-card-title class="white--text" >     
+                    <v-card-title class="white--text" style="padding:0;" >     
                         <!-- Titulo -->
-                        <v-row>
-                            <v-col cols="8" sm="6" md="3" class="align-self-end" style="text-shadow: #000000 3px 3px 4px;">
-                                <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;' "> Profesores </strong>
+                        <v-row class="px-5">
+                            <v-col cols="12" class="pt-1">
+                                <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" >Profesores</strong>
                             </v-col>
-                            <v-col sm="0" md="6" class="align-self-end d-none d-md-flex" style="text-align:center;">
+                            <v-col cols="7" sm="9" md="9" class="align-self-end" >
                                 <v-text-field
                                 v-model="buscar"
                                 append-icon="mdi-magnify"
                                 label="Buscar"
                                 hide-details
                                 outlined
-                                class="px-5 pb-2"
                                 clearable
                                 dense
                                 solo
@@ -33,14 +32,13 @@
                                 background-color="white"
                                 ></v-text-field>
                             </v-col>
-                            <v-col cols="4" sm="6" md="3" class="align-self-end" style="text-align:right;">
+                            <v-col  cols="5" sm="3" md="3" class="align-self-end" style="text-align:right;">
                                 <v-tooltip bottom color="primary">
                                     <template v-slot:activator="{ on }">
                                         <v-btn
                                         fab
                                         bottom
                                         left
-                                        :large="$vuetify.breakpoint.smAndDown ? false : true"
                                         :small="$vuetify.breakpoint.smAndDown ? true : false"
                                         v-on="on"
                                         @click="obtenerProfesoresDeshabilitados"
@@ -63,7 +61,7 @@
                                         <strong> Cerrar </strong>
                                         <v-icon class="ml-1">mdi-close</v-icon>
                                     </v-btn>
-                                    </v-toolbar>
+                                </v-toolbar>
                                 <v-container style="background-color: #F7FFF7;">
                                     <v-row>
                                         <v-col cols="12" md="1">
@@ -78,24 +76,18 @@
                                                 height="180px"       
                                                 src="@/assets/Globales/fondo3.jpg"        
                                             >
-                                            <v-row>
-                                                <v-col cols="8" sm="4" md="5">
-                                                    <v-card-title class="white--text" style="text-shadow: #000000 3px 3px 4px;">     
-                                                        <strong :class="$vuetify.breakpoint.lgAndDown ? 'mb-2':'pr-2'" :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 135%;' : 'font-size: 180%;'">Profesores </strong>
-                                                        <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 135%;' : 'font-size: 180%;'">Eliminados</strong>
-                                                    </v-card-title>
-                                                
+                                            <v-card-title class="white--text" style="padding:0;"> 
+                                            <v-row  class="px-5">
+                                                <v-col cols="12" class="pt-1">
+                                                    <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" >Profesores Eliminados</strong>
                                                 </v-col>
-                                                <v-col  md="1" class="align-self-end d-none d-md-flex">
-                                                </v-col>  
-                                                <v-col  md="6" class="align-self-end d-none d-md-flex">
+                                                <v-col cols="7" sm="9" md="9" class="align-self-end" >
                                                     <v-text-field
                                                     v-model="buscar2"
                                                     append-icon="mdi-magnify"
                                                     label="Buscar"
                                                     hide-details
                                                     outlined
-                                                    class="px-5 pb-2"
                                                     clearable
                                                     dense
                                                     solo
@@ -104,7 +96,25 @@
                                                     background-color="white"
                                                     ></v-text-field>
                                                 </v-col>
+                                                <v-col  cols="5" sm="3" md="3" class="align-self-end" style="text-align:right;">
+                                                    <v-tooltip bottom color="primary">
+                                                    <template v-slot:activator="{ on }">
+                                                        <v-btn
+                                                        class="ml-2"
+                                                        fab
+                                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                                        bottom
+                                                        left
+                                                        v-on="on"
+                                                        >
+                                                            <v-icon  color="secondary">fas fa-envelope</v-icon>
+                                                        </v-btn>
+                                                    </template>
+                                                    <span><strong>Contactar</strong></span>
+                                                    </v-tooltip>
+                                                </v-col>
                                             </v-row>
+                                            </v-card-title>
                                             </v-img> 
                                                 <v-text-field
                                                 v-model="buscar2"
@@ -145,11 +155,13 @@
                                                         </v-tooltip>
                                                     </template>
                                                 </v-data-table>
+                                                
                                             </v-card>
                                         </v-col>
                                         <v-col cols="12" md="1">
                                         </v-col>
                                     </v-row>
+                                    
                                 </v-container>
                                 
                             </v-card>
@@ -210,20 +222,6 @@
                         </v-dialog>                
                     </v-card-title>                                                                                   
                 </v-img>
-                <v-text-field
-                v-model="buscar"
-                append-icon="mdi-magnify"
-                label="Buscar"
-                hide-details
-                outlined
-                rounded=""
-                clearable
-                dense
-                solo
-                class="px-5 py-2 -sm-flex d-md-none"
-                color="secondary"
-                background-color="white"
-                ></v-text-field>  
                 <!-- propiedades tablas -->
                 <v-data-table        
                     :headers="columnas"

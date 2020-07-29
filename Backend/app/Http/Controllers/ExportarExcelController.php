@@ -6,7 +6,6 @@ use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Excel;
 use App\Estudiante;
-use DB;
 use Validator;
 
 class ExportarExcelController extends Controller
@@ -26,14 +25,14 @@ class ExportarExcelController extends Controller
 
     public function exportar(Request $request)
     {
-        /*$request = new Request([
-            'tipo'=> 3,
-            'fechaInicio'=> '2020-07-19',
-            'fechaFin'=>'2020-07-21',
-            'id'=>1,
-            'escuela'=> 2
-        ]);*/
-        return Excel::download(new DataEstudiantes($request) , 'estudiantes.xlsx');
+        if($request->tipo == 1 || $request->tipo == 2)
+        {
+            return Excel::download(new DataEstudiantes($request) , 'estudiantes.xlsx');
+        }
+        elseif($request->tipo == 3)
+        {
+            #Error, los pdf se exportan en otra ruta
+        }
     }   
 }
 
@@ -50,12 +49,12 @@ class DataEstudiantes implements FromCollection
     {
         $estudiante = new Estudiante();
 
-        $columnas = $estudiante->getTableColumns();
+        $columnas = $estudiante->getTableColumns($this->request);
 
         $estudiantes = $estudiante->filtrarExportar($this->request);
-    
+        
         $data = new collection();
-
+        
         foreach($columnas as $columna)
         {
             $data[0] = (object) $columna;

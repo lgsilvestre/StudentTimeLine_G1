@@ -393,6 +393,15 @@ const routes = [
             },
             {
                 //Enrutamiento de la vista del administrador
+                path: 'estudiantes/:matricula',
+                name: 'estudiantesPerfilProfesor',
+                component: () =>import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/EstudiantePerfil.vue'),
+                meta: {
+                    profesor: true
+                },
+            },
+            {
+                //Enrutamiento de la vista del administrador
                 path: 'cursos',
                 name: 'cursosProfesor',
                 component: () =>

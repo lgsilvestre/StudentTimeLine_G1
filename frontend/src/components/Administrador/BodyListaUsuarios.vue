@@ -7,20 +7,19 @@
                     <v-img class="mx-auto white--text align-end justify-center"
                         width="100%" height="180px"       
                         src="@/assets/Globales/fondo3.jpg" >                    
-                        <v-card-title class="white--text">     
+                        <v-card-title class="white--text" style="padding:0;">     
                             <!-- Titulo -->
-                            <v-row>
-                                <v-col sm="6" md="3" class="align-self-end" style="text-shadow: #000000 3px 3px 4px;">
-                                    <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;' "> Usuarios </strong>
+                            <v-row class="px-5 ">
+                                <v-col cols="12" class="pt-1" >
+                                    <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" > Usuarios</strong>
                                 </v-col>
-                                <v-col sm="0" md="6" class="align-self-end d-none d-md-flex" style="text-align:center;">
+                                <v-col  cols="7" sm="9" md="9" class="align-self-end" >
                                     <v-text-field
                                     v-model="buscar"
                                     append-icon="mdi-magnify"
                                     label="Buscar"
                                     hide-details
                                     outlined
-                                    class="px-5 pb-2"
                                     clearable
                                     dense
                                     solo
@@ -29,109 +28,114 @@
                                     background-color="white"
                                     ></v-text-field>
                                 </v-col>
-                                <v-col sm="6" md="3" class="align-self-end" style="text-align:right;">
-                                    
-                                    <!-- Formulario Registrar Usuario -->
-                                    <v-dialog v-model="dialog" persistent max-width="500px" :key="keyDialogCreacion">
+                                <v-col  cols="5" sm="3" md="3" class="align-self-end" style="text-align:right;">
+                                    <v-tooltip bottom color="primary">
                                         <template v-slot:activator="{ on }">
                                             <v-btn 
-                                            :large="$vuetify.breakpoint.smAndDown ? false : true"
                                             :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                            @click="dialog = true"
                                             fab bottom left v-on="on" >
                                                 <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
                                             </v-btn>
                                         </template>
+                                        <span><strong>Registrar Usuario</strong></span>
+                                    </v-tooltip>
+                                    <!-- Formulario Registrar Usuario -->
+                                    <v-dialog v-model="dialog" persistent max-width="500px" :key="keyDialogCreacion">
                                         <v-card class="mx-auto" max-width="500" >
                                             <v-card-title class="headline primary text--center" primary-title >
                                                 <h5 class="white--text ">Registrar Usuario</h5>
                                             </v-card-title>
                                                 <v-container class="px-5 mt-5">
-                                                    <v-text-field
+                                                    <v-form ref="formCrearUsuario">
+                                                        <v-text-field
                                                         v-model="datosUsuario.nombre"
                                                         label="Nombre de Usuario"
                                                         :rules="[() => !!datosUsuario.nombre ||'Requerido']"
                                                         outlined
                                                         prepend-inner-icon="mdi-account"
-                                                    ></v-text-field>
-                                                    <v-select
-                                                        v-model="datosUsuario.escuela"
-                                                        label="Escuela"
-                                                        :items="listaEscuela"
-                                                        item-text="nombre"
-                                                        item-value="id"
-                                                        :rules="[() => !!datosUsuario.escuela ||'Requerido']"
-                                                        outlined
-                                                        prepend-inner-icon="mdi-school"
-                                                    >                                
-                                                    </v-select>
-                                                    <v-select v-show="datosUsuario.role!='Profesor'"
-                                                        v-model="datosUsuario.escuelaAux"
-                                                        label="Escuela Secundaria"
-                                                        :items="listaEscuela"
-                                                        item-text="nombre"
-                                                        item-value="id"
-                                                        outlined
-                                                        prepend-inner-icon="mdi-school"
-                                                    >                                
-                                                    </v-select>
-                                                    <v-select
-                                                        v-model="datosUsuario.role"
-                                                        label="Rol"
-                                                        :items="roles"
-                                                        :rules="[() => !!datosUsuario.role ||'Requerido']"
-                                                        outlined
-                                                        prepend-inner-icon="mdi-account-tie"
-                                                    >                                
-                                                    </v-select>
-                                                    <v-text-field
-                                                        v-model="datosUsuario.correo"
-                                                        label="Correo Electronico"
-                                                        :rules="reglasEmail"
-                                                        outlined
-                                                        prepend-inner-icon="mdi-email"
-                                                    >
-                                                    </v-text-field>
-                                                    <v-text-field
-                                                        v-model="datosUsuario.contrasena"
-                                                        :prepend-inner-icon= "mostrar ? 'mdi-eye' : 'mdi-eye-off'"
-                                                        :type="mostrar ? 'text' : 'password'"
-                                                        :rules="reglas"
-                                                        label="Contraseña"
-                                                        outlined
-                                                        hint="Al menos 8 caracteres"
-                                                        @click:prepend-inner="mostrar = !mostrar"                              
-                                                    >
-                                                    </v-text-field>
-                                                    <v-file-input                                      
-                                                        @change="convertirImagen"
-                                                        chips
-                                                        solo
-                                                        label="Fotografia del Usuario"
-                                                        placeholder="Seleccionar Imagen"
-                                                        outlined                                
-                                                        prepend-inner-icon="mdi-camera"
-                                                        prepend-icon=""
-                                                    ></v-file-input>   
-                                                    <div class="pb-1" style="text-align:right;">  
-                                                        <v-btn 
-                                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
-                                                        rounded color="warning" @click="resetRegistrarUsuario()">
-                                                            <h4 class="white--text">Cancelar</h4>
-                                                        </v-btn>
-                                                        <v-btn 
-                                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
-                                                        rounded color="secondary" class="ml-2" @click="registrarUsuario()" >
-                                                            <h4 class="white--text">Registrar</h4>
-                                                        </v-btn>
-                                                    </div>  
+                                                        ></v-text-field>
+                                                        <v-select
+                                                            v-model="datosUsuario.escuela"
+                                                            label="Escuela"
+                                                            :items="listaEscuela"
+                                                            item-text="nombre"
+                                                            item-value="id"
+                                                            :rules="[() => !!datosUsuario.escuela ||'Requerido']"
+                                                            outlined
+                                                            prepend-inner-icon="mdi-school"
+                                                        >                                
+                                                        </v-select>
+                                                        <v-select v-show="datosUsuario.role!='Profesor'"
+                                                            v-model="datosUsuario.escuelaAux"
+                                                            label="Escuela Secundaria"
+                                                            :items="listaEscuela"
+                                                            item-text="nombre"
+                                                            item-value="id"
+                                                            outlined
+                                                            prepend-inner-icon="mdi-school"
+                                                        >                                
+                                                        </v-select>
+                                                        <v-select
+                                                            v-model="datosUsuario.role"
+                                                            label="Rol"
+                                                            :items="roles"
+                                                            :rules="[() => !!datosUsuario.role ||'Requerido']"
+                                                            outlined
+                                                            prepend-inner-icon="mdi-account-tie"
+                                                        >                                
+                                                        </v-select>
+                                                        <v-text-field
+                                                            v-model="datosUsuario.correo"
+                                                            label="Correo Electronico"
+                                                            :rules="reglasEmail"
+                                                            outlined
+                                                            prepend-inner-icon="mdi-email"
+                                                        >
+                                                        </v-text-field>
+                                                        <v-text-field
+                                                            v-model="datosUsuario.contrasena"
+                                                            :prepend-inner-icon= "mostrar ? 'mdi-eye' : 'mdi-eye-off'"
+                                                            :type="mostrar ? 'text' : 'password'"
+                                                            :rules="reglas"
+                                                            label="Contraseña"
+                                                            outlined
+                                                            hint="Al menos 8 caracteres"
+                                                            @click:prepend-inner="mostrar = !mostrar"                              
+                                                        >
+                                                        </v-text-field>
+                                                        <v-file-input                                      
+                                                            @change="convertirImagen"
+                                                            chips
+                                                            solo
+                                                            label="Fotografia del Usuario"
+                                                            placeholder="Seleccionar Imagen"
+                                                            outlined                                
+                                                            prepend-inner-icon="mdi-camera"
+                                                            prepend-icon=""
+                                                        ></v-file-input>   
+                                                        <div class="pb-1" style="text-align:right;">  
+                                                            <v-btn 
+                                                            :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                                            rounded color="warning" @click="resetRegistrarUsuario()">
+                                                                <h4 class="white--text">Cancelar</h4>
+                                                            </v-btn>
+                                                            <v-btn 
+                                                            :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                                            rounded color="secondary" class="ml-2" @click="registrarUsuario()" >
+                                                                <h4 class="white--text">Registrar</h4>
+                                                            </v-btn>
+                                                        </div>
+                                                    </v-form>
+                                                      
                                                 </v-container>
                                             
                                         </v-card>
                                     </v-dialog> 
+                                    
                                     <v-tooltip bottom color="primary">
                                         <template v-slot:activator="{ on, attrs }">
                                             <v-btn 
-                                            :large="$vuetify.breakpoint.smAndDown ? false : true"
                                             :small="$vuetify.breakpoint.smAndDown ? true : false"
                                             v-bind="attrs"
                                             v-on="on"
@@ -156,25 +160,22 @@
                                                 <v-row>
                                                     <v-col cols="12" md="1"></v-col>
                                                     <v-col cols="12" md="10" >
-                                                        <v-card elevation="1">
+                                                        <v-card elevation="1 " >
                                                         <v-img class="mx-auto white--text align-end justify-center"  
                                                             width="100%" height="180px"       
                                                             src="@/assets/Globales/fondo3.jpg" >     
-                                                            <v-row>
-                                                                <v-col cols="12" md="6">
-                                                                    <v-card-title class="white--text" style="text-shadow: #000000 3px 3px 4px;">     
-                                                                        <!-- Titulo -->
-                                                                        <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'"> Usuarios Eliminados </strong>
-                                                                    </v-card-title>
+                                                            <v-card-title class="white--text" style="padding:0;">
+                                                            <v-row class="px-5">
+                                                                <v-col cols="12"  >
+                                                                    <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" > Usuarios Eliminados</strong>
                                                                 </v-col>
-                                                                <v-col cols="12" md="6" class="align-self-end d-none d-md-flex">
+                                                                <v-col  cols="7" sm="9" md="9" class="align-self-end" >
                                                                     <v-text-field
                                                                     v-model="buscar2"
                                                                     append-icon="mdi-magnify"
                                                                     label="Buscar"
                                                                     hide-details
                                                                     outlined
-                                                                    class="px-5 pb-2"
                                                                     clearable
                                                                     dense
                                                                     solo
@@ -182,8 +183,26 @@
                                                                     color="secondary"
                                                                     background-color="white"
                                                                     ></v-text-field>
-                                                                </v-col>              
+                                                                </v-col> 
+                                                                <v-col  cols="5" sm="3" md="3" class="align-self-end" style="text-align:right;">
+                                                                    <v-tooltip bottom color="primary">
+                                                                    <template v-slot:activator="{ on }">
+                                                                        <v-btn
+                                                                        class="ml-2"
+                                                                        fab
+                                                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                                                        bottom
+                                                                        left
+                                                                        v-on="on"
+                                                                        >
+                                                                            <v-icon  color="secondary">fas fa-envelope</v-icon>
+                                                                        </v-btn>
+                                                                    </template>
+                                                                    <span><strong>Contactar</strong></span>
+                                                                    </v-tooltip>
+                                                                </v-col>             
                                                             </v-row> 
+                                                            </v-card-title>
                                                         </v-img>
                                                         <v-text-field
                                                         v-model="buscar2"
@@ -231,7 +250,7 @@
                                             
                                         </v-card>
                                     </v-dialog>
-                                    <v-dialog  v-model="dialogRestaurarUsuarioEliminado" ref="form" persistent max-width="450px">
+                                    <v-dialog  v-model="dialogRestaurarUsuarioEliminado" ref="form" persistent max-width="500px">
                                         <v-card class="mx-auto" max-width="500"  >
                                             <v-card-title class="headline primary text--center" primary-title >
                                                 <h5 class="white--text ">Restaurar Usuario</h5>
@@ -265,80 +284,83 @@
                                         <h5 class="white--text ">Modificar Usuario</h5>
                                     </v-card-title>
                                     <v-container class="px-5 mt-5">
-                                        <v-text-field v-model="datosUsuario.nombre" label="Nombre de usuario" outlined
+                                       <v-form ref="formModificarUsuario"> 
+                                            <v-text-field v-model="datosUsuario.nombre" label="Nombre de usuario" outlined
                                             color="secondary"
                                             :rules="[() => !!datosUsuario.nombre ||'Requerido']"
                                             prepend-inner-icon="mdi-account"
-                                        ></v-text-field>
+                                            ></v-text-field>
 
-                                        <v-select  v-model="datosUsuario.escuela"
-                                            :items="listaEscuela"
-                                            item-text="nombre"
-                                            item-value="id"
-                                            label="Escuela"
-                                            outlined
-                                            :small-chips="$vuetify.breakpoint.smAndDown ? true : false"
-                                            :rules="[() => !!datosUsuario.escuela ||'Requerido']"
-                                            prepend-inner-icon="mdi-school"
-                                        ></v-select>
-                                        <v-select  v-model="datosUsuario.escuelaAux"
-                                            :items="listaEscuela"
-                                            item-text="nombre"
-                                            item-value="id"
-                                            label="Escuela Secundaria"
-                                            outlined
-                                            :small-chips="$vuetify.breakpoint.smAndDown ? true : false"
-                                            prepend-inner-icon="mdi-school"
-                                        ></v-select>
-
-                                        <v-select v-model="datosUsuario.role"
-                                            label="Rol" 
-                                            :items="roles"
-                                            :rules="[() => !!datosUsuario.role ||'Requerido']"
-                                            outlined
-                                            prepend-inner-icon="mdi-account-tie"
+                                            <v-select  v-model="datosUsuario.escuela"
+                                                :items="listaEscuela"
+                                                item-text="nombre"
+                                                item-value="id"
+                                                label="Escuela"
+                                                outlined
+                                                :small-chips="$vuetify.breakpoint.smAndDown ? true : false"
+                                                :rules="[() => !!datosUsuario.escuela ||'Requerido']"
+                                                prepend-inner-icon="mdi-school"
+                                            ></v-select> 
+                                            <v-select  v-model="datosUsuario.escuelaAux"
+                                                :items="listaEscuela"
+                                                item-text="nombre"
+                                                item-value="id"
+                                                label="Escuela Secundaria"
+                                                outlined
+                                                :small-chips="$vuetify.breakpoint.smAndDown ? true : false"
+                                                prepend-inner-icon="mdi-school"
                                             ></v-select>
 
-                                        <v-file-input  accept="image/png, image/jpeg, image/bmp" 
-                                            label="Seleccione una imagen"
-                                            color="secondary"
-                                            outlined
-                                            @change="convertirImagen"
-                                            prepend-icon=""   
-                                            prepend-inner-icon="mdi-camera"
-                                            >
-                                        </v-file-input>
+                                            <v-select v-model="datosUsuario.role"
+                                                label="Rol" 
+                                                :items="roles"
+                                                :rules="[() => !!datosUsuario.role ||'Requerido']"
+                                                outlined
+                                                prepend-inner-icon="mdi-account-tie"
+                                                ></v-select>
 
-                                        <v-text-field 
-                                            v-model="datosUsuario.correo"
-                                            label="Correo Electronico"
-                                            :rules="reglasEmail"
-                                            outlined
-                                            color="secondary"
-                                            prepend-inner-icon="mdi-email"
-                                        ></v-text-field>
+                                            <v-file-input  accept="image/png, image/jpeg, image/bmp" 
+                                                label="Seleccione una imagen"
+                                                color="secondary"
+                                                outlined
+                                                @change="convertirImagen"
+                                                prepend-icon=""   
+                                                prepend-inner-icon="mdi-camera"
+                                                >
+                                            </v-file-input>
 
-                                        <v-text-field v-model="datosUsuario.contrasena" label="Contraseña "
-                                            :prepend-inner-icon= "mostrar ? 'mdi-eye' : 'mdi-eye-off'"
-                                            :type="mostrar ? 'text' : 'password'"
-                                            outlined
-                                            color="secondary"
-                                            hint="Al menos 8 caracteres"
-                                            @click:prepend-inner="mostrar = !mostrar"
-                                        ></v-text-field>
+                                            <v-text-field 
+                                                v-model="datosUsuario.correo"
+                                                label="Correo Electronico"
+                                                :rules="reglasEmail"
+                                                outlined
+                                                color="secondary"
+                                                prepend-inner-icon="mdi-email"
+                                            ></v-text-field>
 
-                                        <div style="text-align:right;" class="mb-1 " >
-                                            <v-btn 
-                                            :small="$vuetify.breakpoint.smAndDown ? true : false"
-                                            rounded color="warning"    @click="resetModificacionUsuario">  
-                                                <h4 class="white--text">Cancelar</h4>
-                                            </v-btn>
-                                            <v-btn 
-                                            :small="$vuetify.breakpoint.smAndDown ? true : false"
-                                            rounded color="secondary" class=" ml-2"    @click="modificarUsuario">
-                                                <h4 class="white--text">Modificar</h4>
-                                            </v-btn>
-                                        </div>
+                                            <v-text-field v-model="datosUsuario.contrasena" label="Contraseña "
+                                                :prepend-inner-icon= "mostrar ? 'mdi-eye' : 'mdi-eye-off'"
+                                                :type="mostrar ? 'text' : 'password'"
+                                                outlined
+                                                color="secondary"
+                                                hint="Al menos 8 caracteres"
+                                                @click:prepend-inner="mostrar = !mostrar"
+                                            ></v-text-field>
+                                            <div style="text-align:right;" class="mb-1 " >
+                                                <v-btn 
+                                                :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                                rounded color="warning"    @click="resetModificacionUsuario">  
+                                                    <h4 class="white--text">Cancelar</h4>
+                                                </v-btn>
+                                                <v-btn 
+                                                :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                                rounded color="secondary" class=" ml-2"    @click="modificarUsuario">
+                                                    <h4 class="white--text">Modificar</h4>
+                                                </v-btn>
+                                            </div>
+                                       </v-form>
+
+                                        
                                     </v-container> 
                                 </v-card>                        
                             </v-dialog>
@@ -373,20 +395,7 @@
                             </v-dialog>                
                         </v-card-title>                                                                                   
                     </v-img>
-                    <v-text-field
-                    v-model="buscar"
-                    append-icon="mdi-magnify"
-                    label="Buscar"
-                    hide-details
-                    outlined
-                    class="px-5 py-2 d-sm-flex d-md-none"
-                    clearable
-                    dense
-                    solo
-                    rounded
-                    color="secondary"
-                    background-color="white"
-                    ></v-text-field>
+
                     <!-- propiedades tablas -->
                     <v-data-table  :headers="columnas" :items="listaUsuarios"
                         :search="buscar" :loading="cargando" :items-per-page="10"  >            
@@ -504,7 +513,7 @@ export default {
             ],
             reglasEmail: [
                 v => !!v || 'E-mail is required',
-                v => /.+@utalca.cl/.test(v) || 'E-mail must be valid',
+                v => /.+@utalca.cl/.test(v) || /.+@alumnos.utalca.cl/.test(v) || 'Correo invalido', 
             ],
             search:'',
             columnas:[
@@ -535,12 +544,72 @@ export default {
         this.obtenerUsuarios();        
     },
     methods: {
+        resetFormModificarUsuario () {
+        this.$refs.formModificarUsuario.reset();
+      },
+      resetFormCrearUsuario () {
+        this.$refs.formCrearUsuario.reset();
+      },
         /* ...mapMutations(['registrarUsuario']), */
         validate () {
             if(this.$refs.form.validate()){
                 this.resetRegistrarUsuario();
             };
         },
+         /**
+       * Valida que el correo ingresado por el usuario
+       * contenga @utalca.cl o @alumnos.utalca.cl
+       */
+      validarCorreo(correoElectronico){
+          if(correoElectronico != null){
+               var utalca = correoElectronico.indexOf("@utalca.cl");
+                var al_utalca =correoElectronico.indexOf("@alumnos.utalca.cl");
+                if(utalca == -1 && al_utalca ==-1){
+                    return false;
+                }
+                return true;
+          }
+          return false;
+      },
+      /**
+       * Valida que la contraseña del usuario
+       * sea de un largo mayor o igual a 8 caracteres.
+       */
+      validarContrasena(contrasena){
+          if(contrasena != null){
+              if(contrasena.length >= 8){
+                  return true;
+              }
+              return false;
+          }
+          return false;
+      },
+      /**
+       * Valida que el nombre del usuario no 
+       * contenga numeros
+       */
+      validarNombre(nombre){
+          if(nombre!=null){
+
+              var val0= nombre.indexOf("0"); 
+              var val1= nombre.indexOf("1");
+              var val2= nombre.indexOf("2");  
+              var val3= nombre.indexOf("3"); 
+              var val4= nombre.indexOf("4"); 
+              var val5= nombre.indexOf("5"); 
+              var val6= nombre.indexOf("6"); 
+              var val7= nombre.indexOf("7"); 
+              var val8= nombre.indexOf("8");
+              var val9= nombre.indexOf("9");
+                 if(val0 >= 0 || val1  >= 0 || val2  >= 0 || val3  >= 0 || val4  >= 0 || val5  >= 0 || val6  >= 0 
+              || val7  >= 0 || val8  >= 0 || val9  >= 0 ){
+                  console.log("nombre es invalido puto")
+                    return false;
+                }
+                return true;
+          }
+          return false;
+      },
         obtenerListaUsuariosEliminados(){
              this.dialogListaUsuariosEliminado = true;
             this.listaUsuariosAux = [];
@@ -593,14 +662,14 @@ export default {
              var url =`http://127.0.0.1:8000/api/v1/usuario/restore/${this.datosUsuario.id}`;
             axios.post(url,null,this.$store.state.config)
             .then((result)=>{
-            if (result.data.data.usuario==true) {
+            if (result.data.success == true) {
                 this.obtenerListaUsuariosEliminados();
                 this.obtenerUsuarios(); 
                 this.alertaExito = true;
                 this.textoAlertas = result.data.message
             }
             }).catch((error)=>{
-                                
+                console.log(error);
                 // if (error.message == 'Network Error') {
                 //     console.log(error)
                 //     this.alertaError = true;
@@ -640,6 +709,7 @@ export default {
 
         /* Metodo que reinicia los campos del formulario de registrar usuario, asi como las validaciones */
         resetRegistrarUsuario(){
+            this.resetFormCrearUsuario();
             this.dialog = false;
             this.datosUsuario.nombre='';
             this.datosUsuario.escuela='';
@@ -745,7 +815,12 @@ export default {
                 aux = "profesor"
                 this.datosUsuario.escuelaAux=null
             };
-            let post = {
+            //variables para verificar el correo, contraseña y nombre de usuario
+            var validarCorreo= this.validarCorreo(this.datosUsuario.correo);
+            var validarContrasena =this.validarContrasena(this.datosUsuario.contrasena);
+            var nombreValido = this.validarNombre(this.datosUsuario.nombre);
+            if(validarCorreo == true && validarContrasena == true && nombreValido == true){
+               let post = {
                 "foto": this.datosUsuario.imagen,
                 "nombre": this.datosUsuario.nombre,
                 "escuela": this.datosUsuario.escuela,
@@ -753,41 +828,45 @@ export default {
                 "rol": aux,
                 "email": this.datosUsuario.correo,
                 "password": this.datosUsuario.contrasena,
-            }
-            var url = 'http://127.0.0.1:8000/api/v1/usuario';
-            console.log(post);
-            axios.post(url, post, this.$store.state.config)
-            .then((result) => {
-                this.alertaExito = true;
-                this.textoAlertas = "Se creó el usuario con exito."
-                this.resetRegistrarUsuario()
-                this.obtenerUsuarios(); 
-            }).catch((error)=>{
-                if (error.message == 'Network Error') {
-                    console.log(error)
-                    this.alertaError = true;
-                    this.textoAlertas = "Error al modificar el usuario, intente mas tarde."
-                    this.resetRegistrarUsuario();
                 }
-                else{
-                    if (error.response.data.success == false) {
-                        if(error.response.data.code == 301){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
-                            this.textoAlertas = error.response.data.message;
-                            this.alertaError = true;      
-                            this.resetRegistrarUsuario();
-                        }
-                        if(error.response.data.code == 302){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
-                            this.textoAlertas = error.response.data.message;
-                            this.alertaError = true;  
-                            this.resetRegistrarUsuario();   
-                        }
+                var url = 'http://127.0.0.1:8000/api/v1/usuario';
+                console.log(post);
+                axios.post(url, post, this.$store.state.config)
+                .then((result) => {
+                    this.alertaExito = true;
+                    this.textoAlertas = "Se creó el usuario con exito."
+                    this.resetRegistrarUsuario()
+                    this.obtenerUsuarios(); 
+                }).catch((error)=>{
+                    if (error.message == 'Network Error') {
+                        console.log(error)
+                        this.alertaError = true;
+                        this.textoAlertas = "Error al modificar el usuario, intente mas tarde."
+                        this.resetRegistrarUsuario();
                     }
-                }                
-            });
+                    else{
+                        if (error.response.data.success == false) {
+                            if(error.response.data.code == 301){
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
+                                this.textoAlertas = error.response.data.message;
+                                this.alertaError = true;      
+                                this.resetRegistrarUsuario();
+                            }
+                            if(error.response.data.code == 302){
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
+                                this.textoAlertas = error.response.data.message;
+                                this.alertaError = true;  
+                                this.resetRegistrarUsuario();   
+                            }
+                        }
+                    }                
+                });
+
+            }
+
+            
         },
 
     // Funcion que convierte la imagen a base64 para poder almacenarla en la base de datos.
@@ -810,6 +889,7 @@ export default {
        */
         MostrarPanelModificar(item){
             this.modUsuarioActivo = true;
+            //this.resetFormModificarUsuario();
             this.datosUsuario.id= item.id;
             this.datosUsuario.nombre= item.nombre;            
             this.datosUsuario.imagen= item.imagen;
@@ -833,6 +913,7 @@ export default {
         },
 
         resetModificacionUsuario(){
+            this.resetFormModificarUsuario();
             this.modUsuarioActivo = false;
             this.datosUsuario.nombre='';
             this.datosUsuario.escuela='';
@@ -841,6 +922,7 @@ export default {
             this.datosUsuario.contrasena='';
             this.datosUsuario.imagen=null;
             this.keyDialogModificar--;
+            
         },
         modificarUsuario(){
             var aux;
@@ -853,63 +935,101 @@ export default {
             if ( this.datosUsuario.role == "Profesor") {
                 aux = "profesor"
             };
-            
-            var url =`http://127.0.0.1:8000/api/v1/usuario/${this.datosUsuario.id}`;
-            let put ={
-                "nombre": this.datosUsuario.nombre,
-                "escuela": this.datosUsuario.escuela,
-                "role": aux,
-                "foto": this.datosUsuario.imagen,
-                "email":this.datosUsuario.correo,
-                "password": this.datosUsuario.contraseña,
+            var validarCorreo= this.validarCorreo(this.datosUsuario.correo);
+            var nombreValido = this.validarNombre(this.datosUsuario.nombre);
+            var validarContrasena =this.validarContrasena(this.datosUsuario.contrasena);
+            if( this.datosUsuario.contrasena == null){
+
+                var validarContrasena =true;
             }
-            axios.put(url,put,this.$store.state.config)
-            .then((result)=>{
-            if (result.statusText=='OK') {
-                this.alertaExito = true;
-                this.textoAlertas = "Se modificó el usuario con exito."
-                this.obtenerUsuarios(); 
+
+            if(validarCorreo == false  || validarContrasena ==false || nombreValido == false ){
                 this.resetModificacionUsuario();
+                this.textoAlertas = "Error en los datos ingresados.";
+                this.alertaError = true;
+            
+                
             }
-            }).catch((error)=>{                
-                if (error.message == 'Network Error') {
-                    console.log(error)
+            else{
+                var correo=this.datosUsuario.correo;
+                var contrasena=this.datosUsuario.contrasena;
+                var nombre = this.datosUsuario.nombre;
+               if(validarCorreo == false){
+                   correo = null;
+                    this.resetModificacionUsuario();
+                    this.textoAlertas = "Error en los datos ingresados.";
                     this.alertaError = true;
-                    this.textoAlertas = "Error al modificar el usuario, intente mas tarde."
+                    return ;
+                //    console.log("correo invalido")
+               }
+               if(validarContrasena == false){
+                   contrasena=null;
+                //    console.log("contraseña invalido")
+               }
+               if(nombreValido == false){
+                   nombre = null;
+                //    console.log("nombre invalido")
+               }
+
+                var url =`http://127.0.0.1:8000/api/v1/usuario/${this.datosUsuario.id}`;
+                let put ={
+                    "nombre": nombre,
+                    "escuela": this.datosUsuario.escuela,
+                    "role": aux,
+                    "foto": this.datosUsuario.imagen,
+                    "email":correo,
+                    "password": contrasena,
                 }
-                else{
-                    if (error.response.data.success == false) {
-                        if(error.response.data.code == 601){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
-                            this.textoAlertas = error.response.data.message;
-                            this.alertaError = true;
-                            this.resetModificacionUsuario();
-                        }
-                        if(error.response.data.code == 602){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
-                            this.textoAlertas = error.response.data.message;
-                            this.alertaError = true;
-                            this.resetModificacionUsuario();
-                        }
-                        if(error.response.data.code == 603){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
-                            this.textoAlertas = error.response.data.message;
-                            this.alertaError = true;
-                            this.resetModificacionUsuario();
-                        }
-                        if(error.response.data.code == 604){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
-                            this.textoAlertas = error.response.data.message;
-                            this.alertaError = true;
-                            this.resetModificacionUsuario();
+                axios.put(url,put,this.$store.state.config)
+                .then((result)=>{
+                if (result.statusText=='OK') {
+                    this.alertaExito = true;
+                    this.textoAlertas = "Se modificó el usuario con exito."
+                    this.obtenerUsuarios(); 
+                    this.resetModificacionUsuario();
+                }
+                }).catch((error)=>{                
+                    if (error.message == 'Network Error') {
+                        console.log(error)
+                        this.alertaError = true;
+                        this.textoAlertas = "Error al modificar el usuario, intente mas tarde."
+                    }
+                    else{
+                        if (error.response.data.success == false) {
+                            if(error.response.data.code == 601){
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
+                                this.textoAlertas = error.response.data.message;
+                                this.alertaError = true;
+                                this.resetModificacionUsuario();
+                            }
+                            if(error.response.data.code == 602){
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
+                                this.textoAlertas = error.response.data.message;
+                                this.alertaError = true;
+                                this.resetModificacionUsuario();
+                            }
+                            if(error.response.data.code == 603){
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
+                                this.textoAlertas = error.response.data.message;
+                                this.alertaError = true;
+                                this.resetModificacionUsuario();
+                            }
+                            if(error.response.data.code == 604){
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
+                                this.textoAlertas = error.response.data.message;
+                                this.alertaError = true;
+                                this.resetModificacionUsuario();
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
+            
+            
 
         },
         resetEliminarUsuario(){
