@@ -79,7 +79,7 @@
                 <v-card-title  class="headline primary text--center" primary-title > 
                     <h5 class="white--text ">Editar Perfil</h5>
                 </v-card-title>
-                <v-form  @submit.prevent="modificarUsuario" class=" px-5 mt-7" >
+                <v-form ref="form"  @submit.prevent="modificarUsuario" class=" px-5 mt-7" >
                     <v-text-field v-model="datosUsuarioModificar.nombre" label="Nombre de usuario" outlined
                     color="secondary"
                     :rules="[() => !!datosUsuario.nombre ]"
@@ -372,7 +372,6 @@ export default {
                         this.reset();
                     }
                     }).catch((error)=>{
-                        console.log("SE CALLO")
                         console.log(error);
                         console.log(error.response.data);
                         this.resetModificacionUsuario();
@@ -429,7 +428,7 @@ export default {
                     });
 
            }
-        if(validarCorreo == false && validarContrasena == false && nombreValido == false){
+        if(validarCorreo == false && validarContrasena == false && nombreValido == false && this.datosUsuarioModificar.imagen== null){
             this.cargando = false;
             this.alertError = true;
             var mensaje='Datos ingresados invalidos';
@@ -439,18 +438,18 @@ export default {
             
 
     },
-        resetModificacionUsuario(){
-            this.datosUsuarioModificar.nombre=null;
-            this.datosUsuarioModificar.correo=null;
-            this.datosUsuarioModificar.contrasena=null;
-            this.datosUsuarioModificar.imagen=null;
-            this.imagenMiniatura=null;
-            this.alertError= false;
-            this.textoError= '';
-            this.alertAcept= false;
-            this.textoAcept= '';
-            
-        },
+    resetModificacionUsuario(){
+        this.datosUsuarioModificar.nombre=null;
+        this.datosUsuarioModificar.correo=null;
+        this.datosUsuarioModificar.contrasena=null;
+        this.datosUsuarioModificar.imagen=null;
+        this.imagenMiniatura=null;
+        this.alertError= false;
+        this.textoError= '';
+        this.alertAcept= false;
+        this.textoAcept= '';
+        
+    },
     }
 }
 </script>

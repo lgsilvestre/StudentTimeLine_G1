@@ -27,133 +27,139 @@ const routes = [
         meta: {
             requiresAuth: true
         },
-        children:[
-            {
+        children: [{
                 //Enrutamiento de la vista del administrador
                 path: 'escuela',
                 name: 'Escuela',
-                component: () => import(/* webpackChunkName: "Administrador" */ '@/components/Administrador/BodyEscuelas.vue'/* ruta exacta por definir dado que no esta aun creada*/),
+                component: () =>
+                    import ( /* webpackChunkName: "Administrador" */ '@/components/Administrador/BodyEscuelas.vue' /* ruta exacta por definir dado que no esta aun creada*/ ),
                 meta: {
-                  admin: true
+                    admin: true
                 },
-              },
-      {
-        //Enrutamiento de la vista del administrador
-        path: 'usuarios',
-        name: 'Usuarios',
-        component: () => import(/* webpackChunkName: "Administrador" */ '@/components/Administrador/BodyListaUsuarios.vue'/* ruta exacta por definir dado que no esta aun creada*/),
-        meta: {
-          admin: true
-        },
-      },
-      {
-        //Enrutamiento de la vista del administrador
-        path: 'perfil',
-        name: 'perfilAdministrador',
-        component: () =>import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/BodyGlobal.vue'),
-        meta: {
-            admin: true
-        },
-      },
-      {
-        //Enrutamiento de la vista del administrador
-        path: 'estudiantes',
-        name: 'estudiantesAdministrador',
-        component: () =>import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/EstudiantesGlobal.vue'),
-        meta: {
-            admin: true
-        },
-      },
-      {
-        //Enrutamiento de la vista del administrador
-        path: 'estudiantes/:matricula',
-        name: 'estudiantesPerfilAdministrador',
-        component: () =>import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/EstudiantePerfil.vue'),
-        meta: {
-            admin: true
-        },
-      },
-      {
-         //Enrutamiento de la vista del administrador
-        path: 'profesores',
-        name: 'profesoresAdministrador',
-         component: () => import(/* webpackChunkName: "Administrador" */ '@/components/SecretariaDeEscuela/BodyProfesores.vue'),
-        meta: {
-          admin: true
-        },
-      },
-      {
-        //Enrutamiento de la vista del administrador
-        path: 'registros',
-        name: 'registrosAdministrador',
-        component: () =>import ( /* webpackChunkName: "Administrador" */ '@/components/Administrador/Registros.vue'),
-        meta: {
-            admin: true
-        },
-      },
-      // {
-      //   //Enrutamiento de la vista del administrador
-      //   path: 'escuela/deshabilitarEscuela',
-      //   name: 'deshabilitarEscuela',
-      //   component: () => import(/* webpackChunkName: "Administrador" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
-      //   meta: {
-      //     admin: true
-      //   },
-      // },
-      // {
-      //   //Enrutamiento de la vista crearObservacionAdministrador
-      //   path: 'observaciones/crearObservacion',
-      //   name: 'crearObservacionAdministrador',
-      //   component: () => import(/* webpackChunkName: "" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
-      //   meta: {
-      //     admin: true
-      //   },
-      // },
-      // {
-      //   //Enrutamiento de la vista listarObservacionesAdministrador
-      //   path: 'observaciones/listarObservaciones',
-      //   name: 'listarObservacionesAdministradorr',
-      //   component: () => import(/* webpackChunkName: "" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
-      //   meta: {
-      //     admin: true
-      //   },
-      // },
-      // {
-      //   //Enrutamiento de la vista modificarObservacionAdministrador
-      //   path: 'observaciones/modificarObservacion',
-      //   name: 'modificarObservacionAdministrador',
-      //   component: () => import(/* webpackChunkName: "" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
-      //   meta: {
-      //     admin: true
-      //   },
-      // },
-      // {
-      //   //Enrutamiento de la vista eliminarObservacionAdministrador
-      //   path: 'observaciones/eliminarObservacion',
-      //   name: 'eliminarObservacionAdministrador',
-      //   component: () => import(/* webpackChunkName: "" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
-      //   meta: {
-      //     admin: true
-      //   },
-      // },
-      // {
-      //   //Enrutamiento de la vista habilitarProfesorAdministrador
-      //   path: 'habilitarProfesor',
-      //   name: 'habilitarProfesorAdministrador',
-      //   component: () => import(/* webpackChunkName: "" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
-      //   meta: {
-      //     admin: true
-      //   },
-      // },
-      // {
-      //   //Enrutamiento de la vista deshabilitarProfesorAdministrador
-      //   path: 'deshabilitarProfesor',
-      //   name: 'deshabilitarProfesorAdministrador',
-      //   component: () => import(/* webpackChunkName: "" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
-      //   meta: {
-      //     admin: true
-      //   },
-      // },
+            },
+            {
+                //Enrutamiento de la vista del administrador
+                path: 'usuarios',
+                name: 'Usuarios',
+                component: () =>
+                    import ( /* webpackChunkName: "Administrador" */ '@/components/Administrador/BodyListaUsuarios.vue' /* ruta exacta por definir dado que no esta aun creada*/ ),
+                meta: {
+                    admin: true
+                },
+            },
+            {
+                //Enrutamiento de la vista del administrador
+                path: 'perfil',
+                name: 'perfilAdministrador',
+                component: () =>
+                    import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/BodyGlobal.vue'),
+                meta: {
+                    admin: true
+                },
+            },
+            {
+                //Enrutamiento de la vista del administrador
+                path: 'estudiantes',
+                name: 'estudiantesAdministrador',
+                component: () =>
+                    import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/EstudiantesGlobal.vue'),
+                meta: {
+                    admin: true
+                },
+            },
+            {
+                //Enrutamiento de la vista del administrador
+                path: 'estudiantes/:matricula',
+                name: 'estudiantesPerfilAdministrador',
+                component: () =>
+                    import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/EstudiantePerfil.vue'),
+                meta: {
+                    admin: true
+                },
+            },
+            {
+                //Enrutamiento de la vista del administrador
+                path: 'profesores',
+                name: 'profesoresAdministrador',
+                component: () =>
+                    import ( /* webpackChunkName: "Administrador" */ '@/components/SecretariaDeEscuela/BodyProfesores.vue'),
+                meta: {
+                    admin: true
+                },
+            },
+            {
+                //Enrutamiento de la vista del administrador
+                path: 'registros',
+                name: 'registrosAdministrador',
+                component: () =>
+                    import ( /* webpackChunkName: "Administrador" */ '@/components/Administrador/Registros.vue'),
+                meta: {
+                    admin: true
+                },
+            },
+            // {
+            //   //Enrutamiento de la vista del administrador
+            //   path: 'escuela/deshabilitarEscuela',
+            //   name: 'deshabilitarEscuela',
+            //   component: () => import(/* webpackChunkName: "Administrador" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
+            //   meta: {
+            //     admin: true
+            //   },
+            // },
+            // {
+            //   //Enrutamiento de la vista crearObservacionAdministrador
+            //   path: 'observaciones/crearObservacion',
+            //   name: 'crearObservacionAdministrador',
+            //   component: () => import(/* webpackChunkName: "" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
+            //   meta: {
+            //     admin: true
+            //   },
+            // },
+            // {
+            //   //Enrutamiento de la vista listarObservacionesAdministrador
+            //   path: 'observaciones/listarObservaciones',
+            //   name: 'listarObservacionesAdministradorr',
+            //   component: () => import(/* webpackChunkName: "" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
+            //   meta: {
+            //     admin: true
+            //   },
+            // },
+            // {
+            //   //Enrutamiento de la vista modificarObservacionAdministrador
+            //   path: 'observaciones/modificarObservacion',
+            //   name: 'modificarObservacionAdministrador',
+            //   component: () => import(/* webpackChunkName: "" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
+            //   meta: {
+            //     admin: true
+            //   },
+            // },
+            // {
+            //   //Enrutamiento de la vista eliminarObservacionAdministrador
+            //   path: 'observaciones/eliminarObservacion',
+            //   name: 'eliminarObservacionAdministrador',
+            //   component: () => import(/* webpackChunkName: "" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
+            //   meta: {
+            //     admin: true
+            //   },
+            // },
+            // {
+            //   //Enrutamiento de la vista habilitarProfesorAdministrador
+            //   path: 'habilitarProfesor',
+            //   name: 'habilitarProfesorAdministrador',
+            //   component: () => import(/* webpackChunkName: "" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
+            //   meta: {
+            //     admin: true
+            //   },
+            // },
+            // {
+            //   //Enrutamiento de la vista deshabilitarProfesorAdministrador
+            //   path: 'deshabilitarProfesor',
+            //   name: 'deshabilitarProfesorAdministrador',
+            //   component: () => import(/* webpackChunkName: "" */ '@/views/Administrador.vue'/* ruta exacta por definir dado que no esta aun creada*/)
+            //   meta: {
+            //     admin: true
+            //   },
+            // },
             // {
             //   //Enrutamiento de la vista crearObservacionAdministrador
             //   path: 'observaciones/crearObservacion',
@@ -361,7 +367,8 @@ const routes = [
                     secretariaEscuela: true
                 },
             },
-        ]},
+        ]
+    },
     {
         //Enrutamiento de la vista del profesor
         path: '/profesor',
@@ -395,7 +402,8 @@ const routes = [
                 //Enrutamiento de la vista del administrador
                 path: 'estudiantes/:matricula',
                 name: 'estudiantesPerfilProfesor',
-                component: () =>import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/EstudiantePerfil.vue'),
+                component: () =>
+                    import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/EstudiantePerfil.vue'),
                 meta: {
                     profesor: true
                 },
@@ -406,6 +414,16 @@ const routes = [
                 name: 'cursosProfesor',
                 component: () =>
                     import ( /* webpackChunkName: "Administrador" */ '@/components/Profesor/BodyCursosProfesor.vue'),
+                meta: {
+                    profesor: true
+                },
+            },
+            {
+                //Enrutamiento de la vista del administrador
+                path: 'observaciones',
+                name: 'observacionesProfesor',
+                component: () =>
+                    import ( /* webpackChunkName: "Administrador" */ '@/components/Profesor/BodyObservacionesProf.vue'),
                 meta: {
                     profesor: true
                 },

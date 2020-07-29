@@ -222,6 +222,7 @@
                                                     bottom
                                                     left
                                                     class="ml-2"
+                                                    @click="dialogExportar = true"
                                                     >
                                                         <v-icon class="mx-2" color="secondary">fas fa-file-download</v-icon>
                                                     </v-btn>
@@ -461,6 +462,34 @@
                 </v-container>
             </v-card>
         </v-dialog>
+
+         <v-dialog v-model="dialogExportar" ref="form" persistent max-width="500px" transition="scroll-y-reverse-transition">
+            <v-card class="mx-auto" max-width="500px"  >
+                <v-card-title
+                    class="headline primary text--center"
+                    primary-title
+                    >
+                    <h5 class="white--text ">Exportar  Usuario</h5>
+                    </v-card-title> 
+                    <!-- <v-container fluid class=" text-left"> -->
+                    <v-card-title class="text-justify" :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%;' :'font-size: 110%;'">Exportar las observaciones del siguiente Usuario?</v-card-title>
+                    <v-card-text>Nombre : {{ perfilEstudiante.nombre_completo }}</v-card-text>
+                    
+                    <!-- </v-container > -->
+                    <div style="text-align:right;">
+                        <v-btn 
+                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                        rounded color="warning" class=" mb-4 "  @click="dialogExportar = false">
+                            <h4 class="white--text">Cancelar</h4>
+                        </v-btn>
+                        <v-btn 
+                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                        rounded color="secondary"   class=" mb-4 ml-2 mr-5" @click="exportarEstudiante">
+                            <h4 class="white--text">Exportar</h4>
+                        </v-btn>
+                    </div> 
+            </v-card>
+        </v-dialog>
         <!-- Alertas -->
         <!-- alerta de exito de la modificacion -->
         <v-snackbar v-model="alertAcept" :timeout=delay
@@ -597,6 +626,8 @@ export default {
             tipos:['Positiva','Negativa','Informativa','Otro'],
             categorias:['Ayudantía','Práctica','Copia','Otro','En Observación - 1 por Tercera','En Observación - 1 por Segunda','Se Retira','Eliminado por Rendimiento','Titulado','Eliminado Art. 31 E','Eliminado Art. 31 B'],
 
+            //variables para la exportacion de la informacion del estudiante
+            dialogExportar:false,
         }
     },
     computed:{
@@ -608,7 +639,71 @@ export default {
         this.obtenerCursosUsuario();
     },
     methods:{
+        exportarEstudiante(){
+            console.log("exportar info del estudiante.")
+            //console.log( this.$store.state.perfilEstudiante.id)
+            
+            //this.exportar(3,0,0,this.$store.state.perfilEstudiante.id,0);
+            this.exportar(3,'2020-07-19','2020-07-21',1,1);
+        },
+        exportar(tipo, fechaIni,fechaTer,idEstudiante,escuela){
+            //var fechaInicio=this.formatDate(fechaIni);
+            //var fechaTermino =this.formatDate(fechaTer);
+            //console.log("FECHA INI  "+ fechaInicio);
+            //console.log("FECHA fin  "+ fechaTermino);
+
+            // if(fechaInicio == 0 || fechaTermino== 0){
+            //     fechaInicio = 0
+            //     fechaTermino=0;;
+            // }
+            let post = {
+                    "tipo": tipo,
+                    "fechaInicio" : fechaIni,
+                    "fechaFin": fechaTer ,
+                    "id": idEstudiante,
+                    "escuela": escuela
+                };
+                console.log(post)
+            var url = 'http://127.0.0.1:8000/api/v1/estudiante/exportarPDF';
+            console.log(post)
+            axios.post(url,post,this.$store.state.config)
+            .then((result)=>{
+                console.log(result);
+                //var fileDownload = require('js-file-download');
+                //fileDownload(result.data, 'archivo.xlsx');
+                
+
+                // const url = URL.createObjectURL(new Blob([result.data], {
+                //     type: 'application/pdf'
+                // }))
+                // const link = document.createElement('a');
+                // link.href = url;
+                // link.setAttribute('download', 'Estudiante.pdf');
+                // document.body.appendChild(link);
+                // link.click();
+                // this.alertAcept = true;
+                // this.textoAcept = 'Se realizó la operación correctamente'
+                
+                this.dialogExportar=false;
+                
+            })
+            .catch((error) => {
+                console.log(error);
+                if (error.message == 'Network Error') {
+                    console.log(error);
+                    this.alertError = true;
+                    this.textoError = 'Error, intente más tarde'
+                } else {
+                    console.log(error);
+                    this.alertError = true;
+                    this.textoError = 'Error, intente más tarde'
+                } 
+            });
+        },
+
+
         /**
+         * 
          * Convierte la imagen cargada a base 64.
          */
         convertirImagen(e){
