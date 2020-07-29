@@ -182,7 +182,7 @@ class EstudianteController extends Controller
       
         try{
             $estudiante = Estudiante::find($id);
-            
+            $estudiante->escuela=$estudiante->getEscuela->nombre;
             if($estudiante==null){
                 return response()->json([
                     'success' => false,

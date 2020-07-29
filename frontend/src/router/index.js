@@ -11,6 +11,7 @@ const routes = [
         path: '/',
         name: 'Inicio',
         component: Inicio
+        
     },
     {
         path: '/ReinicioContraseña/:codigo',
@@ -27,14 +28,14 @@ const routes = [
         meta: {
             requiresAuth: true
         },
-        children:[
-            {
+        children: [{
                 //Enrutamiento de la vista del administrador
                 path: 'escuela',
                 name: 'Escuela',
-                component: () => import(/* webpackChunkName: "Administrador" */ '@/components/Administrador/BodyEscuelas.vue'/* ruta exacta por definir dado que no esta aun creada*/),
+                component: () =>
+                    import ( /* webpackChunkName: "Administrador" */ '@/components/Administrador/BodyEscuelas.vue' /* ruta exacta por definir dado que no esta aun creada*/ ),
                 meta: {
-                  admin: true
+                    admin: true
                 },
               },
       {
@@ -240,7 +241,8 @@ const routes = [
                 //Enrutamiento de la vista del administrador
                 path: 'estudiantes/id=:id',
                 name: 'estudiantesPerfilProfesor',
-                component: () =>import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/EstudiantePerfil.vue'),
+                component: () =>
+                    import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/EstudiantePerfil.vue'),
                 meta: {
                     profesor: true
                 },

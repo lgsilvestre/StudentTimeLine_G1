@@ -226,8 +226,10 @@
                                         </v-card-title>
                                         <h4 class="px-5 pt-6">Ingrese el periodo de datos que desea exportar:</h4>
                                         <v-container class="pt-0">
+                                            
                                             <v-row class="justify-right px-5">
                                                 <v-col cols="1"> 
+                                                    <v-form ref="form2"  >
                                                     <v-radio-group column class="pt-0 mt-0">
                                                         <v-radio
                                                             class="pb-2 mt-5"
@@ -240,6 +242,7 @@
                                                             @mousedown="rangoAnhos" 
                                                         ></v-radio>
                                                     </v-radio-group>
+                                                    </v-form>
                                                 </v-col>
                                                 <v-col cols="5" class="mt-5">
                                                     <h4 class="mb-8">Por Escuela :</h4>
@@ -306,6 +309,7 @@
                                                                 v-model="fechaTer"
                                                                 :max="new Date().toISOString().substr(0, 10)"
                                                                 min="1950-01-01"
+                                                                
                                                                 @change="save"
                                                                 @input="menu2 = false"
                                                                 
@@ -530,6 +534,7 @@
       },
       reset() {
         this.$refs.form.reset();
+        this.$refs.form2.reset();
       },
       
 
@@ -741,46 +746,57 @@
         },
         resetYCerrarExportar(){
             this.dialogExportar = false;
-            this.fechaIni= new Date().toISOString().substr(0, 10);
-            this.fechaTer=new Date().toISOString().substr(0, 10);
+            this.reset();
             this.unAnhoVariable=true;
             this.rangoAnhosVariable=true;
-            this.reset();
+            this.fechaIni= new Date().toISOString().substr(0, 10);
+            this.fechaTer=new Date().toISOString().substr(0, 10);
         },
         exportarEstudiantes(){
+            console.log("EXPORTAR POR ESCUELA"+this.unAnhoVariable )
+            console.log("EXPORTAR POR RANGO DE FECHAS"+this.rangoAnhosVariable )
             if(this.unAnhoVariable == false){
                 var escuela= this.escuelaExportar;
-                // console.log("Exportar por escuela" + escuela)
+                 console.log("Exportar por escuela" + escuela)
                 this.exportar(1,0,0,0,escuela);
                 
 
             }
-            if(this.rangoAnhosVariable == false && this.fechaTer > this.fechaIni ){
+            if(this.rangoAnhosVariable == false  ){
                 console.log("Exportar por ranfo de fechas")
                 this.exportar(2,this.fechaIni,this.fechaTer ,0,0);
 
             }
         },
+        formatDate (date) {
+        if (!date) return null
+
+        const [year, month, day] = date.split('-')
+        return `${day}-${month}-${year}`
+      },
         //Exporta las observaciones de un estudiantes.
         exportar(tipo, fechaIni,fechaTer,idEstudiante,escuela){
-            var fechaIni=fechaIni;
-            var fechaTet =fechaTer;
-            if(fechaIni == 0 || fechaTet== 0){
-                fechaIni = 0
-                fechaTet=0;;
-            }
+            var fechaInicio=this.formatDate(fechaIni);
+            var fechaTermino =this.formatDate(fechaTer);
+            console.log("FECHA INI  "+ fechaInicio);
+            console.log("FECHA fin  "+ fechaTermino);
+
+            // if(fechaInicio == 0 || fechaTermino== 0){
+            //     fechaInicio = 0
+            //     fechaTermino=0;;
+            // }
             let post = {
                     "tipo": tipo,
-                    "fechaInicio" : '13-05-2020' ,
-                    "fechaFin": '28-07-2020' ,
+                    "fechaInicio" : fechaInicio,
+                    "fechaFin": fechaTermino ,
                     "id": idEstudiante,
                     "escuela": escuela
                 };
-                //console.log(post)
+                console.log(post)
             var url = 'http://127.0.0.1:8000/api/v1/estudiante/exportar';
             axios.post(url,post,this.$store.state.config2)
             .then((result)=>{
-               // console.log(result);
+                console.log(result.data);
                 //var fileDownload = require('js-file-download');
                 //fileDownload(result.data, 'archivo.xlsx');
                 
