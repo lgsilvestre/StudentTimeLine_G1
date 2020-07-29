@@ -26,13 +26,11 @@ class Estudiante extends Model
     public function filtrarExportar(Request $request)
     {
         $tipo = $request->tipo;
-        $fechaInicio = $request->fechaInicio;
-        $fechaFin = $request->fechaFin;
-        $escuela = $request->escuela;
-        $idEstudiante = $request->id;
+        
 
         if($tipo == 1)
         {
+            $escuela = $request->escuela;
             $data = collect(DB::table('estudiantes')
                 ->select('matricula','rut','nombre_completo','correo','anho_ingreso','situacion_academica','porcentaje_avance','creditos_aprobados','escuelas.nombre')
                 ->join('escuelas', 'escuelas.id','=', 'estudiantes.escuela')
@@ -42,6 +40,8 @@ class Estudiante extends Model
         }
         elseif($tipo == 2)
         {
+            $fechaInicio = $request->fechaInicio;
+            $fechaFin = $request->fechaFin;
             $data = collect(DB::table('estudiantes')
                     ->select('matricula','rut','nombre_completo','correo','anho_ingreso','situacion_academica','porcentaje_avance','creditos_aprobados','escuelas.nombre', DB::Raw('COUNT(observaciones.id) AS cant_observaciones'))
                     ->join('escuelas', 'escuelas.id','=', 'estudiantes.escuela')
@@ -53,6 +53,7 @@ class Estudiante extends Model
         }
         elseif($tipo == 3)
         {
+            $idEstudiante = $request->id;
             /*
             $data = collect(DB::table('estudiantes')
                     ->select('matricula','rut','nombre_completo','correo','anho_ingreso','situacion_academica','porcentaje_avance','creditos_aprobados','escuelas.nombre', 'users.nombre', 'cursos.nombre', 'categorias.nombre','observaciones.titulo', 'observaciones.descripcion', 'observaciones.tipo')
@@ -88,6 +89,7 @@ class Estudiante extends Model
 
     public function getTableColumns(Request $request)
     {
+        $tipo = $request->tipo;
         /*$tipo = $request->tipo;
         $query = "SELECT column_name 
         FROM information_schema.columns 
