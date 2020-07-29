@@ -754,8 +754,8 @@
             this.fechaTer=new Date().toISOString().substr(0, 10);
         },
         exportarEstudiantes(){
-            console.log("EXPORTAR POR ESCUELA"+this.unAnhoVariable )
-            console.log("EXPORTAR POR RANGO DE FECHAS"+this.rangoAnhosVariable )
+            // console.log("EXPORTAR POR ESCUELA"+this.unAnhoVariable )
+            // console.log("EXPORTAR POR RANGO DE FECHAS"+this.rangoAnhosVariable )
             if(this.unAnhoVariable == false){
                 var escuela= this.escuelaExportar;
                  console.log("Exportar por escuela" + escuela)
@@ -769,23 +769,15 @@
 
             }
         },
-        formatDate (date) {
-        if (!date) return null
-
-        const [year, month, day] = date.split('-')
-        return `${day}-${month}-${year}`
-      },
+        
         //Exporta las observaciones de un estudiantes.
         exportar(tipo, fechaIni,fechaTer,idEstudiante,escuela){
-            var fechaInicio=this.formatDate(fechaIni);
-            var fechaTermino =this.formatDate(fechaTer);
-            console.log("FECHA INI  "+ fechaInicio);
-            console.log("FECHA fin  "+ fechaTermino);
+            var fechaInicio=fechaIni;
+            var fechaTermino =fechaTer;
+            // console.log("FECHA INI  "+ fechaInicio);
+            // console.log("FECHA fin  "+ fechaTermino);
 
-            // if(fechaInicio == 0 || fechaTermino== 0){
-            //     fechaInicio = 0
-            //     fechaTermino=0;;
-            // }
+         
             let post = {
                     "tipo": tipo,
                     "fechaInicio" : fechaInicio,
