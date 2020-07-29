@@ -28,7 +28,17 @@ class ObservacionController extends Controller
     public function index()
     {
         try{
-            $observaciones = Observacion::all();
+            $credenciales = JWTAuth::parseToken()->authenticate();
+            $observaciones = Observacion::where('creador', $credenciales['id'])->get();
+            foreach($observaciones as $observacion){
+                $observacion->estudiante=$observacion->getEstudiante->nombre_completo;
+                $observacion->creador=$observacion->getCreador->nombre;
+                $observacion->tipo=$observacion->getTipo->descripcion;
+                if($observacion->curso!=null){
+                    $observacion->curso=$observacion->getCurso->nombre;
+                }
+                $observacion->categoria=$observacion->getCategoria->nombre;
+            }
             return response()->json([
                 'success' => true,
                 'code' => 100,

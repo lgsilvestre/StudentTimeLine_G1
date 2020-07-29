@@ -19,8 +19,8 @@ class EstudianteController extends Controller
     public function __construct()
     {
         $this->middleware(['permission:create estudiante'], ['only' => ['create', 'store']]);
-        $this->middleware(['permission:read estudiante'], ['only' => 'index']);
-        $this->middleware(['permission:update estudiante'], ['only' => ['edit', 'update']]);
+        $this->middleware(['permission:read estudiante'], ['only' => ['index','edit']]);
+        $this->middleware(['permission:update estudiante'], ['only' => 'update']);
         $this->middleware(['permission:delete estudiante'], ['only' => 'delete']);
         $this->middleware(['permission:restore estudiante'], ['only' => 'disabled', 'restore']);
     }
@@ -182,7 +182,7 @@ class EstudianteController extends Controller
       
         try{
             $estudiante = Estudiante::find($id);
-            
+            $estudiante->escuela=$estudiante->getEscuela->nombre;
             if($estudiante==null){
                 return response()->json([
                     'success' => false,
