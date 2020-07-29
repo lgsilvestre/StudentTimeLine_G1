@@ -6,11 +6,11 @@ use App\Imports\EstudiantesImport;
 use Excel;
 use App\Estudiante;
 use DB; //Operaciones de DB
-use Log;
 use Validator;
+use App\Log;
 use Maatwebsite\Excel\HeadingRowImport;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\EstudianteController;
 
 
 class ImportarExcelController extends Controller
@@ -22,7 +22,7 @@ class ImportarExcelController extends Controller
     
     public function __construct()
     {
-        $this->middleware(['permission:importar estudiantes'], ['only' => ['index']]);
+        $this->middleware(['permission:importar estudiante'], ['only' => ['index', 'importar']]);
     }
 
     function index()
@@ -41,13 +41,12 @@ class ImportarExcelController extends Controller
             //Log::info($request->file('file'));
             $path = $request->file('file');
             $data = Excel::toArray(new EstudiantesImport, $path);
-
             $headerRow = head($data)[0];
             
             $i=0;
             $orden = [];
             
-            dump($headerRow);
+            //dump($headerRow);
             $error=[];
             $flag = true;
             if(!in_array ("COD_CARRERA" , $headerRow)){
@@ -89,7 +88,7 @@ class ImportarExcelController extends Controller
             if($flag == false){
                 return response()->json([
                     'success' => false,
-                    'code' => 301,
+                    'code' => 2,
                     'message' => 'Archivo Excel no posee el formato requerido.',
                     'data' => ['error'=>$error]
                 ], 422); 
@@ -125,7 +124,7 @@ class ImportarExcelController extends Controller
                 }
                 $i+=1;
             }
-            dump($orden);
+            //dump($orden);
 
             $credenciales = JWTAuth::parseToken()->authenticate();
             $escuela = $credenciales['escuela'];
@@ -134,41 +133,66 @@ class ImportarExcelController extends Controller
 
             $i=0;
 
-            $errorImportar[] = array();
+            $matriculas=array();
+            $resultados=array();
             foreach ($data[0] as $key => $row)
             {
-                $insert_data = new Request(array(
-                    'matricula'  => $row[$orden[1]],
-                    'rut'  => $row[$orden[2]],
-                    'nombre_completo'  => $row[$orden[3]],
-                    'correo'  => $row[$orden[4]],
-                    'anho_ingreso'  => $row[$orden[5]],
-                    'situacion_academica'  => $row[$orden[6]],
-                    'porcentaje_avance'  => $row[$orden[7]],
-                    'creditos_aprobados'  => $row[$orden[8]],
-                    'escuela'  => $escuela,    
-                ));
-                
-                $i+=1;
-                
-                if((!empty($insert_data)) && ($i>1))
-                {
-                    
-                    $estudiante = Estudiante::WHERE('matricula', $insert_data['matricula'])->get();
-                    if($estudiante == null){
-                        $controller = (new UsuarioController())->store($insert_data);
-                        return $controller;
+                if($row[$orden[1]]!=null){
+                    $insert_data = new Request(array(
+                        'matricula'  => $row[$orden[1]],
+                        'rut'  => $row[$orden[2]],
+                        'nombre_completo'  => $row[$orden[3]],
+                        'correo'  => $row[$orden[4]],
+                        'anho_ingreso'  => $row[$orden[5]],
+                        'situacion_academica'  => $row[$orden[6]],
+                        'porcentaje_avance'  => $row[$orden[7]],
+                        'creditos_aprobados'  => $row[$orden[8]],
+                        'escuela'  => $escuela,    
+                    ));
+                    $i+=1;
+                    if((!empty($insert_data)) && ($i>1))
+                    {
+                        try{
+                            $estudiante = Estudiante::Where('matricula', $insert_data['matricula'])->first();
+                        //----- Mecanismos anticaidas y reporte de errores -----
+                        //catch que se encarga en responder que paso en la sentencia sql
+                        }catch(\Illuminate\Database\QueryException $ex){ 
+                            return response()->json([
+                                'success' => false,
+                                'code' => 3,
+                                'message' => "Error en la base de datos",
+                                'data' => ['error'=>$ex]
+                            ], 409 );
+                        }
+                        if($estudiante == null){
+                            $controller = (new EstudianteController())->store($insert_data);
+                            array_push($matriculas , $insert_data['matricula'] );
+                            array_push($resultados , $controller->original['message']);
+                        }else{
+                            $controller = (new EstudianteController())->update($insert_data, $estudiante->id);
+                            array_push($matriculas , $insert_data['matricula'] );
+                            array_push($resultados , $controller->original['message']);
+                        }
                     }
-                    else{
-                        return $estudiante;
-                        $controller = (new UsuarioController())->update($insert_data, $estudiante['id']);
-                    }
-                    //DB::table('estudiantes')->insert($insert_data);
                 }
+                $i+=1;
             }
-            
-            //return response()->json($data,200);
-            //return back()->with('success', 'Estudiantes importados exitosamente.');
+            $resultado = array_combine($matriculas, $resultados);
+            $credenciales = JWTAuth::parseToken()->authenticate();
+            Log::create([
+                'titulo' => "Se han importado estudiantes",
+                'accion' => "Importar estudiantes",
+                'tipo' => "Informativo",
+                'descripcion' => "Se han importado estudiantes en la escuela:".$credenciales['escuela'],
+                'data' => $resultado,
+                'usuario' =>  $credenciales['id']
+            ]);
+            return response()->json([
+                'success' => true,
+                'code' => 1,
+                'message' => "Operacion realizada con exito",
+                'data' => ['data'=>$resultado]
+            ], 200);
         }
     }
         

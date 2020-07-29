@@ -19,20 +19,12 @@ class ExportarExcelController extends Controller
      */
     public function __construct()
     {
-        //$this->middleware(['permission:exportar estudiantes'], ['only' => ['index']]);
-        //$this->middleware(['permission:exportar estudiantes'], ['only' => ['exportar']]);
+        //$this->middleware(['permission:exportar estudiante'], ['only' => ['index']]);
+        //$this->middleware(['permission:exportar estudiante'], ['only' => ['exportar']]);
     }
 
     public function exportar(Request $request)
     {
-        $request = new Request([
-            'tipo'=> 2,
-            'fechaInicio'=> '2020-07-19',
-            'fechaFin'=>'2020-07-21',
-            'id'=> 1,
-            'escuela'=> 1
-        ]);
-
         if($request->tipo == 1 || $request->tipo == 2)
         {
             return Excel::download(new DataEstudiantes($request) , 'estudiantes.xlsx');
@@ -60,9 +52,9 @@ class DataEstudiantes implements FromCollection
         $columnas = $estudiante->getTableColumns($this->request);
 
         $estudiantes = $estudiante->filtrarExportar($this->request);
-    
+        
         $data = new collection();
-
+        
         foreach($columnas as $columna)
         {
             $data[0] = (object) $columna;

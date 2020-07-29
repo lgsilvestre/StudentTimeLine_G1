@@ -11,19 +11,18 @@
                     height="180px"
                     src="@/assets/Globales/fondo3.jpg"
                     >
-                    <v-card-title class="white--text " > 
-                            <v-col md="3" class="align-self-end" style="text-align:left; text-shadow: #555 2px 2px 3px; font-size:150% ;">
-                                        <v-icon class="pb-2" color="white" style="font-size:100% ;">fas fa-user-graduate</v-icon>
-                                        <strong class="pl-2" style="font-size:95% ">Estudiantes</strong>
+                    <v-card-title class="white--text" style="padding:0;" > 
+                        <v-row class="px-5"> 
+                            <v-col cols="12" class="pt-1">
+                                <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" >Estudiantes</strong>
                             </v-col>
-                            <v-col  md="6" class="align-self-end" style="text-align:center;">
+                            <v-col cols="7" sm="9" md="9" class="align-self-end" >
                                 <v-text-field
                                     v-model="buscar"
                                     append-icon="mdi-magnify"
                                     label="Buscar"
                                     hide-details
                                     outlined
-                                    class="px-5 pb-2"
                                     clearable
                                     dense
                                     solo
@@ -33,12 +32,12 @@
                                 ></v-text-field>
                                 
                             </v-col>
-                            <v-col  md="3" class="align-self-end" style="text-align:right;">
+                            <v-col  cols="5" sm="3" md="3" class="align-self-end" style="text-align:right;">
                                 <v-dialog v-model="dialogAgregarEstudiante" persistent max-width="500px">
                                     <template v-slot:activator="{ on }">
                                         <v-btn
                                         fab
-                                        large
+                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
                                         bottom
                                         left
                                         v-on="on"
@@ -47,7 +46,7 @@
                                             <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
                                         </v-btn>
                                     </template>
-                                    <v-card elevation="1" shaped>
+                                    <v-card elevation="1">
                                         <v-card-title
                                         class="headline primary text--center"
                                         primary-title
@@ -105,8 +104,8 @@
                                                 </v-row>
 
                                             </v-container>
-                                            <v-container v-if="containerAgregarEstudianteUnico">
-                                                <v-form  class=" px-10 pt-8 "  >
+                                            <v-container class="px-5 mt-5" color="primary" v-if="containerAgregarEstudianteUnico">
+                                                
                                                     <v-text-field  
                                                     v-model="estudianteImportar.matricula"
                                                     label="Matricula" outlined
@@ -163,25 +162,26 @@
                                                     ></v-select>
                                                     <div style="text-align:right;" class="mb-1">
                                                         <v-btn rounded color="warning" 
+                                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
                                                         @click="volverYcerrarAgregarEstudiantes"
                                                         >
                                                             <h4 class="white--text">Cancelar</h4>
                                                         </v-btn>
                                                         <v-btn 
                                                         @click="agregarEstudiantesUnico"
+                                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
                                                         rounded color="secondary" class="ml-2"   >
                                                             <h4 class="white--text">Aceptar</h4>
                                                         </v-btn>
                                                     </div>
-                                                </v-form> 
+                                                
                                             </v-container>
-                                            <v-container v-if="containerAgregarEstudianteImportar" class="px-10">
+                                            <v-container v-if="containerAgregarEstudianteImportar" class="px-5 mt-5">
                                                 <v-file-input 
                                                 id="file" 
                                                 v-model="file"
                                                 ref="file" 
                                                 type="file"
-                                                class="pt-5"
                                                 label="Seleccione un archivo"
                                                 color="secondary"
                                                 outlined
@@ -191,12 +191,13 @@
                                                 </v-file-input>
                                                 <div style="text-align:right;" class="mb-1">
                                                     <v-btn rounded color="warning" 
-                                                    
+                                                    :small="$vuetify.breakpoint.smAndDown ? true : false"
                                                     @click="volverYcerrarAgregarEstudiantes"
                                                     >
                                                         <h4 class="white--text">Cancelar</h4>
                                                     </v-btn>
                                                     <v-btn rounded color="secondary" class="ml-2"   
+                                                    :small="$vuetify.breakpoint.smAndDown ? true : false"
                                                     @click="agregarEstudiantesImportar">
                                                         <h4 class="white--text">Aceptar</h4>
                                                     </v-btn>
@@ -206,92 +207,117 @@
                                         </v-form> 
                                     </v-card>
                                 </v-dialog>
+
+                                <!-- Dialog exportar observaciones -->
                                 <v-dialog v-model="dialogExportar" persistent max-width="600px">
+                                    
                                     <template v-slot:activator="{ on}" >
-                                        <v-btn
-                                        fab
-                                        large
-                                        bottom
-                                        left
-                                        v-on="on"
-                                        class="ml-2"
-                                        >
+                                        <v-btn fab bottom
+                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                        left v-on="on" class="ml-2" >
                                             <v-icon class="mx-2" color="secondary">fas fa-file-download</v-icon>
                                         </v-btn>
                                     </template>
-                                    <v-card elevation="1" shaped>
+                                    <v-card elevation="1">
                                         <v-card-title
                                         class="headline primary text--center"
                                         primary-title
                                         >
-                                        <h5 class="white--text ">Ingrese el periodo de datos que desea exportar:</h5>
+                                        <strong class="white--text "> Exportar estudiantes</strong>
                                         </v-card-title>
+                                        <h4 class="px-5 pt-6">Ingrese el periodo de datos que desea exportar:</h4>
                                         <v-container class="pt-0">
+                                            
                                             <v-row class="justify-right px-5">
                                                 <v-col cols="1"> 
+                                                    <v-form ref="form2"  >
                                                     <v-radio-group column class="pt-0 mt-0">
                                                         <v-radio
-                                                            class="pb-2 mt-3"
-                                                            color="secondary"
-                                                            @mousedown="todosLosAnhos"                                                        
-                                                        >
-                                                        </v-radio>
-                                                        <v-radio
-                                                            class="pb-2 mt-6"
+                                                            class="pb-2 mt-5"
                                                             color="warning"
                                                             @mousedown="unAnho" 
                                                         ></v-radio>
                                                         <v-radio
-                                                            class="pb-2 mt-6"
+                                                            class="pb-2 mt-9"
                                                             color="accent"
                                                             @mousedown="rangoAnhos" 
                                                         ></v-radio>
                                                     </v-radio-group>
+                                                    </v-form>
                                                 </v-col>
-                                                <v-col cols="5" class="mt-3">
-                                                    <h4 class="mb-10">Todos los años </h4>
-                                                    <h4 class="mb-10">Ingrese el año a exportar :</h4>
-                                                    <h4 >Ingrese el rango de años  :</h4>
-                                            
+                                                <v-col cols="5" class="mt-5">
+                                                    <h4 class="mb-8">Por Escuela :</h4>
+                                                    <h4 class="pt-5" >Ingrese el rango de años  :</h4>
                                                 </v-col>
                                                 <v-col cols="6">
-                                                    <v-row class="mt-12 pt-5 mb-0 pb-0">
-                                                        <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
-                                                            <v-text-field
-                                                            v-model="anhov1"
-                                                            dense
-                                                            outlined
-                                                            color="secondary"
-                                                            :disabled="unAnhoVariable"
-                                                            :rules="rules"
-                                                            type="number"
-                                                            ></v-text-field>
+                                                    <v-row class="mt-1 pt-1 mb-0 pb-0">
+                                                        <v-col cols="12" class="mt-0 pt-0 mb-0 pb-0 ">
+                                                            <v-form ref="form"  >
+                                                                
+                                                            <v-select   
+                                                                v-model="escuelaExportar"
+                                                                :items="listaEscuela"
+                                                                item-text="nombre"
+                                                                item-value="id"
+                                                                label="Escuela" 
+                                                                :disabled="unAnhoVariable"
+                                                                outlined
+                                                                dense
+                                                                color="secondary"
+                                                                ></v-select >
+                                                            </v-form>
                                                         </v-col>
                                                     </v-row>
                                                     <v-row class="mt-0 pt-0 mb-0 pb-0">
                                                         
                                                         <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
-                                                            
-                                                            <v-text-field
-                                                            v-model="anhov2"
-                                                            dense
-                                                            outlined
-                                                            color="secondary"
-                                                            :disabled="rangoAnhosVariable"
-                                                            :rules="rules"
-                                                            type="number"
-                                                            ></v-text-field>
+                                                            <v-menu ref="menu" v-model="menu" :close-on-content-click="false"
+                                                            transition="scale-transition"
+                                                            offset-y
+                                                            min-width="290px"
+                                                            :disabled="rangoAnhosVariable"> 
+                                                                <template v-slot:activator="{ on, attrs }">
+                                                                    <v-text-field v-model="fechaIni" 
+                                                                    readonly v-bind="attrs" v-on="on" >
+                                                                    </v-text-field>
+                                                                </template>
+                                                                <v-date-picker
+                                                                ref="picker"
+                                                                v-model="fechaIni"
+                                                                :max="new Date().toISOString().substr(0, 10)"
+                                                                min="1950-01-01"
+                                                                @change="save"
+                                                                @input="menu = false"
+                                                                
+                                                                ></v-date-picker>
+
+                                                            </v-menu>
+                                                           
                                                         </v-col>
-                                                        <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
-                                                            <v-text-field
-                                                            v-model="anhov3"
-                                                            dense
-                                                            color="secondary"
-                                                            :disabled="rangoAnhosVariable"
-                                                            :rules="rules"
-                                                            outlined
-                                                            type="number"
-                                                            ></v-text-field>
+                                                        <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">  
+                                                            <v-menu ref="menu2" v-model="menu2" :close-on-content-click="false"
+                                                            transition="scale-transition"
+                                                            offset-y
+                                                            min-width="290px"
+                                                            :disabled="rangoAnhosVariable"> 
+                                                                <template v-slot:activator="{ on, attrs }">
+                                                                    <v-text-field v-model="fechaTer" 
+                                                                    readonly v-bind="attrs" v-on="on" >
+                                                                    </v-text-field>
+                                                                </template>
+                                                                <v-date-picker
+                                                                ref="picker"
+                                                                v-model="fechaTer"
+                                                                :max="new Date().toISOString().substr(0, 10)"
+                                                                min="1950-01-01"
+                                                                
+                                                                @change="save"
+                                                                @input="menu2 = false"
+                                                                
+                                                                ></v-date-picker>
+
+                                                            </v-menu>
+                                                           
                                                         </v-col>
                                                     </v-row>
                                                     
@@ -299,18 +325,19 @@
                                             </v-row>
                                             <v-alert 
                                             v-model="alertaErrorRangoAnhos"
-                                            
                                             dismissible
                                             type="error">
                                             El año de inicio no puede ser mayor al del final
                                             </v-alert>
-                                            <div style="text-align:right;" class="mb-2 mr-5">
+                                            <div style="text-align:right;" class="mb-1 mr-5">
                                                 <v-btn rounded color="warning" 
+                                                :small="$vuetify.breakpoint.smAndDown ? true : false"
                                                 @click="resetYCerrarExportar"
                                                 >
                                                     <h4 class="white--text">Cancelar</h4>
                                                 </v-btn>
                                                 <v-btn rounded color="secondary" class="ml-2"  
+                                                :small="$vuetify.breakpoint.smAndDown ? true : false"
                                                 @click="exportarEstudiantes" >
                                                     <h4 class="white--text">Aceptar</h4>
                                                 </v-btn>
@@ -320,6 +347,7 @@
                                     </v-card>
                                 </v-dialog>
                             </v-col>
+                        </v-row>
                     </v-card-title>
                     </v-img>
                 <v-data-table
@@ -331,13 +359,18 @@
                 class="elevation-1 "
                 >
                     <template v-slot:item.actions="{ item }">
-                    <v-btn color="white" fab small depressed class="mr-2 py-2" @click="perfilEstudiante(item)">
-                        <v-icon  
-                        color="primary"
-                        >
-                        fas fa-edit
-                        </v-icon>
-                    </v-btn>
+                        <v-tooltip bottom color="primary">
+                            <template v-slot:activator="{ on }">
+                                <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on" @click="perfilEstudiante(item)">
+                                    <v-icon  
+                                    color="primary"
+                                    >
+                                    fas fa-external-link-alt
+                                    </v-icon>
+                                </v-btn>
+                            </template>
+                            <span><strong>Ver Perfil</strong></span>
+                        </v-tooltip>
                     </template>                                                         
                 </v-data-table>
                 </v-card>
@@ -426,12 +459,8 @@
         listaEstudiantesAux:[],
         dessertsAux:[],
         listaEscuelaAux:[],
-        todosLosAnhosVariable: true,
-        unAnhoVariable: true,
-        rangoAnhosVariable: true,
-        anhov1: new Date().getFullYear(),
-        anhov2: new Date().getFullYear(),
-        anhov3: new Date().getFullYear(),
+        listaEscuela:[],
+        
         alertaErrorRangoAnhos: false,
         dialogExportar: false,
         rules: [
@@ -461,24 +490,55 @@
         listaSituacionAcademica:[
             'Regular ','Egresado ', 'Eliminado ', 'Titulado',
             'Intercambio','Postergación','Retiro','Temporal'
-        ]
+        ],
+        escuelaExportar:'',
+        // todosLosAnhosVariable: true,
+        unAnhoVariable: true,
+        rangoAnhosVariable: true,
+        // anhov1: new Date().getFullYear(),
+        // anhov2: new Date().getFullYear(),
+        // anhov3: new Date().getFullYear(),
+        //mis varaibles para trabjar las fechas.
+
+        
+         fechaIni: new Date().toISOString().substr(0, 10),
+        menu: false,
+
+        menu2:false,
+        fechaTer: new Date().toISOString().substr(0, 10),
+
+
 
     }),
     computed: {
-        ...mapState(['admin','secretariaEscuela'])
+        ...mapState(['admin','secretariaEscuela']),
+    //     computedDateFormatted () {
+    //     return this.formatDate(this.date)
+    //   },
     },
-    watch: {
+     watch: {
+         menu (val) {
+        val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
+      },
     },
     beforeMount(){
         this.obtenerEstudiantes();
+        this.obtenerEscuelas();
     },
-    //beforeCreate(){
-        //this.obtenerEstudiantes();
-    //},
     created () {
         this.obtenerEscuelas();
     },
     methods: {
+
+         save (date) {
+        this.$refs.menu.save(date)
+      },
+      reset() {
+        this.$refs.form.reset();
+        this.$refs.form2.reset();
+      },
+      
+
         nada(item){
             
         },
@@ -500,15 +560,17 @@
         agregarEstudiantesImportar(){
             let formData = new FormData();
             formData.append('file',this.file);
-            var url = 'http://127.0.0.1:8000/api/estudiante/importar';
-            axios.post(url,formData)
+            var url = 'http://127.0.0.1:8000/api/v1/estudiante/importar';
+            axios.post(url,formData,this.$store.state.config)
             .then((result)=>{
+                //console.log(result);
                 if (result.data.success == true) {
                     this.resetImportarEstudiantes();
                     this.obtenerEstudiantes();
                 }
             })
             .catch((error)=>{
+                console.log(error);
                 if (error.message == 'Network Error') {
                     console.log(error);
                     this.alertError = true;
@@ -524,11 +586,13 @@
             var url = 'http://127.0.0.1:8000/api/v1/estudiante';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
-                console.log(result.data);
+               //console.log(result.data);
                 if (result.data.success == true) {
                     for (let index = 0; index < result.data.data.estudiantes.length; index++) {
                     const element = result.data.data.estudiantes[index];
+                    //console.log(element)
                     let estudiante = {
+                        id: element.id,
                         matricula: element.matricula,
                         rut: element.rut,
                         nombre_completo: element.nombre_completo,
@@ -666,53 +730,74 @@
             });
         },
         todosLosAnhos(){
-            this.todosLosAnhosVariable= false;
             this.unAnhoVariable= true;
             this.rangoAnhosVariable= true;
-            this.anhov1= new Date().getFullYear();
-            this.anhov2= new Date().getFullYear();
-            this.anhov3= new Date().getFullYear();
+
             
         },
         unAnho(){
-            this.todosLosAnhosVariable= true;
             this.unAnhoVariable= false;
             this.rangoAnhosVariable= true;
-            this.anhov2= new Date().getFullYear();
-            this.anhov3= new Date().getFullYear();
             
         },
         rangoAnhos(){
-            this.todosLosAnhosVariable= true;
             this.unAnhoVariable= true;
             this.rangoAnhosVariable=false;
-            this.anhov1= new Date().getFullYear();
             
         },
         resetYCerrarExportar(){
             this.dialogExportar = false;
-            this.anhov1= new Date().getFullYear();
-            this.anhov2= new Date().getFullYear();
-            this.anhov3= new Date().getFullYear();
+            this.reset();
+            this.unAnhoVariable=true;
+            this.rangoAnhosVariable=true;
+            this.fechaIni= new Date().toISOString().substr(0, 10);
+            this.fechaTer=new Date().toISOString().substr(0, 10);
         },
         exportarEstudiantes(){
-            //if (this.anhov2 > this.anhov3) {
-                //this.alertaErrorRangoAnhos = true;
-                //console.log('rango mal');
-            //}
+            console.log("EXPORTAR POR ESCUELA"+this.unAnhoVariable )
+            console.log("EXPORTAR POR RANGO DE FECHAS"+this.rangoAnhosVariable )
+            if(this.unAnhoVariable == false){
+                var escuela= this.escuelaExportar;
+                 console.log("Exportar por escuela" + escuela)
+                this.exportar(1,0,0,0,escuela);
+                
+
+            }
+            if(this.rangoAnhosVariable == false  ){
+                console.log("Exportar por ranfo de fechas")
+                this.exportar(2,this.fechaIni,this.fechaTer ,0,0);
+
+            }
+        },
+        formatDate (date) {
+        if (!date) return null
+
+        const [year, month, day] = date.split('-')
+        return `${day}-${month}-${year}`
+      },
+        //Exporta las observaciones de un estudiantes.
+        exportar(tipo, fechaIni,fechaTer,idEstudiante,escuela){
+            var fechaInicio=this.formatDate(fechaIni);
+            var fechaTermino =this.formatDate(fechaTer);
+            console.log("FECHA INI  "+ fechaInicio);
+            console.log("FECHA fin  "+ fechaTermino);
+
+            // if(fechaInicio == 0 || fechaTermino== 0){
+            //     fechaInicio = 0
+            //     fechaTermino=0;;
+            // }
             let post = {
-                "tipo": 1,
-                "fechaInicio" :"2020-07-19" ,
-                "fechaFin":"2020-07-21" ,
-                "id": 1,
-                "escuela": 1
-            };
+                    "tipo": tipo,
+                    "fechaInicio" : fechaInicio,
+                    "fechaFin": fechaTermino ,
+                    "id": idEstudiante,
+                    "escuela": escuela
+                };
+                console.log(post)
             var url = 'http://127.0.0.1:8000/api/v1/estudiante/exportar';
             axios.post(url,post,this.$store.state.config2)
-            //var url = 'http://127.0.0.1:8000/api/v1/exportar';
-            //axios.get(url,this.$store.state.config2, {responseType: 'blob'})
             .then((result)=>{
-                console.log(result);
+                console.log(result.data);
                 //var fileDownload = require('js-file-download');
                 //fileDownload(result.data, 'archivo.xlsx');
                 
@@ -727,6 +812,8 @@
                 link.click();
                 this.alertAcept = true;
                 this.textoAcept = 'Se realizó la operación correctamente'
+                this.dialogExportar=false;
+                this.resetYCerrarExportar();
                 
             })
             .catch((error) => {

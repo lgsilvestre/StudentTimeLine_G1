@@ -34,7 +34,7 @@ Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1'], function () {
     #Controlador de estudiante
     Route::get('/estudiante/disabled','EstudianteController@disabled');
     Route::post('/estudiante/restore/{id}','EstudianteController@restore');
-    Route::post('/estudiante/importar', 'ImportarExcelController@index');
+    //Route::post('/estudiante/importar', 'ImportarExcelController@index');
     Route::post('/estudiante/importar', 'ImportarExcelController@importar');
     Route::post('/estudiante/exportar', 'ExportarExcelController@exportar');
     Route::post('/estudiante/exportarPDF', 'ExportarPDFController@exportar');
@@ -56,13 +56,17 @@ Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1'], function () {
     Route::post('/ayudanteCurso/restore/{id}','AyudanteConCursoController@restore');
     Route::resource('/ayudanteCurso','AyudanteConCursoController');
     #controlador de observaciones
-    Route::get('/observaciones/disabled','ObservacionController@disabled');
-    Route::post('/observaciones/restore/{id}','ObservacionController@restore');
-    Route::resource('/observaciones','ObservacionController');
+    Route::get('/observacion/disabled','ObservacionController@disabled');
+    Route::post('/observacion/restore/{id}','ObservacionController@restore');
+    Route::resource('/observacion','ObservacionController');
     #controlador de categorias
-    Route::get('/categorias/disabled','CategoriaController@disabled');
-    Route::post('/categorias/restore/{id}','CategoriaController@restore');
-    Route::resource('/categorias','CategoriaController');
+    Route::get('/categoria/disabled','CategoriaController@disabled');
+    Route::post('/categoria/restore/{id}','CategoriaController@restore');
+    Route::resource('/categoria','CategoriaController');
+    #controlador de tipo de observaciones
+    Route::resource('/tipoObservacion','TipoObservacionController');
+    #controlador de log
+    Route::get('/log','LogController@index');
 });
 
 Route::group(['middleware' => [], 'prefix' => 'v1'], function () {

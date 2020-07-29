@@ -16,8 +16,8 @@ class ObservacionTableSeeder extends Seeder
             'estudiante' => '1',
             'titulo' => 'Comentario 1', 
             'descripcion' => 'Muy buen ayudante.',
-            'profesor' => 7,
-            'tipo' =>'POSITIVA',
+            'creador' => 1,
+            'tipo' =>'1',
             'curso' => 1, 
             'categoria' => 1,
         ]);
@@ -27,8 +27,8 @@ class ObservacionTableSeeder extends Seeder
             'estudiante' => '1',
             'titulo' => 'Comentario 2', 
             'descripcion' => 'Muy buen ayudante.',
-            'profesor' => 7,
-            'tipo' =>'POSITIVA',
+            'creador' => 7,
+            'tipo' =>'1',
             'curso' => 1, 
             'categoria' => 1,
         ]);
@@ -38,8 +38,8 @@ class ObservacionTableSeeder extends Seeder
             'estudiante' => '1',
             'titulo' => 'Comentario 3', 
             'descripcion' => 'Muy buen ayudante.',
-            'profesor' => 7,
-            'tipo' =>'POSITIVA',
+            'creador' => 7,
+            'tipo' =>'2',
             'curso' => 1, 
             'categoria' => 1,
         ]);

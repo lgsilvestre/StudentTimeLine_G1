@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Observacion;
 use Illuminate\Http\Request;
+use Validator;
+
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ObservacionController extends Controller
 {
@@ -65,15 +68,14 @@ class ObservacionController extends Controller
      */
     public function store(Request $request)
     {
-        $entradas = $request->only('ayudante', 'estudiante','titulo', 'descripcion','profesor', 'tipo','curso', 'categoria');
+        $entradas = $request->only('ayudante', 'estudiante','titulo', 'descripcion', 'tipo','curso', 'categoria');
         $validator = Validator::make($entradas, [
-            'ayudante' => ['required', 'numeric'],
+            'ayudante' => ['nullable', 'numeric'],
             'estudiante' => [' required', 'numeric'],
             'titulo' => ['required', 'string'],
             'descripcion' => [' required', 'string'],
-            'profesor' => ['required', 'numeric'],
-            'tipo' => [' required', 'string'],
-            'curso' => [' required', 'numeric'],
+            'tipo' => [' required', 'numeric'],
+            'curso' => [' nullable', 'numeric'],
             'categoria' => [' required', 'numeric']
         ]);
         if ($validator->fails()) {
@@ -96,8 +98,8 @@ class ObservacionController extends Controller
         if(!array_key_exists ("descripcion" , $entradas)){
             $entradas['descripcion'] = null;
         }
-        if(!array_key_exists ("profesor" , $entradas)){
-            $entradas['profesor'] = null;
+        if(!array_key_exists ("creador" , $entradas)){
+            $entradas['creador'] = null;
         }
         if(!array_key_exists ("tipo" , $entradas)){
             $entradas['tipo'] = null;
@@ -108,13 +110,14 @@ class ObservacionController extends Controller
         if(!array_key_exists ("categoria" , $entradas)){
             $entradas['categoria'] = null;
         }
+        $credenciales = JWTAuth::parseToken()->authenticate();
         try{
             $observacion = new Observacion();
             $observacion->ayudante = $entradas['ayudante'];
             $observacion->estudiante = $entradas['estudiante'];
             $observacion->titulo = $entradas['titulo'] ;
             $observacion->descripcion = $entradas['descripcion'];
-            $observacion->profesor = $entradas['profesor'];
+            $observacion->creador = $credenciales['id'];
             $observacion->tipo = $entradas['tipo'];
             $observacion->curso = $entradas['curso'];
             $observacion->categoria = $entradas['categoria'];
@@ -175,14 +178,13 @@ class ObservacionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $entradas = $request->only('ayudante', 'estudiante','titulo', 'descripcion','profesor', 'tipo','curso', 'categoria');
+        $entradas = $request->only('ayudante', 'estudiante','titulo', 'descripcion', 'tipo','curso', 'categoria');
         $validator = Validator::make($entradas, [
             'ayudante' => ['nullable', 'numeric'],
             'estudiante' => [' nullable', 'numeric'],
             'titulo' => ['nullable', 'string'],
             'descripcion' => [' nullable', 'string'],
-            'profesor' => ['nullable', 'numeric'],
-            'tipo' => [' nullable', 'string'],
+            'tipo' => [' nullable', 'numeric'],
             'curso' => [' nullable', 'numeric'],
             'categoria' => [' nullable', 'numeric']
         ]);
@@ -206,9 +208,6 @@ class ObservacionController extends Controller
         if(!array_key_exists ("descripcion" , $entradas)){
             $entradas['descripcion'] = null;
         }
-        if(!array_key_exists ("profesor" , $entradas)){
-            $entradas['profesor'] = null;
-        }
         if(!array_key_exists ("tipo" , $entradas)){
             $entradas['tipo'] = null;
         }
@@ -219,6 +218,7 @@ class ObservacionController extends Controller
             $entradas['categoria'] = null;
         }
         try{
+            $credenciales = JWTAuth::parseToken()->authenticate();
             $observacion = Observacion::find($id);
             if ($observacion == null) {
                 return response()->json([
@@ -228,6 +228,7 @@ class ObservacionController extends Controller
                     'data' => null
                 ], 409);
             }
+            $observacion->creador = $credenciales['id'];
             if($entradas['ayudante']!=null){
                 $observacion->ayudante = $entradas['ayudante'];
             }
@@ -240,9 +241,6 @@ class ObservacionController extends Controller
             if($entradas['descripcion']!=null){
                 $observacion->descripcion = $entradas['descripcion'];
             }
-            if($entradas['profesor']!=null){
-                $observacion->profesor = $entradas['profesor'];
-            }
             if($entradas['tipo']!=null){
                 $observacion->tipo = $entradas['tipo'];
             }
@@ -253,7 +251,6 @@ class ObservacionController extends Controller
                 $observacion->categoria = $entradas['categoria'];
             }
             $observacion->save();
-            return compact('observacion');
             return response()->json([
                 'success' => true,
                 'code' => 600,

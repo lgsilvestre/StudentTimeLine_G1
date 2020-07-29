@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\InstanciaCurso;
+use App\Profesor_Con_Curso;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -27,12 +28,20 @@ class InstanciaCursoController extends Controller
      */
     public function index(){
         try{
-            $insCurso = InstanciaCurso::all();
+            $insCursos = InstanciaCurso::all();
+            foreach($insCursos as $insCurso){
+                $insCurso->curso=$insCurso->getCurso->nombre;
+                $profesores = Profesor_Con_Curso::where('curso', $insCurso->id)->get();
+                foreach($profesores as $profesor){
+                    $insCurso->idProfesor= $profesor->id;
+                    $insCurso->nombreProfesor= $profesor->getProfesor->nombre;
+                }
+            }
             return response()->json([
                 'success' => true,
                 'code' => 700,
                 'message' => "Operacion realizada con exito",
-                'data' =>['insCurso'=> $insCurso]
+                'data' =>['insCursos'=> $insCursos]
             ], 200);
         } catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
@@ -119,12 +128,15 @@ class InstanciaCursoController extends Controller
      */
     public function show($id){
         try{
-            $insCurso = InstanciaCurso::Where('semestre', '=' , $id)->get();
+            $insCursos = InstanciaCurso::Where('semestre', '=' , $id)->get();
+            foreach($insCursos as $insCurso){
+                $insCurso->curso=$insCurso->getCurso->nombre;
+            }
             return response()->json([
                 'success' => true,
                 'code' => 400,
                 'message' => "Operacion realizada con exito",
-                'data' => ['insCurso'=>$insCurso]
+                'data' => ['insCursos'=>$insCursos]
             ], 200);
         } catch(\Illuminate\Database\QueryException $ex){ 
             return response()->json([
@@ -200,7 +212,7 @@ class InstanciaCursoController extends Controller
                 $insCurso->curso = $entradas['curso'];
             }
             if($entradas['seccion']!=null){
-                $insCurso->curso = $entradas['seccion'];
+                $insCurso->seccion = $entradas['seccion'];
             }
             $insCurso->save();
             return response()->json([
