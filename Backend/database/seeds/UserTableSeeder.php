@@ -125,7 +125,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 8,
             'rol' => 'profesor', 
             'foto' => null,
-            'email' => 'wilfred@gmail.com',
+            'email' => 'a@gmail.com',
             'password' => bcrypt('12345678')
         ]);
         $profesor->assignRole('profesor');
@@ -135,7 +135,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 8,
             'rol' => 'profesor', 
             'foto' => null,
-            'email' => 'Milton@gmail.com',
+            'email' => 'b@gmail.com',
             'password' => bcrypt('12345678')
         ]);
         $profesor->assignRole('profesor');
@@ -146,7 +146,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 4,
             'rol' => 'profesor', 
             'foto' => null,
-            'email' => 'jhinojosa@utalca.cl',
+            'email' => 'c@utalca.cl',
             'password' => bcrypt('12345678')
         ]);
         $profesor->assignRole('profesor');
@@ -156,7 +156,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 4,
             'rol' => 'profesor', 
             'foto' => null,
-            'email' => 'ambrosio@utalca.cl',
+            'email' => 'e@utalca.cl',
             'password' => bcrypt('12345678')
         ]);
         $profesor->assignRole('profesor');
@@ -166,7 +166,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 5,
             'rol' => 'profesor', 
             'foto' => null,
-            'email' => 'damora@utalca.cl',
+            'email' => 'w@utalca.cl',
             'password' => bcrypt('12345678')
         ]);
 
@@ -175,9 +175,9 @@ class UserTableSeeder extends Seeder
         $profesor=User::create([
             'nombre' => 'Ernesto Del Rosario Santibañez Gonzalez',
             'escuela' => 2,
-            'rol' => 'profesor', 
+            'rol' => 'q', 
             'foto' => null,
-            'email' => 'esantibanez@utalca.cl',
+            'email' => 'as@utalca.cl',
             'password' => bcrypt('12345678')
         ]);
         $profesor->assignRole('profesor');
@@ -187,7 +187,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 1,
             'rol' => 'profesor', 
             'foto' => null,
-            'email' => 'mbardeen@utalca.cl',
+            'email' => 'zx@utalca.cl',
             'password' => bcrypt('12345678')
         ]);
         $profesor->assignRole('profesor');
@@ -197,7 +197,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 1,
             'rol' => 'profesor', 
             'foto' => null,
-            'email' => 'rangles@utalca.cl',
+            'email' => 'az@utalca.cl',
             'password' => bcrypt('12345678')
         ]);
         $profesor->assignRole('profesor');
@@ -207,7 +207,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 8,
             'rol' => 'profesor', 
             'foto' => null,
-            'email' => 'ctenreiro@utalca.cl',
+            'email' => 'uy@utalca.cl',
             'password' => bcrypt('12345678')
         ]);
         $profesor->assignRole('profesor');
@@ -217,7 +217,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 2,
             'rol' => 'profesor', 
             'foto' => null,
-            'email' => 'ealvarez@utalca.cl',
+            'email' => 'ih@utalca.cl',
             'password' => bcrypt('12345678')
         ]);
         $profesor->assignRole('profesor');
@@ -227,7 +227,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 1,
             'rol' => 'profesor', 
             'foto' => null,
-            'email' => 'jalzate@utalca.cl',
+            'email' => 'nb@utalca.cl',
             'password' => bcrypt('12345678')
         ]);
         $profesor->assignRole('profesor');
@@ -237,7 +237,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 5,
             'rol' => 'profesor', 
             'foto' => null,
-            'email' => 'earellano@utalca.cl',
+            'email' => 'asd@utalca.cl',
             'password' => bcrypt('12345678')
         ]);
         $profesor->assignRole('profesor');
@@ -247,7 +247,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 1,
             'rol' => 'profesor', 
             'foto' => null,
-            'email' => 'marenas@utalca.cl',
+            'email' => 'dsa@utalca.cl',
             'password' => bcrypt('12345678')
         ]);
         $profesor->assignRole('profesor');
@@ -257,7 +257,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 4,
             'rol' => 'profesor', 
             'foto' => null,
-            'email' => 'cbaier@utalca.cl',
+            'email' => 'cbaiberer@utalca.cl',
             'password' => bcrypt('12345678')
         ]);
         $profesor->assignRole('profesor');
@@ -268,7 +268,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 3,
             'rol' => 'profesor', 
             'foto' => null,
-            'email' => 'jamunoz@utalca.cl',
+            'email' => 'sadx@utalca.cl',
             'password' => bcrypt('12345678')
         ]);
         $profesor->assignRole('profesor');
@@ -278,7 +278,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 3,
             'rol' => 'profesor', 
             'foto' => null,
-            'email' => 'lalbornoz@utalca.cl',
+            'email' => 'tsbsdf@utalca.cl',
             'password' => bcrypt('12345678')
         ]);
         $profesor->assignRole('profesor');
@@ -288,7 +288,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 5,
             'rol' => 'profesor', 
             'foto' => null,
-            'email' => 'aduran@utalca.cl',
+            'email' => 'ndfgw@utalca.cl',
             'password' => bcrypt('12345678')
         ]);
         $profesor->assignRole('profesor');
@@ -298,7 +298,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 1,
             'rol' => 'secretaria de escuela', 
             'foto' => null,
-            'email' => 'a@utalca.cl',
+            'email' => 'adqwrasc@utalca.cl',
             'password' => bcrypt('12345678')
         ]);
         $profesor->assignRole('secretaria de escuela');
@@ -308,7 +308,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 6,
             'rol' => 'profesor', 
             'foto' => null,
-            'email' => 'knaito@utalca.cl',
+            'email' => 'xvcvxcv@utalca.cl',
             'password' => bcrypt('12345678')
         ]);
         $profesor->assignRole('profesor');
@@ -318,7 +318,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 1,
             'rol' => 'profesor', 
             'foto' => null,
-            'email' => 'ganunez@utalca.cl',
+            'email' => 'nnnnnnnnn@utalca.cl',
             'password' => bcrypt('12345678')
         ]);
         $profesor->assignRole('profesor');
@@ -328,7 +328,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 1,
             'rol' => 'profesor', 
             'foto' => null,
-            'email' => 'pabrojas@utalca.cl',
+            'email' => 'ttttt@utalca.cl',
             'password' => bcrypt('12345678')
         ]);
         $profesor->assignRole('profesor');
@@ -338,7 +338,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 7,
             'rol' => 'profesor', 
             'foto' => null,
-            'email' => 'ddiaz@utalca.cl',
+            'email' => 'awqdazxf@utalca.cl',
             'password' => bcrypt('12345678')
         ]);
         $profesor->assignRole('profesor');
@@ -348,7 +348,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 3,
             'rol' => 'profesor', 
             'foto' => null,
-            'email' => 'cmardonesn@utalca.cl',
+            'email' => 'zxcasrqvsd@utalca.cl',
             'password' => bcrypt('12345678')
         ]);
         $profesor->assignRole('profesor');
@@ -358,7 +358,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 1,
             'rol' => 'profesor', 
             'foto' => null,
-            'email' => 'castudillo@utalca.cl',
+            'email' => 'popo@utalca.cl',
             'password' => bcrypt('12345678')
         ]);
         $profesor->assignRole('profesor');
@@ -368,7 +368,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 1,
             'rol' => 'profesor', 
             'foto' => null,
-            'email' => 'dmoreno@utalca.cl',
+            'email' => 'yurty@utalca.cl',
             'password' => bcrypt('12345678')
         ]);
         $profesor->assignRole('profesor');
@@ -378,7 +378,7 @@ class UserTableSeeder extends Seeder
             'escuela' => 1,
             'rol' => 'profesor', 
             'foto' => null,
-            'email' => 'jcaballero@utalca.cl',
+            'email' => 'wqtsxc@utalca.cl',
             'password' => bcrypt('12345678')
         ]);
         $profesor->assignRole('profesor');
