@@ -848,10 +848,10 @@
                 this.$router.push({path:'/administrador/estudiantes/id='+item.id});
             } else {
                 if (this.$store.state.usuario.usuario.rol == "secretaria de escuela") {
-                    this.$router.push({path:'/secretariaEscuela/estudiantes/?id='+item.id});
+                    this.$router.push({path:'/secretariaEscuela/estudiantes/id='+item.id});
                 } else {
                     if (this.$store.state.usuario.usuario.rol == "profesor") {
-                        this.$router.push({path:'/profesor/estudiantes/?id='+item.id});
+                        this.$router.push({path:'/profesor/estudiantes/id='+item.id});
                     }
                 }
             }
