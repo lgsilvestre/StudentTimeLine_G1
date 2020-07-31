@@ -51,9 +51,9 @@
                         </v-row>
                     </v-card-title>
                     </v-img>
-                <!--<v-data-table
+                <v-data-table
                 :headers="headers"
-                :items="listaEstudiantes"
+                :items="listaObservaciones"
                 :search="buscar"
                 :loading="cargando"
                 style="font-size: 140%;"
@@ -73,13 +73,14 @@
                             <span><strong>Ver Perfil</strong></span>
                         </v-tooltip>
                     </template>                                                         
-                </v-data-table>!-->
+                </v-data-table>
                 </v-card>
             </v-col>
             <v-col cols="12" md="1">
             </v-col>          
         </v-row>
-        <v-snackbar
+        
+        <!--<v-snackbar
         v-model="alertError"
         :timeout=delay
         bottom
@@ -126,7 +127,7 @@
         > 
             <v-icon color="secondary">fas fa-times</v-icon>
         </v-btn>
-        </v-snackbar>
+        </v-snackbar>!-->
     </v-container>
 
 </template>
@@ -134,15 +135,97 @@
 <script>
     import axios from 'axios'
     export default {
-        data:{
+        data: () => ({
             buscar: '',
             alertError: false,
             textoError: '',
             alertAcept: false,
             textoAcept: '',
             delay: 4000,
+            headers: [
+                { text: 'Titulo',align: 'start',value: 'titulo',sortable: true},
+                { text: 'Categoria', value: 'categoria',sortable: true, },
+                { text: 'Tipo', value: 'tipo',sortable: true, },
+                { text: 'Estudiante', value: 'estudiante',sortable: true, },
+                { text: 'Fecha', value: 'fecha',sortable: true, },
+                { text: 'Ir',align: 'center', value: 'actions', sortable: false },
+            ],
+            cargando: true,
+            listaObservaciones:[],
+            listaObservacionesAux:[],
+        }),
+        beforeMount(){
+            this.obtenerObservaciones();
         },
-
+        methods:{
+            perfilEstudiante(item){
+                this.$store.state.perfilEstudiante = item;
+                if (this.$store.state.usuario.usuario.rol == "admin") {
+                    this.$router.push({path:'/administrador/estudiantes/id='+item.id});
+                } else {
+                    if (this.$store.state.usuario.usuario.rol == "secretaria de escuela") {
+                        this.$router.push({path:'/secretariaEscuela/estudiantes/?id='+item.id});
+                    } else {
+                        if (this.$store.state.usuario.usuario.rol == "profesor") {
+                            this.$router.push({path:'/profesor/estudiantes/?id='+item.id});
+                        }
+                    }
+                }
+            },
+            obtenerObservaciones(){
+                this.listaObservaciones= [];
+                this.listaObservacionesAux = [];
+                var url = 'http://127.0.0.1:8000/api/v1/observacion';
+                axios.get(url,this.$store.state.config)
+                .then((result)=>{
+                    if (result.data.success == true) {
+                        var contador = 0;
+                        for (let index = result.data.data.observaciones.length-1; index >=0; index--) {
+                            const element = result.data.data.observaciones[index];
+                            var fechaaux =  element.created_at;
+                            var fechaaux2 = fechaaux.split("T");
+                            let observacion = {
+                                titulo:element.titulo,
+                                categoria:element.categoria,
+                                tipo:element.tipo,
+                                estudiante:element.estudiante,
+                                fecha:fechaaux2[0],
+                                idobservacion:element.id,
+                                id:element.get_estudiante.id,
+                            };
+                            // console.log(escuela);
+                            this.listaObservacionesAux[contador]=observacion;
+                            contador ++;
+                        }
+                        this.cargando = false;
+                        this.listaObservaciones= this.listaObservacionesAux;
+                        
+                    }
+                })
+                .catch((error) => {
+                    if (error.message == 'Network Error') {
+                        console.log(error);
+                        this.alertError = true;
+                        this.cargando = false;
+                        this.textoError = 'Error al cargar los datos, intente más tarde'
+                    } else {
+                        if (error.response.data.success == false) {
+                            switch (error.response.data.code) {
+                            case 101:
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
+                                this.alertError = true;
+                                this.cargando = false;
+                                this.textoError = error.response.data.message;
+                                break;
+                            default:
+                                break;
+                            }
+                        }
+                    } 
+                });
+            }
+        },
     }
 </script>
 
