@@ -40,7 +40,7 @@
                             <h5 >:</h5>
                         </v-col >
                         <v-col :cols="$vuetify.breakpoint.smAndDown ? 7 : 8">
-                            <h5 >{{perfilEstudiante.matricula}}</h5>
+                            <h5 >{{estudiante.matricula}}</h5>
                         </v-col>
                     </v-row>
                     <v-row class="px-5">
@@ -51,7 +51,7 @@
                             <h5 >:</h5>
                         </v-col >
                         <v-col :cols="$vuetify.breakpoint.smAndDown ? 7 : 8">
-                            <h5 >{{perfilEstudiante.rut}}</h5>
+                            <h5 >{{estudiante.rut}}</h5>
                         </v-col>
                     </v-row>
                     <v-row class="px-5">
@@ -62,7 +62,7 @@
                             <h5 >:</h5>
                         </v-col >
                         <v-col :cols="$vuetify.breakpoint.smAndDown ? 7 : 8">
-                            <h5 >{{ perfilEstudiante.nombre_completo}}</h5>
+                            <h5 >{{ estudiante.nombre_completo}}</h5>
                         </v-col>
                     </v-row>
                     <v-row class="px-5">
@@ -73,7 +73,7 @@
                             <h5 >:</h5>
                         </v-col >
                         <v-col :cols="$vuetify.breakpoint.smAndDown ? 7 : 8">
-                            <h5 >{{ perfilEstudiante.correo}}</h5>
+                            <h5 >{{ estudiante.correo}}</h5>
                         </v-col>
                     </v-row>
                     <v-row class="px-5">
@@ -84,7 +84,7 @@
                             <h5 >:</h5>
                         </v-col >
                         <v-col :cols="$vuetify.breakpoint.smAndDown ? 7 : 8">
-                            <h5 >{{ perfilEstudiante.anho_ingreso}}</h5>
+                            <h5 >{{ estudiante.anho_ingreso}}</h5>
                         </v-col>
                     </v-row>
                     <v-row class="px-5">
@@ -95,7 +95,7 @@
                             <h5 >:</h5>
                         </v-col >
                         <v-col :cols="$vuetify.breakpoint.smAndDown ? 7 : 8">
-                            <h5 >{{ perfilEstudiante.situacion_academica}}</h5>
+                            <h5 >{{ estudiante.situacion_academica}}</h5>
                         </v-col>
                     </v-row>
                     <v-row class="px-5">
@@ -106,7 +106,7 @@
                             <h5 >:</h5>
                         </v-col >
                         <v-col class="pb-5" :cols="$vuetify.breakpoint.smAndDown ? 7 : 8">
-                            <h5 >{{ perfilEstudiante.escuela}}</h5>
+                            <h5 >{{ estudiante.escuela}}</h5>
                         </v-col>
                     </v-row>
                     <div class="pb-5"  style="text-align:center;">
@@ -547,25 +547,6 @@ export default {
             auxObservaciones:[],
             listaCursos: [],
             listaCursosAux: [],
-            items: [
-            {
-            color: 'red lighten-2',
-            icon: 'mdi-star',
-            },
-            {
-            color: 'purple darken-1',
-            icon: 'mdi-book-variant',
-            },
-            {
-            color: 'green lighten-1',
-            icon: 'mdi-airballoon',
-            },
-            {
-            color: 'indigo',
-            icon: 'mdi-buffer',
-            },
-            
-            ],
             series: [0, 0, 0, 0],
             seriesaux:[0,0,0,0],
             chartOptions: {
@@ -589,6 +570,30 @@ export default {
                 labels: ["Positiva", "Negativa", "Informativa", "Otro"],
                 
                 
+            },
+            estudiante:{
+                anho_ingreso: '',
+                correo: '',
+                escuela: '',
+                foto: '',
+                id: '',
+                matricula: '',
+                nombre_completo: '',
+                porcentaje_avance: '',
+                rut: '',
+                situacion_academica: '',
+            },
+            estudianteAUX:{
+                anho_ingreso: '',
+                correo: '',
+                escuela: '',
+                foto: '',
+                id: '',
+                matricula: '',
+                nombre_completo: '',
+                porcentaje_avance: '',
+                rut: '',
+                situacion_academica: '',
             },
             estudianteObservacion: {
                 estudiante:'',
@@ -625,8 +630,7 @@ export default {
             datosSolicitud: { estudiante:'', curso:'', nota:'', horas:'',meses:''},
             tipos:['Positiva','Negativa','Informativa','Otro'],
             categorias:['Ayudantía','Práctica','Copia','Otro','En Observación - 1 por Tercera','En Observación - 1 por Segunda','Se Retira','Eliminado por Rendimiento','Titulado','Eliminado Art. 31 E','Eliminado Art. 31 B'],
-
-            //variables para la exportacion de la informacion del estudiante
+            id : null,
             dialogExportar:false,
         }
     },
@@ -635,7 +639,8 @@ export default {
         
     },
     beforeMount(){
-        this.obtenerObservaciones();
+        this.id =  this.$route.params.id;
+        this.obtenerEstudiante(1);
         this.obtenerCursosUsuario();
     },
     methods:{
@@ -643,8 +648,8 @@ export default {
             console.log("exportar info del estudiante.")
             //console.log( this.$store.state.perfilEstudiante.id)
             
-            //this.exportar(3,0,0,this.$store.state.perfilEstudiante.id,0);
-            this.exportar(3,'2020-07-19','2020-07-21',1,1);
+            this.exportar(3,0,0,this.$store.state.perfilEstudiante.id,0);
+            // this.exportar(3,'2020-07-19','2020-07-21',1,1);
         },
         exportar(tipo, fechaIni,fechaTer,idEstudiante,escuela){
             //var fechaInicio=this.formatDate(fechaIni);
@@ -658,31 +663,31 @@ export default {
             // }
             let post = {
                     "tipo": tipo,
-                    "fechaInicio" : fechaIni,
-                    "fechaFin": fechaTer ,
+                    "fechaInicio" : 0,
+                    "fechaFin": 0 ,
                     "id": idEstudiante,
-                    "escuela": escuela
+                    "escuela": 0
                 };
                 console.log(post)
             var url = 'http://127.0.0.1:8000/api/v1/estudiante/exportarPDF';
             console.log(post)
             axios.post(url,post,this.$store.state.config)
             .then((result)=>{
-                console.log(result);
+                // console.log(result);
                 //var fileDownload = require('js-file-download');
                 //fileDownload(result.data, 'archivo.xlsx');
                 
 
-                // const url = URL.createObjectURL(new Blob([result.data], {
-                //     type: 'application/pdf'
-                // }))
-                // const link = document.createElement('a');
-                // link.href = url;
-                // link.setAttribute('download', 'Estudiante.pdf');
-                // document.body.appendChild(link);
-                // link.click();
-                // this.alertAcept = true;
-                // this.textoAcept = 'Se realizó la operación correctamente'
+                const url = URL.createObjectURL(new Blob([result.data], {
+                    type: 'application/pdf'
+                }))
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'Estudiante.pdf');
+                document.body.appendChild(link);
+                link.click();
+                this.alertAcept = true;
+                this.textoAcept = 'Se realizó la operación correctamente'
                 
                 this.dialogExportar=false;
                 
@@ -733,98 +738,142 @@ export default {
         editarEstudiante(){
             console.log(this.$vuetify.breakpoint);
         },
-        obtenerObservaciones(){
-            this.cargando =true;
-            this.seriesaux =[0,0,0,0];
-            this.observaciones =[];
-            this.auxObservaciones =[];
-            var url = 'http://127.0.0.1:8000/api/v1/estudiante/'+ this.$store.state.perfilEstudiante.id+'/edit';
-            //var url = 'http://127.0.0.1:8000/api/v1/observacion';
+
+        obtenerEstudiante(opcion){
+            if (opcion == 1 || opcion==2) {
+                this.estudianteAUX={
+                    anho_ingreso: '',
+                    correo: '',
+                    escuela: '',
+                    foto: '',
+                    id: '',
+                    matricula: '',
+                    nombre_completo: '',
+                    porcentaje_avance: '',
+                    rut: '',
+                    situacion_academica: '',
+                };
+                this.estudiante={
+                    anho_ingreso: '',
+                    correo: '',
+                    escuela: '',
+                    foto: '',
+                    id: '',
+                    matricula: '',
+                    nombre_completo: '',
+                    porcentaje_avance: '',
+                    rut: '',
+                    situacion_academica: '',
+                };     
+            }
+            
+            if (opcion == 1 || opcion == 3) {
+                this.cargando =true;
+                this.seriesaux =[0,0,0,0];
+                this.observaciones =[];
+                this.auxObservaciones =[];
+            }
+            
+            
+            var url = 'http://127.0.0.1:8000/api/v1/estudiante/'+ this.id+'/edit';
 
             axios.get(url,this.$store.state.config)
             .then((result)=>{
-                console.log(result.data.data.observaciones);
-                //if (result.data.success == true) {
-                var contador = 0;
-                for (let index = result.data.data.observaciones.length-1; index >= 0; index--) {
-                    const element = result.data.data.observaciones[contador];
-                    contador ++;
-                    var auxcolor = null;
-                    var auxicono = null;
-                    if (element.tipo == "Positiva") {
-                        auxcolor="secondary";
-                        auxicono="fas fa-check-circle";
-                        this.seriesaux[0] = this.seriesaux[0]+1;
-                    }
-                    else{
-                        if (element.tipo == "Negativa") {
-                            auxcolor="warning";
-                            auxicono="fas fa-exclamation-triangle";
-                            this.seriesaux[1] = this.seriesaux[1]+1;
-                        } else {
-                            if (element.tipo == "Informativa") {
-                                auxcolor="accent";
-                                auxicono="fas fa-info";
-                                this.seriesaux[2] = this.seriesaux[2]+1;
+                console.log(result.data.data);
+                if (opcion == 1 || opcion==2) {
+                    this.estudianteAUX.anho_ingreso=result.data.data.estudiante.anho_ingreso;
+                    this.estudianteAUX.correo=result.data.data.estudiante.correo;
+                    this.estudianteAUX.escuela=result.data.data.estudiante.escuela;
+                    this.estudianteAUX.foto=result.data.data.estudiante.foto;
+                    this.estudianteAUX.id=result.data.data.estudiante.id;
+                    this.estudianteAUX.matricula=result.data.data.estudiante.matricula;
+                    this.estudianteAUX.nombre_completo=result.data.data.estudiante.nombre_completo;
+                    this.estudianteAUX.rut=result.data.data.estudiante.rut;
+                    this.estudianteAUX.situacion_academica=result.data.data.estudiante.situacion_academica;
+                    this.estudiante=this.estudianteAUX;
+                }
+                if (opcion == 1 || opcion == 3) {
+                    var contador = 0;
+                    for (let index = result.data.data.observaciones.length-1; index >= 0; index--) {
+                        const element = result.data.data.observaciones[contador];
+                        contador ++;
+                        var auxcolor = null;
+                        var auxicono = null;
+                        if (element.tipo == "Positiva") {
+                            auxcolor="secondary";
+                            auxicono="fas fa-check-circle";
+                            this.seriesaux[0] = this.seriesaux[0]+1;
+                        }
+                        else{
+                            if (element.tipo == "Negativa") {
+                                auxcolor="warning";
+                                auxicono="fas fa-exclamation-triangle";
+                                this.seriesaux[1] = this.seriesaux[1]+1;
                             } else {
-                                auxcolor="#2196F3";
-                                auxicono="fas fa-clipboard";
-                                this.seriesaux[3] = this.seriesaux[3]+1;
+                                if (element.tipo == "Informativa") {
+                                    auxcolor="accent";
+                                    auxicono="fas fa-info";
+                                    this.seriesaux[2] = this.seriesaux[2]+1;
+                                } else {
+                                    auxcolor="#2196F3";
+                                    auxicono="fas fa-clipboard";
+                                    this.seriesaux[3] = this.seriesaux[3]+1;
+                                }
                             }
                         }
-                    }
-                    
-                    this.series=this.seriesaux;
-                    this.chartOptions = {
-                        chart: {
-                            type: 'donut',
-                            
-                        },
-                        animations: {
-                            enabled: true,
-                            easing: 'easeinout',
-                            speed: 800,
-                            animateGradually: {
-                                enabled: true,
-                                delay: 150
+                        
+                        this.series=this.seriesaux;
+                        this.chartOptions = {
+                            chart: {
+                                type: 'donut',
+                                
                             },
-                            dynamicAnimation: {
+                            animations: {
                                 enabled: true,
-                                speed: 350
-                            }
-                        },
-                        colors: ['#4ECDC4', '#FF6B6B', '#FFE66D', '#2196F3'],
-                        labels: ["Positiva", "Negativa", "Informativa", "Otro"],
-                    };
-                    //var chart = new ApexCharts(el, chartOptions);
-                    //chart.render();
-                    let observacion ={
-                        titulo: element.titulo,
-                        ayudante: element.ayudante,
-                        categoria: element.categoria,
-                        creador: element.creador,
-                        curso: element.curso, 
-                        descripcion: element.descripcion, 
-                        estudiante: element.estudiante,
-                        id: element.id,
-                        tipo: element.tipo,
-                        color: auxcolor,
-                        icono: auxicono,
-                    };
+                                easing: 'easeinout',
+                                speed: 800,
+                                animateGradually: {
+                                    enabled: true,
+                                    delay: 150
+                                },
+                                dynamicAnimation: {
+                                    enabled: true,
+                                    speed: 350
+                                }
+                            },
+                            colors: ['#4ECDC4', '#FF6B6B', '#FFE66D', '#2196F3'],
+                            labels: ["Positiva", "Negativa", "Informativa", "Otro"],
+                        };
+                        //var chart = new ApexCharts(el, chartOptions);
+                        //chart.render();
+                        let observacion ={
+                            titulo: element.titulo,
+                            ayudante: element.ayudante,
+                            categoria: element.categoria,
+                            creador: element.creador,
+                            curso: element.curso, 
+                            descripcion: element.descripcion, 
+                            estudiante: element.estudiante,
+                            id: element.id,
+                            tipo: element.tipo,
+                            color: auxcolor,
+                            icono: auxicono,
+                        };
 
-                    this.auxObservaciones[index]=observacion;
+                        this.auxObservaciones[index]=observacion;
+                    }
+                    if (contador>0) {
+                        this.validacionObservaciones=true;
+                        this.validacionObservacionesFalse = true;
+                    }
+                    else{
+                        this.validacionObservacionesFalse = false;
+                        this.validacionObservaciones=false;
+                    }
+                    this.cargando =false;
+                    this.observaciones = this.auxObservaciones;
+                    console.log(this.observaciones);
                 }
-                if (contador>0) {
-                    this.validacionObservaciones=true;
-                    this.validacionObservacionesFalse = true;
-                }
-                else{
-                    this.validacionObservacionesFalse = false;
-                    this.validacionObservaciones=false;
-                }
-                this.cargando =false;
-                this.observaciones = this.auxObservaciones;
-                console.log(this.observaciones);
                 //}
             })
             .catch((error) => {
@@ -850,7 +899,7 @@ export default {
         obtenerCursosUsuario(){
             this.listaCursosAux = [];
             // var url =`http://127.0.0.1:8000/api/v1/instanciacurso/${this.$store.state.usuario.usuario.id}`;
-            var url = `http://127.0.0.1:8000/api/v1/profesorConCurso/${this.$store.state.usuario.usuario.id}`;
+            var url = `http://127.0.0.1:8000/api/v1/profesorConCurso/${this.id}`;
             
             axios.get(url,this.$store.state.config)
             .then((result)=>{   
@@ -927,7 +976,7 @@ export default {
                 "titulo": this.estudianteObservacion.titulo,
                 "descripcion": this.estudianteObservacion.descripcion,
                 "ayudante": null, 
-                "estudiante": this.$store.state.perfilEstudiante.id,
+                "estudiante": this.id,
                 "curso": null,
                 "categoria": auxcategoria,
                 "tipo": auxTipo,
@@ -940,7 +989,7 @@ export default {
                 this.alertAcept = true;
                 this.textoAcept = "Se agrego la observacion con exito."
                 this.resetAgregarObservacion();
-                this.obtenerObservaciones(); 
+                this.obtenerEstudiante(3);
             }).catch((error)=>{
                 if (error.message == 'Network Error') {
                     console.log(error)
@@ -1006,7 +1055,6 @@ export default {
             this.estudianteModificarObservacion.id = observacion.id;
         },
         modificarObservacion(observacion){
-            
             //this.cargarDatosModificarObservacion(observacion);
             var auxTipo=0;
             if (this.estudianteModificarObservacion.tipo == "Positiva") {
@@ -1048,7 +1096,7 @@ export default {
                 this.alertAcept = true;
                 this.textoAcept = "Se modifico la observacion con exito."
                 this.resetModificarObservacion();
-                this.obtenerObservaciones(); 
+                this.obtenerEstudiante(3);
             }).catch((error)=>{
                 if (error.message == 'Network Error') {
                     console.log(error)
@@ -1122,7 +1170,7 @@ export default {
                 this.alertAcept = true;
                 this.textoAcept = "Se elimino la observacion con exito."
                 this.resetEliminarObservacion();
-                this.obtenerObservaciones(); 
+                this.obtenerEstudiante(3);
             }).catch((error)=>{
                 if (error.message == 'Network Error') {
                     console.log(error)
@@ -1205,8 +1253,7 @@ export default {
                 "horas": this.datosSolicitud.horas,
                 "meses": this.datosSolicitud.meses,
             }
-
-            // var url = `http://127.0.0.1:8000/api/v1/profesorConCurso/${this.$store.state.usuario.usuario.id}`;
+            var url = `http://127.0.0.1:8000/api/v1/solicitudDeAyudante/enviar`;
 
             axios.post(url, post, this.$store.state.config)
             .then((result) => {

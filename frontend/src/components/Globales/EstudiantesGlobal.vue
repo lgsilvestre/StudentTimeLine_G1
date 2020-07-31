@@ -209,8 +209,7 @@
                                 </v-dialog>
 
                                 <!-- Dialog exportar observaciones -->
-                                <v-dialog v-model="dialogExportar" persistent max-width="600px">
-                                    
+                                <v-dialog v-model="dialogExportar" persistent max-width="500px">
                                     <template v-slot:activator="{ on}" >
                                         <v-btn fab bottom
                                         :small="$vuetify.breakpoint.smAndDown ? true : false"
@@ -247,7 +246,7 @@
                                                 </v-col>
                                                 <v-col cols="5" class="mt-5">
                                                     <h4 class="mb-8">Por Escuela :</h4>
-                                                    <h4 class="pt-5" >Ingrese el rango de años  :</h4>
+                                                    <h4 class="pt-5" >Por rango de fecha:</h4>
                                                 </v-col>
                                                 <v-col cols="6">
                                                     <v-row class="mt-1 pt-1 mb-0 pb-0">
@@ -754,8 +753,8 @@
             this.fechaTer=new Date().toISOString().substr(0, 10);
         },
         exportarEstudiantes(){
-            console.log("EXPORTAR POR ESCUELA"+this.unAnhoVariable )
-            console.log("EXPORTAR POR RANGO DE FECHAS"+this.rangoAnhosVariable )
+            // console.log("EXPORTAR POR ESCUELA"+this.unAnhoVariable )
+            // console.log("EXPORTAR POR RANGO DE FECHAS"+this.rangoAnhosVariable )
             if(this.unAnhoVariable == false){
                 var escuela= this.escuelaExportar;
                  console.log("Exportar por escuela" + escuela)
@@ -769,23 +768,15 @@
 
             }
         },
-        formatDate (date) {
-        if (!date) return null
-
-        const [year, month, day] = date.split('-')
-        return `${day}-${month}-${year}`
-      },
+        
         //Exporta las observaciones de un estudiantes.
         exportar(tipo, fechaIni,fechaTer,idEstudiante,escuela){
-            var fechaInicio=this.formatDate(fechaIni);
-            var fechaTermino =this.formatDate(fechaTer);
-            console.log("FECHA INI  "+ fechaInicio);
-            console.log("FECHA fin  "+ fechaTermino);
+            var fechaInicio=fechaIni;
+            var fechaTermino =fechaTer;
+            // console.log("FECHA INI  "+ fechaInicio);
+            // console.log("FECHA fin  "+ fechaTermino);
 
-            // if(fechaInicio == 0 || fechaTermino== 0){
-            //     fechaInicio = 0
-            //     fechaTermino=0;;
-            // }
+         
             let post = {
                     "tipo": tipo,
                     "fechaInicio" : fechaInicio,
@@ -845,7 +836,17 @@
         },
         perfilEstudiante(item){
             this.$store.state.perfilEstudiante = item;
-            this.$router.push({path:'/administrador/estudiantes/'+item.rut});
+            if (this.$store.state.usuario.usuario.rol == "admin") {
+                this.$router.push({path:'/administrador/estudiantes/id='+item.id});
+            } else {
+                if (this.$store.state.usuario.usuario.rol == "secretaria de escuela") {
+                    this.$router.push({path:'/secretariaEscuela/estudiantes/id='+item.id});
+                } else {
+                    if (this.$store.state.usuario.usuario.rol == "profesor") {
+                        this.$router.push({path:'/profesor/estudiantes/id='+item.id});
+                    }
+                }
+            }
         },
 
     },
