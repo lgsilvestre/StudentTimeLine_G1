@@ -19,7 +19,7 @@
                 <v-list-item-title class="white--text letra"><strong>Estudiantes</strong></v-list-item-title>
             </v-list-item> 
               
-            <v-list-item  v-on="on"  class="difuminado" active-class="activacion">
+            <v-list-item  v-on="on"  class="difuminado" active-class="activacion" to="/profesor/observaciones">
                 <v-list-item-icon>
                     <v-icon color="white">fas fa-book-open</v-icon>
                 </v-list-item-icon>
