@@ -76,6 +76,11 @@ class EstudianteController extends Controller
      */
     public function store(Request $request){
         $entradas = $request->only('matricula', 'rut', 'nombre_completo', 'correo', 'anho_ingreso', 'situacion_academica', 'porcentaje_avance', 'creditos_aprobados', 'escuela', 'foto');
+        if(array_key_exists ("rut" , $entradas)){
+            if(gettype($entradas['rut']=="integer")){
+                $entradas['rut'] = strval($entradas['rut']);
+            }
+        }
         $validator = Validator::make($entradas, [
             'matricula' => ['required','numeric'],
             'rut' => ['required', 'string'],
@@ -247,6 +252,11 @@ class EstudianteController extends Controller
      */
     public function update(Request $request, $id){
         $entradas = $request->only('nombre_completo', 'situacion_academica', 'porcentaje_avance', 'creditos_aprobados', 'escuela');
+        if(array_key_exists ("rut" , $entradas)){
+            if(gettype($entradas['rut']=="integer")){
+                $entradas['rut'] = strval($entradas['rut']);
+            }
+        }
         $validator = Validator::make($entradas, [
             'nombre_completo' => ['nullable','string'],
             'situacion_academica' => ['nullable', 'string'], //Cambiar lo de la foreign key dps
