@@ -97,7 +97,6 @@ class UsuarioController extends Controller{
     public function indexProfesor(){
         $usuarios = User::onlyTrashed()->get();
         try{
-            $credenciales = JWTAuth::parseToken()->authenticate();
             $usuarios = User::Where('rol', '=' , 'profesor')->orderBy('escuela', 'asc')->get();
             foreach ($usuarios as $usuario){
                 $usuario->nombreEscuela= $usuario->getEscuela->nombre;
