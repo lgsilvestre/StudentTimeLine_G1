@@ -17,7 +17,7 @@ class UsuarioController extends Controller{
     public function __construct()
     {
         $this->middleware(['permission:create user'], ['only' => ['create', 'store']]);
-        $this->middleware(['permission:read user'], ['only' => 'index']);
+        $this->middleware(['permission:read user'], ['only' => ['index', 'indexProfesor']]);
         $this->middleware(['permission:update user'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete user'], ['only' => 'delete']);
         $this->middleware(['permission:restore user'], ['only' => 'disabled', 'restore']);
@@ -62,6 +62,49 @@ class UsuarioController extends Controller{
                 }else{
                     $usuario->escuelaAux = 'no posee otra escuela';
                 }
+            }
+            return response()->json([
+                'success' => true,
+                'code' => 100,
+                'message' => "La operacion se a realizado con exito",
+                'data' => ['usuarios'=>$usuarios]
+            ], 200);
+        //----- Mecanismos anticaidas y reporte de errores -----
+        //este catch permite responder directamente que problemas en la peticion SQL
+        } catch(\Illuminate\Database\QueryException $ex){ 
+            Log::create([
+                'titulo' => "Error en la base de datos",
+                'accion' => "listar usuario",
+                'tipo' => "Error",
+                'descripcion' => "Al momento de listar los usuarios, hubo un problema en la base de datos",
+                'data' => $ex,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
+            return response()->json([
+                'success' => false,
+                'code' => 103,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
+    }
+
+    /**
+     * Metodo que se encarga de listar a todos usuarios
+     * Errores code inician 100
+     * @return \Illuminate\Http\Response
+     */
+    public function indexProfesor(){
+        $usuarios = User::onlyTrashed()->get();
+        try{
+            $credenciales = JWTAuth::parseToken()->authenticate();
+            $usuarios = User::Where('rol', '=' , 'profesor')->orderBy('escuela', 'asc')->get();
+            foreach ($usuarios as $usuario){
+                $usuario->nombreEscuela= $usuario->getEscuela->nombre;
+                unset($usuario->foto);
+                unset($usuario->created_at);
+                unset($usuario->updated_at);
+                unset($usuario->deleted_at);
             }
             return response()->json([
                 'success' => true,

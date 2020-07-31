@@ -20,6 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1'], function () {
     #Controlador de usuario
+    Route::get('/usuario/indexProfesor','UsuarioController@indexProfesor');
     Route::get('/usuario/disabled','UsuarioController@disabled');
     Route::post('/usuario/restore/{id}','UsuarioController@restore');
     Route::resource('usuario', 'UsuarioController');
