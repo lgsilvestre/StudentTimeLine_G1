@@ -68,6 +68,8 @@ Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1'], function () {
     Route::resource('/tipoObservacion','TipoObservacionController');
     #controlador de log
     Route::get('/log','LogController@index');
+    #
+    Route::post('/solicitudDeAyudante/enviar', 'SolicitudDeAyudanteController@enviar');
 });
 
 Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
