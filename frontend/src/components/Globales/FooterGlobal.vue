@@ -114,7 +114,7 @@ export default {
             nombrePag:'La Calila y los Mojojojo',
 
             dialogContactar: false,
-            keyDialogCreacion: 1,
+            keyContactar: 1,
             listaRoles: [],
             listaUsuarios: [], 
 

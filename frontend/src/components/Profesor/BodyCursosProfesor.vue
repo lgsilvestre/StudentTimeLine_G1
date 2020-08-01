@@ -44,7 +44,7 @@
                                                 <v-col cols="12" class=" mb-1 pt-0 pl-0 pr-0 pb-0  text-right">
                                                     <v-tooltip bottom color="primary">
                                                         <template v-slot:activator="{ on }">
-                                                            <v-btn color="white" text icon class="mr-2 py-2" v-on="on" @click="setDialogAyudantes(item)">
+                                                            <v-btn color="white" text icon class="mr-2 py-2" v-on="on" @click="dialogAyudantes=true">
                                                                 <v-icon color="primary">
                                                                     fas fa-user-friends
                                                                 </v-icon>
@@ -66,16 +66,16 @@
             <v-col cols="12" md="1"></v-col>
         </v-row>
 
-        <v-dialog v-model="dialogAyudantes"  max-width="500px" >
+        <v-dialog v-model="dialogAyudantes"  :loading="cargando" max-width="500px" >
             <v-card class="mx-auto" max-width="500" >
                 <v-card-title class="headline primary text--center" primary-title >
                     <h5 class="white--text ">Lista Ayudantes</h5>
                 </v-card-title>
                 <v-container class="px-5">    
-                        <v-col cols="12" md="11" v-for="ayudante in listaInsCursos" :key="ayudante.id">
+                        <v-col cols="12" md="11" v-for="ayudante in ayudantes" :key="ayudante.id">
                             <v-row> 
                                 <v-col cols="12" md="11">
-                                    <h4> {{ayudante.nomCurso}},      {{ayudante.seccion}}</h4>
+                                    <h4> {{ayudante.nombre}}</h4>
                                 </v-col>                                
                                 <v-col cols="12" md="1">
                                     <v-tooltip bottom color="primary">
@@ -114,14 +114,16 @@ export default {
             cargando: true,
             sortBy:'nomCurso',
             dialogAyudantes: false,
-            ayudantesAux: [[{id:'1', nombre:'hola'}],[{id:'2', nombre:'chao'}]],
+            ayudantes: [],
+            ayudantesAux: [],
         }
     },
     beforeMount(){
         /**
          * Obtenemos la lista de todos los semestres antes de montar la vista.
          */
-        this.obtenerListaInstanciaCursos();        
+        this.obtenerListaInstanciaCursos(); 
+        
     },
     methods: {
         obtenerListaInstanciaCursos(){
@@ -145,6 +147,7 @@ export default {
                     this.listaInsCursosAux[index]=insCurso;                                                         
                 }
                 this.listaInsCursos = this.listaInsCursosAux;  
+                this.setDialogAyudantes(); 
             }
             ).catch((error)=>{
                 if (error.message == 'Network Error') {
@@ -170,10 +173,49 @@ export default {
                 }
             });
         },
+
+        obtenerListaAyudantes(id){
+            this.ayudantes = [];
+            this.ayudantesAux = [];
+            var aux;    
+            var url = `http://127.0.0.1:8000/api/v1/ayudanteCurso/`+id;
+            axios.get(url,this.$store.state.config)
+            .then((result)=>{   
+                console.log(result);
+                for (let index = 0; index < result.data.data.ayudantesCurso.length; index++) {
+                    const element = result.data.data.ayudantesCurso[index]; 
+                    let estudiante = {
+                        id: element.get_estudiante.id,
+                        nombre: element.estudiante,
+                    }; 
+                    this.ayudantesAux[index]=estudiante;                                                         
+                }
+                this.ayudantes = this.ayudantesAux;  
+                this.cargando = false;
+            }
+            ).catch((error)=>{
+                if (error.message == 'Network Error') {
+                    this.alertaError = true;
+                    this.cargando = false;
+                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                }
+                else{
+                    if (error.response.data.success == false) {
+                        if(error.response.data.code == 101){
+                            console.log(error.response.data.code +' '+ error.response.data.message);
+                            console.log(error.response.data);
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true;                            
+                        }                   
+                    }
+                }
+            });
+        },
         
-        setDialogAyudantes(item){
-            
-            this.dialogAyudantes = true;
+        setDialogAyudantes(){        
+            for (let index = 0; index < this.listaInsCursos.length; index++){
+                this.obtenerListaAyudantes(this.listaInsCursos[index].id);
+            }
         },
 
         perfilEstudiante(item){
