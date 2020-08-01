@@ -32,10 +32,12 @@ class InstanciaCursoController extends Controller
             foreach($insCursos as $insCurso){
                 $insCurso->curso=$insCurso->getCurso->nombre;
                 $profesores = Profesor_Con_Curso::where('curso', $insCurso->id)->get();
+                $listaProfesores = array();
                 foreach($profesores as $profesor){
-                    $insCurso->idProfesor= $profesor->id;
-                    $insCurso->nombreProfesor= $profesor->getProfesor->nombre;
+                    array_push($listaProfesores,  $insCurso->nombreProfesor= $profesor->getProfesor);
                 }
+                $insCurso->listaProfesores = $listaProfesores;
+
             }
             return response()->json([
                 'success' => true,
