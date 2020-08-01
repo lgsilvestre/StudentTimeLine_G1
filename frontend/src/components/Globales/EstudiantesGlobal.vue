@@ -209,8 +209,7 @@
                                 </v-dialog>
 
                                 <!-- Dialog exportar observaciones -->
-                                <v-dialog v-model="dialogExportar" persistent max-width="600px">
-                                    
+                                <v-dialog v-model="dialogExportar" persistent max-width="500px">
                                     <template v-slot:activator="{ on}" >
                                         <v-btn fab bottom
                                         :small="$vuetify.breakpoint.smAndDown ? true : false"
@@ -247,7 +246,7 @@
                                                 </v-col>
                                                 <v-col cols="5" class="mt-5">
                                                     <h4 class="mb-8">Por Escuela :</h4>
-                                                    <h4 class="pt-5" >Ingrese el rango de años  :</h4>
+                                                    <h4 class="pt-5" >Por rango de fecha:</h4>
                                                 </v-col>
                                                 <v-col cols="6">
                                                     <v-row class="mt-1 pt-1 mb-0 pb-0">
@@ -833,7 +832,17 @@
         },
         perfilEstudiante(item){
             this.$store.state.perfilEstudiante = item;
-            this.$router.push({path:'/administrador/estudiantes/'+item.rut});
+            if (this.$store.state.usuario.usuario.rol == "admin") {
+                this.$router.push({path:'/administrador/estudiantes/id='+item.id});
+            } else {
+                if (this.$store.state.usuario.usuario.rol == "secretaria de escuela") {
+                    this.$router.push({path:'/secretariaEscuela/estudiantes/id='+item.id});
+                } else {
+                    if (this.$store.state.usuario.usuario.rol == "profesor") {
+                        this.$router.push({path:'/profesor/estudiantes/id='+item.id});
+                    }
+                }
+            }
         },
 
     },
