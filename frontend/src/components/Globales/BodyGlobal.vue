@@ -204,11 +204,12 @@ export default {
     },
     beforeMount() {
         this.obtenerUsuario();
+        this.reset();
     },
     methods:{
         reset () {
-        this.$refs.form.reset();
-      },
+            this.$refs.form.reset();
+        },
       /**
        * Valida que el correo ingresado por el usuario
        * contenga @utalca.cl o @alumnos.utalca.cl
