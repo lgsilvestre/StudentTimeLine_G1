@@ -899,14 +899,14 @@ export default {
         obtenerCursosUsuario(){
             this.listaCursosAux = [];
             // var url =`http://127.0.0.1:8000/api/v1/instanciacurso/${this.$store.state.usuario.usuario.id}`;
-            var url = `http://127.0.0.1:8000/api/v1/profesorConCurso/${this.id}`;
+            var url = `http://127.0.0.1:8000/api/v1/profesorConCurso/${this.$store.state.usuario.usuario.id}`;
             
             axios.get(url,this.$store.state.config)
             .then((result)=>{   
                 for (let index = 0; index < result.data.data.cursos.length; index++) {
                     const element = result.data.data.cursos[index];  
                     let insCurso = {
-                        id: element.id,
+                        id: element.idInstanciaCurso,
                         anio:element.anio,
                         semestre: element.semestre,
                         seccion:element.seccion,

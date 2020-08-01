@@ -14,41 +14,92 @@
                             </v-btn> -->
                      </v-card-title> 
                     </v-img>
-                    <v-row>
-                        <v-col v-for="(curso, index) in listaInsCursos" :key="index" cols="12" sm="6" md="4" lg="4">
-                            <v-card class=" ml-2 mr-2"  dark color="#F7FFF7"  style=" border-style:solid; border-color:rgba(0,0,0,0.5);"
-                           >
-                                <v-container class="pt-0 mt-0 pb-0">
-                                    <v-row>
-                                        <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0">
-                                            <v-card-title class="mt-0 pt-0 pl-0 pr-0 " >
-                                                <v-img class="mx-auto white--text align-end justify-center "
-                                                        width="100%" height="30px"       
-                                                        src="@/assets/Globales/background-panel-08.jpg" >
-                                                </v-img>
-                                            </v-card-title>
-                                        </v-col>
-                                        <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0  text-left">
-                                            
-                                             <v-card-text class=" pt-0 pl-5 pr-0 pb-0 ">
-                                                <div class="text--primary " >
-                                                    <p class="font-weight-black text-truncate   pt-0  pb-0 mt-0 mb-0"   >Nombre: {{ curso.nomCurso }}</p>
-                                                    <p class="font-weight-black pt-0 pb-0 mt-0 mb-0"   > Seccion: {{ curso.seccion }} </p>
-                                                    <p class="font-weight-black pt-0  pb-0 mt-0 mb-0"   > Plan : {{ curso.plan }} </p>
-                                                    <p class="font-weight-black pt-0 pb-0 mt-0 mb-1"   > Año de inscripción: {{ curso.anio }} - {{ curso.semestre }} </p>
-                                                </div>
-                                            </v-card-text>
-                                        </v-col>
-                                    </v-row>
-                                </v-container>
-                            </v-card>
+                    <v-data-iterator :items="listaInsCursos"  :sort-by="sortBy.toLowerCase()" class="px-2 py-2" :loading="cargando">
+                         <template v-slot:default="props">
+                            <v-row>
+                                <v-col v-for="item in props.items" :key="item.nomCurso" cols="12" sm="6" md="4" lg="4">
+                                    <v-card class=" ml-2 mr-2"  dark color="#F7FFF7"  style=" border-style:solid; border-color:rgba(0,0,0,0.5);"
+                                >
+                                        <v-container class="pt-0 mt-0 pb-0">
+                                            <v-row>
+                                                <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0">
+                                                    <v-card-title class="mt-0 pt-0 pl-0 pr-0 " >
+                                                        <v-img class="mx-auto white--text align-end justify-center "
+                                                                width="100%" height="30px"       
+                                                                src="@/assets/Globales/background-panel-08.jpg" >
+                                                        </v-img>
+                                                    </v-card-title>
+                                                </v-col>
+                                                <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0  text-left">
+                                                    
+                                                    <v-card-text class=" pt-0 pl-5 pr-0 pb-0 ">
+                                                        <div class="text--primary " >
+                                                            <p class="font-weight-black text-truncate   pt-0  pb-0 mt-0 mb-0"   >Nombre: {{ item.nomCurso }}</p>
+                                                            <p class="font-weight-black pt-0 pb-0 mt-0 mb-0"   > Seccion: {{ item.seccion }} </p>
+                                                            <p class="font-weight-black pt-0  pb-0 mt-0 mb-0"   > Plan : {{ item.plan }} </p>
+                                                            <p class="font-weight-black pt-0 pb-0 mt-0 mb-1"   > Año de inscripción: {{ item.anio }} - {{ item.semestre }} </p>
+                                                        </div>
+                                                    </v-card-text>
+                                                </v-col>
+                                                <v-col cols="12" class=" mb-1 pt-0 pl-0 pr-0 pb-0  text-right">
+                                                    <v-tooltip bottom color="primary">
+                                                        <template v-slot:activator="{ on }">
+                                                            <v-btn color="white" text icon class="mr-2 py-2" v-on="on" @click="setDialogAyudantes(item)">
+                                                                <v-icon color="primary">
+                                                                    fas fa-user-friends
+                                                                </v-icon>
+                                                            </v-btn>
+                                                        </template>
+                                                        <span><strong>Mostrar Ayudantes</strong></span>
+                                                    </v-tooltip>    
+                                                </v-col>
+                                            </v-row>
+                                        </v-container>
+                                    </v-card>
 
-                        </v-col>
-                    </v-row>
+                                </v-col>
+                            </v-row>
+                        </template>
+                    </v-data-iterator>
                 </v-card>
             </v-col>
             <v-col cols="12" md="1"></v-col>
         </v-row>
+
+        <v-dialog v-model="dialogAyudantes"  max-width="500px" >
+            <v-card class="mx-auto" max-width="500" >
+                <v-card-title class="headline primary text--center" primary-title >
+                    <h5 class="white--text ">Lista Ayudantes</h5>
+                </v-card-title>
+                <v-container class="px-5">    
+                        <v-col cols="12" md="11" v-for="ayudante in listaInsCursos" :key="ayudante.id">
+                            <v-row> 
+                                <v-col cols="12" md="11">
+                                    <h4> {{ayudante.nomCurso}},      {{ayudante.seccion}}</h4>
+                                </v-col>                                
+                                <v-col cols="12" md="1">
+                                    <v-tooltip bottom color="primary">
+                                        <template v-slot:activator="{ on }">
+                                            <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on" @click="perfilEstudiante(ayudante)">
+                                                <v-icon  
+                                                color="primary"
+                                                >
+                                                fas fa-external-link-alt
+                                                </v-icon>
+                                            </v-btn>
+                                        </template>
+                                        <span><strong>Ver Perfil</strong></span>
+                                    </v-tooltip>  
+                                </v-col>
+                            </v-row>      
+                            <v-divider></v-divider>    
+                        </v-col>
+                            
+                        
+                </v-container>            
+            </v-card>
+        </v-dialog> 
+
     </v-container>
 </template>
 <script>
@@ -59,7 +110,11 @@ export default {
     data() {
         return {
             listaInsCursosAux:[],
-            listaInsCursos:[{id:''},{anio:''},{semestre:''},{seccion:''},{nomCurso:''},{plan:''},{escuela:''}]
+            listaInsCursos:[{id:''},{anio:''},{semestre:''},{seccion:''},{nomCurso:''},{plan:''},{escuela:''}],
+            cargando: true,
+            sortBy:'nomCurso',
+            dialogAyudantes: false,
+            ayudantesAux: [[{id:'1', nombre:'hola'}],[{id:'2', nombre:'chao'}]],
         }
     },
     beforeMount(){
@@ -114,7 +169,27 @@ export default {
                     }
                 }
             });
-        }
+        },
+        
+        setDialogAyudantes(item){
+            
+            this.dialogAyudantes = true;
+        },
+
+        perfilEstudiante(item){
+            this.$store.state.perfilEstudiante = item;
+            if (this.$store.state.usuario.usuario.rol == "admin") {
+                this.$router.push({path:'/administrador/estudiantes/id='+item.id});
+            } else {
+                if (this.$store.state.usuario.usuario.rol == "secretaria de escuela") {
+                    this.$router.push({path:'/secretariaEscuela/estudiantes/id='+item.id});
+                } else {
+                    if (this.$store.state.usuario.usuario.rol == "profesor") {
+                        this.$router.push({path:'/profesor/estudiantes/id='+item.id});
+                    }
+                }
+            }
+        },
     },
 }
 </script>
