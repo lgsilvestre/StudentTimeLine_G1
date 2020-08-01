@@ -175,7 +175,7 @@
                                             <template v-slot:activator="{ on }">
                                             <v-btn 
                                             :small="$vuetify.breakpoint.smAndDown ? true : false"
-                                            @click="dialogCrearCurso = true"
+                                            @click="crearNuevoCurso"
                                             fab bottom left 
                                             v-on="on"
                                             >
@@ -189,7 +189,7 @@
                                 </v-card-title>
                             </v-img>
                             <v-data-table  :headers="colCursos" :items="listaCursos"
-                                :search="buscarCursos" :loading="cargando" :items-per-page="10"  >            
+                                :search="buscarCursos" :loading="cargando" :items-per-page="10"  class="ml-5">            
                                 <template v-slot:item.opciones="{ item }">
                                 <!-- boton para modificar usuario seleccionado -->
                                     <v-tooltip bottom color="primary">
@@ -253,13 +253,13 @@
                                 outlined
                                 prepend-inner-icon="mdi-school"
                             ></v-select>
-                            <v-text-field
+                            <!-- <v-text-field
                                 v-model="datosCurso.descripcion"
                                 label="Descripcion"
                                 :rules="[() => !!datosCurso.descripcion ||'Requerido']"
                                 outlined
                                 prepend-inner-icon="mdi-account"
-                            ></v-text-field>
+                            ></v-text-field> -->
                             
                             <div class="pb-1" style="text-align:right;">
                                 <v-btn rounded color="warning" @click="resetCrearCurso()">
@@ -301,11 +301,11 @@
                             :rules="[() => !!datosCurso.escuela ||'Requerido']"
                             prepend-inner-icon="mdi-school"
                         ></v-select>
-                        <v-text-field v-model="datosCurso.descripcion" label="Descripcion del Curso" outlined
+                        <!-- <v-text-field v-model="datosCurso.descripcion" label="Descripcion del Curso" outlined
                             color="secondary"
                             :rules="[() => !!datosCurso.descripcion ||'Requerido']"
                             prepend-inner-icon="mdi-account"
-                        ></v-text-field>
+                        ></v-text-field> -->
                         
                         <div style="text-align:right;" class="mb-1 " >
                             <v-btn 
@@ -485,6 +485,7 @@
                                 </v-card-title>
                                 </v-img>  
                                 <v-data-table
+                                class="ml-4 mr-0 "
                                     v-model="seleccionados"
                                     :headers="colCursos2"
                                     :items="listaCursos"
@@ -492,8 +493,8 @@
                                     :search="buscarAsignarCursos"
                                     :items-per-page="10"
                                     show-select
-                                    item-key="id"                                    
-                                >                                             
+                                    item-key="id"  
+                                >                               
                                 </v-data-table>
                                 
                             </v-card>
@@ -710,19 +711,18 @@ export default {
                 {text:'Opciones', value:'opciones'},                
             ],
             colCursos:[
-                {text:'ID', value:'id'},
-                {text:'Nombre', value:'nombre'},
-                {text:'Plan', value:'plan'},   
-                {text:'Escuela', value:'nomEscuela'},
-                {text:'Descripcion', value:'descripcion'},
-                {text:'Opciones', value:'opciones'},
+                // {text:'ID', value:'id'},
+                {text:'Nombre', value:'nombre',align: 'start',width:300},
+                {text:'Plan', value:'plan',align:'center'},   
+                {text:'Escuela', value:'nomEscuela',align:'center'},
+                // {text:'Descripcion', value:'descripcion'},
+                {text:'Opciones', value:'opciones',align: 'end',},
             ],
             colCursos2:[
-                {text:'ID', value:'id',align: 'start'},
-                {text:'Nombre', value:'nombre',align: 'start'},
-                {text:'Plan', value:'plan',align: 'start'},   
-                {text:'Escuela', value:'nomEscuela',align: 'start'},
-                {text:'Descripcion', value:'descripcion',align: 'start'},
+                {text:'Nombre', value:'nombre',align: 'start',width:250},
+                {text:'Plan', value:'plan',align: 'center',width:300},   
+                {text:'Escuela', value:'nomEscuela',align: 'center'},
+                // {text:'Descripcion', value:'descripcion',align: 'start'},
             ],
             
             listaEscuela: [],
@@ -760,6 +760,7 @@ export default {
             secionActual:'',
             semestre:null,
             KeyDialogCrearCurso: 0,
+            calcularCol:true,
         }
     },
     _props: {
@@ -954,32 +955,42 @@ export default {
             });
         },        
         
-        crearCurso(){         
-            let post = {
-                "nombre": this.datosCurso.nombre,
-                "plan": this.datosCurso.plan,
-                "escuela": this.datosCurso.escuela,
-                "descripcion": this.datosCurso.descripcion,
-            }
-            var url = 'http://127.0.0.1:8000/api/v1/curso';
-            
-            axios.post(url, post, this.$store.state.config)
-            .then((result) => {
-                this.alertaExito = true;
-                this.textoAlertas = "Se creó el curso con exito."
-                this.resetCrearCurso();
-                this.obtenerCursos(); 
-                this.KeyDialogCrearCurso ++; 
-            }).catch((error)=>{
-                console.log(error);
-                if (error.message == 'Network Error') {
-                    console.log(error)
-                    this.alertaError = true;
-                    this.textoAlertas = "Error al crear el curso, intente mas tarde."
+        crearCurso(){ 
+            var nombre=this.datosCurso.nombre; 
+            var plan = this.datosCurso.plan;
+            var escuela = this.datosCurso.escuela      
+            if(nombre!='' && plan!='' && escuela!=''){
+                let post = {
+                "nombre": nombre,
+                "plan": plan,
+                "escuela": escuela,
+                "descripcion": '',
+                }
+                var url = 'http://127.0.0.1:8000/api/v1/curso';
+                
+                axios.post(url, post, this.$store.state.config)
+                .then((result) => {
+                    this.alertaExito = true;
+                    this.textoAlertas = "Se creó el curso con exito."
                     this.resetCrearCurso();
-                    this.KeyDialogCrearCurso ++;
-                };                        
-            });
+                    this.obtenerCursos(); 
+                    this.KeyDialogCrearCurso ++; 
+                }).catch((error)=>{
+                    console.log(error);
+                    if (error.message == 'Network Error') {
+                        console.log(error)
+                        this.alertaError = true;
+                        this.textoAlertas = "Error al crear el curso, intente mas tarde."
+                        this.resetCrearCurso();
+                        this.KeyDialogCrearCurso ++;
+                    };                        
+                });
+            }else{
+                console.log("ERROR EN LOS DATOS INGRESADOS")
+                this.alertaError = true;
+                this.textoAlertas = "Es necesario rellenar todos los campos."
+
+            }
         },
 
         resetCrearCurso(){
@@ -996,7 +1007,7 @@ export default {
             this.datosCurso.nombre = item.nombre;
             this.datosCurso.plan = item.plan;
             this.datosCurso.escuela = item.escuela;
-            this.datosCurso.descripcion = item.descripcion;
+            // this.datosCurso.descripcion = item.descripcion;
             this.dialogModificarCurso = true;
         },
         resetModificarCurso(){
@@ -1004,7 +1015,7 @@ export default {
             this.datosCurso.nombre = '';
             this.datosCurso.plan = '';
             this.datosCurso.escuela = '';
-            this.datosCurso.descripcion = '';
+            // this.datosCurso.descripcion = '';
             this.dialogModificarCurso = false;
         },
         modificarCurso(){
@@ -1015,7 +1026,7 @@ export default {
                 "nombre": this.datosCurso.nombre,
                 "plan": this.datosCurso.plan,
                 "escuela": this.datosCurso.escuela,
-                "descripcion": this.datosCurso.descripcion,
+                "descripcion": ''
             };
             axios.put(url,put,this.$store.state.config)
             .then((result)=>{
@@ -1305,6 +1316,7 @@ export default {
                     console.log(error)
                     this.alertaError = true;
                     this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
+                    this.resetEliminarInstanciaCurso(); 
                 }
                 //Mensajes de error proximamente                
             });
@@ -1328,9 +1340,15 @@ export default {
 
             }
             
-        },        
+        },  
+        /**
+         * Abre el dialog para crear un nuevo curso,
+         *  sin antes resetear las variables que usara para esta tarea.
+         *  */ 
+        crearNuevoCurso(){
+            this.resetEliminarCurso();
+            this.dialogCrearCurso=true;
+        }     
     }
-    
-    
 }
 </script>
