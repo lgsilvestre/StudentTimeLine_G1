@@ -174,9 +174,9 @@
                             descripcion: element.descripcion,   
                             usuario: element.usuario,
                             data: element.data,
-                            created_at: element.created_at,
+                            created_at: element.created_at.split("T")[0],
                             updated_at: element.updated_at,
-                        };                         
+                        };                                 
                         this.listaRegistrosAux[index]=log;
                     }
                     this.cargando = false;

@@ -5,7 +5,11 @@
                 <v-col class="d-none d-sm-none d-md-flex" align-self="center" md="4" >
                     <v-btn class="ml-2" color="primary white--text" depressed   @click="urlUniversidad" >Universidad de Talca</v-btn>
                     <!-- Boton que muestra informacion sobre el equipo de desarrollo -->
-                    <NosotrosComponent/> 
+                    <!-- <NosotrosComponent/>  -->
+                    <v-btn class="ml-2" color="primary white--text" depressed @click="dialogContactar = true" v-show="this.$store.state.usuario.usuario.rol != 'admin'">
+                        Contactar
+                    </v-btn>
+
                 </v-col>
                 
                 <v-col class="text-center" sm="12" md="4" lg="4" align-self="center">
@@ -28,11 +32,75 @@
                 </v-col>
             </v-row>
         </v-footer>
+
+        <v-dialog v-model="dialogContactar" persistent max-width="500px" :key="keyContactar">
+            <v-card class="mx-auto" max-width="500" >
+                <v-card-title class="headline primary text--center" primary-title >
+                    <h5 class="white--text ">Contactar Superior</h5>
+                </v-card-title>
+                    <v-container class="px-5 mt-5">
+                        <v-form ref="contactar">
+                            <v-select
+                                v-model="datosContactar.rolDestinatario"
+                                label="Tipo Destinatario"
+                                :items="listaRoles"
+                                item-text="nombre"
+                                item-value="id"
+                                :rules="[() => !!datosContactar.rolDestinatario ||'Requerido']"
+                                outlined
+                                prepend-inner-icon="mdi-account-tie"
+                            >                                
+                            </v-select>
+                            <v-select
+                                v-model="datosContactar.idDestinatario"
+                                label="Destinatario"
+                                :items="listaUsuarios"
+                                item-text="nombre"
+                                item-value="id"
+                                :rules="[() => !!datosContactar.idDestinatario ||'Requerido']"
+                                outlined
+                                prepend-inner-icon="mdi-account"
+                            >                                
+                            </v-select>
+                            <v-text-field
+                                v-model="datosContactar.motivo"
+                                label="Motivo"
+                                outlined
+                                :rules="[() => !!datosContactar.motivo ||'Requerido']"
+                                prepend-inner-icon="fas fa-question-circle"
+                            >
+                            </v-text-field>
+                            <v-textarea
+                                v-model="datosContactar.descripcion"
+                                outlined
+                                color="secondary"
+                                label="Descripcion"
+                            >
+                            </v-textarea>
+                            <div class="pb-1" style="text-align:right;">  
+                                <v-btn 
+                                :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                rounded color="warning" @click="resetContactar()">
+                                    <h4 class="white--text">Cancelar</h4>
+                                </v-btn>
+                                <v-btn 
+                                :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                rounded color="secondary" class="ml-2" @click="contactar()" >
+                                    <h4 class="white--text">Enviar</h4>
+                                </v-btn>
+                            </div>
+                        </v-form>
+                            
+                    </v-container>
+                
+            </v-card>
+        </v-dialog> 
     </v-container>
 </template>
 
 <script>
 import NosotrosComponent from '@/components/Globales/NosotrosComponent.vue';
+import { mapState, mapMutations } from 'vuex'
 export default {
     components:{
         NosotrosComponent
@@ -44,6 +112,14 @@ export default {
             icoInstagram: 'mdi-instagram',
             icoYoutube:'mdi-youtube',
             nombrePag:'La Calila y los Mojojojo',
+
+            dialogContactar: false,
+            keyContactar: 1,
+            listaRoles: [],
+            listaUsuarios: [], 
+
+            datosContactar: [{rolDestinatario:''},{idDestinatario:''},{motivo:''},{descripcion:''}],
+            
         }
     },
     methods:{
@@ -61,7 +137,24 @@ export default {
         },
         urlUniversidad(){
             window.open("https://www.utalca.cl/universidad/", '_blank');
-        }
+        },
+
+        resetFormCrearUsuario () {
+            this.$refs.contactar.reset();
+        },
+        resetContactar(){
+            this.resetFormCrearUsuario();
+            this.datosContactar.rolDestinatario = '';
+            this.datosContactar.idDestinatario = '';
+            this.datosContactar.motivo = '';
+            this.datosContactar.descripcion = '';
+            this.keyDialogCreacion++;
+            this.dialogContactar = false;
+        },
+
+        contactar(){
+            // inserte codigo aqui
+        },
     }
 }
 </script>
