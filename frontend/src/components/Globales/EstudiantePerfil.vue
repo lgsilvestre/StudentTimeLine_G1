@@ -1253,8 +1253,7 @@ export default {
                 "horas": this.datosSolicitud.horas,
                 "meses": this.datosSolicitud.meses,
             }
-
-            // var url = `http://127.0.0.1:8000/api/v1/profesorConCurso/${this.$store.state.usuario.usuario.id}`;
+            var url = `http://127.0.0.1:8000/api/v1/solicitudDeAyudante/enviar`;
 
             axios.post(url, post, this.$store.state.config)
             .then((result) => {
