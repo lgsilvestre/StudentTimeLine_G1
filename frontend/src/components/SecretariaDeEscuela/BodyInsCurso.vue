@@ -1137,12 +1137,11 @@ export default {
             this.contadorProfesores=1;
             this.seleccionados = [];
         },
-        AsiganarCurso(profesorAux){
+        crearInstanciaCurso(){
             /**variables para el correcto funcionamiento de la consulta. */
             let ins_curso=0;
             let profe_Selec="";
             
-            profe_Selec=profesorAux;
             this.dialogAsignarCurso = true
 
             for(let i = 0; i < this.seleccionados.length ; i++){
@@ -1152,20 +1151,95 @@ export default {
                         "curso": this.seleccionados[i].id,
                         "seccion":  this.seleccionados[i].seccion,
                     }
+                    console.log('PRIMER POST1'+post);
                     var url = 'http://127.0.0.1:8000/api/v1/instanciaCurso';   
                     axios.post(url, post, this.$store.state.config)
                     .then((result) => {
+                        // console.log('SE REALIZO CON EXITO LA PRIMERA CONSULTA( SE CREARON LAS INS DE CURSO)')
                         // this.dialogAsignarCurso=false;
                         // this.dialogAgregarCursoSemestre=false;
+                        // console.log(result)
                         ins_curso= result.data.data.insCurso.id;
-                        let post2 = {
-                            "profesor" :  profe_Selec,
-                            "curso":  ins_curso,
-                            };
-                        //SEGUNDA CONSULTA
-                        if(ins_curso != 0 ){ 
-                            this.agregarProfesorCurso(post2)
-                        }     
+                        // console.log('EL ID DE LA INSTANCIAS DE CURSO ES: '+ ins_curso)
+                         if(ins_curso != 0){
+                            //  console.log('ENTRO A AÑADIOR AL PROFESOR A LAS INSTANCIAS'+ this.profesorSeleccionado);
+
+                            if(this.profesorSeleccionado != ''){
+                                // console.log('EL PROFESOR 1 ESTA SELECCIONADO')
+                                let post2 = {
+                                    "profesor" :  this.profesorSeleccionado,
+                                    "curso":  ins_curso,
+                                    };
+                                
+                                this.agregarProfesorCurso(post2)
+                            }
+                            if(this.profesorSeleccionado2 != ''){
+                                // console.log('EL PROFESOR 2 ESTA SELECCIONADO')
+                                let post2 = {
+                                    "profesor" :  this.profesorSeleccionado2,
+                                    "curso":  ins_curso,
+                                    };
+                                this.agregarProfesorCurso(post2)
+                                }
+                            
+                            if(this.profesorSeleccionado3 != ''){
+                                // console.log('EL PROFESOR 3 ESTA SELECCIONADO')
+                                let post2 = {
+                                    "profesor" :  this.profesorSeleccionado3,
+                                    "curso":  ins_curso,
+                                    };
+                                
+                                this.agregarProfesorCurso(post2)
+                            }
+                            if(this.profesorSeleccionado4 != ''){
+                                // console.log('EL PROFESOR 4 ESTA SELECCIONADO')
+                                let post2 = {
+                                    "profesor" :  this.profesorSeleccionado4,
+                                    "curso":  ins_curso,
+                                    };
+                                
+                                this.agregarProfesorCurso(post2)
+                            }
+                            if(this.profesorSeleccionado5 != ''){
+                                // console.log('EL PROFESOR 5 ESTA SELECCIONADO')
+                                let post2 = {
+                                    "profesor" :  this.profesorSeleccionado5,
+                                    "curso":  ins_curso,
+                                    };
+                                
+                                this.agregarProfesorCurso(post2)
+                            }
+                            // Reseteamos las variables.
+                            this.profesorSeleccionado = '';
+                            this.profesorSeleccionado2='';
+                            this.profesorSeleccionado3='';
+                            this.profesorSeleccionado4='';
+                            this.profesorSeleccionado5='';
+                             this.dialogAsignarCurso=false;
+                            this.dialogAgregarCursoSemestre=false;
+                            this.seleccionados = []; 
+                            
+                            this.contadorProfesores=1;
+                            this.obtenerInstanciasCursos();   
+                        }
+                        else{
+                            // console.log('NO FUNCIONO')
+                            this.alertaError = true;
+                            this.textoAlertas = "Error al asignar profesores al curso."
+                            this.profesorSeleccionado = '';
+                            this.profesorSeleccionado2='';
+                            this.profesorSeleccionado3='';
+                            this.profesorSeleccionado4='';
+                            this.profesorSeleccionado5='';
+                            this.dialogAsignarCurso=false;
+                            this.dialogAgregarCursoSemestre=false;
+                            this.seleccionados = []; 
+                            
+                            this.contadorProfesores=1;
+                            this.obtenerInstanciasCursos();
+                        }
+
+
                     }).catch((error)=>{
                         console.log( error.response.data);
                         if (error.message == 'Network Error') {
@@ -1199,43 +1273,9 @@ export default {
 
         asignarCursoASementre(){
             this.dialogAsignarCurso=true;
-            if(this.profesorSeleccionado != ''){
-                console.log('EL PROFESOR 1 ESTA SELECCIONADO')
-                this.AsiganarCurso(this.profesorSeleccionado);
-            }
-            if(this.profesorSeleccionado2 != ''){
-                console.log('EL PROFESOR 2 ESTA SELECCIONADO')
-                this.AsiganarCurso(this.profesorSeleccionado2);
-            }
-            if(this.profesorSeleccionado3 != ''){
-                console.log('EL PROFESOR 3 ESTA SELECCIONADO')
-                this.AsiganarCurso(this.profesorSeleccionado3);
-            }
-            if(this.profesorSeleccionado4 != ''){
-                console.log('EL PROFESOR 4 ESTA SELECCIONADO')
-                this.AsiganarCurso(this.profesorSeleccionado4);
-            }
-            if(this.profesorSeleccionado5 != ''){
-                console.log('EL PROFESOR 5 ESTA SELECCIONADO')
-                this.AsiganarCurso(this.profesorSeleccionado5);
-            }
-            this.dialogAsignarCurso=false;
-            this.dialogAgregarCursoSemestre=false;
-            this.seleccionados = []; 
-            this.profesorSeleccionado = '';
-            this.profesorSeleccionado2='';
-            this.profesorSeleccionado3='';
-            this.profesorSeleccionado4='';
-            this.profesorSeleccionado5='';
-            this.contadorProfesores=1;
-            this.obtenerInstanciasCursos();     
-                                                        
-                
-                   
-            
-            
-            
-
+            // Primero creamos la instancia donde asociaremos los profesores
+            //guardamos el id de la nueva instancia del curso creada
+            this.crearInstanciaCurso();
         },
 
         agregarProfesorCurso(post2){
@@ -1244,12 +1284,10 @@ export default {
                     axios.post(url2, post2, this.$store.state.config)
                     .then((result) => {
                         // console.log(result)
-                        console.log("Se agrego al profesor correctamente : "+ post2.profesor)
                         this.textoAlertas = "Se asignó el profesor correctamente"
                         this.alertaExito=true;
                         
                     }).catch((error)=>{
-                        console.log(error.response);
                         if (error.message == 'Network Error') {
                             console.log(error)  
                             this.alertaError = true;
