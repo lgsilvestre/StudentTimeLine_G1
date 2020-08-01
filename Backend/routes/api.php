@@ -20,6 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1'], function () {
     #Controlador de usuario
+    Route::get('/usuario/indexProfesor','UsuarioController@indexProfesor');
     Route::get('/usuario/disabled','UsuarioController@disabled');
     Route::post('/usuario/restore/{id}','UsuarioController@restore');
     Route::resource('usuario', 'UsuarioController');
@@ -38,7 +39,7 @@ Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1'], function () {
     Route::post('/estudiante/importar', 'ImportarExcelController@importar');
     Route::post('/estudiante/exportar', 'ExportarExcelController@exportar');
     Route::post('/estudiante/exportarPDF', 'ExportarPDFController@exportar');
-    Route::resource('/estudiante', 'EstudianteController' );
+    Route::resource('/estudiante', 'EstudianteController');
     #Controlador de Profesor_Con_Curso
     Route::get('/profesorConCurso/disabled','ProfesorConCursoController@disabled');
     Route::post('/profesorConCurso/restore/{id}','ProfesorConCursoController@restore');
@@ -67,6 +68,8 @@ Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1'], function () {
     Route::resource('/tipoObservacion','TipoObservacionController');
     #controlador de log
     Route::get('/log','LogController@index');
+    #
+    Route::post('/solicitudDeAyudante/enviar', 'SolicitudDeAyudanteController@enviar');
 });
 
 Route::group(['middleware' => [], 'prefix' => 'v1'], function () {

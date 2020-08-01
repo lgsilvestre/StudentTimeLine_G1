@@ -81,7 +81,8 @@ class RolesAndPermissions extends Seeder
         Permission::create(['name' => 'update observacion']);
         Permission::create(['name' => 'delete observacion']);
         Permission::create(['name' => 'restore observacion']);
-        
+        //Enviar solicitud de ayudante
+        Permission::create(['name' => 'enviar solicitud']);
 
         //---------------- asignacion de permisos ----------------
         //Creacion de rol y asignacion de permisos al rol de "administrador"
@@ -150,7 +151,7 @@ class RolesAndPermissions extends Seeder
         $role->givePermissionTo('update observacion');
         $role->givePermissionTo('delete observacion');
         $role->givePermissionTo('restore observacion');
-        
+        $role->givePermissionTo('enviar solicitud');
 
         //Creacion de rol y asignacion de permisos al rol de "secretaria de escuela"
         $role = Role::create(['name' => 'secretaria de escuela']);
@@ -207,6 +208,7 @@ class RolesAndPermissions extends Seeder
         $role->givePermissionTo('update observacion');
         $role->givePermissionTo('delete observacion');
         $role->givePermissionTo('restore observacion');
+        $role->givePermissionTo('enviar solicitud');
 
         //Creacion de rol y asignacion de permisos al rol de "profesor"
         $role = Role::create(['name' => 'profesor']);
@@ -236,5 +238,6 @@ class RolesAndPermissions extends Seeder
         $role->givePermissionTo('update observacion');
         $role->givePermissionTo('delete observacion');
         $role->givePermissionTo('restore observacion');
+        $role->givePermissionTo('enviar solicitud');
     }
 }

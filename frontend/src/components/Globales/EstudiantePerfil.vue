@@ -1001,8 +1001,8 @@ export default {
             console.log("exportar info del estudiante.")
             //console.log( this.$store.state.perfilEstudiante.id)
             
-            //this.exportar(3,0,0,this.$store.state.perfilEstudiante.id,0);
-            this.exportar(3,'2020-07-19','2020-07-21',1,1);
+            this.exportar(3,0,0,this.$store.state.perfilEstudiante.id,0);
+            // this.exportar(3,'2020-07-19','2020-07-21',1,1);
         },
         exportar(tipo, fechaIni,fechaTer,idEstudiante,escuela){
             //var fechaInicio=this.formatDate(fechaIni);
@@ -1016,31 +1016,31 @@ export default {
             // }
             let post = {
                     "tipo": tipo,
-                    "fechaInicio" : fechaIni,
-                    "fechaFin": fechaTer ,
+                    "fechaInicio" : 0,
+                    "fechaFin": 0 ,
                     "id": idEstudiante,
-                    "escuela": escuela
+                    "escuela": 0
                 };
                 console.log(post)
             var url = 'http://127.0.0.1:8000/api/v1/estudiante/exportarPDF';
             console.log(post)
             axios.post(url,post,this.$store.state.config)
             .then((result)=>{
-                console.log(result);
+                // console.log(result);
                 //var fileDownload = require('js-file-download');
                 //fileDownload(result.data, 'archivo.xlsx');
                 
 
-                // const url = URL.createObjectURL(new Blob([result.data], {
-                //     type: 'application/pdf'
-                // }))
-                // const link = document.createElement('a');
-                // link.href = url;
-                // link.setAttribute('download', 'Estudiante.pdf');
-                // document.body.appendChild(link);
-                // link.click();
-                // this.alertAcept = true;
-                // this.textoAcept = 'Se realizó la operación correctamente'
+                const url = URL.createObjectURL(new Blob([result.data], {
+                    type: 'application/pdf'
+                }))
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'Estudiante.pdf');
+                document.body.appendChild(link);
+                link.click();
+                this.alertAcept = true;
+                this.textoAcept = 'Se realizó la operación correctamente'
                 
                 this.dialogExportar=false;
                 
@@ -1329,14 +1329,14 @@ export default {
         obtenerCursosUsuario(){
             this.listaCursosAux = [];
             // var url =`http://127.0.0.1:8000/api/v1/instanciacurso/${this.$store.state.usuario.usuario.id}`;
-            var url = `http://127.0.0.1:8000/api/v1/profesorConCurso/${this.id}`;
+            var url = `http://127.0.0.1:8000/api/v1/profesorConCurso/${this.$store.state.usuario.usuario.id}`;
             
             axios.get(url,this.$store.state.config)
             .then((result)=>{   
                 for (let index = 0; index < result.data.data.cursos.length; index++) {
                     const element = result.data.data.cursos[index];  
                     let insCurso = {
-                        id: element.id,
+                        id: element.idInstanciaCurso,
                         anio:element.anio,
                         semestre: element.semestre,
                         seccion:element.seccion,
@@ -1694,8 +1694,7 @@ export default {
                 "horas": this.datosSolicitud.horas,
                 "meses": this.datosSolicitud.meses,
             }
-
-            // var url = `http://127.0.0.1:8000/api/v1/profesorConCurso/${this.$store.state.usuario.usuario.id}`;
+            var url = `http://127.0.0.1:8000/api/v1/solicitudDeAyudante/enviar`;
 
             axios.post(url, post, this.$store.state.config)
             .then((result) => {

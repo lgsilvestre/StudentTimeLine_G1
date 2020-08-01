@@ -76,8 +76,13 @@ class EstudianteController extends Controller
      */
     public function store(Request $request){
         $entradas = $request->only('matricula', 'rut', 'nombre_completo', 'correo', 'anho_ingreso', 'situacion_academica', 'porcentaje_avance', 'creditos_aprobados', 'escuela', 'foto');
+        if(array_key_exists ("rut" , $entradas)){
+            if(gettype($entradas['rut']=="integer")){
+                $entradas['rut'] = strval($entradas['rut']);
+            }
+        }
         $validator = Validator::make($entradas, [
-            'matricula' => ['required','numeric'],
+            'matricula' => ['required','string'],
             'rut' => ['required', 'string'],
             'nombre_completo' => ['required', 'string'],
             'correo' => ['required','email'], 
@@ -246,13 +251,22 @@ class EstudianteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id){
-        $entradas = $request->only('nombre_completo', 'situacion_academica', 'porcentaje_avance', 'creditos_aprobados', 'escuela');
+        $entradas = $request->only('matricula', 'rut', 'nombre_completo', 'correo' , 'anho_ingreso', 'situacion_academica', 'porcentaje_avance', 'creditos_aprobados', 'escuela', 'foto');
+        if(array_key_exists ("rut" , $entradas)){
+            if(gettype($entradas['rut']=="integer")){
+                $entradas['rut'] = strval($entradas['rut']);
+            }
+        }
         $validator = Validator::make($entradas, [
+            'matricula' => ['nullable','string'],
+            'rut' => ['nullable','string'],
             'nombre_completo' => ['nullable','string'],
+            'correo' => ['nullable','email'],
+            'anho_ingreso' => ['nullable','numeric'],
             'situacion_academica' => ['nullable', 'string'], //Cambiar lo de la foreign key dps
             'porcentaje_avance' => ['nullable', 'numeric'], //Cambiar lo de la foreign key dps
             'creditos_aprobados' => ['nullable','numeric'], 
-            'escuela' => ['nullable','numeric'],
+            'escuela' => ['nullable','numeric']
         ]);
         //respuesta cuando falla
         if ($validator->fails()) {
