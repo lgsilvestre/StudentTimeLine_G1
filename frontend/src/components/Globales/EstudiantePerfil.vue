@@ -134,6 +134,17 @@
                     </div>
                     
                 </v-card>
+                <!--<section id="up" class="mb-12">!-->
+                    <!--<div id="up">!-->
+                        <!--<div id="up" class="base-title">
+                            <a id="up" href="#up" class="mr-2 d-inline-flex core-goto text--primary">
+                                
+                                <h2>wena</h2>
+                                
+                            </a>
+                        </div>!-->
+                    <!--</div>!-->
+                <!--</section>!-->
             </v-col>
             <v-col cols="12" md="7" xl="8">
                 <v-row>
@@ -198,19 +209,17 @@
                                 
                                 <v-timeline-item
                                 v-for="(observacion, i) in observaciones"
-                                  
                                 :key="i"
                                 :color="observacion.color"
                                 :icon="observacion.icono"
                                 fill-dot
                                 dense
-                                
                                 >
                                 <v-card
                                     :color="observacion.color"
                                 >
                                     <v-card-title class="headline  text--center"   primary-title >
-                                        <div class="v-markdown" :href="observacion.selector" :id="observacion.selector">
+                                        <div class="v-markdown" id="hola" href="#hola">
                                             <h5 class="white--text " >{{observacion.titulo}}</h5>
                                         </div>
                                         
@@ -725,6 +734,7 @@
                 <v-icon color="warning">fas fa-times</v-icon>
             </v-btn>
         </v-snackbar>
+        
     </v-container> 
 </template>
 
@@ -913,13 +923,13 @@ export default {
         ...mapState(['perfilEstudiante','usuario','admin','secretariaEscuela','profesor']), 
         
         target () {
-            return "#Comentario 1"
+            return '#hola';
         },
         options () {
             return {
             duration: 300,
-            offset: 0,
-            easing: 'easeInOutCubic',
+            offset: 23,
+            easing: 'linear',
             }
         },
     },
@@ -1276,7 +1286,8 @@ export default {
                             creador: element.creador,
                             creadorid: element.get_creador.id,
                             fecha:fechaaux2[0],
-                            selector:'#'+element.titulo,
+                            selector:'#'+element.id+element.titulo,
+                            idselector: element.id+element.titulo,
                         };
 
                         this.auxObservaciones[index]=observacion;
@@ -1468,7 +1479,7 @@ export default {
                     this.estudianteModificarObservacion.categoria = element;
                 }
             }
-            this.estudianteModificarObservacion.estudiante = observacion.estudiante;
+            this.estudianteModificarObservacion.estudiante = this.id;
             this.estudianteModificarObservacion.titulo = observacion.titulo;
             this.estudianteModificarObservacion.curso = observacion.curso;
             this.estudianteModificarObservacion.curso = observacion.ayudante;
@@ -1512,12 +1523,14 @@ export default {
                 "titulo": this.estudianteModificarObservacion.titulo,
                 "descripcion": this.estudianteModificarObservacion.descripcion,
                 "ayudante": null, 
-                "estudiante": this.estudianteModificarObservacion.id,
+                "estudiante": this.estudianteModificarObservacion.estudiante,
                 "curso": null,
                 "categoria": auxcategoria,
                 "tipo": auxTipo,
             }
-            var url = 'http://127.0.0.1:8000/api/v1/observacion/'+this.estudianteModificarObservacion.id;
+            console.log(put);
+            var url = 'http://127.0.0.1:8000/api/v1/observacion/'+ this.estudianteModificarObservacion.id;
+            console.log(url);
             axios.put(url, put, this.$store.state.config)
             .then((result) => {
                 //console.log(result);
