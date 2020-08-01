@@ -772,11 +772,7 @@
         exportar(tipo, fechaIni,fechaTer,idEstudiante,escuela){
             var fechaInicio=fechaIni;
             var fechaTermino =fechaTer;
-            // console.log("FECHA INI  "+ fechaInicio);
-            // console.log("FECHA fin  "+ fechaTermino);
-
-         
-            let post = {
+             let post = {
                     "tipo": tipo,
                     "fechaInicio" : fechaInicio,
                     "fechaFin": fechaTermino ,
@@ -785,7 +781,7 @@
                 };
                 console.log(post)
             var url = 'http://127.0.0.1:8000/api/v1/estudiante/exportar';
-            axios.post(url,post,this.$store.state.config2)
+            axios.post(url,post,this.$store.state.config)
             .then((result)=>{
                 console.log(result.data);
                 //var fileDownload = require('js-file-download');
