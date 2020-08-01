@@ -39,7 +39,7 @@ Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1'], function () {
     Route::post('/estudiante/importar', 'ImportarExcelController@importar');
     Route::post('/estudiante/exportar', 'ExportarExcelController@exportar');
     Route::post('/estudiante/exportarPDF', 'ExportarPDFController@exportar');
-    Route::resource('/estudiante', 'EstudianteController' );
+    Route::resource('/estudiante', 'EstudianteController');
     #Controlador de Profesor_Con_Curso
     Route::get('/profesorConCurso/disabled','ProfesorConCursoController@disabled');
     Route::post('/profesorConCurso/restore/{id}','ProfesorConCursoController@restore');
