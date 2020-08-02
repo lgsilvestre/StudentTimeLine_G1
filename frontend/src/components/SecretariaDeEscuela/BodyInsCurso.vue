@@ -102,14 +102,25 @@
                                                 </v-list>
                                             </v-menu>
                                         </v-col>
-                                        <v-col cols="12"  class=" pt-0 pl-1 pr-0 pb-0 "  >
-
-                                            <v-card-text class=" pt-0 pl-2 pr-0 pb-0 ">
-                                                <div class=" text-truncate"  >
-                                                    <p class="font-weight-black mb-2 text-truncate"   >Nombre: {{ item.nomCurso }}</p>
-                                                    <p class="font-weight-black"   > Sección: {{ item.seccion}} </p>
-                                                </div>
-                                            </v-card-text>
+                                        <v-col cols="12"  >
+                                            <v-row>
+                                                <v-col cols="12" >
+                                                    <p class="font-weight-black  text-truncate"   >Nombre: {{ item.nomCurso }}</p>
+                                                </v-col>
+                                                <v-col>
+                                                    <p class=" text-truncate font-weight-black  "   > Sección: {{ item.seccion}} </p>
+                                                </v-col>
+                                                <v-col cols="12" >
+                                                    <v-btn  outlined x-small  @click="mostrarProfesoresDeCurso(item)">
+                                                        Profesor/es: Ver
+                                                    </v-btn>
+                                                </v-col>
+                                                <v-col cols="12" >
+                                                    <v-btn  outlined x-small>
+                                                        Ayudante/s : Ver
+                                                    </v-btn>
+                                                </v-col>
+                                            </v-row>
                                         </v-col>
                                     </v-row>
                                 </v-container>
@@ -614,6 +625,34 @@
             </v-card>
         </v-dialog>
 
+        <!-- dialog para mostrar con los profesores asociados a una instancia curso -->
+        <v-dialog v-model="dialogProfesoresInsCurso" ref="form"  max-width="450px">
+            <v-card class="mx-auto" max-width="450"  >
+                <v-card-title
+                    class="headline primary text--center"
+                    primary-title
+                    >
+                    <h5 class="white--text ">Profesores de {{ profesoresDeInstanciaCurso.nomCurso  }} </h5>
+                    </v-card-title> 
+                    <!-- <v-container fluid class=" text-left"> -->
+                    <!-- <v-card-title class="text-justify" style="font-size: 100%;">Profesores</v-card-title> -->
+                    <!-- <v-card-text>Curso : {{ this.datosInsCurso.nomCurso }}</v-card-text> -->
+                    <!-- </v-container > -->
+                    <ul>
+                        <li class="mt-2"  v-for="(item,index) in profesoresDeInstanciaCurso.listaProfesores" :key="index"> 
+                            <strong > <a   > {{ item.nombre }} </a></strong>
+                        </li>
+                    </ul>
+                    <div style="text-align:right;" class="mt-3">
+                        <v-btn rounded color="warning" class=" mb-4 "  @click="resetProfesoresDeInstanciaCurso">
+                            <h4 class="white--text">Cancelar</h4>
+                        </v-btn>
+                        <v-btn rounded color="secondary"   class=" mb-4 ml-2 mr-5" @click="eliminarInstanciaCurso()">
+                            <h4 class="white--text">Eliminar</h4>
+                        </v-btn>
+                    </div> 
+            </v-card>
+        </v-dialog>
 
         <!-- Alertas -->
 
@@ -741,12 +780,16 @@ export default {
                 { text: 'Curso ', value: 'curso' },
                 { text: 'Nombre curso', value: 'nomCurso' },
             ],
-            listaAccionesSobreInstaciaCurso: [ 'Modificar curso' , 'Cerrar curso'  ],
+            listaAccionesSobreInstaciaCurso: [ 'Modificar curso' , 'Cerrar curso' ,'Añadir ayudante','Quitar ayudante' ],
             listaDeSeccionesDisponibles:['A','B','C','D','E','F','G','H'],
             secionActual:'',
             semestre:null,
             KeyDialogCrearCurso: 0,
             calcularCol:true,
+
+            dialogProfesoresInsCurso:false,
+            profesoresDeInstanciaCurso:'',
+
         }
     },
     _props: {
@@ -773,13 +816,6 @@ export default {
     },
     methods: {
         ...mapMutations(['calcularRolVuelta']),
-    //     resetSeccion () {
-    //     this.$refs.formSeccion.reset();
-    //   },
-    //   resetProfesores () {
-    //     this.$refs.formProfesores.reset();
-    //   },
-
         sumarProfesor(){
             if (this.contadorProfesores < 5) {
                 this.contadorProfesores ++;
@@ -931,23 +967,33 @@ export default {
                 console.log(result)
                 for (let index = 0; index < result.data.data.insCursos.length; index++) {
                     const element = result.data.data.insCursos[index];  
-                    console.log('DATA   '+element)
+                    // console.log(result.data.data.insCursos[index])
                     let insCurso = {
                         id: element.id,
                         semestre: element.semestre,
                         nomCurso: element.curso,
                         seccion:element.seccion,
+                        listaProfesores:element.listaProfesores,
                     }; 
                     this.listaInsCursosAux[index]=insCurso;                                                         
                 }
-                this.listaInsCursos = this.listaInsCursosAux;  
+                this.listaInsCursos = this.listaInsCursosAux; 
+                // console.log(this.listaInsCursos);
                 this.cargando = false;              
             }
             ).catch((error)=>{
                 this.cargando = false;
                 console.log(error.response)
             });
-        },        
+        },
+        mostrarProfesoresDeCurso(item){
+            this.dialogProfesoresInsCurso = true;
+            this.profesoresDeInstanciaCurso=item
+            console.log(item);
+        },   
+        resetProfesoresDeInstanciaCurso(){
+            this.dialogProfesoresInsCurso = false;
+        },     
         
         crearCurso(){ 
             var nombre=this.datosCurso.nombre; 
@@ -1137,6 +1183,10 @@ export default {
             this.contadorProfesores=1;
             this.seleccionados = [];
         },
+        /**
+         * Crea la instancia de un curso y lo asocia a lo 
+         * mas con 5 profesores previamente registrados.
+         */
         crearInstanciaCurso(){
             /**variables para el correcto funcionamiento de la consulta. */
             let ins_curso=0;
@@ -1270,14 +1320,19 @@ export default {
                 } 
 
         },
-
+        /**
+         * Abre el dialog para la la creaciopn de una una instancia de curso.
+         */
         asignarCursoASementre(){
             this.dialogAsignarCurso=true;
             // Primero creamos la instancia donde asociaremos los profesores
             //guardamos el id de la nueva instancia del curso creada
             this.crearInstanciaCurso();
         },
-
+        /**
+         * Se asocia un profesor a un profesor con una instancia previamente
+         * creada
+         */
         agregarProfesorCurso(post2){
             var url2 = 'http://127.0.0.1:8000/api/v1/profesorConCurso'; 
                     /* crear profesor con curso */
@@ -1434,3 +1489,14 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+    a {       
+        text-decoration-line: none;
+        color: black;
+}
+
+a:hover {
+  text-decoration: underline  ;
+}
+</style>
