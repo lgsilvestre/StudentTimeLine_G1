@@ -103,24 +103,15 @@
                                             </v-menu>
                                         </v-col>
                                         <v-col cols="12"  >
-                                            <v-row>
-                                                <v-col cols="12" >
-                                                    <p class="font-weight-black  text-truncate"   >Nombre: {{ item.nomCurso }}</p>
-                                                </v-col>
-                                                <v-col>
-                                                    <p class=" text-truncate font-weight-black  "   > Sección: {{ item.seccion}} </p>
-                                                </v-col>
-                                                <v-col cols="12" >
-                                                    <v-btn  outlined x-small  @click="mostrarProfesoresDeCurso(item)">
+                                                    <p class=" mt-0 mb-1   font-weight-black  text-truncate"   >Nombre: {{ item.nomCurso }}</p>
+                                                    <p class="mt-0 mb-1  text-truncate font-weight-black  "   > Sección: {{ item.seccion}} </p>
+                                                    <v-btn class="mt-0 mb-1"   outlined x-small  @click="mostrarProfesoresDeCurso(item)">
                                                         Profesor/es: Ver
                                                     </v-btn>
-                                                </v-col>
-                                                <v-col cols="12" >
-                                                    <v-btn  outlined x-small>
+                                                    <v-btn class="mt-0 mb-0"  outlined x-small>
                                                         Ayudante/s : Ver
                                                     </v-btn>
-                                                </v-col>
-                                            </v-row>
+                                            
                                         </v-col>
                                     </v-row>
                                 </v-container>
@@ -1472,6 +1463,16 @@ export default {
                  //this.semestreActual_1=semestre;
             }
             if(item=='Cerrar curso'){
+                this.datosInsCurso= curso;
+                this.dialogEliminarInsCurso=true
+
+            }
+            if(item=='Añadir ayudante'){
+                this.datosInsCurso= curso;
+                this.dialogEliminarInsCurso=true
+
+            }
+            if(item=='Quitar ayudante'){
                 this.datosInsCurso= curso;
                 this.dialogEliminarInsCurso=true
 
