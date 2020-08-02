@@ -68,24 +68,24 @@ class AyudanteConCursoController extends Controller
     public function store(Request $request)
     {
         $entradas = $request->only('estudiante', 'curso');
-        $validator = Validator::make($entradas, [
-            'estudiante' => ['required', 'numeric'],
-            'curso' => [' required', 'numeric'],
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'code' => 301,
-                'message' => 'Error en datos ingresados',
-                'data' => ['error'=>$validator->errors()]
-            ], 422);
-        }
-        if(!array_key_exists ("estudiante" , $entradas)){
-            $entradas['estudiante'] = null;
-        }
-        if(!array_key_exists ("curso" , $entradas)){
-            $entradas['curso'] = null;
-        }
+        // $validator = Validator::make($entradas, [
+        //     'estudiante' => ['required', 'numeric'],
+        //     'curso' => [' required', 'numeric'],
+        // ]);
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'code' => 301,
+        //         'message' => 'Error en datos ingresados',
+        //         'data' => ['error'=>$validator->errors()]
+        //     ], 422);
+        // }
+        // if(!array_key_exists ("estudiante" , $entradas)){
+        //     $entradas['estudiante'] = null;
+        // }
+        // if(!array_key_exists ("curso" , $entradas)){
+        //     $entradas['curso'] = null;
+        // }
         try{
             $ayudanteCurso = new Ayudante_Con_Curso();
             $ayudanteCurso-> estudiante=$entradas['estudiante'];
