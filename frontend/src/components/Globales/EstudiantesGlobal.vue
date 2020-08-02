@@ -159,6 +159,15 @@
                                                     outlined
                                                     prepend-inner-icon="fas fa-book"
                                                     ></v-select>
+                                                    <v-file-input  accept="image/png, image/jpeg, image/bmp" 
+                                                    label="Seleccione una imagen"
+                                                    color="secondary"
+                                                    outlined
+                                                    prepend-icon=""   
+                                                    prepend-inner-icon="mdi-camera"
+                                                    @change="convertirImagen"
+                                                    v-model="estudianteImportar.foto">
+                                                    </v-file-input>
                                                     <div style="text-align:right;" class="mb-1">
                                                         <v-btn rounded color="warning" 
                                                         :small="$vuetify.breakpoint.smAndDown ? true : false"
@@ -478,6 +487,7 @@
             anho_ingreso:'',
             situacion_academica:'',
             escuela:'',
+            foto:null,
         },
         cargando: true,    
         alertError: false,
@@ -506,7 +516,7 @@
         fechaTer: new Date().toISOString().substr(0, 10),
 
 
-
+        imagenMiniatura:null,
     }),
     computed: {
         ...mapState(['admin','secretariaEscuela']),
@@ -537,9 +547,22 @@
       },
       
 
-        nada(item){
-            
+        
+        /**
+         * Convierte la imagen cargada a base 64.
+         */
+        convertirImagen(e){
+            this.imagenMiniatura=null;
+            if(e != null){
+                let image =e;
+                let reader = new FileReader();
+                reader.readAsDataURL(image);
+                reader.onload = e =>{
+                    this.imagenMiniatura=e.target.result;
+                }
+            }  
         },
+        
         volverAgregarEstudiantes(){
             this.botonesAgregarEstudiantes= true;
             this.containerAgregarEstudianteUnico= false;
@@ -648,7 +671,8 @@
                 "situacion_academica": this.estudianteImportar.situacion_academica,
                 "porcentaje_avance":0,
                 "creditos_aprobados":0,
-                "escuela": this.estudianteImportar.escuela
+                "escuela": this.estudianteImportar.escuela,
+                "foto": this.imagenMiniatura,
             };
             axios.post(url,post,this.$store.state.config)
             .then((result)=>{
@@ -827,6 +851,7 @@
             this.estudianteImportar.anho_ingreso="";
             this.estudianteImportar.situacion_academica="";
             this.estudianteImportar.escuela="";
+            this.estudianteImportar.foto=null;
             this.dialogAgregarEstudiante= false;
         },
         perfilEstudiante(item){
