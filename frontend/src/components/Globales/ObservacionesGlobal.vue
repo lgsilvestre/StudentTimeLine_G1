@@ -164,10 +164,10 @@
                     this.$router.push({path:'/administrador/'+observaciones+'/id='+item.id});
                 } else {
                     if (this.$store.state.usuario.usuario.rol == "secretaria de escuela") {
-                        this.$router.push({path:'/secretariaEscuela/'+observaciones+'/?id='+item.id});
+                        this.$router.push({path:'/secretariaEscuela/'+observaciones+'/id='+item.id});
                     } else {
                         if (this.$store.state.usuario.usuario.rol == "profesor") {
-                            this.$router.push({path:'/profesor/'+observaciones+'/?id='+item.id});
+                            this.$router.push({path:'/profesor/'+observaciones+'/id='+item.id});
                         }
                     }
                 }

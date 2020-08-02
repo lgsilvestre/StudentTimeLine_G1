@@ -9,14 +9,14 @@
             <v-icon class="pr-2" color="primary"> fas fa-arrow-circle-left</v-icon> 
             volver
         </v-btn>
-        <v-btn
+        <!--<v-btn
         ref="button"
         block
         color="primary"
         @click="$vuetify.goTo(target, options)"
         >
           scroll
-        </v-btn>
+        </v-btn>!-->
         <v-row >
             <v-col  cols="12" md="5" xl="4">
                 <v-card elevation="1" > 
@@ -294,7 +294,7 @@
                                         <v-tooltip bottom color="primary">
                                             <template v-slot:activator="{ on }">
                                         <v-btn v-on="on" color="white" fab small depressed class="mr-2 py-2" 
-                                        @click="cargarDatosEliminarObservacion(observacion)"
+                                        @click="verficarEliminarObservacion(observacion)"
                                         >
                                             <v-icon color="warning"  >
                                                 fas fa-trash-alt
@@ -350,8 +350,23 @@
                         label="Categoria"
                         color="secondary"
                         outlined
+                        :disabled="profesor == true"
                         prepend-inner-icon="fas fa-check-circle"
                         ></v-select>
+
+                        <v-select 
+                        v-if="profesor == true"
+                        v-model="estudianteModificarObservacion.curso"
+                        :items="cursosAyudante"
+                        item-text="curso"
+                        item-value="id"
+                        label="Cursos"
+                        color="secondary"
+                        outlined
+                        prepend-inner-icon="fas fa-check-circle"
+                        ></v-select>
+
+
                         <v-textarea
                         v-model="estudianteModificarObservacion.descripcion"
                         outlined
@@ -554,12 +569,24 @@
                         prepend-inner-icon="fas fa-check-circle"
                         ></v-select >
 
-                        <v-select 
+                        <v-select   
                         v-model="estudianteObservacion.categoria"
                         :items="categorias"
                         item-text="nombre"
                         item-value="id"
                         label="Categoria"
+                        color="secondary"
+                        outlined
+                        :disabled="profesor == true"
+                        prepend-inner-icon="fas fa-check-circle"
+                        ></v-select>
+                        <v-select 
+                        v-if="profesor == true"
+                        v-model="estudianteObservacion.curso"
+                        :items="cursosAyudante"
+                        item-text="curso"
+                        item-value="id"
+                        label="Cursos"
                         color="secondary"
                         outlined
                         prepend-inner-icon="fas fa-check-circle"
@@ -917,6 +944,9 @@ export default {
             counter: 0,
             //prueba de imagen
             imagenMiniatura:null,
+
+            cursosAyudante:[],
+            cursosAyudanteAux:[],
         }
     },
     computed:{
@@ -935,7 +965,6 @@ export default {
     },
 
     beforeMount(){
-        
         this.id =  this.$route.params.id;
         this.enrutamiento = this.$route.params.enrutamiento;
         this.obtenerEstudiante(1);
@@ -1188,10 +1217,11 @@ export default {
             }
             
             if (opcion == 1 || opcion == 3) {
-                this.cargando =true;
-                this.seriesaux =[0,0,0,0];
-                this.observaciones =[];
-                this.auxObservaciones =[];
+                this.cargando = true;
+                this.seriesaux = [0,0,0,0];
+                this.observaciones = [];
+                this.auxObservaciones = [];
+                this.cursosAyudanteAux= [];
             }
             
             
@@ -1214,6 +1244,36 @@ export default {
                     this.estudianteAUX.escuelaid = result.data.data.estudiante.get_escuela.id;
                     this.estudiante=this.estudianteAUX;
                     this.obtenerEscuelas(this.estudiante);
+                }
+                if (opcion == 1 && this.profesor ==true) {
+                    var contador = 0;
+                    for (let index = 0; index < result.data.data.cursos.length; index++) {
+                        const element = result.data.data.cursos[index];
+                        contador ++;
+                        let cursos ={
+                            id: element.curso,
+                            curso: element.nombreCurso,
+                        };
+                        console.log("cursos");
+                        console.log(cursos);
+                        this.cursosAyudanteAux[index]= cursos;
+                    }
+                    if (contador>0) {
+                        this.cursosAyudante = this.cursosAyudanteAux;
+                        //this.validacionObservaciones=true;
+                        //this.validacionObservacionesFalse = true;
+                    }
+                    else{
+                        let curso ={
+                            id: 1,
+                            curso: "No existen cursos asociados",
+                        }
+                        this.cursosAyudanteAux[0]= curso;
+                        this.cursosAyudante = this.cursosAyudanteAux;
+                        //this.validacionObservacionesFalse = false;
+                        //this.validacionObservaciones=false;
+                    }
+                    this.estudianteObservacion.categoria = 'Ayudantía';
                 }
                 if (opcion == 1 || opcion == 3) {
                     var contador = 0;
@@ -1395,19 +1455,30 @@ export default {
                 }
             }
             var auxcategoria=0;
-            for (let index = 0; index < this.categorias.length; index++) {
-                const element = this.categorias[index];
-                if (this.estudianteObservacion.categoria == element) {
-                    auxcategoria=index+1;
+            if (this.profesor == true) {
+                auxcategoria = auxcategoria+1;
+            }
+            else{
+                for (let index = 0; index < this.categorias.length; index++) {
+                    const element = this.categorias[index];
+                    if (this.estudianteObservacion.categoria == element) {
+                        auxcategoria=index+1;
+                    }
                 }
-                
+            }
+            var auxcurso = 0;
+            for (let index = 0; index < this.cursosAyudante.length; index++) {
+                const element = this.cursosAyudante[index];
+                if (this.estudianteObservacion.curso == element.id) {
+                    auxcurso= element.id;
+                }
             }
             let post = {
                 "titulo": this.estudianteObservacion.titulo,
                 "descripcion": this.estudianteObservacion.descripcion,
                 "ayudante": null, 
                 "estudiante": this.id,
-                "curso": null,
+                "curso": auxcurso,
                 "categoria": auxcategoria,
                 "tipo": auxTipo,
             }
@@ -1457,7 +1528,6 @@ export default {
                 descripcion:'',
                 id:''
             };
-            console.log(observacion.tipo);
             if (observacion.tipo == "Positiva") {
                 this.estudianteModificarObservacion.tipo="Positiva";
             }
@@ -1473,16 +1543,25 @@ export default {
                 }
             
             }
-            for (let index = 1; index <= this.categorias.length; index++) {
+            var categoriaAux = 0
+            for (let index = 0; index < this.categorias.length; index++) {
                 const element = this.categorias[index];
                 if (observacion.categoria == element) {
                     this.estudianteModificarObservacion.categoria = element;
                 }
             }
+            var auxcurso = null;
+            for (let index = 0; index < this.cursosAyudante.length; index++) {
+                const element = this.cursosAyudante[index];
+                if (observacion.curso == element.curso) {
+                    auxcurso= element;
+                }
+            }
+
+            console.log("cursoooooooooooooooooooooooooo"+ auxcurso);
             this.estudianteModificarObservacion.estudiante = this.id;
             this.estudianteModificarObservacion.titulo = observacion.titulo;
-            this.estudianteModificarObservacion.curso = observacion.curso;
-            this.estudianteModificarObservacion.curso = observacion.ayudante;
+            this.estudianteModificarObservacion.curso =  auxcurso;
             this.estudianteModificarObservacion.descripcion = observacion.descripcion;
             this.estudianteModificarObservacion.id = observacion.id;
         },
@@ -1602,6 +1681,14 @@ export default {
             this.estudianteEliminarObservacion.id = observacion.id;
             this.estudianteEliminarObservacion.descripcion = observacion.descripcion;
         },
+        verficarEliminarObservacion(observacion){
+            if (observacion.creadorid== this.$store.state.usuario.usuario.id) {
+                this.cargarDatosEliminarObservacion(observacion);
+            } else {
+                this.alertError = true;
+                this.textoError = "Solo el creador de la observacion puede eliminarla";
+            }
+        },
         EliminarObservacion(){
             var url = 'http://127.0.0.1:8000/api/v1/observacion/'+this.estudianteEliminarObservacion.id;
             axios.delete(url, this.$store.state.config)
@@ -1644,8 +1731,10 @@ export default {
             this.estudianteObservacion.titulo = '';
             this.estudianteObservacion.descripcion= '';
             this.estudianteObservacion.ayudante= '';
+            if (this.profesor != true) {
+                this.estudianteObservacion.categoria= '';
+            }
             this.estudianteObservacion.curso= '';
-            this.estudianteObservacion.categoria= '';
             this.estudianteObservacion.tipo= '';
         },
 
@@ -1688,7 +1777,7 @@ export default {
 
         enviarSolicitud(){
             let post = {
-                "estudiante": this.$store.state.perfilEstudiante.id,
+                "estudiante": this.id,
                 "curso": this.datosSolicitud.curso,
                 "nota": this.datosSolicitud.nota,
                 "horas": this.datosSolicitud.horas,
