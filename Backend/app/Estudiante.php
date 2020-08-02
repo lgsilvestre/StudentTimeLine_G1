@@ -49,6 +49,7 @@ class Estudiante extends Model
                     ->groupBy('matricula','rut','nombre_completo','correo','anho_ingreso','situacion_academica','porcentaje_avance','creditos_aprobados','escuelas.nombre')
                     ->whereBetween('observaciones.created_at',[$fechaInicio,$fechaFin])
                     ->get());
+            //dump($data);
             return $data;
         }
         elseif($tipo == 3)
@@ -66,7 +67,7 @@ class Estudiante extends Model
                     ->get());*/
             $data = collect(DB::table('observaciones')
                     ->select('users.nombre AS profesor', 'cursos.nombre AS curso', 'categorias.nombre AS categoria','observaciones.titulo', 'observaciones.descripcion', 'observaciones.tipo')
-                    ->join('users', 'users.id','=', 'observaciones.profesor')
+                    ->join('users', 'users.id','=', 'observaciones.creador')
                     ->join('cursos', 'observaciones.curso','=', 'cursos.id')
                     ->join('categorias', 'observaciones.categoria','=', 'categorias.id')
                     ->where('observaciones.estudiante','=',$idEstudiante)

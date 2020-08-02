@@ -21,6 +21,7 @@ class ExportarPDFController extends Controller
 
     public function exportar(Request $request)
     {
+        
         $request = new Request([
             'tipo'=> 3,
             'fechaInicio'=> '2020-07-19',

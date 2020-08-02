@@ -25,6 +25,14 @@ class ExportarExcelController extends Controller
 
     public function exportar(Request $request)
     {
+        
+        $request = new Request([
+            'tipo'=> 2,
+            'fechaInicio'=> '2020-05-19',
+            'fechaFin'=>'2020-07-29',
+            'id'=> 0,
+            'escuela'=> 0
+        ]);
         if($request->tipo == 1 || $request->tipo == 2)
         {
             return Excel::download(new DataEstudiantes($request) , 'estudiantes.xlsx');
@@ -61,6 +69,8 @@ class DataEstudiantes implements FromCollection
         }
 
         $data = $data->merge($estudiantes);
+
+        //dump($data);
 
         return $data;
     }
