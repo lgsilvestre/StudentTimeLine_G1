@@ -29,9 +29,9 @@ class ExportarExcelController extends Controller
         $request = new Request([
             'tipo'=> 2,
             'fechaInicio'=> '2020-05-19',
-            'fechaFin'=>'2020-07-29',
+            'fechaFin'=>'2020-08-03',
             'id'=> 0,
-            'escuela'=> 0
+            'escuela'=> 1
         ]);
         if($request->tipo == 1 || $request->tipo == 2)
         {

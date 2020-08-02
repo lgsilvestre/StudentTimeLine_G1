@@ -85,5 +85,6 @@ Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
     Route::post('/estudiante/exportar', 'ExportarExcelController@exportar');
 });
 
+#Route::get('/estudiante/exportar', 'ExportarExcelController@exportar');
 Route::get('/estudiante/exportarPDF', 'ExportarPDFController@exportar');
 #Route::get('/estudiante/exportar', 'ExportarExcelController@exportar');
