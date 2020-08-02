@@ -102,17 +102,34 @@
                                                 </v-list>
                                             </v-menu>
                                         </v-col>
-                                        <v-col cols="12"  >
-                                                    <p class=" mt-0 mb-1   font-weight-black  text-truncate"   >Nombre: {{ item.nomCurso }}</p>
-                                                    <p class="mt-0 mb-1  text-truncate font-weight-black  "   > Sección: {{ item.seccion}} </p>
-                                                    <v-btn class="mt-0 mb-1"   outlined x-small  @click="mostrarProfesoresDeCurso(item)">
-                                                        Profesor/es: Ver
-                                                    </v-btn>
-                                                    <v-btn class="mt-0 mb-0"  outlined x-small>
-                                                        Ayudante/s : Ver
-                                                    </v-btn>
+                                        <v-col cols="12" class="pb-0" >
+                                            <v-card-text class="pt-0">
+                                                <p class=" mt-0 mb-1   font-weight-black  text-truncate"   >Nombre: {{ item.nomCurso }}</p>
+                                                <p class="mt-0 mb-0  text-truncate font-weight-black  "   > Sección: {{ item.seccion}} </p>
+                                            </v-card-text>
+                                            <v-card-actions class="pt-0 pl-2">
+                                                <v-btn   outlined x-small  @click="mostrarProfesoresDeCurso(item)">
+                                                    Profesor/es
+                                                </v-btn>
+                                                <v-divider></v-divider>
+                                                <v-btn   outlined x-small  @click="mostrarAyudantesDeCurso(item)">
+                                                    Ayudante/s 
+                                                </v-btn>
+                                            </v-card-actions>
                                             
                                         </v-col>
+                                        <!-- <v-col cols="6" class="pt-0 pb-1 pl-2 ">
+                                            <v-btn   outlined x-small  @click="mostrarProfesoresDeCurso(item)">
+                                                Profesor/es:ver
+                                            </v-btn>
+                                        </v-col>
+                                        <v-col cols="6" class="pt-0 pb-1 pl-1">
+                                            <v-btn   outlined x-small  @click="mostrarAyudantesDeCurso(item)">
+                                                Ayudante/s :ver
+                                            </v-btn>
+
+                                        </v-col> -->
+                                        
                                     </v-row>
                                 </v-container>
                             </v-card>
@@ -362,16 +379,13 @@
                     <h5 class="white--text ">Modificar Curso</h5>
                 </v-card-title>
                 <v-container class="px-5 mt-5">
-                    <v-select  v-model="datosInsCurso.curso"
-                        :items="listaCursos"
-                        item-text="nombre"
-                        item-value="id"
+                    <v-text-field  v-model="datosInsCurso.nomCurso"
+                        item-text="nombre del curso"
                         label="Curso"
                         outlined
-                        :small-chips="$vuetify.breakpoint.smAndDown ? true : false"
-                        :rules="[() => !!datosInsCurso.curso ||'Requerido']"
+                        
                         prepend-inner-icon="mdi-school"
-                    ></v-select>
+                    ></v-text-field>
                     <v-select  v-model="datosInsCurso.seccion"
                         :items="listaDeSeccionesDisponibles"
                         item-text="nombre"
@@ -544,7 +558,7 @@
                             > 
                             </v-select> 
                             <v-select
-                                v-if="contadorProfesores>1"
+                                v-if=" profesorSeleccionado!='' "
                                 v-model="profesorSeleccionado2"
                                 label="Profesor"
                                 :items="listaProfesores"
@@ -556,7 +570,7 @@
                             >                               
                             </v-select>
                             <v-select
-                                v-if="contadorProfesores>2"
+                                v-if="profesorSeleccionado2!=''"
                                 v-model="profesorSeleccionado3"
                                 label="Profesor"
                                 :items="listaProfesores"
@@ -568,7 +582,7 @@
                             >                               
                             </v-select> 
                             <v-select
-                                v-if="contadorProfesores>3"
+                                v-if="profesorSeleccionado3!=''"
                                 v-model="profesorSeleccionado4"
                                 label="Profesor"
                                 :items="listaProfesores"
@@ -580,7 +594,7 @@
                             >                               
                             </v-select> 
                             <v-select
-                                v-if="contadorProfesores>4"
+                                v-if="profesorSeleccionado4!=''"
                                 v-model="profesorSeleccionado5"
                                 label="Profesor"
                                 :items="listaProfesores"
@@ -591,17 +605,7 @@
                                 prepend-inner-icon="mdi-school"
                             >                               
                             </v-select>  
-                        </v-form> 
-                        <div style="text-align:left;" >
-                            <v-btn  x-small fab color="primary" 
-                            @click="sumarProfesor" >
-                                <h4 class="white--text">+</h4>
-                            </v-btn>
-                            <v-btn   @click="restarProfesor"
-                            x-small  fab color="primary" class="ml-1" >
-                                <h4 class="white--text">-</h4>
-                            </v-btn>
-                        </div>                        
+                        </v-form>                       
                         <div style="text-align:right;"  class="mb-1">
                             <v-btn rounded color="warning" @click="resetAsignarCurso()">
                                 <h4 class="white--text">Cancelar</h4>
@@ -629,11 +633,29 @@
                     <!-- <v-card-title class="text-justify" style="font-size: 100%;">Profesores</v-card-title> -->
                     <!-- <v-card-text>Curso : {{ this.datosInsCurso.nomCurso }}</v-card-text> -->
                     <!-- </v-container > -->
-                    <ul>
+                    <!-- <ul>
                         <li class="mt-2"  v-for="(item,index) in profesoresDeInstanciaCurso.listaProfesores" :key="index"> 
                             <strong > <a   > {{ item.nombre }} </a></strong>
                         </li>
-                    </ul>
+                    </ul> -->
+                     <v-data-table
+                    :headers="headersProfesor"
+                    :items="profesoresDeInstanciaCurso.listaProfesores"
+                    hide-default-footer  >
+                    <template v-slot:item.opciones="{ item }">
+                        <!-- boton para eliminar usuario seleccionado -->
+                            <v-tooltip bottom color="primary">
+                                <template v-slot:activator="{ on }">
+                                    <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on">
+                                        <v-icon color="warning" @click="desvincularProfesorInstanciaCurso(item)" >
+                                            fas fa-trash-alt
+                                        </v-icon>
+                                    </v-btn>
+                                </template>
+                                <span><strong>Desvincular profesor del curso</strong></span>
+                            </v-tooltip>  
+                        </template>
+                    </v-data-table>
                     <div style="text-align:right;" class="mt-3">
                         <v-btn rounded color="warning" class=" mb-4 "  @click="resetProfesoresDeInstanciaCurso">
                             <h4 class="white--text">Cancelar</h4>
@@ -644,9 +666,148 @@
                     </div> 
             </v-card>
         </v-dialog>
+        <!-- gialog para asignar ayudantes a una instanciaCurso -->
+        <v-dialog v-model="dialogAsignarAyudante" max-width="500">
+            <v-card class="mx-auto" max-width="500" >
+                <v-card-title primary-title class="headline primary text--center">
+                    <h5 class="white--text">Asignar ayudante a {{ datosInsCurso.nomCurso }} - {{  datosInsCurso.seccion }} </h5>
+                </v-card-title>
+                <v-container class="px-5">
+                    <v-form>
+                        
+                        <strong ><h3 class="pt-5">Eliga el profesor: </h3></strong>
+                        <v-form ref="formAyudantes">
+                            <v-autocomplete
+                                class="pt-3"
+                                v-model="ayudanteSeleccionado"
+                                label="Ayudante"
+                                :items="listaProspectosAyudante"
+                                item-text="nombre"
+                                item-value="id"
+                                :rules="[() => !!ayudanteSeleccionado ||'Requerido']"
+                                outlined
+                                prepend-inner-icon="mdi-school"
+                                solo
+                            > 
+                            </v-autocomplete> 
+                            <v-autocomplete
+                                v-if="ayudanteSeleccionado!=''"
+                                v-model="ayudanteSeleccionado2"
+                                label="Ayudante"
+                                :items="listaProspectosAyudante"
+                                item-text="nombre"
+                                item-value="id"
+                                :rules="[() => !!ayudanteSeleccionado2 ||'Requerido']"
+                                outlined
+                                prepend-inner-icon="mdi-school"
+                                solo
+                            >                               
+                            </v-autocomplete>
+                            <v-autocomplete
+                                v-if="ayudanteSeleccionado2!=''"
+                                v-model="ayudanteSeleccionado3"
+                                label="Ayudante"
+                                :items="listaProspectosAyudante"
+                                item-text="nombre"
+                                item-value="id"
+                                :rules="[() => !!ayudanteSeleccionado3 ||'Requerido']"
+                                outlined
+                                prepend-inner-icon="mdi-school"
+                                solo
+                            >                               
+                            </v-autocomplete> 
+                            <v-autocomplete
+                                v-if="ayudanteSeleccionado3!=''"
+                                v-model="ayudanteSeleccionado4"
+                                label="Ayudante"
+                                :items="listaProspectosAyudante"
+                                item-text="nombre"
+                                item-value="id"
+                                :rules="[() => !!ayudanteSeleccionado4 ||'Requerido']"
+                                outlined
+                                prepend-inner-icon="mdi-school"
+                                solo
+                            >                               
+                            </v-autocomplete> 
+                            <v-autocomplete
+                                v-if="ayudanteSeleccionado4!=''"
+                                v-model="ayudanteSeleccionado5"
+                                label="Ayudante"
+                                :items="listaProspectosAyudante"
+                                item-text="nombre"
+                                item-value="id"
+                                :rules="[() => !!ayudanteSeleccionado5 ||'Requerido']"
+                                outlined
+                                prepend-inner-icon="mdi-school"
+                                solo
+                            >                               
+                            </v-autocomplete>  
+                        </v-form> 
+                                                
+                        <div style="text-align:right;"  class="mb-1">
+                            <v-btn rounded color="warning" @click="resetAsignarAyudante()">
+                                <h4 class="white--text">Cancelar</h4>
+                            </v-btn>
+                            <v-btn rounded color="secondary" class="ml-2 " @click="asignarAyudanteInstanciaCurso()" >
+                                <h4 class="white--text">Asignar</h4>
+                            </v-btn>
+                        </div> 
+                    </v-form> 
+                </v-container>
+                
+            </v-card>
+        </v-dialog>
+
+        <!-- Muestra una lista con los ayudantes de uns  instancia curso -->
+        <v-dialog v-model="dialogAyudantesInsCurso" ref="form" persistent max-width="450px">
+            <v-card class="mx-auto" max-width="450"  >
+                <v-card-title
+                    class="headline primary text--center"
+                    primary-title
+                    >
+                    <h5 class="white--text text-truncate">Ayudantes del curso {{ profesoresDeInstanciaCurso.nomCurso  }} </h5>
+                    </v-card-title> 
+                    <v-data-table
+                    :headers="headersAyudante"
+                    :items="AyudanteDeInstanciaCurso.listaAyudantes"
+                    
+                    hide-default-footer  >
+                    <template v-slot:item.opciones="{ item }">
+                        <!-- boton para eliminar usuario seleccionado -->
+                            <v-tooltip bottom color="primary">
+                                <template v-slot:activator="{ on }">
+                                    <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on">
+                                        <v-icon color="warning" @click="desvincularAyudanteInstanciaCurso(item)" >
+                                            fas fa-trash-alt
+                                        </v-icon>
+                                    </v-btn>
+                                </template>
+                                <span><strong>Desvincular ayudante del curso</strong></span>
+                            </v-tooltip>
+                            <v-tooltip bottom color="primary">
+                            <template v-slot:activator="{ on }">
+                                <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on">
+                                    <v-icon  
+                                    color="primary"
+                                    >
+                                    fas fa-external-link-alt
+                                    </v-icon>
+                                </v-btn>
+                            </template>
+                            <span><strong>Ver Perfil</strong></span>
+                        </v-tooltip>
+                        </template>
+                    </v-data-table>
+                    <div style="text-align:right;" class="mt-3 mr-3" >
+                        <v-btn rounded color="secondary" class=" mb-4 "  @click="resetAyudantesDeInstanciaCurso">
+                            <h4 class="white--text">Volver</h4>
+                        </v-btn>
+                       
+                    </div> 
+            </v-card>
+        </v-dialog>
 
         <!-- Alertas -->
-
         <v-snackbar v-model="alertaError" :timeout="timeout"
             bottom color= "warning" left class="pb-12"  >
             <v-icon color="white"   
@@ -719,7 +880,7 @@ export default {
             profesorSeleccionado3: '',
             profesorSeleccionado4: '',
             profesorSeleccionado5: '',
-            contadorProfesores:1,
+      
             colInsCursos:[
                 {text:'ID', value:'id'},
                 // {text:'Semestre', value:'semestre'},
@@ -771,7 +932,7 @@ export default {
                 { text: 'Curso ', value: 'curso' },
                 { text: 'Nombre curso', value: 'nomCurso' },
             ],
-            listaAccionesSobreInstaciaCurso: [ 'Modificar curso' , 'Cerrar curso' ,'Añadir ayudante','Quitar ayudante' ],
+            listaAccionesSobreInstaciaCurso: [ 'Modificar curso' , 'Cerrar curso' ,'Añadir ayudante' ],
             listaDeSeccionesDisponibles:['A','B','C','D','E','F','G','H'],
             secionActual:'',
             semestre:null,
@@ -780,6 +941,26 @@ export default {
 
             dialogProfesoresInsCurso:false,
             profesoresDeInstanciaCurso:'',
+            dialogAsignarAyudante:false,
+            listaProspectosAyudante:[],
+            listaProspectosAyudanteAux:[],
+            ayudanteSeleccionado: '',
+            ayudanteSeleccionado2: '',
+            ayudanteSeleccionado3: '',
+            ayudanteSeleccionado4: '',
+            ayudanteSeleccionado5: '',
+            dialogAyudantesInsCurso:false,
+            AyudanteDeInstanciaCurso:'',
+            headersAyudante:[
+                { text: 'Matricula', value: 'matricula',align: 'start'},
+                { text: 'Nombre Completo', value: 'nombre_completo' },
+                {text:'Opciones', value:'opciones'},
+            ],
+            headersProfesor:[
+                { text: 'Nombre Completo', value: 'nombre',align: 'start' },
+                {text:'Opciones', value:'opciones'},
+            ],
+            
 
         }
     },
@@ -801,29 +982,15 @@ export default {
         this.obtenerCursos();        
         this.obtenerInstanciasCursos();  
         this.semestre =  this.$route.params.id;
+        this.obtenerProspectosAyudante();
     },
     computed: {
         
     },
     methods: {
         ...mapMutations(['calcularRolVuelta']),
-        sumarProfesor(){
-            if (this.contadorProfesores < 5) {
-                this.contadorProfesores ++;
-            }
-            else{
-                //alerta de no se pueden crear mas profesores
-            }
-        },
-        restarProfesor(){
-            if (this.contadorProfesores > 1) {
-                this.contadorProfesores --;
-            }
-            else{
-                //alerta de no se pueden tener menos profes
-            }
 
-        },
+ 
 
         obtenerProfesores(){
             this.listaProfesoresAux = [];
@@ -950,26 +1117,30 @@ export default {
         obtenerInstanciasCursos(){
             this.cargando=true;
             this.listaInsCursosAux = [];
+            // this.listaInsCursos=[];
             var listaBrayan=[];
             var aux;            
             var url = `http://127.0.0.1:8000/api/v1/instanciaCurso/${this.$store.infoSemestre.id}`;
+            console.log(url)
             axios.get(url,this.$store.state.config)
             .then((result)=>{   
-                console.log(result)
+                // console.log(result)
                 for (let index = 0; index < result.data.data.insCursos.length; index++) {
                     const element = result.data.data.insCursos[index];  
-                    // console.log(result.data.data.insCursos[index])
+                    //  console.log(result.data.data.insCursos[index])
                     let insCurso = {
                         id: element.id,
                         semestre: element.semestre,
                         nomCurso: element.curso,
                         seccion:element.seccion,
                         listaProfesores:element.listaProfesores,
+                        listaAyudantes:element.listaAyudantes,
                     }; 
                     this.listaInsCursosAux[index]=insCurso;                                                         
                 }
                 this.listaInsCursos = this.listaInsCursosAux; 
-                // console.log(this.listaInsCursos);
+                // console.log('INSTANCIAS DE CURSOS')
+                //  console.log(this.listaInsCursos);
                 this.cargando = false;              
             }
             ).catch((error)=>{
@@ -977,11 +1148,179 @@ export default {
                 console.log(error.response)
             });
         },
+        mostrarAyudantesDeCurso(item){
+             this.AyudanteDeInstanciaCurso=item
+            this.dialogAyudantesInsCurso=true;
+        },
+        resetAyudantesDeInstanciaCurso(){
+             this.dialogAyudantesInsCurso=false;
+        },
+        /**
+         * Obtiene una lista con todos los posibles ayudantes registrados en el sistemas, 
+         * con el filtro que el posoble ayudante tiene que pertenecer a la misma escuela que
+         * el del curso.
+         */
+        obtenerProspectosAyudante(){
+             this.listaProspectosAyudante = [];
+             this.listaProspectosAyudanteAux = [];
+            var aux;
+            var url = `http://127.0.0.1:8000/api/v1/estudiante/estudiantesAyudantes `;
+            axios.get(url,this.$store.state.config)
+            .then((result)=>{
+                
+                for( let index=0; index < result.data.data.estudiantes.length; index++){
+                    const element = result.data.data.estudiantes[index];
+                    let ayudante = {
+                        id: element.id,
+                        nombre: element.nombre_completo,
+                        matricula: element.matricula,
+                    };
+                    this.listaProspectosAyudanteAux[index]=ayudante;
+                }
+                this.listaProspectosAyudante = this.listaProspectosAyudanteAux;   
+              
+            }
+            ).catch((error)=>{ 
+                console.log(error.response)
+            });
+        },
+        //agregaremos al ayudante a la instancia del curso
+        asignarAyudanteInstanciaCurso(){
+             console.log('INSTANCIA DE CURSO SELECCIONADA.')
+             console.log(this.datosInsCurso);
+            // console.log('AYUDANTE SELECCIONADO')
+            // console.log(this.ayudanteSeleccionado);
+            var idInstancia= this.datosInsCurso.id;
+            if(idInstancia !=null && this.ayudanteSeleccionado!='' ){
+                let post = {
+                    "estudiante" :  this.ayudanteSeleccionado,
+                    "curso":  idInstancia,
+                };
+                console.log('ESTUDIANTE 1')
+                this.asignartAyudante(post);
+            }
+            if(idInstancia !=null && this.ayudanteSeleccionado2!='' ){
+                let post = {
+                    "estudiante" :  this.ayudanteSeleccionado2,
+                    "curso":  idInstancia,
+                };
+                console.log('ESTUDIANTE 2')
+                this.asignartAyudante(post);
+            }
+            if(idInstancia !=null && this.ayudanteSeleccionado3!='' ){
+                let post = {
+                    "estudiante" :  this.ayudanteSeleccionado3,
+                    "curso":  idInstancia,
+                };
+                console.log('ESTUDIANTE 3')
+                this.asignartAyudante(post);
+            }
+            if(idInstancia !=null && this.ayudanteSeleccionado4!='' ){
+                let post = {
+                    "estudiante" :  this.ayudanteSeleccionado4,
+                    "curso":  idInstancia,
+                };
+                console.log('ESTUDIANTE 4')
+                this.asignartAyudante(post);
+            }
+            if(idInstancia !=null && this.ayudanteSeleccionado5!='' ){
+                let post = {
+                    "estudiante" :  this.ayudanteSeleccionado5,
+                    "curso":  idInstancia,
+                };
+                console.log('ESTUDIANTE 5')
+                this.asignartAyudante(post);
+            }
+            this.resetAsignarAyudante();
+            
+
+
+        },
+        asignartAyudante(post){
+            var url ='http://127.0.0.1:8000/api/v1/ayudanteCurso'; 
+            /* crear profesor con curso */
+            console.log(post)
+            axios.post(url, post, this.$store.state.config)
+            .then((result) => {
+                // console.log(result)
+                this.textoAlertas = "Se asignó el ayudante correctamente"
+                this.alertaExito=true;
+                this.obtenerInstanciasCursos();
+                
+            }).catch((error)=>{
+                if (error.message == 'Network Error') {
+                    console.log(error)  
+                    this.alertaError = true;
+                    this.textoAlertas = "Error al asignar el profesor intente mas tarde."
+                    this.resetAsignarCurso();
+                }
+                // if(error.response.data.code == 301){
+                //     console.log(error.response.data.code +' '+ error.response.data.message);
+                //     console.log(error.response.data);
+                //     this.alertaError = true;      
+                //     this.textoAlertas = error.response.data.message;
+                // }    
+                if(error.response.data.code == 302){
+                    console.log(error.response.data.code +' '+ error.response.data.message);
+                    console.log(error.response.data);
+                    this.alertaError = true;      
+                    this.textoAlertas = error.response.data.message;
+                }                    
+            });
+            
+        },
+        resetAsignarAyudante(){
+            this.dialogAsignarAyudante=false;
+            this.datosInsCurso='';
+             // Reseteamos las variables.
+            this.ayudanteSeleccionado = '';
+            this.ayudanteSeleccionado2='';
+            this.ayudanteSeleccionado3='';
+            this.ayudanteSeleccionado4='';
+            this.ayudanteSeleccionado5='';
+            
+        },
         mostrarProfesoresDeCurso(item){
             this.dialogProfesoresInsCurso = true;
             this.profesoresDeInstanciaCurso=item
+            // console.log(item);
+        },  
+        /**
+         * Desvincula un profesor de una instancia de curso
+         */
+        desvincularProfesorInstanciaCurso(item){
             console.log(item);
-        },   
+            var url = 'http://127.0.0.1:8000/api/v1/profesorConCurso/'+item.idAProfesorConCurso;
+            axios.delete(url,this.$store.state.config)
+            .then((result)=>{
+            if (result.statusText=='OK') {
+                this.alertaExito = true;
+                this.textoAlertas = "Se desvinculo el el profesor con exito "
+                this.obtenerInstanciasCursos();
+                this.dialogAyudantesInsCurso=false;
+            }
+            }).catch((error)=>{
+                if (error.message == 'Network Error') {
+                    console.log(error)
+                    this.alertaError = true;
+                    this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
+                }
+                if(error.response.data.code == 701){
+                            console.log(error.response.data.code +' '+ error.response.data.message);
+                            console.log(error.response.data);
+                            this.textoAlertas = 'No existe la relacion entre el profesor y el curso';
+                            this.alertaError = true;
+                            this.resetModificarInstanciaCurso();
+                }
+                if(error.response.data.code == 702){
+                            console.log(error.response.data.code +' '+ error.response.data.message);
+                            console.log(error.response.data);
+                            this.textoAlertas = 'Error en la base de datos.';
+                            this.alertaError = true;
+                            this.resetModificarInstanciaCurso();
+                }               
+            });
+        }, 
         resetProfesoresDeInstanciaCurso(){
             this.dialogProfesoresInsCurso = false;
         },     
@@ -1153,7 +1492,6 @@ export default {
                 this.profesorSeleccionado3='';
                 this.profesorSeleccionado4='';
                 this.profesorSeleccionado5='';
-                this.contadorProfesores=1;
                 this.dialogAsignarCurso = true; 
                 //this.resetSeccion();
                 //this.resetProfesores();    
@@ -1163,6 +1501,28 @@ export default {
                 this.alertaError = true;
             }
         },
+        /**
+         * Desvincula un ayudante de una instancia curso.
+         */
+        desvincularAyudanteInstanciaCurso(item){
+            var url = 'http://127.0.0.1:8000/api/v1/ayudanteCurso/'+item.idAyudanteConCurso;
+            axios.delete(url,this.$store.state.config)
+            .then((result)=>{
+            if (result.statusText=='OK') {
+                this.alertaExito = true;
+                this.textoAlertas = "Se desvinculo el ayudantecon exito "
+                this.obtenerInstanciasCursos();
+                this.dialogAyudantesInsCurso=false;
+            }
+            }).catch((error)=>{
+                if (error.message == 'Network Error') {
+                    console.log(error)
+                    this.alertaError = true;
+                    this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
+                }
+                //Mensajes de error proximamente                
+            });
+        },
 
         resetAsignarCurso(){
             this.dialogAsignarCurso = false;
@@ -1171,7 +1531,7 @@ export default {
             this.profesorSeleccionado3='';
             this.profesorSeleccionado4='';
             this.profesorSeleccionado5='';
-            this.contadorProfesores=1;
+        
             this.seleccionados = [];
         },
         /**
@@ -1182,133 +1542,134 @@ export default {
             /**variables para el correcto funcionamiento de la consulta. */
             let ins_curso=0;
             let profe_Selec="";
-            
             this.dialogAsignarCurso = true
+            if(this.seleccionados[i].seccion!= '' && this.profesorSeleccionado!='' ){
 
-            for(let i = 0; i < this.seleccionados.length ; i++){
-                    /* datos instancia curso */
-                    let post = {
-                        "semestre":this.$store.infoSemestre.id,
-                        "curso": this.seleccionados[i].id,
-                        "seccion":  this.seleccionados[i].seccion,
-                    }
-                    console.log('PRIMER POST1'+post);
-                    var url = 'http://127.0.0.1:8000/api/v1/instanciaCurso';   
-                    axios.post(url, post, this.$store.state.config)
-                    .then((result) => {
-                        // console.log('SE REALIZO CON EXITO LA PRIMERA CONSULTA( SE CREARON LAS INS DE CURSO)')
-                        // this.dialogAsignarCurso=false;
-                        // this.dialogAgregarCursoSemestre=false;
-                        // console.log(result)
-                        ins_curso= result.data.data.insCurso.id;
-                        // console.log('EL ID DE LA INSTANCIAS DE CURSO ES: '+ ins_curso)
-                         if(ins_curso != 0){
-                            //  console.log('ENTRO A AÑADIOR AL PROFESOR A LAS INSTANCIAS'+ this.profesorSeleccionado);
-
-                            if(this.profesorSeleccionado != ''){
-                                // console.log('EL PROFESOR 1 ESTA SELECCIONADO')
-                                let post2 = {
-                                    "profesor" :  this.profesorSeleccionado,
-                                    "curso":  ins_curso,
-                                    };
-                                
-                                this.agregarProfesorCurso(post2)
-                            }
-                            if(this.profesorSeleccionado2 != ''){
-                                // console.log('EL PROFESOR 2 ESTA SELECCIONADO')
-                                let post2 = {
-                                    "profesor" :  this.profesorSeleccionado2,
-                                    "curso":  ins_curso,
-                                    };
-                                this.agregarProfesorCurso(post2)
+                for(let i = 0; i < this.seleccionados.length ; i++){
+                        /* datos instancia curso */
+                        let post = {
+                            "semestre":this.$store.infoSemestre.id,
+                            "curso": this.seleccionados[i].id,
+                            "seccion":  this.seleccionados[i].seccion,
+                        }
+                        console.log('PRIMER POST1'+post);
+                        var url = 'http://127.0.0.1:8000/api/v1/instanciaCurso';   
+                        axios.post(url, post, this.$store.state.config)
+                        .then((result) => {
+                            // console.log('SE REALIZO CON EXITO LA PRIMERA CONSULTA( SE CREARON LAS INS DE CURSO)')
+                            // this.dialogAsignarCurso=false;
+                            // this.dialogAgregarCursoSemestre=false;
+                            // console.log(result)
+                            ins_curso= result.data.data.insCurso.id;
+                            // console.log('EL ID DE LA INSTANCIAS DE CURSO ES: '+ ins_curso)
+                             if(ins_curso != 0){
+                                //  console.log('ENTRO A AÑADIOR AL PROFESOR A LAS INSTANCIAS'+ this.profesorSeleccionado);
+    
+                                if(this.profesorSeleccionado != ''){
+                                    // console.log('EL PROFESOR 1 ESTA SELECCIONADO')
+                                    let post2 = {
+                                        "profesor" :  this.profesorSeleccionado,
+                                        "curso":  ins_curso,
+                                        };
+                                    
+                                    this.agregarProfesorCurso(post2)
                                 }
-                            
-                            if(this.profesorSeleccionado3 != ''){
-                                // console.log('EL PROFESOR 3 ESTA SELECCIONADO')
-                                let post2 = {
-                                    "profesor" :  this.profesorSeleccionado3,
-                                    "curso":  ins_curso,
-                                    };
+                                if(this.profesorSeleccionado2 != ''){
+                                    // console.log('EL PROFESOR 2 ESTA SELECCIONADO')
+                                    let post2 = {
+                                        "profesor" :  this.profesorSeleccionado2,
+                                        "curso":  ins_curso,
+                                        };
+                                    this.agregarProfesorCurso(post2)
+                                    }
                                 
-                                this.agregarProfesorCurso(post2)
-                            }
-                            if(this.profesorSeleccionado4 != ''){
-                                // console.log('EL PROFESOR 4 ESTA SELECCIONADO')
-                                let post2 = {
-                                    "profesor" :  this.profesorSeleccionado4,
-                                    "curso":  ins_curso,
-                                    };
+                                if(this.profesorSeleccionado3 != ''){
+                                    // console.log('EL PROFESOR 3 ESTA SELECCIONADO')
+                                    let post2 = {
+                                        "profesor" :  this.profesorSeleccionado3,
+                                        "curso":  ins_curso,
+                                        };
+                                    
+                                    this.agregarProfesorCurso(post2)
+                                }
+                                if(this.profesorSeleccionado4 != ''){
+                                    // console.log('EL PROFESOR 4 ESTA SELECCIONADO')
+                                    let post2 = {
+                                        "profesor" :  this.profesorSeleccionado4,
+                                        "curso":  ins_curso,
+                                        };
+                                    
+                                    this.agregarProfesorCurso(post2)
+                                }
+                                if(this.profesorSeleccionado5 != ''){
+                                    // console.log('EL PROFESOR 5 ESTA SELECCIONADO')
+                                    let post2 = {
+                                        "profesor" :  this.profesorSeleccionado5,
+                                        "curso":  ins_curso,
+                                        };
+                                    
+                                    this.agregarProfesorCurso(post2)
+                                }
+                                // Reseteamos las variables.
+                                this.profesorSeleccionado = '';
+                                this.profesorSeleccionado2='';
+                                this.profesorSeleccionado3='';
+                                this.profesorSeleccionado4='';
+                                this.profesorSeleccionado5='';
+                                 this.dialogAsignarCurso=false;
+                                this.dialogAgregarCursoSemestre=false;
+                                this.seleccionados = []; 
                                 
-                                this.agregarProfesorCurso(post2)
+                           
+                                this.obtenerInstanciasCursos();   
                             }
-                            if(this.profesorSeleccionado5 != ''){
-                                // console.log('EL PROFESOR 5 ESTA SELECCIONADO')
-                                let post2 = {
-                                    "profesor" :  this.profesorSeleccionado5,
-                                    "curso":  ins_curso,
-                                    };
+                            else{
+                                // console.log('NO FUNCIONO')
+                                this.alertaError = true;
+                                this.textoAlertas = "Error al asignar profesores al curso."
+                                this.profesorSeleccionado = '';
+                                this.profesorSeleccionado2='';
+                                this.profesorSeleccionado3='';
+                                this.profesorSeleccionado4='';
+                                this.profesorSeleccionado5='';
+                                this.dialogAsignarCurso=false;
+                                this.dialogAgregarCursoSemestre=false;
+                                this.seleccionados = []; 
                                 
-                                this.agregarProfesorCurso(post2)
+                             
+                                this.obtenerInstanciasCursos();
                             }
-                            // Reseteamos las variables.
-                            this.profesorSeleccionado = '';
-                            this.profesorSeleccionado2='';
-                            this.profesorSeleccionado3='';
-                            this.profesorSeleccionado4='';
-                            this.profesorSeleccionado5='';
-                             this.dialogAsignarCurso=false;
-                            this.dialogAgregarCursoSemestre=false;
-                            this.seleccionados = []; 
-                            
-                            this.contadorProfesores=1;
-                            this.obtenerInstanciasCursos();   
-                        }
-                        else{
-                            // console.log('NO FUNCIONO')
-                            this.alertaError = true;
-                            this.textoAlertas = "Error al asignar profesores al curso."
-                            this.profesorSeleccionado = '';
-                            this.profesorSeleccionado2='';
-                            this.profesorSeleccionado3='';
-                            this.profesorSeleccionado4='';
-                            this.profesorSeleccionado5='';
-                            this.dialogAsignarCurso=false;
-                            this.dialogAgregarCursoSemestre=false;
-                            this.seleccionados = []; 
-                            
-                            this.contadorProfesores=1;
-                            this.obtenerInstanciasCursos();
-                        }
-
-
-                    }).catch((error)=>{
-                        console.log( error.response.data);
-                        if (error.message == 'Network Error') {
-                            this.alertaError = true;
-                            this.textoAlertas = "Error al asignar el curso, intente mas tarde."
-                            this.resetAsignarCurso();
-                            this.dialogAsignarCurso=false;
-                            this.dialogAgregarCursoSemestre=false;
-                        }
-                        if(error.response.data.code == 301){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
-                            this.alertaError = true;      
-                            this.textoAlertas = error.response.data.message;
-                            this.dialogAsignarCurso=false;
-                            this.dialogAgregarCursoSemestre=false;
-                        } 
-                        if(error.response.data.code == 302){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
-                            this.textoAlertas = error.response.data.message;
-                            this.alertaError = true;  
-                            this.dialogAsignarCurso=false;    
-                            this.dialogAgregarCursoSemestre=false;
-                        }   
-                    });                                                            
-                
-                } 
+    
+    
+                        }).catch((error)=>{
+                            console.log( error.response.data);
+                            if (error.message == 'Network Error') {
+                                this.alertaError = true;
+                                this.textoAlertas = "Error al asignar el curso, intente mas tarde."
+                                this.resetAsignarCurso();
+                                this.dialogAsignarCurso=false;
+                                this.dialogAgregarCursoSemestre=false;
+                            }
+                            if(error.response.data.code == 301){
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
+                                this.alertaError = true;      
+                                this.textoAlertas = error.response.data.message;
+                                this.dialogAsignarCurso=false;
+                                this.dialogAgregarCursoSemestre=false;
+                            } 
+                            if(error.response.data.code == 302){
+                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                console.log(error.response.data);
+                                this.textoAlertas = error.response.data.message;
+                                this.alertaError = true;  
+                                this.dialogAsignarCurso=false;    
+                                this.dialogAgregarCursoSemestre=false;
+                            }   
+                        });                                                            
+                    
+                    } 
+            }
 
         },
         /**
@@ -1326,33 +1687,33 @@ export default {
          */
         agregarProfesorCurso(post2){
             var url2 = 'http://127.0.0.1:8000/api/v1/profesorConCurso'; 
-                    /* crear profesor con curso */
-                    axios.post(url2, post2, this.$store.state.config)
-                    .then((result) => {
-                        // console.log(result)
-                        this.textoAlertas = "Se asignó el profesor correctamente"
-                        this.alertaExito=true;
-                        
-                    }).catch((error)=>{
-                        if (error.message == 'Network Error') {
-                            console.log(error)  
-                            this.alertaError = true;
-                            this.textoAlertas = "Error al asignar el profesor intente mas tarde."
-                            this.resetAsignarCurso();
-                        }
-                        if(error.response.data.code == 301){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
-                            this.alertaError = true;      
-                            this.textoAlertas = error.response.data.message;
-                        }    
-                        if(error.response.data.code == 302){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
-                            this.alertaError = true;      
-                            this.textoAlertas = error.response.data.message;
-                        }                    
-                    });
+            /* crear profesor con curso */
+            axios.post(url2, post2, this.$store.state.config)
+            .then((result) => {
+                // console.log(result)
+                this.textoAlertas = "Se asignó el profesor correctamente"
+                this.alertaExito=true;
+                
+            }).catch((error)=>{
+                if (error.message == 'Network Error') {
+                    console.log(error)  
+                    this.alertaError = true;
+                    this.textoAlertas = "Error al asignar el profesor intente mas tarde."
+                    this.resetAsignarCurso();
+                }
+                if(error.response.data.code == 301){
+                    console.log(error.response.data.code +' '+ error.response.data.message);
+                    console.log(error.response.data);
+                    this.alertaError = true;      
+                    this.textoAlertas = error.response.data.message;
+                }    
+                if(error.response.data.code == 302){
+                    console.log(error.response.data.code +' '+ error.response.data.message);
+                    console.log(error.response.data);
+                    this.alertaError = true;      
+                    this.textoAlertas = error.response.data.message;
+                }                    
+            });
         },
 
         resetModificarInstanciaCurso(){
@@ -1364,9 +1725,10 @@ export default {
         },
         modificarInstanciaCurso(){
             var url =`http://127.0.0.1:8000/api/v1/instanciaCurso/${this.datosInsCurso.id}`;
+            console.log('MODIFICAR LA INFO DE CURSO')
+            console.log(this.datosInsCurso);
             let put ={                
-                "semestre": this.datosInsCurso.semestre,
-                "curso": this.datosInsCurso.curso,
+                "nomCurso": this.datosInsCurso.nomCurso,
                 "seccion": this.datosInsCurso.seccion,
             };
             axios.put(url,put,this.$store.state.config)
@@ -1469,14 +1831,11 @@ export default {
             }
             if(item=='Añadir ayudante'){
                 this.datosInsCurso= curso;
-                this.dialogEliminarInsCurso=true
+                console.log(curso)
+                this.dialogAsignarAyudante=true;
 
             }
-            if(item=='Quitar ayudante'){
-                this.datosInsCurso= curso;
-                this.dialogEliminarInsCurso=true
 
-            }
             
         },  
         /**
