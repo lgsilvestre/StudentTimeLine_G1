@@ -51,17 +51,36 @@
                                 prepend-inner-icon="mdi-account-tie"
                             >                                
                             </v-select>
-                            <v-select
+                            <v-autocomplete
                                 v-model="datosContactar.idDestinatario"
-                                label="Destinatario"
-                                :items="listaUsuarios"
+                                label="Administrador"
+                                :items="listaAdmin"
                                 item-text="nombre"
                                 item-value="id"
                                 :rules="[() => !!datosContactar.idDestinatario ||'Requerido']"
                                 outlined
+                                multiple
+                                chips
+                                small-chips
                                 prepend-inner-icon="mdi-account"
+                                v-show="datosContactar.rolDestinatario == 'Administrador'"
                             >                                
-                            </v-select>
+                            </v-autocomplete>
+                            <v-autocomplete
+                                v-model="datosContactar.idDestinatario"
+                                label="Secretaría de Escuela"
+                                :items="listaSecEscuela"
+                                item-text="nombre"
+                                item-value="id"
+                                :rules="[() => !!datosContactar.idDestinatario ||'Requerido']"
+                                outlined
+                                multiple
+                                chips
+                                small-chips
+                                prepend-inner-icon="mdi-account"
+                                v-show="datosContactar.rolDestinatario == 'Secretaría de Escuela'"
+                            >                                
+                            </v-autocomplete>
                             <v-text-field
                                 v-model="datosContactar.motivo"
                                 label="Motivo"
@@ -74,6 +93,7 @@
                                 v-model="datosContactar.descripcion"
                                 outlined
                                 color="secondary"
+                                :rules="[() => !!datosContactar.descripcion ||'Requerido']"
                                 label="Descripcion"
                             >
                             </v-textarea>
@@ -94,13 +114,59 @@
                     </v-container>
                 
             </v-card>
-        </v-dialog> 
+        </v-dialog>
+
+                <!-- Alertas -->
+
+        <!-- Alerta de Error -->
+        <v-snackbar v-model="alertaError" :timeout="timeout"
+            bottom color= "warning" left class="pb-12"  >
+            <v-icon color="white"   
+                class="mr-3"                      
+            >
+            fas fa-exclamation-triangle 
+            </v-icon>
+        
+            <strong> {{textoAlertas }}</strong>
+            <v-btn
+                icon
+                @click="alertaError = false"
+                >
+                <v-icon     
+                    color="white"                         
+                >
+                fas fa-times-circle
+                </v-icon>                
+            </v-btn>
+        </v-snackbar>       
+
+        <!-- Alerta de Exito (success) -->
+
+        <v-snackbar v-model="alertaExito" :timeout="timeout" bottom
+            color= "secondary" left class="pb-12"  >
+            <v-icon class="mr-3"  color="white" >
+                fas fa-info-circle  
+            </v-icon>
+            <strong> {{ textoAlertas }} </strong>
+            <v-btn
+                icon
+                @click="alertaExito = false"
+                >
+                <v-icon     
+                    class="mr-3"
+                    color="white"                         
+                >
+                fas fa-times-circle
+                </v-icon>                
+            </v-btn>
+        </v-snackbar> 
     </v-container>
 </template>
 
 <script>
 import NosotrosComponent from '@/components/Globales/NosotrosComponent.vue';
 import { mapState, mapMutations } from 'vuex'
+import axios from 'axios'
 export default {
     components:{
         NosotrosComponent
@@ -115,12 +181,24 @@ export default {
 
             dialogContactar: false,
             keyContactar: 1,
-            listaRoles: [],
-            listaUsuarios: [], 
+            listaRoles: ['Administrador','Secretaría de Escuela'],
+            listaAdmin: [],
+            listaSecEscuela: [],
+            listaAdminAux: [],      
+            listaSecEscuelaAux: [],      
 
-            datosContactar: [{rolDestinatario:''},{idDestinatario:''},{motivo:''},{descripcion:''}],
+            datosContactar: [{rolDestinatario:''},{idDestinatario:[]},{motivo:''},{descripcion:''}],
+
+            timeout: 4000,
+            textoAlertas: '',
+            alertaError: false,
+            alertaExito: false,
+
             
         }
+    },
+    beforeMount(){
+        this.obtenerUsuarios();        
     },
     methods:{
         urlFacebook(){
@@ -139,21 +217,77 @@ export default {
             window.open("https://www.utalca.cl/universidad/", '_blank');
         },
 
-        resetFormCrearUsuario () {
+        resetFormContactar() {
             this.$refs.contactar.reset();
         },
         resetContactar(){
-            this.resetFormCrearUsuario();
+            this.resetFormContactar();
             this.datosContactar.rolDestinatario = '';
-            this.datosContactar.idDestinatario = '';
+            this.datosContactar.idDestinatario = [];
             this.datosContactar.motivo = '';
             this.datosContactar.descripcion = '';
             this.keyDialogCreacion++;
             this.dialogContactar = false;
         },
 
+        obtenerUsuarios(){            
+            this.listaAdminAux = [];
+            this.listaSecEscuelaAux = [];
+            var c1 = 0;
+            var c2 = 0;
+            var url = 'http://127.0.0.1:8000/api/v1/usuario/listarEncargados';
+            
+            axios.get(url,this.$store.state.config)
+            .then((result)=>{                
+                    for (let index = 0; index < result.data.data.usuarios.length; index++) {
+                        const element = result.data.data.usuarios[index];
+                        let usuario = {
+                            id: element.id,
+                            nombre: element.nombre,
+                            rol: element.rol,
+                        };                   
+                        if(usuario.rol == 'admin'){
+                            this.listaAdminAux[c1] = usuario;
+                            c1++;                            
+                        }
+                        else if(usuario.rol == 'secretaria de escuela'){
+                            this.listaSecEscuelaAux[c2] = usuario;
+                            c2++;                            
+                        }                    
+                    }
+                    this.listaAdmin = this.listaAdminAux;                              
+                    this.listaSecEscuela = this.listaSecEscuelaAux;                    
+                }
+                ).catch((error)=>{
+                    if (error.message == 'Network Error') {
+                        this.alertaError = true;                        
+                        this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    }
+            })
+        },
+
         contactar(){
-            // inserte codigo aqui
+            
+            let post ={
+                "destinatarios": this.datosContactar.idDestinatario,
+                "motivo": this.datosContactar.motivo,
+                "descripcion": this.datosContactar.descripcion,
+            };            
+            //por definir
+            var url = '';
+
+            axios.post(url, post, this.$store.state.config)
+            .then((result)=>{                
+                    this.alertaExito = true;
+                    this.textoAlertas = "Se ha enviado el/los correos correctamente."
+                }
+                ).catch((error)=>{
+                    if (error.message == 'Network Error') {
+                        this.alertaError = true;                        
+                        this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    }
+            })
+
         },
     }
 }

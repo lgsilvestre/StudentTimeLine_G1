@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Ayudante_Con_Curso;
 use App\InstanciaCurso;
 use App\Profesor_Con_Curso;
 use Illuminate\Http\Request;
@@ -37,7 +38,6 @@ class InstanciaCursoController extends Controller
                     array_push($listaProfesores,  $insCurso->nombreProfesor= $profesor->getProfesor);
                 }
                 $insCurso->listaProfesores = $listaProfesores;
-
             }
             return response()->json([
                 'success' => true,
@@ -133,6 +133,22 @@ class InstanciaCursoController extends Controller
             $insCursos = InstanciaCurso::Where('semestre', '=' , $id)->get();
             foreach($insCursos as $insCurso){
                 $insCurso->curso=$insCurso->getCurso->nombre;
+                $profesores = Profesor_Con_Curso::where('curso', $insCurso->id)->get();
+                $listaProfesores = array();
+                foreach($profesores as $profesor){
+                    $a = $profesor->getProfesor;
+                    $a->idProfesorConCurso = $profesor->id;
+                    array_push($listaProfesores, $a);
+                }
+                $insCurso->listaProfesores = $listaProfesores;
+                $ayudantes = Ayudante_Con_Curso::where('curso', $insCurso->id)->get();
+                $listaAyudantes = array();
+                foreach($ayudantes as $ayudante){
+                    $a = $ayudante->getEstudiante;
+                    $a->idAyudanteConCurso = $ayudante->id;
+                    array_push($listaAyudantes, $a);
+                }
+                $insCurso->listaAyudantes = $listaAyudantes;
             }
             return response()->json([
                 'success' => true,
