@@ -37,7 +37,6 @@ class InstanciaCursoController extends Controller
                     array_push($listaProfesores,  $insCurso->nombreProfesor= $profesor->getProfesor);
                 }
                 $insCurso->listaProfesores = $listaProfesores;
-
             }
             return response()->json([
                 'success' => true,
