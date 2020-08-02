@@ -35,7 +35,7 @@
                                     <v-btn 
                                     :small="$vuetify.breakpoint.smAndDown ? true : false"
                                     class="mr-2" fab 
-                                    bottom left v-on="on" @click="dialogAñadirSemestre =true" >
+                                    bottom left v-on="on" @click="abrirDialogAgregarSemestre " >
                                         <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
                                     </v-btn>
                                 </template>
@@ -118,121 +118,108 @@
                                             </v-chip>
                                             </div>
                                         </v-col>
-
                                     </v-row>
                                 </v-container>
                             </v-card>
                             </v-col>
                         </v-row>
-
                 </template>
-
                     </v-data-iterator>
                 <!-- </v-container> -->
-
             </v-card>
-
         </v-col>
         <v-col cols="0" sm="1">
-
         </v-col>
-     </v-row>
+    </v-row>
         <!-- Dialogo para agregar un semestre -->
-     <v-dialog v-model="dialogAñadirSemestre" rtransition="scroll-y-reverse-transition"  persistent max-width="500px">
-         <v-card class="mx-auto" max-width="500" >
+    <v-dialog v-model="dialogAñadirSemestre" rtransition="scroll-y-reverse-transition"  persistent max-width="500px">
+        <v-card class="mx-auto" max-width="500" >
                 <v-card-title class="headline primary text--center" primary-title >
                     <h5 class="white--text ">Registrar Semestre</h5>
                 </v-card-title>
-                <v-card-text class="px-12 mt-5" >
-                    <v-form  ref="form" >
-                        <v-container>
-                            <v-row >
-                                <v-col cols="6" >
-                                    <strong>Año</strong>
-                                </v-col>
-                                <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
-                                    <v-text-field  v-model="añoActual" dense
-                                        outlined  color="secondary" :disabled="unAnhoVariable"
-                                        :rules="rules" type="number"
-                                        ></v-text-field>
-                                </v-col>
-                            </v-row>
-                            <v-row >
-                                <v-col cols="6" >
-                                    <strong>Semestre</strong>
-                                </v-col>
-                                <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
-                                    <v-select
-                                        v-model="semestreActual"
-                                        :items="listaSemestres_reg"
-                                        item-text="sem"
-                                        dense
-                                        outlined
-                                        color="secondary"
-                                        ></v-select>
-                                </v-col>
-                            </v-row>
+                <v-container class="px-5 mt-5" >
+                    <v-form  ref="form" style="margin:0;padding:0;">
+                        <v-row >
+                            <v-col cols="6" >
+                                <strong>Año</strong>
+                            </v-col>
+                            <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
+                                <v-text-field  v-model="añoActual" dense
+                                    outlined  color="secondary" :disabled="unAnhoVariable"
+                                    :rules="rules" type="number"
+                                    ></v-text-field>
+                            </v-col>
+                            <v-col cols="6" >
+                                <strong>Semestre</strong>
+                            </v-col>
+                            <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
+                                <v-select
+                                    v-model="semestreActual"
+                                    :items="listaSemestres_reg"
+                                    item-text="sem"
+                                    dense
+                                    outlined
+                                    color="secondary"
+                                    ></v-select>
+                            </v-col>
                             
-                        </v-container>
-                                  
-                        <v-container  style="text-align:right;">
+                        </v-row>
+                        <div style="text-align:right;" class="pb-1">
                             <v-btn rounded color="warning" @click="dialogAñadirSemestre=false">
                                 <h4 class="white--text">Cancelar</h4>
                             </v-btn>
-                            <v-btn rounded color="secondary" class="ml-2 mr'5" @click="registrarSemestre()" >
+                            <v-btn rounded color="secondary" class="ml-2" @click="registrarSemestre()" >
                                 <h4 class="white--text">Registrar</h4>
                             </v-btn>
-                        </v-container>  
+                        </div>  
                     </v-form>
-                </v-card-text>
+                    
+                </v-container>
             </v-card>
     </v-dialog>
     
     <v-dialog v-model="dialogModificarSemestre" rtransition="scroll-y-reverse-transition"  persistent max-width="500px">
-         <v-card class="mx-auto" max-width="800" >
+        <v-card class="mx-auto" max-width="500" >
                 <v-card-title class="headline primary text--center" primary-title >
                     <h5 class="white--text ">Modificar Semestre</h5>
                 </v-card-title>
-                <v-card-text class="px-12 mt-10" >
+                <v-container class="px-5 mt-5" >
                     <v-form  ref="form" >
-                        <v-container>
-                            <v-row >
-                                <v-col cols="6" >
-                                    <strong>Año</strong>
-                                </v-col>
-                                <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
-                                    <v-text-field  v-model="añoActual" dense
-                                        outlined  color="secondary" :disabled="unAnhoVariable"
-                                        :rules="rules" type="number"
-                                        ></v-text-field>
-                                </v-col>
-                            </v-row>
-                            <v-row >
-                                <v-col cols="6" >
-                                    <strong>Semestre</strong>
-                                </v-col>
-                                <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
-                                    <v-select
-                                        v-model="semestreActual"
-                                        :items="listaSemestres_reg"
-                                        item-text="sem"
-                                        dense
-                                        outlined
-                                        color="secondary"
-                                        ></v-select>
-                                </v-col>
-                            </v-row>
-                        </v-container>
-                        <v-container  style="text-align:right;">
+                        <v-row >
+                            <v-col cols="6" >
+                                <strong>Año</strong>
+                            </v-col>
+                            <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
+                                <v-text-field  v-model="añoActual" dense
+                                    outlined  color="secondary" :disabled="unAnhoVariable"
+                                    :rules="rules" type="number"
+                                    ></v-text-field>
+                            </v-col>
+                            <v-col cols="6" >
+                                <strong>Semestre</strong>
+                            </v-col>
+                            <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
+                                <v-select
+                                    v-model="semestreActual"
+                                    :items="listaSemestres_reg"
+                                    item-text="sem"
+                                    dense
+                                    outlined
+                                    color="secondary"
+                                    ></v-select>
+                            </v-col>
+                        </v-row>
+                        <div  style="text-align:right;" class="pb-1">
                             <v-btn rounded color="warning" @click="dialogModificarSemestre=false">
                                 <h4 class="white--text">Cancelar</h4>
                             </v-btn>
-                            <v-btn rounded color="secondary" class="ml-2 mr'5" @click="modificarSemestre()" >
+                            <v-btn rounded color="secondary" class="ml-2 " @click="modificarSemestre()" >
                                 <h4 class="white--text">Registrar</h4>
                             </v-btn>
-                        </v-container>  
+                        </div>  
+                        
                     </v-form>
-                </v-card-text>
+                </v-container>
             </v-card>
     </v-dialog>
     <!-- dialogo para eliminar un semestre -->
@@ -404,6 +391,10 @@ export default {
     },
     methods: {
         ...mapMutations(['calcularRol']),
+        abrirDialogAgregarSemestre(){
+            this.añoActual=new Date().getFullYear();
+            this.dialogAñadirSemestre =true;
+        },
         
         /**
          * Obtiene la lista de todos los 

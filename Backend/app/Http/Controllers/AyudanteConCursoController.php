@@ -13,7 +13,7 @@ class AyudanteConCursoController extends Controller
     public function __construct()
     {
         $this->middleware(['permission:create ayudante con curso'], ['only' => ['create', 'store']]);
-        $this->middleware(['permission:read ayudante con curso'], ['only' => 'index']);
+        $this->middleware(['permission:read ayudante con curso'], ['only' => ['index', 'show']]);
         $this->middleware(['permission:update ayudante con curso'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete ayudante con curso'], ['only' => 'delete']);
         $this->middleware(['permission:restore ayudante con curso'], ['only' => 'disabled', 'restore']);
@@ -42,7 +42,6 @@ class AyudanteConCursoController extends Controller
                 'data' => ['error'=>$ex]
             ], 409);
         }
-
     }
 
     /**
@@ -69,24 +68,24 @@ class AyudanteConCursoController extends Controller
     public function store(Request $request)
     {
         $entradas = $request->only('estudiante', 'curso');
-        $validator = Validator::make($entradas, [
-            'estudiante' => ['required', 'numeric'],
-            'curso' => [' required', 'numeric'],
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'code' => 301,
-                'message' => 'Error en datos ingresados',
-                'data' => ['error'=>$validator->errors()]
-            ], 422);
-        }
-        if(!array_key_exists ("estudiante" , $entradas)){
-            $entradas['estudiante'] = null;
-        }
-        if(!array_key_exists ("curso" , $entradas)){
-            $entradas['curso'] = null;
-        }
+        // $validator = Validator::make($entradas, [
+        //     'estudiante' => ['required', 'numeric'],
+        //     'curso' => [' required', 'numeric'],
+        // ]);
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'code' => 301,
+        //         'message' => 'Error en datos ingresados',
+        //         'data' => ['error'=>$validator->errors()]
+        //     ], 422);
+        // }
+        // if(!array_key_exists ("estudiante" , $entradas)){
+        //     $entradas['estudiante'] = null;
+        // }
+        // if(!array_key_exists ("curso" , $entradas)){
+        //     $entradas['curso'] = null;
+        // }
         try{
             $ayudanteCurso = new Ayudante_Con_Curso();
             $ayudanteCurso-> estudiante=$entradas['estudiante'];
@@ -114,14 +113,27 @@ class AyudanteConCursoController extends Controller
      * @param  \App\Ayudante_Con_Curso  $ayudante_Con_Curso
      * @return \Illuminate\Http\Response
      */
-    public function show(Ayudante_Con_Curso $ayudante_Con_Curso)
+    public function show($id)
     {
-        return response()->json([
-            'success' => false,
-            'code' => 401,
-            'message' => 'Este recurso está bloqueado',
-            'data' => ['error'=>'El el protocolo se llama index']
-        ], 426);
+        try{
+            $ayudantesCurso= Ayudante_Con_Curso::Where('curso', $id)->get();
+            foreach($ayudantesCurso as $ayudanteCurso){
+                $ayudanteCurso->estudiante=$ayudanteCurso->getEstudiante->nombre_completo;
+            }
+            return response()->json([
+                'success' => true,
+                'code' => 100,
+                'message' => "La operacion se a realizado con exito",
+                'data' => ['ayudantesCurso'=>$ayudantesCurso]
+            ], 200);
+        } catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 101,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
     }
 
     /**

@@ -17,7 +17,7 @@ class EstudianteTableSeeder extends Seeder
             'nombre_completo' => 'Paulo Parraguez Diaz', 
             'correo' => 'p.parraguez.diaz@hotmail.cl',
             'anho_ingreso' => 2016,
-            'situacion_academica' =>'regular',
+            'situacion_academica' =>'Regular',
             'porcentaje_avance' => 70, 
             'creditos_aprobados' => 250,
             'escuela' => 1
@@ -29,7 +29,7 @@ class EstudianteTableSeeder extends Seeder
             'nombre_completo' => 'Javiera Mendez Osorio', 
             'correo' => 'jamendez16@alumnos.utalca.cl',
             'anho_ingreso' => 2016,
-            'situacion_academica' =>'regular',
+            'situacion_academica' =>'Regular',
             'porcentaje_avance' => 75,
             'creditos_aprobados' => 300,
             'escuela' => 1
@@ -41,7 +41,7 @@ class EstudianteTableSeeder extends Seeder
             'nombre_completo' => 'Diego Matus', 
             'correo' => 'jmatus@utalca.cl',
             'anho_ingreso' => 2015,
-            'situacion_academica' =>'regular',
+            'situacion_academica' =>'Regular',
             'porcentaje_avance' => 75,
             'creditos_aprobados' => 300,
             'escuela' => 1
@@ -52,7 +52,7 @@ class EstudianteTableSeeder extends Seeder
             'nombre_completo' => 'Diego Iturriaga Iturriaga', 
             'correo' => 'diturriaga@utalca,cl',
             'anho_ingreso' => 2015,
-            'situacion_academica' =>'regular',
+            'situacion_academica' =>'Regular',
             'porcentaje_avance' => 90,
             'creditos_aprobados' => 300,
             'escuela' => 1
@@ -63,7 +63,7 @@ class EstudianteTableSeeder extends Seeder
             'nombre_completo' => 'Fernanda Gallegos', 
             'correo' => 'fgallegos@utalca.cl',
             'anho_ingreso' => 2015,
-            'situacion_academica' =>'regular',
+            'situacion_academica' =>'Regular',
             'porcentaje_avance' => 75,
             'creditos_aprobados' => 300,
             'escuela' => 1
@@ -74,7 +74,7 @@ class EstudianteTableSeeder extends Seeder
             'nombre_completo' => 'Ariel Cornejo ', 
             'correo' => 'acornejo@utalca.cl',
             'anho_ingreso' => 2016,
-            'situacion_academica' =>'regular',
+            'situacion_academica' =>'Regular',
             'porcentaje_avance' => 90,
             'creditos_aprobados' => 350,
             'escuela' => 1
@@ -85,7 +85,7 @@ class EstudianteTableSeeder extends Seeder
             'nombre_completo' => 'Roberto Ureta', 
             'correo' => 'rureta@utalca.cl',
             'anho_ingreso' => 2015,
-            'situacion_academica' =>'regular',
+            'situacion_academica' =>'Regular',
             'porcentaje_avance' => 89,
             'creditos_aprobados' => 300,
             'escuela' => 1
@@ -96,7 +96,7 @@ class EstudianteTableSeeder extends Seeder
             'nombre_completo' => 'Gabriel Gonzalo Caceres ', 
             'correo' => 'gg@utalca.cl',
             'anho_ingreso' => 2016,
-            'situacion_academica' =>'regular',
+            'situacion_academica' =>'Regular',
             'porcentaje_avance' => 75,
             'creditos_aprobados' => 300,
             'escuela' => 1
@@ -107,7 +107,7 @@ class EstudianteTableSeeder extends Seeder
             'nombre_completo' => 'Ariel Valenzuela', 
             'correo' => 'avalenzuela',
             'anho_ingreso' => 2016,
-            'situacion_academica' =>'regular',
+            'situacion_academica' =>'Regular',
             'porcentaje_avance' => 75,
             'creditos_aprobados' => 300,
             'escuela' => 1
@@ -118,7 +118,7 @@ class EstudianteTableSeeder extends Seeder
             'nombre_completo' => 'Matias Pizarro', 
             'correo' => 'mpizarro@utalca.cl',
             'anho_ingreso' => 2016,
-            'situacion_academica' =>'regular',
+            'situacion_academica' =>'Regular',
             'porcentaje_avance' => 75,
             'creditos_aprobados' => 300,
             'escuela' => 1
@@ -129,7 +129,7 @@ class EstudianteTableSeeder extends Seeder
             'nombre_completo' => 'Brayam Escobar', 
             'correo' => 'bescobar@utalca.cl',
             'anho_ingreso' => 2015,
-            'situacion_academica' =>'regular',
+            'situacion_academica' =>'Regular',
             'porcentaje_avance' => 75,
             'creditos_aprobados' => 300,
             'escuela' => 1
@@ -143,7 +143,7 @@ class EstudianteTableSeeder extends Seeder
             'nombre_completo' => 'Rodrigo Letelier', 
             'correo' => 'rletelier@utalca.cl',
             'anho_ingreso' => 2015,
-            'situacion_academica' =>'regular',
+            'situacion_academica' =>'Regular',
             'porcentaje_avance' => 80,
             'creditos_aprobados' => 300,
             'escuela' => 1
@@ -154,7 +154,7 @@ class EstudianteTableSeeder extends Seeder
             'nombre_completo' => 'Jesus Moris', 
             'correo' => 'jmoris@utalca.cl',
             'anho_ingreso' => 2015,
-            'situacion_academica' =>'regular',
+            'situacion_academica' =>'Regular',
             'porcentaje_avance' => 60,
             'creditos_aprobados' => 300,
             'escuela' => 1
@@ -165,7 +165,7 @@ class EstudianteTableSeeder extends Seeder
             'nombre_completo' => 'Isavo Castro', 
             'correo' => 'icastro@utalca.cl',
             'anho_ingreso' => 2016,
-            'situacion_academica' =>'regular',
+            'situacion_academica' =>'Regular',
             'porcentaje_avance' => 85,
             'creditos_aprobados' => 370,
             'escuela' => 1
