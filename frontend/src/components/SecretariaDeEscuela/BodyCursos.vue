@@ -35,7 +35,7 @@
                                     <v-btn 
                                     :small="$vuetify.breakpoint.smAndDown ? true : false"
                                     class="mr-2" fab 
-                                    bottom left v-on="on" @click="dialogAñadirSemestre =true" >
+                                    bottom left v-on="on" @click="abrirDialogAgregarSemestre " >
                                         <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
                                     </v-btn>
                                 </template>
@@ -391,6 +391,10 @@ export default {
     },
     methods: {
         ...mapMutations(['calcularRol']),
+        abrirDialogAgregarSemestre(){
+            this.añoActual=new Date().getFullYear();
+            this.dialogAñadirSemestre =true;
+        },
         
         /**
          * Obtiene la lista de todos los 
