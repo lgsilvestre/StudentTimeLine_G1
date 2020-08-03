@@ -25,13 +25,76 @@ class ExportarExcelController extends Controller
 
     public function exportar(Request $request)
     {
-        if($request->tipo == 1 || $request->tipo == 2)
+        
+        /*
+        $request = new Request([
+            'tipo'=> 1,
+            'fechaInicio'=> '2020-05-19',
+            'fechaFin'=>'2020-08-03',
+            'id'=> 0,
+            'escuela'=> 1
+        ]);*/
+
+        $entradas = $request->only('tipo', 'fechaInicio', 'fechaFin', 'escuela');
+
+        $validator = Validator::make($entradas, [
+            'tipo' => ['required','numeric'],
+        ]);
+ 
+        if($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'code' => 301,
+                'message' => 'El tipo de exportación no es válido.',
+                'data' => ['error'=>$validator->errors()]
+            ], 422);
+        }
+        else{
+            if($entradas['tipo'] == 1)
+            {
+                $validator = Validator::make($entradas, [
+                    'escuela' => ['required','numeric'],
+                ]);
+         
+                if($validator->fails()) {
+                    return response()->json([
+                        'success' => false,
+                        'code' => 301,
+                        'message' => 'El ID de la Escuela no es válido.',
+                        'data' => ['error'=>$validator->errors()]
+                    ], 422);
+                }
+            }
+            else if($entradas['tipo'] == 2)
+            {
+                $validator = Validator::make($entradas, [
+                    'fechaInicio' => ['required', 'date'],
+                    'fechaFin' => ['required', 'date', 'after_or_equal:fechaInicio'],
+                ]);
+         
+                if($validator->fails()) {
+                    return response()->json([
+                        'success' => false,
+                        'code' => 301,
+                        'message' => 'Las fechas ingresadas no son válidas.',
+                        'data' => ['error'=>$validator->errors()]
+                    ], 422);
+                }
+            }
+        }
+
+        if($entradas['tipo'] == 1 || $entradas['tipo'] == 2)
         {
             return Excel::download(new DataEstudiantes($request) , 'estudiantes.xlsx');
         }
         elseif($request->tipo == 3)
         {
-            #Error, los pdf se exportan en otra ruta
+            return response()->json([
+                'success' => false,
+                'code' => 404,
+                'message' => 'Esta ruta no exporta archivos PDF.',
+                'data' => ['error'=>$validator->errors()]
+            ], 422);
         }
     }   
 }

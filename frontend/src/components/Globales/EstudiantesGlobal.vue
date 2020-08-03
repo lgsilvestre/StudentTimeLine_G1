@@ -805,7 +805,7 @@
                 };
                 console.log(post)
             var url = 'http://127.0.0.1:8000/api/v1/estudiante/exportar';
-            axios.post(url,post,this.$store.state.config)
+            axios.post(url,post,this.$store.state.config2)
             .then((result)=>{
                 console.log(result.data);
                 //var fileDownload = require('js-file-download');

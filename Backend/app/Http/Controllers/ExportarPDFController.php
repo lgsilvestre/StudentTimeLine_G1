@@ -21,13 +21,57 @@ class ExportarPDFController extends Controller
 
     public function exportar(Request $request)
     {
-        $request = new Request([
+        
+        /*$request = new Request([
             'tipo'=> 3,
             'fechaInicio'=> '2020-07-19',
             'fechaFin'=>'2020-07-21',
-            'id'=> 1,
+            'id'=> 2,
             'escuela'=> 1
+        ]);*/
+
+        $entradas = $request->only('tipo', 'id');
+
+        $validator = Validator::make($entradas, [
+            'tipo' => ['required','numeric'],
         ]);
+ 
+        if($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'code' => 301,
+                'message' => 'El tipo de exportación no es válido.',
+                'data' => ['error'=>$validator->errors()]
+            ], 422);
+        }
+        else{
+            if($entradas['tipo'] == 3)
+            {
+                $validator = Validator::make($entradas, [
+                    'id' => ['required','numeric'],
+                ]);
+         
+                if($validator->fails()) {
+                    return response()->json([
+                        'success' => false,
+                        'code' => 301,
+                        'message' => 'El ID del estudiante no es válido.',
+                        'data' => ['error'=>$validator->errors()]
+                    ], 422);
+                }
+                else{
+                    $estudiante = Estudiante::find($entradas['id']);
+                    if($estudiante==null){
+                        return response()->json([
+                            'success' => false,
+                            'code' => 701,
+                            'message' => 'El estudiante con el id '.$entradas['id'].' no existe',
+                            'data' => null
+                        ], 409 );
+                    }
+                }
+            }
+        }
         
         $estudiante = $this->obtenerDatosEstudiante($request);
 
