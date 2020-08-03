@@ -14,7 +14,7 @@ use Illuminate\Http\Response;
 use Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Mail\EmergencyCallReceived;
-use \App\Mail\SendMailSolicitud;
+use \App\Mail\SendMail;
 
 
 class SolicitudDeAyudanteController extends Controller
@@ -56,6 +56,7 @@ class SolicitudDeAyudanteController extends Controller
             $secretarias=User::Where('rol', 'secretaria de escuela')->where('escuela', $estudiante['escuela'])->get();
             $escuela = Escuela::where('id', $estudiante['escuela'])->first();
             $details = array(
+                'opcion' => 2,
                 'nombreProfesor' => $credenciales->nombre,
                 'escuelaProfesor' => $credenciales->getEscuela->nombre,
                 'escuelaEstudiante' => $escuela['nombre'],
@@ -69,7 +70,7 @@ class SolicitudDeAyudanteController extends Controller
                 'horas' => $entradas['horas']
             );
             foreach($secretarias as $secretaria){
-                \Mail::to($secretaria->email)->send(new SendMailSolicitud($details));
+                \Mail::to($secretaria->email)->send(new SendMail($details));
             }
             return response()->json([
                 'success' => true,

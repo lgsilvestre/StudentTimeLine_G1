@@ -114,7 +114,7 @@ class EstudianteController extends Controller
             }
         }
         $validator = Validator::make($entradas, [
-            'matricula' => ['required','string'],
+            'matricula' => ['required','numeric'],
             'rut' => ['required', 'string'],
             'nombre_completo' => ['required', 'string'],
             'correo' => ['required','email'], 
@@ -290,7 +290,7 @@ class EstudianteController extends Controller
             }
         }
         $validator = Validator::make($entradas, [
-            'matricula' => ['nullable','string'],
+            'matricula' => ['nullable','numeric'],
             'rut' => ['nullable','string'],
             'nombre_completo' => ['nullable','string'],
             'correo' => ['nullable','email'],
