@@ -190,11 +190,9 @@ class InstanciaCursoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $entradas = $request->only('semestre', 'curso', 'seccion');
+        $entradas = $request->only('seccion');
         $validator = Validator::make($entradas, [
-            'semestre' => ['nullable', 'numeric'],
-            'curso' => [' nullable', 'numeric'],
-            'seccion' => [' nullable', 'string'],
+            'seccion' => ['nullable', 'string']
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -203,12 +201,6 @@ class InstanciaCursoController extends Controller
                 'message' => 'Error en datos ingresados',
                 'data' => ['error'=>$validator->errors()]
             ], 422);
-        }
-        if(!array_key_exists ("semestre" , $entradas)){
-            $entradas['semestre'] = null;
-        }
-        if(!array_key_exists ("curso" , $entradas)){
-            $entradas['curso'] = null;
         }
         if(!array_key_exists ("seccion" , $entradas)){
             $entradas['seccion'] = null;
@@ -222,12 +214,6 @@ class InstanciaCursoController extends Controller
                     'message' => 'La instancia de escuela con el id '.$id.' no existe',
                     'data' => null
                 ], 409);
-            }
-            if($entradas['semestre']!=null){
-                $insCurso->semestre = $entradas['semestre'];
-            }
-            if($entradas['curso']!=null){
-                $insCurso->curso = $entradas['curso'];
             }
             if($entradas['seccion']!=null){
                 $insCurso->seccion = $entradas['seccion'];
