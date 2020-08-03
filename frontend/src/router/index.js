@@ -67,7 +67,7 @@ const routes = [
       },
       {
         //Enrutamiento de la vista del administrador
-        path: 'estudiantes/id=:id',
+        path: ':enrutamiento/id=:id',
         name: 'estudiantesPerfilAdministrador',
         component: () =>import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/EstudiantePerfil.vue'),
         meta: {
@@ -159,7 +159,7 @@ const routes = [
             },
             {
                 //Enrutamiento de la vista del administrador
-                path: 'estudiantes/id=:id',
+                path: ':enrutamiento/id=:id',
                 name: 'estudiantesPerfilSecretariaEscuela',
                 component: () =>
                     import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/EstudiantePerfil.vue'),
@@ -239,7 +239,7 @@ const routes = [
             },
             {
                 //Enrutamiento de la vista del administrador
-                path: 'estudiantes/id=:id',
+                path: ':enrutamiento/id=:id',
                 name: 'estudiantesPerfilProfesor',
                 component: () =>
                     import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/EstudiantePerfil.vue'),

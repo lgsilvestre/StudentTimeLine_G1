@@ -4,46 +4,71 @@
     >
     <!-- Lista general del navigation drawer -->
         <!-- Seccion de Mi Perfil -->
-            <v-list-item class="px-2 py-1  difuminado" active-class="activacion" to="/secretariaEscuela/perfil">
-                <!-- Imagen o Avatar -->
-                <v-list-item-avatar>
-                    <v-img :src="usuario.usuario.foto"
-                    ></v-img>
-                </v-list-item-avatar>    
-                <!-- Nombre del Usuario -->
-                <v-list-item-title class="white--text letra pl-2"><strong>Perfil</strong></v-list-item-title>                       
-            </v-list-item>
+        <v-tooltip left color="primary" :disabled="!drawers.miniVarianteAdm">
+            <template v-slot:activator="{ on }">
+                <v-list-item class="px-2 py-1  difuminado" active-class="activacion" to="/secretariaEscuela/perfil" v-on="on">
+                    <!-- Imagen o Avatar -->
+                    <v-list-item-avatar>
+                        <v-img :src="usuario.usuario.foto"
+                        ></v-img>
+                    </v-list-item-avatar>    
+                    <!-- Nombre del Usuario -->
+                    <v-list-item-title class="white--text letra pl-2"><strong>Perfil</strong></v-list-item-title>                       
+                </v-list-item>
+            </template>
+            <span><strong>Perfil</strong></span>
+        </v-tooltip>
         
             <v-divider></v-divider>
             <v-list style=" margine-right: 0; margine-left:0;"  >
             
-            <v-list-item class="difuminado" active-class="activacion" to="/secretariaEscuela/profesores">
-                <v-list-item-icon>
-                    <v-icon color="white">fas fa-chalkboard-teacher</v-icon>
-                </v-list-item-icon>
-                <v-list-item-title class="white--text letra"><strong>Profesores</strong></v-list-item-title>                            
-            </v-list-item>
+            <v-tooltip left color="primary" :disabled="!drawers.miniVarianteAdm">
+                <template v-slot:activator="{ on }">
+                    <v-list-item class="difuminado" active-class="activacion" to="/secretariaEscuela/profesores" v-on="on">
+                        <v-list-item-icon>
+                            <v-icon color="white">fas fa-chalkboard-teacher</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title class="white--text letra"><strong>Profesores</strong></v-list-item-title>                            
+                    </v-list-item>
+                </template>
+                <span><strong>Profesores</strong></span>
+            </v-tooltip>
 
-            <v-list-item class="difuminado" active-class="activacion" to="/secretariaEscuela/cursos">
-                <v-list-item-icon class="pl-1">
-                    <v-icon color="white">fas fa-book</v-icon>
-                </v-list-item-icon>
-                <v-list-item-title class="white--text letra"><strong>Cursos</strong></v-list-item-title>                            
-            </v-list-item>
+            <v-tooltip left color="primary" :disabled="!drawers.miniVarianteAdm">
+                <template v-slot:activator="{ on }">
+                    <v-list-item class="difuminado" active-class="activacion" to="/secretariaEscuela/cursos" v-on="on">
+                        <v-list-item-icon class="pl-1">
+                            <v-icon color="white">fas fa-book</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title class="white--text letra"><strong>Cursos</strong></v-list-item-title>                            
+                    </v-list-item>
+                </template>
+                <span><strong>Cursos</strong></span>
+            </v-tooltip>
 
-            <v-list-item  class="difuminado" active-class="activacion" to="/secretariaEscuela/estudiantes">
-                <v-list-item-icon class="pl-1">
-                    <v-icon color="white">fas fa-user-graduate</v-icon>
-                </v-list-item-icon>
-                <v-list-item-title class="white--text letra"><strong>Estudiantes</strong></v-list-item-title>                            
-            </v-list-item>
+            <v-tooltip left color="primary" :disabled="!drawers.miniVarianteAdm">
+                <template v-slot:activator="{ on }">
+                    <v-list-item  class="difuminado" active-class="activacion" to="/secretariaEscuela/estudiantes" v-on="on">
+                        <v-list-item-icon class="pl-1">
+                            <v-icon color="white">fas fa-user-graduate</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title class="white--text letra"><strong>Estudiantes</strong></v-list-item-title>                            
+                    </v-list-item>
+                </template>
+                <span><strong>Estudiantes</strong></span>
+            </v-tooltip>
 
-            <v-list-item @click="observaciones" class="difuminado" active-class="activacion" to="/secretariaEscuela/observaciones">
-                <v-list-item-icon>
-                    <v-icon color="white">fas fa-book-open</v-icon>
-                </v-list-item-icon> 
-                <v-list-item-title class="white--text letra"><strong>Observaciones</strong></v-list-item-title>                            
-            </v-list-item>
+            <v-tooltip left color="primary" :disabled="!drawers.miniVarianteAdm">
+                <template v-slot:activator="{ on }">
+                    <v-list-item @click="observaciones" class="difuminado" active-class="activacion" to="/secretariaEscuela/observaciones" v-on="on">
+                        <v-list-item-icon>
+                            <v-icon color="white">fas fa-book-open</v-icon>
+                        </v-list-item-icon> 
+                        <v-list-item-title class="white--text letra"><strong>Observaciones</strong></v-list-item-title>                            
+                    </v-list-item>
+                </template>
+                <span><strong>Observaciones</strong></span>
+            </v-tooltip>
 
             <v-list-item @click="contactar" class="difuminado" active-class="activacion">
                 <v-list-item-icon>
