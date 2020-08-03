@@ -274,8 +274,7 @@ export default {
                 "descripcion": this.datosContactar.descripcion,
             };            
             //por definir
-            var url = '';
-
+            var url = 'http://127.0.0.1:8000/api/v1/usuario/contactar';
             axios.post(url, post, this.$store.state.config)
             .then((result)=>{                
                     this.alertaExito = true;
