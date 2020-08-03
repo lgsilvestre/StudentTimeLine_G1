@@ -122,8 +122,8 @@
                       </v-toolbar>
                       <v-container style="background-color: #F7FFF7;">
                           <v-row>
-                              <v-col cols="12" md="1"></v-col>
-                              <v-col cols="12" md="10" >
+                              <v-col cols="12" md="2"></v-col>
+                              <v-col cols="12" md="8" >
                                   <v-card elevation="1">
                                   <v-img class="mx-auto white--text align-end justify-center"  
                                       width="100%" height="180px"       
@@ -168,7 +168,7 @@
                                   background-color="white"
                                   ></v-text-field>
                                   <v-data-table  
-                                      :headers="headers" 
+                                      :headers="headers2" 
                                       :items="listaEscuelasEliminadas"
                                       :search="buscar2" 
                                       :loading="cargando" 
@@ -191,7 +191,7 @@
                                   </v-data-table>
                                   </v-card>
                               </v-col>
-                              <v-col cols="12" md="1"></v-col>
+                              <v-col cols="12" md="2"></v-col>
                           </v-row>
                           
                       </v-container>
@@ -419,6 +419,14 @@
         { text: 'Nombre', value: 'nombre',sortable: true, width:350},
         { text: 'Codigo carrera', value: 'cod_car',sortable: true , align:'center',width:350  },
         { text: 'Opciones', value: 'actions', sortable: false, align:'end',class:'pr-12'},
+        { text: '', value: '',sortable: false, width:50},
+      ],
+      headers2: [
+        //{ text: 'ID',align: 'start',value: 'id',sortable: true},
+        { text: '', value: '',sortable: false, width:50},
+        { text: 'Nombre', value: 'nombre',sortable: true, width:350},
+        { text: 'Codigo carrera', value: 'cod_car',sortable: true , align:'center',width:350  },
+        { text: 'Opciones', value: 'actions', sortable: false, align:'end',class:'pr-6'},
         { text: '', value: '',sortable: false, width:50},
       ],
       desserts:[],
