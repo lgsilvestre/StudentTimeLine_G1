@@ -1053,21 +1053,21 @@ export default {
                 console.log(post)
             var url = 'http://127.0.0.1:8000/api/v1/estudiante/exportarPDF';
             //console.log(post)
-            axios.post(url,post,this.$store.state.config)
+            axios.post(url,post,this.$store.state.config2)
             .then((result)=>{
                  console.log(result);
                 //var fileDownload = require('js-file-download');
                 //fileDownload(result.data, 'archivo.xlsx');
                 
 
-                // const url = URL.createObjectURL(new Blob([result.data], {
-                //     type: 'application/x-pdf'
-                // }))
-                // const link = document.createElement('a');
-                //link.href = url;
-                //link.setAttribute('download', 'Estudiante.pdf');
-                //document.body.appendChild(link);
-                //link.click();
+                const url = URL.createObjectURL(new Blob([result.data], {
+                     type: 'application/x-pdf'
+                 }))
+                 const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'Estudiante.pdf');
+                document.body.appendChild(link);
+                link.click();
                 this.alertAcept = true;
                 this.textoAcept = 'Se realizó la operación correctamente'
                 
