@@ -610,10 +610,12 @@
                             </v-col>
                         </v-row>
                         <v-divider></v-divider>
-                        <strong ><h3 class="pt-5">Eliga el profesor: </h3></strong>
-                        <v-form ref="formProfesores">
+
+
+                    <v-form ref="formProfesores">
                             <v-select
                                 class="pt-3"
+                                v-if="numeroDeCursosModificar>0"
                                 v-model="profesorSeleccionado"
                                 label="Profesor"
                                 :items="listaProfesores"
@@ -625,7 +627,7 @@
                             > 
                             </v-select> 
                             <v-select
-                                v-if=" profesorSeleccionado!='' "
+                                v-if=" profesorSeleccionado!='' && contadorCursos>1"
                                 v-model="profesorSeleccionado2"
                                 label="Profesor"
                                 :items="listaProfesores"
@@ -637,7 +639,7 @@
                             >                               
                             </v-select>
                             <v-select
-                                v-if="profesorSeleccionado2!=''"
+                                v-if="profesorSeleccionado2!='' && contadorCursos>2"
                                 v-model="profesorSeleccionado3"
                                 label="Profesor"
                                 :items="listaProfesores"
@@ -649,7 +651,7 @@
                             >                               
                             </v-select> 
                             <v-select
-                                v-if="profesorSeleccionado3!=''"
+                                v-if="profesorSeleccionado3!='' && contadorCursos>3"
                                 v-model="profesorSeleccionado4"
                                 label="Profesor"
                                 :items="listaProfesores"
@@ -661,7 +663,7 @@
                             >                               
                             </v-select> 
                             <v-select
-                                v-if="profesorSeleccionado4!=''"
+                                v-if="profesorSeleccionado4!='' && contadorCursos>4"
                                 v-model="profesorSeleccionado5"
                                 label="Profesor"
                                 :items="listaProfesores"
@@ -672,7 +674,23 @@
                                 prepend-inner-icon="mdi-school"
                             >                               
                             </v-select>  
-                        </v-form>                       
+                        </v-form>  
+                         <div style="text-align:left;"   >
+                            <v-btn 
+                            x-small
+                            fab color="primary" 
+                            @click="sumarCurso"
+                            >
+                                <h4 class="white--text">+</h4>
+                            </v-btn>
+                            <v-btn 
+                            @click="restarCurso"
+                            x-small
+                            fab color="primary" class="ml-1" >
+                                <h4 class="white--text">-</h4>
+                            </v-btn>
+                        </div>        
+                                       
                         <div style="text-align:right;"  class="mb-1">
                             <v-btn rounded color="warning" @click="cerrarDialogAsignarCurso()">
                                 <h4 class="white--text">Cancelar</h4>
@@ -1018,9 +1036,10 @@ export default {
             numeroDeProfesoresModificar:0,
             contadorProfesores:1,
             InstanciaModificar:'',
-
             
-
+            //varaibles para añadir instancias de cursos a un semestre
+            numeroDeCursosModificar:5,
+            contadorCursos:1,
         }
     },
     _props: {
@@ -1057,6 +1076,17 @@ export default {
         restarProfesor(){
             if(this.contadorProfesores >1){
                 this.contadorProfesores--;
+            }
+        },
+        sumarCurso(){
+            if(this.contadorCursos< this.numeroDeCursosModificar){
+                this.contadorCursos++;
+                console.log("VALOR DEL CONTADORE DE CURSOS: "+ this.contadorCursos)
+            }
+        },
+        restarCurso(){
+            if(this.contadorCursos >1){
+                this.contadorCursos--;
             }
         },
  
