@@ -166,6 +166,7 @@ class TokensController extends Controller
             }
             $codigo = bin2hex(random_bytes(20));
             $details = array(
+                'opcion' => 1,
                 'usuario' => $user['nombre'],
                 'direccion' => 'http://localhost:8080/ReinicioContraseña/'.$codigo
             );

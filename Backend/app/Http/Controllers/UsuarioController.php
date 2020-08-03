@@ -6,6 +6,11 @@ use Validator;
 use Illuminate\Http\Request;
 use App\Profesor_Con_Curso;
 use App\Log;
+use \App\Mail\SendMail;
+use Mail;
+use App\Mail\Correo;
+use App\Mail\EmergencyCallReceived;
+
 
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -703,6 +708,52 @@ class UsuarioController extends Controller{
                 'message' => 'Error al solicitar peticion a la base de datos',
                 'data' => ['error'=>$ex]
             ], 409);
+        }
+    }
+
+    /**
+     * 
+     */
+    public function contactar(Request $request){
+        $entradas = $request->only('destinatarios', 'motivo', 'descripcion');
+        $validator = Validator::make($entradas, [
+            'destinatarios' => ['required'],
+            'motivo' => ['required', 'string'],
+            'descripcion' => ['required', 'string']
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'code' => 301,
+                'message' => 'Error en datos ingresados',
+                'data' => ['error'=>$validator->errors()]
+            ], 422);
+        }
+        try{
+            $credenciales = JWTAuth::parseToken()->authenticate();
+            $details = array(
+                'opcion' => 3,
+                'motivo' => $entradas['motivo'],
+                'descripcion' => $entradas['descripcion'],
+                'usuario' => $credenciales['nombre']
+            );
+            foreach($entradas['destinatarios'] as $destinatario){
+                $usuario = User::Where('id', $destinatario)->first();
+                \Mail::to($usuario['email'])->send(new SendMail($details));
+            }
+            return response()->json([
+                'success' => true,
+                'code' => 1,
+                'message' => 'Se a mandado el correo exitosamente',
+                'data' => null
+            ], 200);
+        }catch(\Exception $e){
+            return response()->json([
+                'success' => false,
+                'code' => 4,
+                'message' => 'Error',
+                'data' => $e
+            ], 502);
         }
     }
 
