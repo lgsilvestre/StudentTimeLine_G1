@@ -1104,17 +1104,29 @@ export default {
             }  
         },
         volver(){
-            if (this.$store.state.usuario.usuario.rol == "admin") {
-                this.$router.push({path:'/administrador/'+this.enrutamiento});
-            } else {
-                if (this.$store.state.usuario.usuario.rol == "secretaria de escuela") {
-                    this.$router.push({path:'/secretariaEscuela/'+this.enrutamiento});
+            var auxruta = this.enrutamiento.split("");
+            
+            if (auxruta[0] == 1 || auxruta[0] == 2) {
+                if (this.$store.state.usuario.usuario.rol == "admin") {
+                this.$router.push({path:'/administrador/cursos/'+this.enrutamiento});
                 } else {
-                    if (this.$store.state.usuario.usuario.rol == "profesor") {
-                        this.$router.push({path:'/profesor/'+this.enrutamiento});
+                    this.$router.push({path:'/secretariaEscuela/cursos/'+this.enrutamiento});
+                }
+            }
+            else{
+                if (this.$store.state.usuario.usuario.rol == "admin") {
+                    this.$router.push({path:'/administrador/'+this.enrutamiento});
+                } else {
+                    if (this.$store.state.usuario.usuario.rol == "secretaria de escuela") {
+                        this.$router.push({path:'/secretariaEscuela/'+this.enrutamiento});
+                    } else {
+                        if (this.$store.state.usuario.usuario.rol == "profesor") {
+                            this.$router.push({path:'/profesor/'+this.enrutamiento});
+                        }
                     }
                 }
             }
+            
         },
 
         modificarEstudiante() {
