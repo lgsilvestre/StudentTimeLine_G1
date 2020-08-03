@@ -24,6 +24,7 @@ Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1'], function () {
     Route::get('/usuario/disabled','UsuarioController@disabled');
     Route::post('/usuario/restore/{id}','UsuarioController@restore');
     Route::get('/usuario/listarEncargados', 'UsuarioController@listarEncargados');
+    Route::post('/usuario/contactar', 'UsuarioController@contactar');
     Route::resource('usuario', 'UsuarioController');
     #Controlador de escuela
     Route::get('/escuela/disabled','EscuelaController@disabled');
@@ -85,4 +86,6 @@ Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
     Route::post('/estudiante/exportar', 'ExportarExcelController@exportar');
 });
 
-#Route::get('/estudiante/exportarPDF', 'ExportarPDFController@exportar');
+#Route::get('/estudiante/exportar', 'ExportarExcelController@exportar');
+Route::get('/estudiante/exportarPDF', 'ExportarPDFController@exportar');
+#Route::get('/estudiante/exportar', 'ExportarExcelController@exportar');
