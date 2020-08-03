@@ -267,22 +267,27 @@ export default {
         },
 
         contactar(){
-            
+                        
             let post ={
                 "destinatarios": this.datosContactar.idDestinatario,
                 "motivo": this.datosContactar.motivo,
                 "descripcion": this.datosContactar.descripcion,
-            };            
+            };         
+
+            console.log(post);
             //por definir
             var url = 'http://127.0.0.1:8000/api/v1/usuario/contactar';
             axios.post(url, post, this.$store.state.config)
             .then((result)=>{                
+                    this.dialogContactar = false;
                     this.alertaExito = true;
+                    this.resetContactar();
                     this.textoAlertas = "Se ha enviado el/los correos correctamente."
                 }
                 ).catch((error)=>{
                     if (error.message == 'Network Error') {
-                        this.alertaError = true;                        
+                        this.alertaError = true;         
+                        this.resetContactar();               
                         this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
                     }
             })
