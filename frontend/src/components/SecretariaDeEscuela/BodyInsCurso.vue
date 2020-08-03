@@ -1290,7 +1290,7 @@ export default {
          */
         desvincularProfesorInstanciaCurso(item){
             console.log(item);
-            var url = 'http://127.0.0.1:8000/api/v1/profesorConCurso/'+item.idAProfesorConCurso;
+            var url = 'http://127.0.0.1:8000/api/v1/profesorConCurso/'+item.idProfesorConCurso;
             axios.delete(url,this.$store.state.config)
             .then((result)=>{
             if (result.statusText=='OK') {

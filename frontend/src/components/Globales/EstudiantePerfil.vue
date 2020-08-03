@@ -1061,9 +1061,9 @@ export default {
                 
 
                 const url = URL.createObjectURL(new Blob([result.data], {
-                     type: 'application/x-pdf'
-                 }))
-                 const link = document.createElement('a');
+                    type: 'application/x-pdf'
+                }))
+                const link = document.createElement('a');
                 link.href = url;
                 link.setAttribute('download', 'Estudiante.pdf');
                 document.body.appendChild(link);
