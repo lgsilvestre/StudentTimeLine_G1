@@ -507,12 +507,11 @@ export default {
             listaEscuelaAux:[],
             roles: ['Administrador', 'Secretaría de Escuela', 'Profesor'],   
 
-
             //Reglas
             reglasNombre:[
                 v => !!v || 'Requerido',
-                v => /^[a-zA-Z]{3,40}$/.test(v) || 'Largo del Nombre no Válido',
-                v => /^[a-zA-Z]+$/.test(v) || 'Nombre no Válido.'
+                v => /^[a-zA-Z ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',
+                v => /^[a-zA-Z ]+$/.test(v) || 'Nombre no Válido.'
             ],
             reglasEmail: [
                 v => !!v || 'Requerido',
@@ -540,7 +539,6 @@ export default {
 
             //Varibles para el listado de alumnos eliminados
             listaUsuariosEliminados:[],
-            
 
             formCrear: true,
             formModificar: true,
@@ -565,61 +563,6 @@ export default {
                 this.modificarUsuario();
             }
         },
-
-        /**
-       * Valida que el correo ingresado por el usuario
-       * contenga @utalca.cl o @alumnos.utalca.cl
-       */
-      validarCorreo(correoElectronico){
-          if(correoElectronico != null){
-               var utalca = correoElectronico.indexOf("@utalca.cl");
-                var al_utalca =correoElectronico.indexOf("@alumnos.utalca.cl");
-                if(utalca == -1 && al_utalca ==-1){
-                    return false;
-                }
-                return true;
-          }
-          return false;
-      },
-      /**
-       * Valida que la contraseña del usuario
-       * sea de un largo mayor o igual a 8 caracteres.
-       */
-      validarContrasena(contrasena){
-          if(contrasena != null){
-              if(contrasena.length >= 8){
-                  return true;
-              }
-              return false;
-          }
-          return false;
-      },
-      /**
-       * Valida que el nombre del usuario no 
-       * contenga numeros
-       */
-      validarNombre(nombre){
-          if(nombre!=null){
-
-              var val0= nombre.indexOf("0"); 
-              var val1= nombre.indexOf("1");
-              var val2= nombre.indexOf("2");  
-              var val3= nombre.indexOf("3"); 
-              var val4= nombre.indexOf("4"); 
-              var val5= nombre.indexOf("5"); 
-              var val6= nombre.indexOf("6"); 
-              var val7= nombre.indexOf("7"); 
-              var val8= nombre.indexOf("8");
-              var val9= nombre.indexOf("9");
-                 if(val0 >= 0 || val1  >= 0 || val2  >= 0 || val3  >= 0 || val4  >= 0 || val5  >= 0 || val6  >= 0 
-              || val7  >= 0 || val8  >= 0 || val9  >= 0 ){
-                  console.log("nombre es invalido puto")
-                    return false;
-                }
-                return true;
-          }
-          return false;
-      },
 
         obtenerListaUsuariosEliminados(){
              this.dialogListaUsuariosEliminado = true;
@@ -826,58 +769,50 @@ export default {
                 aux = "profesor"
                 this.datosUsuario.escuelaAux=null
             };
-            //variables para verificar el correo, contraseña y nombre de usuario
-            var validarCorreo= this.validarCorreo(this.datosUsuario.correo);
-            var validarContrasena =this.validarContrasena(this.datosUsuario.contrasena);
-            var nombreValido = this.validarNombre(this.datosUsuario.nombre);
-            if(validarCorreo == true && validarContrasena == true && nombreValido == true){
-               let post = {
-                "foto": this.datosUsuario.imagen,
-                "nombre": this.datosUsuario.nombre,
-                "escuela": this.datosUsuario.escuela,
-                "escuelaAux": this.datosUsuario.escuelaAux,
-                "rol": aux,
-                "email": this.datosUsuario.correo,
-                "password": this.datosUsuario.contrasena,
-                }
-                var url = 'http://127.0.0.1:8000/api/v1/usuario';
-                console.log(post);
-                axios.post(url, post, this.$store.state.config)
-                .then((result) => {
-                    this.alertaExito = true;
-                    this.textoAlertas = "Se creó el usuario con exito."
-                    this.resetRegistrarUsuario()
-                    this.obtenerUsuarios(); 
-                }).catch((error)=>{
-                    if (error.message == 'Network Error') {
-                        console.log(error)
-                        this.alertaError = true;
-                        this.textoAlertas = "Error al modificar el usuario, intente mas tarde."
-                        this.resetRegistrarUsuario();
-                    }
-                    else{
-                        if (error.response.data.success == false) {
-                            if(error.response.data.code == 301){
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
-                                this.textoAlertas = error.response.data.message;
-                                this.alertaError = true;      
-                                this.resetRegistrarUsuario();
-                            }
-                            if(error.response.data.code == 302){
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
-                                this.textoAlertas = error.response.data.message;
-                                this.alertaError = true;  
-                                this.resetRegistrarUsuario();   
-                            }
-                        }
-                    }                
-                });
-
-            }
-
             
+            let post = {
+            "foto": this.datosUsuario.imagen,
+            "nombre": this.datosUsuario.nombre,
+            "escuela": this.datosUsuario.escuela,
+            "escuelaAux": this.datosUsuario.escuelaAux,
+            "rol": aux,
+            "email": this.datosUsuario.correo,
+            "password": this.datosUsuario.contrasena,
+            }
+            var url = 'http://127.0.0.1:8000/api/v1/usuario';
+            console.log(post);
+            axios.post(url, post, this.$store.state.config)
+            .then((result) => {
+                this.alertaExito = true;
+                this.textoAlertas = "Se creó el usuario con exito."
+                this.resetRegistrarUsuario()
+                this.obtenerUsuarios(); 
+            }).catch((error)=>{
+                if (error.message == 'Network Error') {
+                    console.log(error)
+                    this.alertaError = true;
+                    this.textoAlertas = "Error al modificar el usuario, intente mas tarde."
+                    this.resetRegistrarUsuario();
+                }
+                else{
+                    if (error.response.data.success == false) {
+                        if(error.response.data.code == 301){
+                            console.log(error.response.data.code +' '+ error.response.data.message);
+                            console.log(error.response.data);
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true;      
+                            this.resetRegistrarUsuario();
+                        }
+                        if(error.response.data.code == 302){
+                            console.log(error.response.data.code +' '+ error.response.data.message);
+                            console.log(error.response.data);
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true;  
+                            this.resetRegistrarUsuario();   
+                        }
+                    }
+                }                
+            });
         },
 
     // Funcion que convierte la imagen a base64 para poder almacenarla en la base de datos.
@@ -945,102 +880,62 @@ export default {
             if ( this.datosUsuario.role == "Profesor") {
                 aux = "profesor"
             };
-            var validarCorreo= this.validarCorreo(this.datosUsuario.correo);
-            var nombreValido = this.validarNombre(this.datosUsuario.nombre);
-            var validarContrasena =this.validarContrasena(this.datosUsuario.contrasena);
-            if( this.datosUsuario.contrasena == null){
-
-                var validarContrasena =true;
+            var url =`http://127.0.0.1:8000/api/v1/usuario/${this.datosUsuario.id}`;
+            let put ={
+                "nombre": this.datosUsuario.nombre,
+                "escuela": this.datosUsuario.escuela,
+                "role": aux,
+                "foto": this.datosUsuario.imagen,
+                "email":this.datosUsuario.correo,
+                "password": this.datosUsuario.contrasena,
             }
-
-            if(validarCorreo == false  || validarContrasena ==false || nombreValido == false ){
+            axios.put(url,put,this.$store.state.config)
+            .then((result)=>{
+            if (result.statusText=='OK') {
+                this.alertaExito = true;
+                this.textoAlertas = "Se modificó el usuario con exito."
+                this.obtenerUsuarios(); 
                 this.resetModificacionUsuario();
-                this.textoAlertas = "Error en los datos ingresados.";
-                this.alertaError = true;
-            
-                
             }
-            else{
-                var correo=this.datosUsuario.correo;
-                var contrasena=this.datosUsuario.contrasena;
-                var nombre = this.datosUsuario.nombre;
-               if(validarCorreo == false){
-                   correo = null;
-                    this.resetModificacionUsuario();
-                    this.textoAlertas = "Error en los datos ingresados.";
+            }).catch((error)=>{                
+                if (error.message == 'Network Error') {
+                    console.log(error)
                     this.alertaError = true;
-                    return ;
-                //    console.log("correo invalido")
-               }
-               if(validarContrasena == false){
-                   contrasena=null;
-                //    console.log("contraseña invalido")
-               }
-               if(nombreValido == false){
-                   nombre = null;
-                //    console.log("nombre invalido")
-               }
-
-                var url =`http://127.0.0.1:8000/api/v1/usuario/${this.datosUsuario.id}`;
-                let put ={
-                    "nombre": nombre,
-                    "escuela": this.datosUsuario.escuela,
-                    "role": aux,
-                    "foto": this.datosUsuario.imagen,
-                    "email":correo,
-                    "password": contrasena,
+                    this.textoAlertas = "Error al modificar el usuario, intente mas tarde."
                 }
-                axios.put(url,put,this.$store.state.config)
-                .then((result)=>{
-                if (result.statusText=='OK') {
-                    this.alertaExito = true;
-                    this.textoAlertas = "Se modificó el usuario con exito."
-                    this.obtenerUsuarios(); 
-                    this.resetModificacionUsuario();
-                }
-                }).catch((error)=>{                
-                    if (error.message == 'Network Error') {
-                        console.log(error)
-                        this.alertaError = true;
-                        this.textoAlertas = "Error al modificar el usuario, intente mas tarde."
-                    }
-                    else{
-                        if (error.response.data.success == false) {
-                            if(error.response.data.code == 601){
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
-                                this.textoAlertas = error.response.data.message;
-                                this.alertaError = true;
-                                this.resetModificacionUsuario();
-                            }
-                            if(error.response.data.code == 602){
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
-                                this.textoAlertas = error.response.data.message;
-                                this.alertaError = true;
-                                this.resetModificacionUsuario();
-                            }
-                            if(error.response.data.code == 603){
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
-                                this.textoAlertas = error.response.data.message;
-                                this.alertaError = true;
-                                this.resetModificacionUsuario();
-                            }
-                            if(error.response.data.code == 604){
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
-                                this.textoAlertas = error.response.data.message;
-                                this.alertaError = true;
-                                this.resetModificacionUsuario();
-                            }
+                else{
+                    if (error.response.data.success == false) {
+                        if(error.response.data.code == 601){
+                            console.log(error.response.data.code +' '+ error.response.data.message);
+                            console.log(error.response.data);
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true;
+                            this.resetModificacionUsuario();
+                        }
+                        if(error.response.data.code == 602){
+                            console.log(error.response.data.code +' '+ error.response.data.message);
+                            console.log(error.response.data);
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true;
+                            this.resetModificacionUsuario();
+                        }
+                        if(error.response.data.code == 603){
+                            console.log(error.response.data.code +' '+ error.response.data.message);
+                            console.log(error.response.data);
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true;
+                            this.resetModificacionUsuario();
+                        }
+                        if(error.response.data.code == 604){
+                            console.log(error.response.data.code +' '+ error.response.data.message);
+                            console.log(error.response.data);
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true;
+                            this.resetModificacionUsuario();
                         }
                     }
-                });
-            }
-            
-            
-
+                }
+            });
         },
         resetEliminarUsuario(){
             this.dialogEliminar = false;
