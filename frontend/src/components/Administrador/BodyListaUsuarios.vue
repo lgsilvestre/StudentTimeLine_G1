@@ -41,20 +41,29 @@
                                         <span><strong>Registrar Usuario</strong></span>
                                     </v-tooltip>
                                     <!-- Formulario Registrar Usuario -->
-                                    <v-dialog v-model="dialog" persistent max-width="500px" :key="keyDialogCreacion">
+                                    <v-dialog v-model="dialog" persistent max-width="500px" :key="keyDialogCreacion" >
                                         <v-card class="mx-auto" max-width="500" >
                                             <v-card-title class="headline primary text--center" primary-title >
                                                 <h5 class="white--text ">Registrar Usuario</h5>
                                             </v-card-title>
                                                 <v-container class="px-5 mt-5">
-                                                    <v-form ref="formCrearUsuario">
+                                                    <v-form ref="crearUsuario" v-model="formCrear" lazy-validation>
                                                         <v-text-field
                                                         v-model="datosUsuario.nombre"
                                                         label="Nombre de Usuario"
-                                                        :rules="[() => !!datosUsuario.nombre ||'Requerido']"
-                                                        outlined
+                                                        :rules="reglasNombre"
+                                                        outlined                                                        
                                                         prepend-inner-icon="mdi-account"
                                                         ></v-text-field>
+                                                        <v-select
+                                                            v-model="datosUsuario.role"
+                                                            label="Rol"
+                                                            :items="roles"
+                                                            :rules="[() => !!datosUsuario.role ||'Requerido']"
+                                                            outlined
+                                                            prepend-inner-icon="mdi-account-tie"
+                                                        >                                
+                                                        </v-select>
                                                         <v-select
                                                             v-model="datosUsuario.escuela"
                                                             label="Escuela"
@@ -66,7 +75,7 @@
                                                             prepend-inner-icon="mdi-school"
                                                         >                                
                                                         </v-select>
-                                                        <v-select v-show="datosUsuario.role!='Profesor'"
+                                                        <v-select v-show="datosUsuario.role!='Profesor' && datosUsuario.role!=''"
                                                             v-model="datosUsuario.escuelaAux"
                                                             label="Escuela Secundaria"
                                                             :items="listaEscuela"
@@ -75,16 +84,7 @@
                                                             outlined
                                                             prepend-inner-icon="mdi-school"
                                                         >                                
-                                                        </v-select>
-                                                        <v-select
-                                                            v-model="datosUsuario.role"
-                                                            label="Rol"
-                                                            :items="roles"
-                                                            :rules="[() => !!datosUsuario.role ||'Requerido']"
-                                                            outlined
-                                                            prepend-inner-icon="mdi-account-tie"
-                                                        >                                
-                                                        </v-select>
+                                                        </v-select>                                                        
                                                         <v-text-field
                                                             v-model="datosUsuario.correo"
                                                             label="Correo Electronico"
@@ -97,7 +97,7 @@
                                                             v-model="datosUsuario.contrasena"
                                                             :prepend-inner-icon= "mostrar ? 'mdi-eye' : 'mdi-eye-off'"
                                                             :type="mostrar ? 'text' : 'password'"
-                                                            :rules="reglas"
+                                                            :rules="reglasContraseña"
                                                             label="Contraseña"
                                                             outlined
                                                             hint="Al menos 8 caracteres"
@@ -121,8 +121,9 @@
                                                                 <h4 class="white--text">Cancelar</h4>
                                                             </v-btn>
                                                             <v-btn 
+                                                            :disabled="!formCrear"
                                                             :small="$vuetify.breakpoint.smAndDown ? true : false"
-                                                            rounded color="secondary" class="ml-2" @click="registrarUsuario()" >
+                                                            rounded color="secondary" class="ml-2" @click="validarCrearUsuario()" >
                                                                 <h4 class="white--text">Registrar</h4>
                                                             </v-btn>
                                                         </div>
@@ -278,19 +279,26 @@
                                 </v-col>
                             </v-row>
                             <!-- Formulario Modificar Usuario -->
-                            <v-dialog v-model="modUsuarioActivo" persistent max-width="500px" transition="scroll-y-reverse-transition">
+                            <v-dialog v-model="modUsuarioActivo" persistent max-width="500px" transition="scroll-y-reverse-transition" :key="keyDialogModificar">
                                 <v-card elevation="1">
                                     <v-card-title  class="headline primary text--center" primary-title > 
                                         <h5 class="white--text ">Modificar Usuario</h5>
                                     </v-card-title>
                                     <v-container class="px-5 mt-5">
-                                       <v-form ref="formModificarUsuario"> 
+                                       <v-form ref="modificarUsuario" v-model="formModificar" lazy-validation > 
                                             <v-text-field v-model="datosUsuario.nombre" label="Nombre de usuario" outlined
                                             color="secondary"
-                                            :rules="[() => !!datosUsuario.nombre ||'Requerido']"
+                                            :rules="reglasNombre"
                                             prepend-inner-icon="mdi-account"
                                             ></v-text-field>
-
+                                            <v-select v-model="datosUsuario.role"
+                                                label="Rol" 
+                                                :items="roles"
+                                                :rules="[() => !!datosUsuario.role ||'Requerido']"
+                                                outlined
+                                                prepend-inner-icon="mdi-account-tie"
+                                                >
+                                            </v-select>
                                             <v-select  v-model="datosUsuario.escuela"
                                                 :items="listaEscuela"
                                                 item-text="nombre"
@@ -310,25 +318,6 @@
                                                 :small-chips="$vuetify.breakpoint.smAndDown ? true : false"
                                                 prepend-inner-icon="mdi-school"
                                             ></v-select>
-
-                                            <v-select v-model="datosUsuario.role"
-                                                label="Rol" 
-                                                :items="roles"
-                                                :rules="[() => !!datosUsuario.role ||'Requerido']"
-                                                outlined
-                                                prepend-inner-icon="mdi-account-tie"
-                                                ></v-select>
-
-                                            <v-file-input  accept="image/png, image/jpeg, image/bmp" 
-                                                label="Seleccione una imagen"
-                                                color="secondary"
-                                                outlined
-                                                @change="convertirImagen"
-                                                prepend-icon=""   
-                                                prepend-inner-icon="mdi-camera"
-                                                >
-                                            </v-file-input>
-
                                             <v-text-field 
                                                 v-model="datosUsuario.correo"
                                                 label="Correo Electronico"
@@ -346,6 +335,15 @@
                                                 hint="Al menos 8 caracteres"
                                                 @click:prepend-inner="mostrar = !mostrar"
                                             ></v-text-field>
+                                            <v-file-input  accept="image/png, image/jpeg, image/bmp" 
+                                                label="Seleccione una imagen"
+                                                color="secondary"
+                                                outlined
+                                                @change="convertirImagen"
+                                                prepend-icon=""   
+                                                prepend-inner-icon="mdi-camera"
+                                                >
+                                            </v-file-input>
                                             <div style="text-align:right;" class="mb-1 " >
                                                 <v-btn 
                                                 :small="$vuetify.breakpoint.smAndDown ? true : false"
@@ -353,8 +351,9 @@
                                                     <h4 class="white--text">Cancelar</h4>
                                                 </v-btn>
                                                 <v-btn 
+                                                :disabled="!formModificar"
                                                 :small="$vuetify.breakpoint.smAndDown ? true : false"
-                                                rounded color="secondary" class=" ml-2"    @click="modificarUsuario">
+                                                rounded color="secondary" class=" ml-2"    @click="validarModificarUsuario()">
                                                     <h4 class="white--text">Modificar</h4>
                                                 </v-btn>
                                             </div>
@@ -507,13 +506,21 @@ export default {
             ],            
             listaEscuelaAux:[],
             roles: ['Administrador', 'Secretaría de Escuela', 'Profesor'],   
-            reglas:[
-                value => !!value || 'Requerido.',
-                value => (value && value.length >= 8) || 'Minimo 8 characters',
+
+
+            //Reglas
+            reglasNombre:[
+                v => !!v || 'Requerido',
+                v => /^[a-zA-Z]{3,40}$/.test(v) || 'Largo del Nombre no Válido',
+                v => /^[a-zA-Z]+$/.test(v) || 'Nombre no Válido.'
             ],
             reglasEmail: [
-                v => !!v || 'E-mail is required',
-                v => /.+@utalca.cl/.test(v) || /.+@alumnos.utalca.cl/.test(v) || 'Correo invalido', 
+                v => !!v || 'Requerido',
+                v => /.+@utalca.cl/.test(v) || /.+@alumnos.utalca.cl/.test(v) || 'Correo no Válido', 
+            ],
+            reglasContraseña:[
+                v => !!v || 'Requerido',
+                v => /^[a-zA-Z0-9!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]{8,}$/.test(v)  || 'Contraseña muy corta',
             ],
             search:'',
             columnas:[
@@ -534,6 +541,9 @@ export default {
             //Varibles para el listado de alumnos eliminados
             listaUsuariosEliminados:[],
             
+
+            formCrear: true,
+            formModificar: true,
             keyDialogCreacion: 2,
 
             keyDialogModificar: 1,
@@ -544,19 +554,19 @@ export default {
         this.obtenerUsuarios();        
     },
     methods: {
-        resetFormModificarUsuario () {
-        this.$refs.formModificarUsuario.reset();
-      },
-      resetFormCrearUsuario () {
-        this.$refs.formCrearUsuario.reset();
-      },
-        /* ...mapMutations(['registrarUsuario']), */
-        validate () {
-            if(this.$refs.form.validate()){
-                this.resetRegistrarUsuario();
-            };
+        validarCrearUsuario(){
+            if(this.$refs.crearUsuario.validate()){
+                this.registrarUsuario();
+            }
         },
-         /**
+
+        validarModificarUsuario(){
+            if(this.$refs.modificarUsuario.validate()){
+                this.modificarUsuario();
+            }
+        },
+
+        /**
        * Valida que el correo ingresado por el usuario
        * contenga @utalca.cl o @alumnos.utalca.cl
        */
@@ -610,6 +620,7 @@ export default {
           }
           return false;
       },
+
         obtenerListaUsuariosEliminados(){
              this.dialogListaUsuariosEliminado = true;
             this.listaUsuariosAux = [];
@@ -709,7 +720,7 @@ export default {
 
         /* Metodo que reinicia los campos del formulario de registrar usuario, asi como las validaciones */
         resetRegistrarUsuario(){
-            this.resetFormCrearUsuario();
+            this.$refs.crearUsuario.reset();               
             this.dialog = false;
             this.datosUsuario.nombre='';
             this.datosUsuario.escuela='';
@@ -888,8 +899,7 @@ export default {
        * para solucionar este problema, se deferan definir nuevamente los roles.
        */
         MostrarPanelModificar(item){
-            this.modUsuarioActivo = true;
-            //this.resetFormModificarUsuario();
+            this.modUsuarioActivo = true;            
             this.datosUsuario.id= item.id;
             this.datosUsuario.nombre= item.nombre;            
             this.datosUsuario.imagen= item.imagen;
@@ -913,7 +923,7 @@ export default {
         },
 
         resetModificacionUsuario(){
-            this.resetFormModificarUsuario();
+            this.$refs.modificarUsuario.reset();  
             this.modUsuarioActivo = false;
             this.datosUsuario.nombre='';
             this.datosUsuario.escuela='';

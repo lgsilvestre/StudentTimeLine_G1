@@ -79,11 +79,31 @@
                 <v-card-title  class="headline primary text--center" primary-title > 
                     <h5 class="white--text ">Editar Perfil</h5>
                 </v-card-title>
-                <v-form ref="form"  @submit.prevent="modificarUsuario" class=" px-5 mt-7" >
+                <v-form ref="modUsuario"  v-model="formModificar" lazy-validation @submit.prevent="modificarUsuario" class=" px-5 mt-7" >
                     <v-text-field v-model="datosUsuarioModificar.nombre" label="Nombre de usuario" outlined
                     color="secondary"
-                    :rules="[() => !!datosUsuario.nombre ]"
+                    :rules="reglasNombre"
                     prepend-inner-icon="mdi-account"
+                    ></v-text-field>
+                    
+                    <v-text-field 
+                    v-model="datosUsuarioModificar.correo"
+                    label="Correo Electronico"
+                    outlined
+                    color="secondary"
+                    prepend-inner-icon="mdi-email"
+                    :rules="reglasEmail"
+                    hint="ejemplo@utalca.cl"
+     
+                    ></v-text-field>
+                    <v-text-field v-model="datosUsuarioModificar.contrasena" label="Contraseña "
+                    :prepend-inner-icon= "mostrar ? 'mdi-eye' : 'mdi-eye-off'"
+                    :type="mostrar ? 'text' : 'password'"
+                    outlined
+                    :rules="reglasContraseña"
+                    color="secondary"
+                    hint="Al menos 8 caracteres"
+                    @click:prepend-inner="mostrar = !mostrar"
                     ></v-text-field>
                     <v-file-input  accept="image/png, image/jpeg, image/bmp" 
                     label="Seleccione una imagen"
@@ -94,24 +114,6 @@
                     @change="convertirImagen"
                     v-model="datosUsuarioModificar.imagen">
                     </v-file-input>
-                    <v-text-field 
-                    v-model="datosUsuarioModificar.correo"
-                    label="Correo Electronico"
-                    outlined
-                    color="secondary"
-                    prepend-inner-icon="mdi-email"
-                    :rules="reglasCorreo"
-                    hint="ejemplo@utalca.cl"
-     
-                    ></v-text-field>
-                    <v-text-field v-model="datosUsuarioModificar.contrasena" label="Contraseña "
-                    :prepend-inner-icon= "mostrar ? 'mdi-eye' : 'mdi-eye-off'"
-                    :type="mostrar ? 'text' : 'password'"
-                    outlined
-                    color="secondary"
-                    hint="Al menos 8 caracteres"
-                    @click:prepend-inner="mostrar = !mostrar"
-                    ></v-text-field>
                     <div style="text-align:right;">
                         <v-btn 
                         :small="$vuetify.breakpoint.smAndDown ? true : false"
@@ -119,6 +121,7 @@
                             Restablecer
                         </v-btn>
                         <v-btn  
+                        :disabled="!formModificar"
                         :small="$vuetify.breakpoint.smAndDown ? true : false"
                         :loading="cargando" rounded color="primary" class="mb-4 ml-2"    type="submit">
                             <h4 class="white--text">Modificar</h4>
@@ -177,7 +180,8 @@ export default {
             delay: 4000,
             mostrar: false, 
             cargando: false,
-            datosUsuarioModificar:[ {nombre:null},{correo:null},{contrasena:''} ,{imagen:null}],
+            formModificar: true,
+            datosUsuarioModificar:[ {nombre:''},{correo:''},{contrasena:''} ,{imagen:null}],
             datosUsuario:[], 
             datosUsuarioAux:[],
             roles: ['Administrador', 'Secretaría de Escuela', 'Profesor'],   
@@ -185,7 +189,6 @@ export default {
             // variables para la modificacion de usuario
             listaUsuarios:[],
             listaUsuariosAux:[],
-            
 
             //escuela
             listaEscuela:[{id:''},{nombre:''},{cod:''}],
@@ -195,11 +198,16 @@ export default {
             //prueba de imagen
             imagenMiniatura:null,
             correo:'',
-            reglasCorreo:[
-                v => /.+@utalca.cl/.test(v) || /.+@alumnos.utalca.cl/.test(v) || 'Correo invalido', 
-            ]
-            
-            
+            reglasNombre:[
+                v => /^[a-zA-Z]{3,40}$/.test(v) || 'Largo del Nombre no Válido',
+                v => /^[a-zA-Z ]+$/.test(v) || 'Nombre no Válido.'
+            ],
+            reglasEmail: [
+                v => /.+@utalca.cl/.test(v) || /.+@alumnos.utalca.cl/.test(v) || 'Correo no Válido', 
+            ],
+            reglasContraseña:[
+                v => /^[a-zA-Z0-9!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]{8,}$/.test(v)  || 'Contraseña muy corta',
+            ],
         }
     },
     computed:{
@@ -208,11 +216,14 @@ export default {
     },
     beforeMount() {
         this.obtenerUsuario();
+        
+    },
+    mounted(){
         this.reset();
     },
     methods:{
         reset () {
-            this.$refs.form.reset();
+            this.$refs.modUsuario.reset();
         },
       /**
        * Valida que el correo ingresado por el usuario
