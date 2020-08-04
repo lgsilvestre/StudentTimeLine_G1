@@ -139,7 +139,7 @@
                     <h5 class="white--text ">Registrar Semestre</h5>
                 </v-card-title>
                 <v-container class="px-5 mt-5" >
-                    <v-form  ref="form_nuevoSemestre" style="margin:0;padding:0;" v-model="formularioModificarSemestreValido" lazy-validation>
+                    <v-form  ref="form_nuevoSemestre" style="margin:0;padding:0;" v-model="formularioNuevoSemestreValido" lazy-validation>
                         <v-row >
                             <v-col cols="6" >
                                 <strong>Año</strong>
@@ -482,45 +482,50 @@ export default {
          * Registra la información de un semestre en la base de datos.
          */
         registrarSemestre(){
-            var año_Aux = new Date().getFullYear()
-            if(this.añoActual <= año_Aux && this.añoActual>= 1981 && this.semestreActual>=1 && this.semestreActual <= 3){
-                let post = {
-                    "semestre": this.semestreActual,
-                    "anio": this.añoActual,
-                }
-                var url = 'http://127.0.0.1:8000/api/v1/semestre ';
-            axios.post(url, post, this.$store.state.config)
-            .then((result) => {
-                if (result.data.success==true){
-                    this.dialogAñadirSemestre = false;
-                    
-                    this.textoAlertas = this.ErrorCreacionSemetre;
-                    this.alertaExito=true;
-                    this.obtenerListaDeSemestres(); 
-                }
-            }).catch((error)=>{
-                
-                if (error.message == 'Network Error') {
-                    console.log(error)
-                    this.alertaError = true;
-                    this.textoAlertas =this.errorServidor;
-                     this.alertaError = true;  
-                }
-                else{
-                    if (error.response.data.success == false) {
-                        if(error.response.data.code == 301){
-                            this.textoAlertas = error.response.data.message;
-                            this.alertaError = true;      
-                        }
-                        if(error.response.data.code == 302){
-                            this.textoAlertas = this.ErrorSemestreDuplicado;
-                            this.alertaError = true;      
-                        }
-                    }
-                }                
-            });
-            
+            var valido=this.$refs.form_nuevoSemestre.validate();
+            console.log("semestre valido :" + valido)
+            if(valido == true){
 
+                var año_Aux = new Date().getFullYear()
+                if(this.añoActual <= año_Aux && this.añoActual>= 1981 && this.semestreActual>=1 && this.semestreActual <= 3){
+                    let post = {
+                        "semestre": this.semestreActual,
+                        "anio": this.añoActual,
+                    }
+                    var url = 'http://127.0.0.1:8000/api/v1/semestre ';
+                axios.post(url, post, this.$store.state.config)
+                .then((result) => {
+                    if (result.data.success==true){
+                        this.dialogAñadirSemestre = false;
+                        
+                        this.textoAlertas = this.ErrorCreacionSemetre;
+                        this.alertaExito=true;
+                        this.obtenerListaDeSemestres(); 
+                    }
+                }).catch((error)=>{
+                    
+                    if (error.message == 'Network Error') {
+                        console.log(error)
+                        this.alertaError = true;
+                        this.textoAlertas =this.errorServidor;
+                         this.alertaError = true;  
+                    }
+                    else{
+                        if (error.response.data.success == false) {
+                            if(error.response.data.code == 301){
+                                this.textoAlertas = error.response.data.message;
+                                this.alertaError = true;      
+                            }
+                            if(error.response.data.code == 302){
+                                this.textoAlertas = this.ErrorSemestreDuplicado;
+                                this.alertaError = true;      
+                            }
+                        }
+                    }                
+                });
+                
+    
+                }
             }
 
 
