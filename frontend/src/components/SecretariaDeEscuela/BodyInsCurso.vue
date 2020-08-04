@@ -583,8 +583,9 @@
                     <h5 class="white--text">Asignar Cursos</h5>
                 </v-card-title>
                 <v-container class="px-5">
-                    <v-form>
-                        <v-row v-for="(item, index) in seleccionados" :key="index">
+                        <v-form  ref="formAsignarCurso" style="margin:0;padding:0;" v-model="form_AsignarCurso" lazy-validation>
+                    <v-row v-for="(item, index) in seleccionados" :key="index">
+
                             <v-col cols="6" v-if="index==0">
                                 <strong><h3>Curso</h3></strong>
                             </v-col>
@@ -595,7 +596,6 @@
                                 <v-list-item-title> {{item.nombre}}</v-list-item-title>
                             </v-col>
                             <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0"> 
-                                <v-form ref="formSeccion">
                                     <v-select
                                         v-model="item.seccion"
                                         :items="listaDeSeccionesDisponibles"
@@ -606,75 +606,70 @@
                                         outlined
                                         color="secondary"
                                     ></v-select>
-                                </v-form>
                             </v-col>
-                        </v-row>
-                        <v-divider></v-divider>
-
-
-                    <v-form ref="formProfesores">
-                            <v-select
-                                class="pt-3"
-                                v-if="numeroDeCursosModificar>0"
-                                v-model="profesorSeleccionado"
-                                label="Profesor"
-                                :items="listaProfesores"
-                                item-text="nombre"
-                                item-value="id"
-                                :rules="[() => !!profesorSeleccionado ||'Requerido']"
-                                outlined
-                                prepend-inner-icon="mdi-school"
-                            > 
-                            </v-select> 
-                            <v-select
-                                v-if=" profesorSeleccionado!='' && contadorCursos>1"
-                                v-model="profesorSeleccionado2"
-                                label="Profesor"
-                                :items="listaProfesores"
-                                item-text="nombre"
-                                item-value="id"
-                                :rules="[() => !!profesorSeleccionado2 ||'Requerido']"
-                                outlined
-                                prepend-inner-icon="mdi-school"
-                            >                               
-                            </v-select>
-                            <v-select
-                                v-if="profesorSeleccionado2!='' && contadorCursos>2"
-                                v-model="profesorSeleccionado3"
-                                label="Profesor"
-                                :items="listaProfesores"
-                                item-text="nombre"
-                                item-value="id"
-                                :rules="[() => !!profesorSeleccionado3 ||'Requerido']"
-                                outlined
-                                prepend-inner-icon="mdi-school"
-                            >                               
-                            </v-select> 
-                            <v-select
-                                v-if="profesorSeleccionado3!='' && contadorCursos>3"
-                                v-model="profesorSeleccionado4"
-                                label="Profesor"
-                                :items="listaProfesores"
-                                item-text="nombre"
-                                item-value="id"
-                                :rules="[() => !!profesorSeleccionado4 ||'Requerido']"
-                                outlined
-                                prepend-inner-icon="mdi-school"
-                            >                               
-                            </v-select> 
-                            <v-select
-                                v-if="profesorSeleccionado4!='' && contadorCursos>4"
-                                v-model="profesorSeleccionado5"
-                                label="Profesor"
-                                :items="listaProfesores"
-                                item-text="nombre"
-                                item-value="id"
-                                :rules="[() => !!profesorSeleccionado5 ||'Requerido']"
-                                outlined
-                                prepend-inner-icon="mdi-school"
-                            >                               
-                            </v-select>  
-                        </v-form>  
+        
+                            </v-row>
+                            <v-divider></v-divider>
+                                <v-select
+                                    class="pt-3"
+                                    v-if="numeroDeCursosModificar>0"
+                                    v-model="profesorSeleccionado"
+                                    label="Profesor"
+                                    :items="listaProfesores"
+                                    item-text="nombre"
+                                    item-value="id"
+                                    :rules="[() => !!profesorSeleccionado ||'Requerido']"
+                                    outlined
+                                    prepend-inner-icon="mdi-school"> 
+                                </v-select> 
+                                <v-select
+                                    v-if=" profesorSeleccionado!='' && contadorCursos>1"
+                                    v-model="profesorSeleccionado2"
+                                    label="Profesor"
+                                    :items="listaProfesores"
+                                    item-text="nombre"
+                                    item-value="id"
+                                    :rules="[() => !!profesorSeleccionado2 ||'Requerido']"
+                                    outlined
+                                    prepend-inner-icon="mdi-school"
+                                >                               
+                                </v-select>
+                                <v-select
+                                    v-if="profesorSeleccionado2!='' && contadorCursos>2"
+                                    v-model="profesorSeleccionado3"
+                                    label="Profesor"
+                                    :items="listaProfesores"
+                                    item-text="nombre"
+                                    item-value="id"
+                                    :rules="[() => !!profesorSeleccionado3 ||'Requerido']"
+                                    outlined
+                                    prepend-inner-icon="mdi-school"
+                                >                               
+                                </v-select> 
+                                <v-select
+                                    v-if="profesorSeleccionado3!='' && contadorCursos>3"
+                                    v-model="profesorSeleccionado4"
+                                    label="Profesor"
+                                    :items="listaProfesores"
+                                    item-text="nombre"
+                                    item-value="id"
+                                    :rules="[() => !!profesorSeleccionado4 ||'Requerido']"
+                                    outlined
+                                    prepend-inner-icon="mdi-school"
+                                >                               
+                                </v-select> 
+                                <v-select
+                                    v-if="profesorSeleccionado4!='' && contadorCursos>4"
+                                    v-model="profesorSeleccionado5"
+                                    label="Profesor"
+                                    :items="listaProfesores"
+                                    item-text="nombre"
+                                    item-value="id"
+                                    :rules="[() => !!profesorSeleccionado5 ||'Requerido']"
+                                    outlined
+                                    prepend-inner-icon="mdi-school" >  </v-select>   
+                                                        
+            
                          <div style="text-align:left;"   >
                             <v-btn 
                             x-small
@@ -695,11 +690,12 @@
                             <v-btn rounded color="warning" @click="cerrarDialogAsignarCurso()">
                                 <h4 class="white--text">Cancelar</h4>
                             </v-btn>
-                            <v-btn rounded color="secondary" class="ml-2 " @click="asignarCursoASementre()" >
+                            <v-btn rounded color="secondary" class="ml-2 " @click="asignarCursoASementre()" 
+                            :disabled="!form_AsignarCurso">
                                 <h4 class="white--text">Asignar</h4>
                             </v-btn>
                         </div> 
-                    </v-form> 
+                    </v-form>
                 </v-container>
                 
             </v-card>
@@ -1040,6 +1036,15 @@ export default {
             //varaibles para añadir instancias de cursos a un semestre
             numeroDeCursosModificar:5,
             contadorCursos:1,
+            //Variables y reglas de formulario
+            form_AsignarCurso:true,
+            reglasSeccion: [
+                value => !!value || 'Requerido'
+                ],
+            reglasProfesor: [
+                value => !!value || 'Requerido'
+                ],
+            
         }
     },
     _props: {
@@ -1067,6 +1072,9 @@ export default {
     },
     methods: {
         ...mapMutations(['calcularRolVuelta']),
+        validate () {
+            this.$refs.form_AsignarCurso.validate()
+        },
         sumarProfesor(){
             if(this.contadorProfesores < this.numeroDeProfesoresModificar){
                 this.contadorProfesores++;
@@ -1094,7 +1102,7 @@ export default {
         obtenerProfesores(){
             this.listaProfesoresAux = [];
             var aux;
-            var url = 'http://127.0.0.1:8000/api/v1/usuario';
+            var url = 'http://127.0.0.1:8000/api/v1/usuario/indexProfesor';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 for (let index = 0; index < result.data.data.usuarios.length; index++) {

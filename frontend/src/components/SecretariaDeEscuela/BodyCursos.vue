@@ -139,7 +139,7 @@
                     <h5 class="white--text ">Registrar Semestre</h5>
                 </v-card-title>
                 <v-container class="px-5 mt-5" >
-                    <v-form  ref="form_nuevoSemestre" style="margin:0;padding:0;" v-model="formularioNuevoSemestreValido" lazy-validation>
+                    <v-form  ref="form_nuevoSemestre" style="margin:0;padding:0;" v-model="formularioModificarSemestreValido" lazy-validation>
                         <v-row >
                             <v-col cols="6" >
                                 <strong>Año</strong>
@@ -379,6 +379,13 @@ export default {
                 value => value <= 3|| 'El semestre debe ser menor a 3',
                 value => value >= 1 || 'El semestre debe ser mayor a 1',
                 ],
+
+                //Texto
+                errorServidor:"Error al comunicarse con el servidor, intente más tarde",
+                exitoCreacionSemestre:"Se creó el semestre satisfactoriamente.",
+                ErrorCreacionSemetre:"Error al crear El semestre.",
+                ErrorSemestreDuplicado:"Error el semestre ya se encuentra registrado.",
+                ErrorDatosIngresados:"Error en los datos Ingresados",
         }
     },
     _props: {
@@ -400,12 +407,12 @@ export default {
     },
     methods: {
         ...mapMutations(['calcularRol']),
-
+        /**
+         * Valida si la información ingresada por el usuario esta correcta.
+         */
         validate () {
             this.$refs.form_nuevoSemestre.validate()
         },
-        
-        
         resetValidacionesCrearNuevoSemestre(){
             this.añoActual= new Date().getFullYear();
             this.semestreActual= 1;
@@ -449,7 +456,7 @@ export default {
             ).catch((error)=>{
                 if (error.message == "Network Error") {
                     console.log(error);
-                    this.textoAlertas = "Error al comunicarse con el servidor, intente más tarde";
+                    this.textoAlertas =this.errorServidor;
                     this.alertaError = true;
                     this.cargando = false;
                     // state.mensajeErrorLogin= 'Error al comunicarse con el servidor, intente más tarde';
@@ -457,8 +464,6 @@ export default {
                     if (error.response.data.success == false) {
                         switch (error.response.data.code) {
                             case 101:
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
                                 mensaje= error.response.data.message;
                                 this.textoAlertas = mensaje;
                                 this.alertaError = true;  
@@ -486,11 +491,10 @@ export default {
                 var url = 'http://127.0.0.1:8000/api/v1/semestre ';
             axios.post(url, post, this.$store.state.config)
             .then((result) => {
-                console.log(result);
                 if (result.data.success==true){
                     this.dialogAñadirSemestre = false;
                     
-                    this.textoAlertas = "Se creó el semestre con exito."
+                    this.textoAlertas = this.ErrorCreacionSemetre;
                     this.alertaExito=true;
                     this.obtenerListaDeSemestres(); 
                 }
@@ -499,21 +503,17 @@ export default {
                 if (error.message == 'Network Error') {
                     console.log(error)
                     this.alertaError = true;
-                    this.textoAlertas = "Error al modificar el usuario, intente mas tarde."
+                    this.textoAlertas =this.errorServidor;
                      this.alertaError = true;  
                 }
                 else{
                     if (error.response.data.success == false) {
                         if(error.response.data.code == 301){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;      
                         }
                         if(error.response.data.code == 302){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
-                            this.textoAlertas = "El semestre ya esta registrado";
+                            this.textoAlertas = this.ErrorSemestreDuplicado;
                             this.alertaError = true;      
                         }
                     }
