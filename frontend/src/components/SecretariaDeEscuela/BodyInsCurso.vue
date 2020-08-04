@@ -1076,25 +1076,118 @@ export default {
             this.$refs.form_AsignarCurso.validate()
         },
         sumarProfesor(){
-            if(this.contadorProfesores < this.numeroDeProfesoresModificar){
+            // if(this.contadorProfesores < this.numeroDeProfesoresModificar){
+            //     this.contadorProfesores++;
+            //     console.log("VALOR DEL CONTADORE DE PROFESORES: "+ this.contadorProfesores)
+            // }
+            // si asigno el primer profesor y quiere añadir otro.
+            if(this.contadorProfesores ==1 &&  this.ayudanteSeleccionado!=''){
                 this.contadorProfesores++;
-                console.log("VALOR DEL CONTADORE DE PROFESORES: "+ this.contadorProfesores)
             }
+            //se asigno el segundo profesor y quiere añadir otro
+            if(this.contadorProfesores == 2 && this.ayudanteSeleccionado2!=''){
+                this.contadorProfesores++;
+            }
+            //se asigno el tercer profesor y quiere añadir otro
+            if(this.contadorProfesores == 3 && this.ayudanteSeleccionado3!=''){
+                this.contadorProfesores++;
+            }
+            //se asigno el cuarto profesor y quiere añadir otro
+            if(this.contadorProfesores == 4 && this.ayudanteSeleccionado4!=''){
+                this.contadorProfesores++;
+            }
+            
         },
         restarProfesor(){
-            if(this.contadorProfesores >1){
+
+            // if(this.contadorProfesores ==1 &&  this.ayudanteSeleccionado!=''){
+            //     this.ayudanteSeleccionado='';
+            // }
+            //se asigno el segundo profesor y quiere añadir otro
+            if(this.contadorProfesores == 2 && this.ayudanteSeleccionado2!=''){
                 this.contadorProfesores--;
+                this.ayudanteSeleccionado2==''
+            }
+            //se asigno el tercer profesor y quiere añadir otro
+            if(this.contadorProfesores == 3 && this.ayudanteSeleccionado3!=''){
+                this.contadorProfesores--;
+                this.ayudanteSeleccionado3==''
+            }
+            //se asigno el cuarto profesor y quiere añadir otro
+            if(this.contadorProfesores == 4 && this.ayudanteSeleccionado4!=''){
+                this.contadorProfesores--;
+                this.ayudanteSeleccionado4==''
+            }
+            if(this.contadorProfesores == 5 && this.ayudanteSeleccionado5!=''){
+                this.contadorProfesores--;
+                this.ayudanteSeleccionado5==''
             }
         },
+        /**
+         * Permite añadir un nuevo profesor al momento de 
+         * asignar cursos a una instancia de semestre.
+         */
         sumarCurso(){
-            if(this.contadorCursos< this.numeroDeCursosModificar){
+            // if(this.contadorCursos< this.numeroDeCursosModificar){
+            //     this.contadorCursos++;
+            //     console.log("VALOR DEL CONTADORE DE CURSOS: "+ this.contadorCursos)
+            // }
+            
+           
+             if(this.contadorCursos ==1 &&  this.profesorSeleccionado!=''){
                 this.contadorCursos++;
-                console.log("VALOR DEL CONTADORE DE CURSOS: "+ this.contadorCursos)
+                // console.log("Numero de profesores ++"+  this.profesorSeleccionado)
+                // console.log("Valor del contador de cursos : "+ this.contadorCursos)
+            }
+            //se asigno el segundo profesor y quiere añadir otro
+            if(this.contadorCursos == 2 && this.profesorSeleccionado2!=''){
+                this.contadorCursos++;
+                // console.log("==============================")
+                // console.log("Numero de profesores ++"+  this.profesorSeleccionado2)
+                // console.log("Valor del contador de cursos : "+ this.contadorCursos)
+            }
+            //se asigno el tercer profesor y quiere añadir otro
+            if(this.contadorCursos == 3 && this.profesorSeleccionado3!=''){
+                this.contadorCursos++;
+                //  console.log("==============================")
+                // console.log("Numero de profesores ++"+  this.profesorSeleccionado3)
+                // console.log("Valor del contador de cursos : "+ this.contadorCursos)
+            }
+            //se asigno el cuarto profesor y quiere añadir otro
+            if(this.contadorCursos == 4 && this.profesorSeleccionado4!=''){
+                this.contadorCursos++;
+                //  console.log("==============================")
+                // console.log("Numero de profesores ++"+  this.profesorSeleccionado4)
+                // console.log("Valor del contador de cursos : "+ this.contadorCursos)
             }
         },
+        /**
+         * Permite quitar profesores al momento de 
+         * asignar cursos a una instancia de semestre.
+         */
         restarCurso(){
-            if(this.contadorCursos >1){
+
+            if(this.contadorCursos== 2 ){
                 this.contadorCursos--;
+                this.profesorSeleccionado2=''
+                //  console.log("++++++++++++++++++++++++++++++++++++++++")
+                // console.log("Numero de profesores --"+  this.profesorSeleccionado2)
+                // console.log("Valor del contador de cursos : "+ this.contadorCursos)
+                
+            }
+            //se asigno el tercer profesor y quiere añadir otro
+            if(this.contadorCursos == 3 ){
+                this.contadorCursos--;
+                this.profesorSeleccionado3=''
+            }
+            //se asigno el cuarto profesor y quiere añadir otro
+            if(this.contadorCursos == 4 ){
+                this.contadorCursos--;
+                this.profesorSeleccionado4=''
+            }
+            if(this.contadorCursos == 5 ){
+                this.contadorCursos--;
+                this.profesorSeleccionado5=''
             }
         },
  
@@ -1651,8 +1744,12 @@ export default {
          * Cierra el dialog de adignar cursos a una instancia de curso.
          */
         cerrarDialogAsignarCurso(){
+            this.resetFormAsignarCurso()
             this.dialogAsignarCurso = false;
             this. resetAsignarCurso();
+        },
+        resetFormAsignarCurso(){
+            this.$refs.formAsignarCurso.reset()
         },
         /**
          * Restablece a los valores originales las varaibles usadas para
@@ -1665,7 +1762,8 @@ export default {
             this.profesorSeleccionado4='';
             this.profesorSeleccionado5='';
             this.seleccionados = [];
-            this.dialogAgregarCursoSemestre=false;
+            
+            //this.dialogAgregarCursoSemestre=false;
         },
         /**
          * Crea la instancia de un curso y lo asocia a lo 
@@ -1764,10 +1862,16 @@ export default {
          * Abre el dialog para la la creación de una una instancia de curso.
          */
         asignarCursoASementre(){
-            this.dialogAsignarCurso=true;
-            // Primero creamos la instancia donde asociaremos los profesores
-            //guardamos el id de la nueva instancia del curso creada
-            this.crearInstanciaCurso();
+            console.log("ASIGNAR CURSO A SEMESTRE")
+            var esValido = this.$refs.formAsignarCurso.validate()
+
+
+            if(esValido == true){
+                console.log("El formulario es valido :)")
+                // Primero creamos la instancia donde asociaremos los profesores
+                //guardamos el id de la nueva instancia del curso creada
+                this.crearInstanciaCurso();
+            }
         },
         /**
          * Se asocia un profesor a un profesor con una instancia previamente
