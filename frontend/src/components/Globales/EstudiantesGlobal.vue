@@ -74,7 +74,6 @@
                                             <v-icon color="warning">fas fa-times</v-icon>
                                         </v-btn>
                                         </v-card-title>
-                                        <v-form>
                                             <v-container  v-if="botonesAgregarEstudiantes">
                                                 <v-row >
                                                     <v-col sm="6">
@@ -102,8 +101,7 @@
                                                         </v-btn>
                                                     </v-col>
                                                 </v-row>
-
-                                            </v-container>
+                                                </v-container>
                                             <v-container class="px-5 mt-5" color="primary" v-if="containerAgregarEstudianteUnico">
                                                    <v-form ref="form_AgregarEstudiante" style="margin:0;padding:0;" v-model="form_AgregarEstudianteValido" lazy-validation>
                                                         <v-text-field  
@@ -198,34 +196,38 @@
                                                    </v-form>
                                             </v-container>
                                             <v-container v-if="containerAgregarEstudianteImportar" class="px-5 mt-5">
-                                                <v-file-input 
-                                                id="file" 
-                                                v-model="file"
-                                                ref="file" 
-                                                type="file"
-                                                label="Seleccione un archivo"
-                                                color="secondary"
-                                                outlined
-                                                prepend-icon=""   
-                                                prepend-inner-icon="fas fa-file-excel"
-                                                >
-                                                </v-file-input>
-                                                <div style="text-align:right;" class="mb-1">
-                                                    <v-btn rounded color="warning" 
-                                                    :small="$vuetify.breakpoint.smAndDown ? true : false"
-                                                    @click="volverYcerrarAgregarEstudiantes"
-                                                    >
-                                                        <h4 class="white--text">Cancelar</h4>
-                                                    </v-btn>
-                                                    <v-btn rounded color="secondary" class="ml-2"   
-                                                    :small="$vuetify.breakpoint.smAndDown ? true : false"
-                                                    @click="agregarEstudiantesImportar">
-                                                        <h4 class="white--text">Aceptar</h4>
-                                                    </v-btn>
-                                                </div>
+                                                <v-form ref="form_agregarEstudiantesMasiva" style="margin:0;padding:0;" v-model="form_AgregarEstudiantesMasivoValido" lazy-validation > 
+                                                    <v-file-input 
+                                                        id="file" 
+                                                        v-model="file"
+                                                        ref="file" 
+                                                        type="file"
+                                                        label="Seleccione un archivo"
+                                                        color="secondary"
+                                                        outlined
+                                                        prepend-icon=""   
+                                                        prepend-inner-icon="fas fa-file-excel"
+                                                        :rules="[v => !!v || 'El archivo es requerido']" >
+                                                     </v-file-input>
+
+                                                    <div style="text-align:right;" class="mb-1">
+                                                        <v-btn rounded color="warning" 
+                                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                                        @click="volverYcerrarAgregarEstudiantes"
+                                                        >
+                                                            <h4 class="white--text">Cancelar</h4>
+                                                        </v-btn>
+                                                        <v-btn rounded color="secondary" class="ml-2"   
+                                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                                        @click="agregarEstudiantesImportar"
+                                                        :disabled="!form_AgregarEstudiantesMasivoValido">
+                                                            <h4 class="white--text">Aceptar</h4>
+                                                        </v-btn>
+                                                    </div>
+                                                </v-form>
                                             </v-container>
                                             
-                                        </v-form> 
+                                    
                                     </v-card>
                                 </v-dialog>
 
@@ -532,6 +534,7 @@
         Variables para la validacion de formularios.
          */
          form_AgregarEstudianteValido:true,
+         form_AgregarEstudiantesMasivoValido:true,
          reglas_matricula:[
              value => !!value || 'Requerido',
              value => value.length == 10 || 'La esta compuesta de 10 numeros',
@@ -620,27 +623,33 @@
             this.containerAgregarEstudianteUnico= true;
         },
         agregarEstudiantesImportar(){
-            let formData = new FormData();
-            formData.append('file',this.file);
-            var url = 'http://127.0.0.1:8000/api/v1/estudiante/importar';
-            axios.post(url,formData,this.$store.state.config)
-            .then((result)=>{
-                //console.log(result);
-                if (result.data.success == true) {
-                    this.resetImportarEstudiantes();
-                    this.obtenerEstudiantes();
-                }
-            })
-            .catch((error)=>{
-                console.log(error);
-                if (error.message == 'Network Error') {
+            
+            var valido=this.$refs.form_agregarEstudiantesMasiva.validate();
+            if(valido == true)
+            {
+                let formData = new FormData();
+                formData.append('file',this.file);
+                var url = 'http://127.0.0.1:8000/api/v1/estudiante/importar';
+                axios.post(url,formData,this.$store.state.config)
+                .then((result)=>{
+                    //console.log(result);
+                    if (result.data.success == true) {
+                        this.resetImportarEstudiantes();
+                        this.obtenerEstudiantes();
+                    }
+                })
+                .catch((error)=>{
                     console.log(error);
-                    this.alertError = true;
-                    this.cargando = false;
-                    console.log(err)
-                    this.textoError = 'Error al importar los datos, intente más tarde'
-                }
-            })
+                    if (error.message == 'Network Error') {
+                        console.log(error);
+                        this.alertError = true;
+                        this.cargando = false;
+                        console.log(err)
+                        this.textoError = 'Error al importar los datos, intente más tarde'
+                    }
+                })
+
+            }
         },
         obtenerEstudiantes(){
             this.cargando = true;
