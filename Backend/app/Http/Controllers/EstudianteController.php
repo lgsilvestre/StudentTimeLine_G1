@@ -18,7 +18,7 @@ class EstudianteController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['permission:create estudiante'], ['only' => ['create', 'store']]);
+        $this->middleware(['permission:create estudiante'], ['only' => ['create', 'store', 'estudiantesAyudantes']]);
         $this->middleware(['permission:read estudiante'], ['only' => ['index','edit']]);
         $this->middleware(['permission:update estudiante'], ['only' => 'update']);
         $this->middleware(['permission:delete estudiante'], ['only' => 'delete']);
@@ -54,6 +54,38 @@ class EstudianteController extends Controller
     }
 
     /**
+     * Metodo que se encarga de listar a todos estudiantes
+     * Errores code inician 1000
+     * @return \Illuminate\Http\Response
+     */
+    public function estudiantesAyudantes(){
+        try{
+            $credenciales = JWTAuth::parseToken()->authenticate();
+            if($credenciales->rol=="admin"){
+                $estudiantes = Estudiante::Where('situacion_academica', 'Regular')->get();
+            }else if($credenciales->rol=="secretaria de escuela"){
+                $estudiantes = Estudiante::Where('situacion_academica', 'Regular')->where(function ($query) use ($credenciales) {
+                    return $query->where('escuela', '=' , $credenciales->escuela)
+                            ->orWhere('escuela', '=' , $credenciales->escuelaAux);
+                    })->get();
+            }
+            return response()->json([
+                'success' => true,
+                'code' => 1000,
+                'message' => "La operacion se a realizado con exito",
+                'data' => ['estudiantes'=>$estudiantes]
+            ], 200);
+        } catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 1001,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
+    }
+
+    /**
      * Metodo que no sirve deberia redireccionar cuando funciona dentro de laravel
      * Este metodo esta inactivo asi que se manda un error correspondiente
      * Errores code inician 200
@@ -82,7 +114,7 @@ class EstudianteController extends Controller
             }
         }
         $validator = Validator::make($entradas, [
-            'matricula' => ['required','string'],
+            'matricula' => ['required','numeric'],
             'rut' => ['required', 'string'],
             'nombre_completo' => ['required', 'string'],
             'correo' => ['required','email'], 
@@ -258,7 +290,7 @@ class EstudianteController extends Controller
             }
         }
         $validator = Validator::make($entradas, [
-            'matricula' => ['nullable','string'],
+            'matricula' => ['nullable','numeric'],
             'rut' => ['nullable','string'],
             'nombre_completo' => ['nullable','string'],
             'correo' => ['nullable','email'],

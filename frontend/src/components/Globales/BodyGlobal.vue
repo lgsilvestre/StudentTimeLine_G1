@@ -27,46 +27,46 @@
                     <v-divider></v-divider>
                     <v-row class="px-5 mt-5">
                         <v-col cols="3">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">Nombre</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 79%' : 'font-size: 100%' ">Nombre</h3>
                         </v-col>
                         <v-col cols="1">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">:</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 79%' : 'font-size: 100%' ">:</h3>
                         </v-col >
                         <v-col :cols="$vuetify.breakpoint.smAndDown ? 7 : 8">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">{{ datosUsuario.nombre}}</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 79%' : 'font-size: 100%' ">{{ datosUsuario.nombre}}</h3>
                         </v-col>
                     </v-row>
                     <v-row class="px-5">
                         <v-col cols="3">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">Rol</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 79%' : 'font-size: 100%' ">Rol</h3>
                         </v-col>
                         <v-col cols="1">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">:</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 79%' : 'font-size: 100%' ">:</h3>
                         </v-col >
                         <v-col :cols="$vuetify.breakpoint.smAndDown ? 7 : 8">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">{{ datosUsuario.rol}}</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 79%' : 'font-size: 100%' ">{{ datosUsuario.rol}}</h3>
                         </v-col>
                     </v-row>
                     <v-row class="px-5">
                         <v-col cols="3">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">Escuela</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 79%' : 'font-size: 100%' ">Escuela</h3>
                         </v-col>
                         <v-col cols="1">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">:</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 79%' : 'font-size: 100%' ">:</h3>
                         </v-col >
                         <v-col :cols="$vuetify.breakpoint.smAndDown ? 7 : 8">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">{{datosUsuario.escuela}}</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 79%' : 'font-size: 100%' ">{{datosUsuario.escuela}}</h3>
                         </v-col>
                     </v-row>
                     <v-row class="px-5 pb-5">
                         <v-col cols="3">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">Correo</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 79%' : 'font-size: 100%' ">Correo</h3>
                         </v-col>
                         <v-col cols="1">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">:</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 79%' : 'font-size: 100%' ">:</h3>
                         </v-col >
                         <v-col :cols="$vuetify.breakpoint.smAndDown ? 7 : 8">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">{{ datosUsuario.email}}</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 79%' : 'font-size: 100%' ">{{ datosUsuario.email}}</h3>
                         </v-col>
                     </v-row>
                     
@@ -113,10 +113,14 @@
                     @click:prepend-inner="mostrar = !mostrar"
                     ></v-text-field>
                     <div style="text-align:right;">
-                        <v-btn rounded color="primary" class="mb-4 ml-2" @click="reset"  > 
+                        <v-btn 
+                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                        rounded color="primary" class="mb-4 ml-2" @click="reset"  > 
                             Restablecer
                         </v-btn>
-                        <v-btn  :loading="cargando" rounded color="primary" class="mb-4 ml-2"    type="submit">
+                        <v-btn  
+                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                        :loading="cargando" rounded color="primary" class="mb-4 ml-2"    type="submit">
                             <h4 class="white--text">Modificar</h4>
                         </v-btn>
                     </div>

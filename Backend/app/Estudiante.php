@@ -49,6 +49,7 @@ class Estudiante extends Model
                     ->groupBy('matricula','rut','nombre_completo','correo','anho_ingreso','situacion_academica','porcentaje_avance','creditos_aprobados','escuelas.nombre')
                     ->whereBetween('observaciones.created_at',[$fechaInicio,$fechaFin])
                     ->get());
+            #dump($data);
             return $data;
         }
         elseif($tipo == 3)
@@ -89,7 +90,7 @@ class Estudiante extends Model
 
     public function getTableColumns(Request $request)
     {
-        $tipo = $request->tipo;
+        //$tipo = $request->tipo;
         /*$tipo = $request->tipo;
         $query = "SELECT column_name 
         FROM information_schema.columns 

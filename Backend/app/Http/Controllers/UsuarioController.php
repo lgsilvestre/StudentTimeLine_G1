@@ -6,6 +6,11 @@ use Validator;
 use Illuminate\Http\Request;
 use App\Profesor_Con_Curso;
 use App\Log;
+use \App\Mail\SendMail;
+use Mail;
+use App\Mail\Correo;
+use App\Mail\EmergencyCallReceived;
+
 
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -22,14 +27,13 @@ class UsuarioController extends Controller{
         $this->middleware(['permission:delete user'], ['only' => 'delete']);
         $this->middleware(['permission:restore user'], ['only' => 'disabled', 'restore']);
     }
-  
+    
     /**
      * Metodo que se encarga de listar a todos usuarios
      * Errores code inician 100
      * @return \Illuminate\Http\Response
      */
     public function index(){
-        $usuarios = User::onlyTrashed()->get();
         try{
             $credenciales = JWTAuth::parseToken()->authenticate();
             if($credenciales->rol=="admin"){
@@ -95,11 +99,53 @@ class UsuarioController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function indexProfesor(){
-        $usuarios = User::onlyTrashed()->get();
         try{
             $usuarios = User::Where('rol', '=' , 'profesor')->orderBy('escuela', 'asc')->get();
             foreach ($usuarios as $usuario){
                 $usuario->nombreEscuela= $usuario->getEscuela->nombre;
+                unset($usuario->foto);
+                unset($usuario->created_at);
+                unset($usuario->updated_at);
+                unset($usuario->deleted_at);
+            }
+            return response()->json([
+                'success' => true,
+                'code' => 100,
+                'message' => "La operacion se a realizado con exito",
+                'data' => ['usuarios'=>$usuarios]
+            ], 200);
+        //----- Mecanismos anticaidas y reporte de errores -----
+        //este catch permite responder directamente que problemas en la peticion SQL
+        } catch(\Illuminate\Database\QueryException $ex){ 
+            Log::create([
+                'titulo' => "Error en la base de datos",
+                'accion' => "listar usuario",
+                'tipo' => "Error",
+                'descripcion' => "Al momento de listar los usuarios, hubo un problema en la base de datos",
+                'data' => $ex,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
+            return response()->json([
+                'success' => false,
+                'code' => 103,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
+    }
+
+    /**
+     * Metodo que se encarga de listar a todos usuarios
+     * Errores code inician 100
+     * @return \Illuminate\Http\Response
+     */
+    public function listarEncargados(){
+        try{
+            $usuarios = User::Where(function ($query){
+                return $query->where('rol', '=' , 'admin')
+                            ->orWhere('rol', '=' , 'secretaria de escuela');
+                })->get();
+            foreach ($usuarios as $usuario){
                 unset($usuario->foto);
                 unset($usuario->created_at);
                 unset($usuario->updated_at);
@@ -662,6 +708,52 @@ class UsuarioController extends Controller{
                 'message' => 'Error al solicitar peticion a la base de datos',
                 'data' => ['error'=>$ex]
             ], 409);
+        }
+    }
+
+    /**
+     * 
+     */
+    public function contactar(Request $request){
+        $entradas = $request->only('destinatarios', 'motivo', 'descripcion');
+        $validator = Validator::make($entradas, [
+            'destinatarios' => ['required'],
+            'motivo' => ['required', 'string'],
+            'descripcion' => ['required', 'string']
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'code' => 301,
+                'message' => 'Error en datos ingresados',
+                'data' => ['error'=>$validator->errors()]
+            ], 422);
+        }
+        try{
+            $credenciales = JWTAuth::parseToken()->authenticate();
+            $details = array(
+                'opcion' => 3,
+                'motivo' => $entradas['motivo'],
+                'descripcion' => $entradas['descripcion'],
+                'usuario' => $credenciales['nombre']
+            );
+            foreach($entradas['destinatarios'] as $destinatario){
+                $usuario = User::Where('id', $destinatario)->first();
+                \Mail::to($usuario['email'])->send(new SendMail($details));
+            }
+            return response()->json([
+                'success' => true,
+                'code' => 1,
+                'message' => 'Se a mandado el correo exitosamente',
+                'data' => null
+            ], 200);
+        }catch(\Exception $e){
+            return response()->json([
+                'success' => false,
+                'code' => 4,
+                'message' => 'Error',
+                'data' => $e
+            ], 502);
         }
     }
 

@@ -135,10 +135,10 @@
             
             /* Variables Tabla */
             headers: [
-            { text: 'Titulo',align: 'start',value: 'titulo',sortable: true},
-            { text: 'Accion', value: 'accion',sortable: true },
-            { text: 'Tipo', value: 'tipo',sortable: true },
-            { text: 'Descripcion', value: 'descripcion',sortable: true },
+            { text: 'Titulo',align: 'start',value: 'titulo',sortable: true, width:250},
+            { text: 'Accion', value: 'accion',sortable: true, width:150 },
+            { text: 'Tipo', value: 'tipo',sortable: true, width:150 },
+            { text: 'Descripcion', value: 'descripcion',sortable: true, width:400 },
             { text: 'Usuario', value: 'usuario',sortable: true },            
             { text: 'Fecha', value: 'created_at',sortable: true },
             { text: '', value: 'data-table-expand'},            

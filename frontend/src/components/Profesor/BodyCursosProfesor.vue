@@ -4,17 +4,34 @@
             <v-col cols="12" md="1"></v-col>
             <v-col cols="12" md="10">
                 <v-card>
-                    <v-img class="mx-auto white--text align-end justify-center" width="100%" height="150px"       
-                    src="@/assets/Globales/background-panel-08.jpg">
-                        <v-card-title class="white--text" style="font-size: 200%;text-shadow: #555 2px 2px 3px;">
-                            <strong class=" font-weight-black"> Cursos Inscritos </strong>
-                            <v-spacer></v-spacer>
-                            <!-- <v-btn class="mr-2" fab large bottom left @click="dialogAñadirSemestre =true" >
-                                <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
-                            </v-btn> -->
+                    <v-img class="mx-auto white--text align-end justify-center" width="100%" height="180px"       
+                    src="@/assets/Globales/fondo3.jpg">
+                        <v-card-title class="white--text" style="padding:0;">
+                            <!-- <strong class=" font-weight-black"> Cursos Inscritos </strong>
+                            <v-spacer></v-spacer> -->
+                            <v-row class="px-5">
+                                <v-col cols="12" class="pt-1">
+                                    <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" >Cursos {{semestre}}</strong>
+                                </v-col>
+                                <v-col cols="7" sm="9" md="9" class="align-self-end" >
+                                    <v-text-field
+                                    v-model="search"
+                                    append-icon="mdi-magnify"
+                                    label="Buscar"
+                                    hide-details
+                                    outlined
+                                    clearable
+                                    dense
+                                    solo
+                                    rounded
+                                    color="secondary"
+                                    background-color="white"
+                                    ></v-text-field>                                
+                                </v-col>                                
+                            </v-row>
                      </v-card-title> 
                     </v-img>
-                    <v-data-iterator :items="listaInsCursos"  :sort-by="sortBy.toLowerCase()" class="px-2 py-2" :loading="cargando">
+                    <v-data-iterator :items="listaInsCursos" :search="search" :sort-by="sortBy.toLowerCase()" class="px-2 py-2" :loading="cargando">
                          <template v-slot:default="props">
                             <v-row>
                                 <v-col v-for="item in props.items" :key="item.nomCurso" cols="12" sm="6" md="4" lg="4">
@@ -73,14 +90,14 @@
                 </v-card-title>
                 <v-container class="px-5">    
                         <v-col cols="12" md="11" v-for="ayudante in ayudantes" :key="ayudante.id">
-                            <v-row> 
-                                <v-col cols="12" md="11">
+                            <v-row no-gutters align="center"> 
+                                <v-col cols="12" md="11" >
                                     <h4> {{ayudante.nombre}}</h4>
                                 </v-col>                                
-                                <v-col cols="12" md="1">
+                                <v-col cols="12" md="1" >
                                     <v-tooltip bottom color="primary">
                                         <template v-slot:activator="{ on }">
-                                            <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on" @click="perfilEstudiante(ayudante)">
+                                            <v-btn color="white justify-center" fab small depressed class="mr-2 py-2" v-on="on" @click="perfilEstudiante(ayudante)">
                                                 <v-icon  
                                                 color="primary"
                                                 >
@@ -112,6 +129,7 @@ export default {
             listaInsCursosAux:[],
             listaInsCursos:[{id:''},{anio:''},{semestre:''},{seccion:''},{nomCurso:''},{plan:''},{escuela:''}],
             cargando: true,
+            search: '',
             sortBy:'nomCurso',
             dialogAyudantes: false,
             ayudantes: [],
