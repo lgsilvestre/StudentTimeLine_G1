@@ -47,7 +47,8 @@
                 </v-card-title> 
                 </v-img>
                 <!-- <v-container> -->
-                    <v-data-iterator :items="listaSemestres" :search="search" :sort-by="sortBy.toLowerCase()" class="px-2 py-2" :loading="cargando">
+                    <v-data-iterator :items="listaSemestres" :search="search" :sort-by="sortBy.toLowerCase()" class="px-2 py-2" :loading="cargando"
+                    :items-per-page.sync="itemsPerPage">
                         <template v-slot:default="props">
                             <v-row >
                                 <v-col v-for="item in props.items" :key="item.nomCurso" cols="12" sm="6" md="4" lg="3">
@@ -138,15 +139,16 @@
                     <h5 class="white--text ">Registrar Semestre</h5>
                 </v-card-title>
                 <v-container class="px-5 mt-5" >
-                    <v-form  ref="form" style="margin:0;padding:0;">
+                    <v-form  ref="form_nuevoSemestre" style="margin:0;padding:0;" v-model="formularioNuevoSemestreValido" lazy-validation>
                         <v-row >
                             <v-col cols="6" >
                                 <strong>Año</strong>
                             </v-col>
                             <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
                                 <v-text-field  v-model="añoActual" dense
-                                    outlined  color="secondary" :disabled="unAnhoVariable"
-                                    :rules="rules" type="number"
+                                    outlined  color="secondary" 
+                                    :disabled="unAnhoVariable"
+                                    :rules="rules" type="number" required
                                     ></v-text-field>
                             </v-col>
                             <v-col cols="6" >
@@ -168,7 +170,8 @@
                             <v-btn rounded color="warning" @click="dialogAñadirSemestre=false">
                                 <h4 class="white--text">Cancelar</h4>
                             </v-btn>
-                            <v-btn rounded color="secondary" class="ml-2" @click="registrarSemestre()" >
+                            <v-btn rounded color="secondary" class="ml-2" @click="registrarSemestre()" 
+                            :disabled="!formularioNuevoSemestreValido">
                                 <h4 class="white--text">Registrar</h4>
                             </v-btn>
                         </div>  
@@ -177,23 +180,24 @@
                 </v-container>
             </v-card>
     </v-dialog>
-    
+    <!-- dialog modificar para modificar un semestre -->
     <v-dialog v-model="dialogModificarSemestre" rtransition="scroll-y-reverse-transition"  persistent max-width="500px">
         <v-card class="mx-auto" max-width="500" >
                 <v-card-title class="headline primary text--center" primary-title >
                     <h5 class="white--text ">Modificar Semestre</h5>
                 </v-card-title>
                 <v-container class="px-5 mt-5" >
-                    <v-form  ref="form" >
+                    <v-form  ref="form_modificarSemestre" v-model="formularioModificarSemestreValido" lazy-validation> >
                         <v-row >
                             <v-col cols="6" >
                                 <strong>Año</strong>
                             </v-col>
                             <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
                                 <v-text-field  v-model="añoActual" dense
-                                    outlined  color="secondary" :disabled="unAnhoVariable"
-                                    :rules="rules" type="number"
-                                    ></v-text-field>
+                                outlined  color="secondary" 
+                                :disabled="unAnhoVariable"
+                                :rules="rules" type="number" required
+                                ></v-text-field>
                             </v-col>
                             <v-col cols="6" >
                                 <strong>Semestre</strong>
@@ -213,7 +217,8 @@
                             <v-btn rounded color="warning" @click="dialogModificarSemestre=false">
                                 <h4 class="white--text">Cancelar</h4>
                             </v-btn>
-                            <v-btn rounded color="secondary" class="ml-2 " @click="modificarSemestre()" >
+                            <v-btn rounded color="secondary" class="ml-2 " @click="modificarSemestre()" 
+                             :disabled="!formularioModificarSemestreValido">
                                 <h4 class="white--text">Registrar</h4>
                             </v-btn>
                         </div>  
@@ -344,16 +349,6 @@ export default {
             añoActual: new Date().getFullYear(),
             semestreActual: 1,
             semestreActual_1:[{id:'',semestre:'',anio:'',deleted_at:''}],
-            rules: [
-                value => !!value || 'Requerido',
-                value => value <= new Date().getFullYear()|| 'El año no debe ser mayor al actual',
-                value => value >= 1981 || 'El año no debe ser menor a 1981',
-                ],
-            rules_2: [
-                value => !!value || 'Requerido',
-                value => value <= 3|| 'El semestre debe ser menor a 3',
-                value => value >= 1 || 'El semestre debe ser mayor a 1',
-                ],
 
             accionesSemestre: [ 'Modificar Semestre' , 'Cerrar Semestre'  ],
             accionesSemestreEliminado:['Re-abrir semestre'],
@@ -369,7 +364,28 @@ export default {
                 { text: 'Anio ', value: 'anio' },
                 { text: 'deleted_at curso', value: 'deleted_at' },
             ],
-        
+            itemsPerPageArray: [4, 8, 12],
+            itemsPerPage: 4,
+            //Validaciones y reglas para los formulario.
+            formularioNuevoSemestreValido:true,
+            formularioModificarSemestreValido:true,
+            rules: [
+                value => !!value || 'Requerido',
+                value => value <= new Date().getFullYear()|| 'El año no debe ser mayor al actual',
+                value => value >= 1981 || 'El año no debe ser menor a 1981',
+                ],
+            rules_2: [
+                value => !!value || 'Requerido',
+                value => value <= 3|| 'El semestre debe ser menor a 3',
+                value => value >= 1 || 'El semestre debe ser mayor a 1',
+                ],
+
+                //Texto
+                errorServidor:"Error al comunicarse con el servidor, intente más tarde",
+                exitoCreacionSemestre:"Se creó el semestre satisfactoriamente.",
+                ErrorCreacionSemetre:"Error al crear El semestre.",
+                ErrorSemestreDuplicado:"Error el semestre ya se encuentra registrado.",
+                ErrorDatosIngresados:"Error en los datos Ingresados",
         }
     },
     _props: {
@@ -391,9 +407,23 @@ export default {
     },
     methods: {
         ...mapMutations(['calcularRol']),
+        /**
+         * Valida si la información ingresada por el usuario esta correcta.
+         */
+        validate () {
+            this.$refs.form_nuevoSemestre.validate()
+        },
+        resetValidacionesCrearNuevoSemestre(){
+            this.añoActual= new Date().getFullYear();
+            this.semestreActual= 1;
+            this.reset();
+            this.resetValidation();
+        },
+
         abrirDialogAgregarSemestre(){
             this.añoActual=new Date().getFullYear();
             this.dialogAñadirSemestre =true;
+            // this.resetValidacionesCrearNuevoSemestre();
         },
         
         /**
@@ -426,7 +456,7 @@ export default {
             ).catch((error)=>{
                 if (error.message == "Network Error") {
                     console.log(error);
-                    this.textoAlertas = "Error al comunicarse con el servidor, intente más tarde";
+                    this.textoAlertas =this.errorServidor;
                     this.alertaError = true;
                     this.cargando = false;
                     // state.mensajeErrorLogin= 'Error al comunicarse con el servidor, intente más tarde';
@@ -434,8 +464,6 @@ export default {
                     if (error.response.data.success == false) {
                         switch (error.response.data.code) {
                             case 101:
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
                                 mensaje= error.response.data.message;
                                 this.textoAlertas = mensaje;
                                 this.alertaError = true;  
@@ -454,51 +482,50 @@ export default {
          * Registra la información de un semestre en la base de datos.
          */
         registrarSemestre(){
-            var año_Aux = new Date().getFullYear()
-            if(this.añoActual <= año_Aux && this.añoActual>= 1981 && this.semestreActual>=1 && this.semestreActual <= 3){
-                let post = {
-                    "semestre": this.semestreActual,
-                    "anio": this.añoActual,
-                }
-                var url = 'http://127.0.0.1:8000/api/v1/semestre ';
-            axios.post(url, post, this.$store.state.config)
-            .then((result) => {
-                console.log(result);
-                if (result.data.success==true){
-                    this.dialogAñadirSemestre = false;
-                    this.añoActual= new Date().getFullYear();
-                    this.semestreActual= 1;
-                    this.textoAlertas = "Se creó el semestre con exito."
-                    this.alertaExito=true;
-                    this.obtenerListaDeSemestres(); 
-                }
-            }).catch((error)=>{
-                
-                if (error.message == 'Network Error') {
-                    console.log(error)
-                    this.alertaError = true;
-                    this.textoAlertas = "Error al modificar el usuario, intente mas tarde."
-                     this.alertaError = true;  
-                }
-                else{
-                    if (error.response.data.success == false) {
-                        if(error.response.data.code == 301){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
-                            this.textoAlertas = error.response.data.message;
-                            this.alertaError = true;      
-                        }
-                        if(error.response.data.code == 302){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
-                            this.textoAlertas = "El semestre ya esta registrado";
-                            this.alertaError = true;      
-                        }
-                    }
-                }                
-            });
-            
+            var valido=this.$refs.form_nuevoSemestre.validate();
+            console.log("semestre valido :" + valido)
+            if(valido == true){
 
+                var año_Aux = new Date().getFullYear()
+                if(this.añoActual <= año_Aux && this.añoActual>= 1981 && this.semestreActual>=1 && this.semestreActual <= 3){
+                    let post = {
+                        "semestre": this.semestreActual,
+                        "anio": this.añoActual,
+                    }
+                    var url = 'http://127.0.0.1:8000/api/v1/semestre ';
+                axios.post(url, post, this.$store.state.config)
+                .then((result) => {
+                    if (result.data.success==true){
+                        this.dialogAñadirSemestre = false;
+                        
+                        this.textoAlertas = this.ErrorCreacionSemetre;
+                        this.alertaExito=true;
+                        this.obtenerListaDeSemestres(); 
+                    }
+                }).catch((error)=>{
+                    
+                    if (error.message == 'Network Error') {
+                        console.log(error)
+                        this.alertaError = true;
+                        this.textoAlertas =this.errorServidor;
+                         this.alertaError = true;  
+                    }
+                    else{
+                        if (error.response.data.success == false) {
+                            if(error.response.data.code == 301){
+                                this.textoAlertas = error.response.data.message;
+                                this.alertaError = true;      
+                            }
+                            if(error.response.data.code == 302){
+                                this.textoAlertas = this.ErrorSemestreDuplicado;
+                                this.alertaError = true;      
+                            }
+                        }
+                    }                
+                });
+                
+    
+                }
             }
 
 
