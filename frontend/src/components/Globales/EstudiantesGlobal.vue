@@ -346,6 +346,7 @@
                                                 </v-col>
                                             </v-row>
                                             <v-alert 
+                                            v-show="fechaIni>fechaTer"
                                             v-model="alertaErrorRangoAnhos"
                                             dismissible
                                             type="error">
@@ -360,6 +361,7 @@
                                                 </v-btn>
                                                 <v-btn rounded color="secondary" class="ml-2"  
                                                 :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                                :disabled="fechaIni>fechaTer"
                                                 @click="exportarEstudiantes" >
                                                     <h4 class="white--text">Aceptar</h4>
                                                 </v-btn>
@@ -617,6 +619,7 @@
             this.botonesAgregarEstudiantes= true;
             this.containerAgregarEstudianteUnico= false;
             this.containerAgregarEstudianteImportar=false;
+            this.$refs.form_AgregarEstudiante.reset()
         },
         mostrarAgregarEstudiantesUnico(){
             this.botonesAgregarEstudiantes= false;
