@@ -539,7 +539,7 @@
          form_AgregarEstudiantesMasivoValido:true,
          reglas_matricula:[
              value => !!value || 'Requerido',
-             value => value.length == 10 || 'La esta compuesta de 10 numeros',
+             value => value.length == 10 || 'La matricula debe compuesta de 10 numeros',
          ],
          reglas_rut:[
              value => !!value || 'Requerido',
