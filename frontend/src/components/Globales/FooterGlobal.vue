@@ -6,12 +6,11 @@
                     <v-btn class="ml-2" color="primary white--text" depressed   @click="urlUniversidad" >Universidad de Talca</v-btn>
                     <!-- Boton que muestra informacion sobre el equipo de desarrollo -->
                     <!-- <NosotrosComponent/>  -->
+                    <!-- Boton que muestra un Dialog para enviar correos electronicos a algun usuario con rango superior. -->
                     <v-btn class="ml-2" color="primary white--text" depressed @click="dialogContactar = true" v-show="this.$store.state.usuario.usuario.rol != 'admin'">
                         Contactar
                     </v-btn>
-
-                </v-col>
-                
+                </v-col>                
                 <v-col class="text-center" sm="12" md="4" lg="4" align-self="center">
                     <strong> {{ nombrePag }} —  {{ new Date().getFullYear() }} </strong>         
                 </v-col>
@@ -38,95 +37,107 @@
                 <v-card-title class="headline primary text--center" primary-title >
                     <h5 class="white--text ">Contactar Superior</h5>
                 </v-card-title>
-                    <v-container class="px-5 mt-5">
-                        <v-form ref="contactar">
-                            <v-select
-                                v-model="datosContactar.rolDestinatario"
-                                label="Tipo Destinatario"
-                                :items="listaRoles"
-                                item-text="nombre"
-                                item-value="id"
-                                :rules="[() => !!datosContactar.rolDestinatario ||'Requerido']"
-                                outlined
-                                prepend-inner-icon="mdi-account-tie"
-                            >                                
-                            </v-select>
-                            <v-autocomplete
-                                v-model="datosContactar.idDestinatario"
-                                label="Administrador"
-                                :items="listaAdmin"
-                                item-text="nombre"
-                                item-value="id"
-                                :rules="[() => !!datosContactar.idDestinatario ||'Requerido']"
-                                outlined
-                                multiple
-                                chips
-                                small-chips
-                                prepend-inner-icon="mdi-account"
-                                v-show="datosContactar.rolDestinatario == 'Administrador'"
-                            >                                
-                            </v-autocomplete>
-                            <v-autocomplete
-                                v-model="datosContactar.idDestinatario"
-                                label="Secretaría de Escuela"
-                                :items="listaSecEscuela"
-                                item-text="nombre"
-                                item-value="id"
-                                :rules="[() => !!datosContactar.idDestinatario ||'Requerido']"
-                                outlined
-                                multiple
-                                chips
-                                small-chips
-                                prepend-inner-icon="mdi-account"
-                                v-show="datosContactar.rolDestinatario == 'Secretaría de Escuela'"
-                            >                                
-                            </v-autocomplete>
-                            <v-text-field
-                                v-model="datosContactar.motivo"
-                                label="Motivo"
-                                outlined
-                                :rules="[() => !!datosContactar.motivo ||'Requerido']"
-                                prepend-inner-icon="fas fa-question-circle"
+                <v-container class="px-5 mt-5">
+                    <v-form ref="contactar" v-model="formContactar" lazy-validation>
+                        <v-select
+                            v-model="datosContactar.rolDestinatario"
+                            label="Tipo Destinatario"
+                            :items="listaRoles"
+                            item-text="nombre"
+                            item-value="id"
+                            :rules="[() => !!datosContactar.rolDestinatario ||'Requerido']"
+                            outlined
+                            prepend-inner-icon="mdi-account-tie"
+                        >                                
+                        </v-select>
+                        <v-autocomplete
+                            v-model="datosContactar.idDestinatario"
+                            label="Administrador"
+                            :items="listaAdmin"
+                            item-text="nombre"
+                            item-value="id"
+                            :rules="[v => v.length > 0 || 'Debe seleccionar al menos un Destinatario']"
+                            required
+                            outlined
+                            multiple
+                            chips
+                            small-chips
+                            prepend-inner-icon="mdi-account"
+                            v-show="datosContactar.rolDestinatario == 'Administrador'"
+                        >                                
+                        </v-autocomplete>
+                        <v-autocomplete
+                            v-model="datosContactar.idDestinatario"
+                            label="Secretaría de Escuela"
+                            :items="listaSecEscuela"
+                            item-text="nombre"
+                            item-value="id"
+                            :rules="[v => v.length > 0 || 'Debe seleccionar al menos un Destinatario']"
+                            outlined
+                            multiple
+                            chips
+                            small-chips
+                            prepend-inner-icon="mdi-account"
+                            v-show="datosContactar.rolDestinatario == 'Secretaría de Escuela'"
+                        >                                
+                        </v-autocomplete>
+                        <v-text-field
+                            v-model="datosContactar.motivo"
+                            label="Motivo"
+                            outlined
+                            :rules="[() => !!datosContactar.motivo ||'Requerido']"
+                            prepend-inner-icon="fas fa-question-circle"
+                        >
+                        </v-text-field>
+                        <v-textarea
+                            v-model="datosContactar.descripcion"
+                            outlined
+                            color="secondary"
+                            :rules="[() => !!datosContactar.descripcion ||'Requerido']"
+                            label="Descripcion"
+                        >
+                        </v-textarea>
+                        <div class="pb-1" style="text-align:right;">  
+                            <v-btn 
+                            :small="$vuetify.breakpoint.smAndDown ? true : false"
+                            rounded 
+                            color="warning" 
+                            @click="resetContactar()"
                             >
-                            </v-text-field>
-                            <v-textarea
-                                v-model="datosContactar.descripcion"
-                                outlined
-                                color="secondary"
-                                :rules="[() => !!datosContactar.descripcion ||'Requerido']"
-                                label="Descripcion"
+                                <h4 class="white--text">Cancelar</h4>
+                            </v-btn>
+                            <v-btn 
+                            :disabled="!formContactar"
+                            :loading="cargando"
+                            :small="$vuetify.breakpoint.smAndDown ? true : false"
+                            rounded 
+                            color="secondary" 
+                            class="ml-2" 
+                            @click="validarContactar()"
                             >
-                            </v-textarea>
-                            <div class="pb-1" style="text-align:right;">  
-                                <v-btn 
-                                :small="$vuetify.breakpoint.smAndDown ? true : false"
-                                rounded color="warning" @click="resetContactar()">
-                                    <h4 class="white--text">Cancelar</h4>
-                                </v-btn>
-                                <v-btn 
-                                :small="$vuetify.breakpoint.smAndDown ? true : false"
-                                rounded color="secondary" class="ml-2" @click="contactar()" >
-                                    <h4 class="white--text">Enviar</h4>
-                                </v-btn>
-                            </div>
-                        </v-form>
-                            
-                    </v-container>
-                
+                                <h4 class="white--text">Enviar</h4>
+                            </v-btn>
+                        </div>
+                    </v-form>
+                </v-container>
             </v-card>
         </v-dialog>
-
-                <!-- Alertas -->
-
+        
+        <!-- Alertas -->
         <!-- Alerta de Error -->
-        <v-snackbar v-model="alertaError" :timeout="timeout"
-            bottom color= "warning" left class="pb-12"  >
+        <v-snackbar 
+            v-model="alertaError" 
+            :timeout="timeout"
+            bottom 
+            color= "warning" 
+            left 
+            class="pb-12"  
+        >
             <v-icon color="white"   
                 class="mr-3"                      
             >
             fas fa-exclamation-triangle 
-            </v-icon>
-        
+            </v-icon>        
             <strong> {{textoAlertas }}</strong>
             <v-btn
                 icon
@@ -139,11 +150,15 @@
                 </v-icon>                
             </v-btn>
         </v-snackbar>       
-
         <!-- Alerta de Exito (success) -->
-
-        <v-snackbar v-model="alertaExito" :timeout="timeout" bottom
-            color= "secondary" left class="pb-12"  >
+        <v-snackbar 
+            v-model="alertaExito" 
+            :timeout="timeout" 
+            bottom
+            color= "secondary" 
+            left 
+            class="pb-12"  
+        >
             <v-icon class="mr-3"  color="white" >
                 fas fa-info-circle  
             </v-icon>
@@ -173,31 +188,36 @@ export default {
     },
     data() {
         return {
+            //Iconos Footer
             icoFacebook:'mdi-facebook',
             icoTwitter:'mdi-twitter',
             icoInstagram: 'mdi-instagram',
             icoYoutube:'mdi-youtube',
             nombrePag:'La Calila y los Mojojojo',
 
+            //Variables Dialog Contactar
             dialogContactar: false,
             keyContactar: 1,
+            formContactar: true,
+            cargando: false,
+
+            //Variables para almacenar datos
             listaRoles: ['Administrador','Secretaría de Escuela'],
             listaAdmin: [],
             listaSecEscuela: [],
             listaAdminAux: [],      
             listaSecEscuelaAux: [],      
+            datosContactar: [{rolDestinatario:''},{idDestinatario:null},{motivo:''},{descripcion:''}],
 
-            datosContactar: [{rolDestinatario:''},{idDestinatario:[]},{motivo:''},{descripcion:''}],
-
+            //Varibales para Alertas
             timeout: 4000,
             textoAlertas: '',
             alertaError: false,
             alertaExito: false,
-
-            
         }
     },
-    beforeMount(){
+    beforeMount(){        
+        //Antes de que la pagina misma cargue, se obtiene la lista con los usuarios existentes.
         this.obtenerUsuarios();        
     },
     methods:{
@@ -217,11 +237,18 @@ export default {
             window.open("https://www.utalca.cl/universidad/", '_blank');
         },
 
-        resetFormContactar() {
-            this.$refs.contactar.reset();
+        //Funcion que valida los datos ingresados en el Dialog Contactar
+        validarContactar(){            
+            if(this.$refs.contactar.validate()){
+                this.contactar();
+            }
+            else{
+                this.$refs.contactar.validate();
+            }
         },
+        //Funcion que reinicia los valores usados en el dialog, ademas de las validaciones relacionadas a este.
         resetContactar(){
-            this.resetFormContactar();
+            this.$refs.contactar.reset();
             this.datosContactar.rolDestinatario = '';
             this.datosContactar.idDestinatario = [];
             this.datosContactar.motivo = '';
@@ -230,6 +257,8 @@ export default {
             this.dialogContactar = false;
         },
 
+        //Funcion utilizada para obtener la lista de los usuarios existentes en el sistema
+        //Solo usuarios con rol Administrador o Secretaría de Escuela
         obtenerUsuarios(){            
             this.listaAdminAux = [];
             this.listaSecEscuelaAux = [];
@@ -266,19 +295,19 @@ export default {
             })
         },
 
+        //Funcion que se encarga de solicitar (a backend) el envio de los distintos correos electronicos
         contactar(){
-                        
+            this.cargando = true;
             let post ={
                 "destinatarios": this.datosContactar.idDestinatario,
                 "motivo": this.datosContactar.motivo,
                 "descripcion": this.datosContactar.descripcion,
-            };         
-
-            console.log(post);
-            //por definir
+            };                     
+            console.log(post.destinatarios);
             var url = 'http://127.0.0.1:8000/api/v1/usuario/contactar';
             axios.post(url, post, this.$store.state.config)
-            .then((result)=>{                
+            .then((result)=>{       
+                    this.cargando = false;
                     this.dialogContactar = false;
                     this.alertaExito = true;
                     this.resetContactar();
@@ -286,12 +315,12 @@ export default {
                 }
                 ).catch((error)=>{
                     if (error.message == 'Network Error') {
+                        this.cargando = false;
                         this.alertaError = true;         
                         this.resetContactar();               
                         this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
                     }
             })
-
         },
     }
 }
