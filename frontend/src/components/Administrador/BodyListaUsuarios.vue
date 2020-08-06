@@ -847,7 +847,7 @@ export default {
                 this.datosUsuario.role= this.roles[1];
             };
             if (item.role  == "profesor") {
-                this.datosUsuario.role= this.roles[1];
+                this.datosUsuario.role= this.roles[2];
             };
             for(var numEscuela = 0; numEscuela < this.listaEscuela.length; numEscuela++){                        
                 if(item.escuela == this.listaEscuela[numEscuela].nombre){                                                   

@@ -83,37 +83,36 @@
             <v-col cols="12" md="1"></v-col>
         </v-row>
 
-        <v-dialog v-model="dialogAyudantes"  :loading="cargando" max-width="500px" >
+        <v-dialog v-model="dialogAyudantes" persistent :loading="cargando" max-width="500px" >
             <v-card class="mx-auto" max-width="500" >
                 <v-card-title class="headline primary text--center" primary-title >
                     <h5 class="white--text ">Lista Ayudantes</h5>
                 </v-card-title>
-                <v-container class="px-5">    
-                        <v-col cols="12" md="11" v-for="ayudante in ayudantes" :key="ayudante.id">
-                            <v-row no-gutters align="center"> 
-                                <v-col cols="12" md="11" >
-                                    <h4> {{ayudante.nombre}}</h4>
-                                </v-col>                                
-                                <v-col cols="12" md="1" >
-                                    <v-tooltip bottom color="primary">
-                                        <template v-slot:activator="{ on }">
-                                            <v-btn color="white justify-center" fab small depressed class="mr-2 py-2" v-on="on" @click="perfilEstudiante(ayudante)">
-                                                <v-icon  
-                                                color="primary"
-                                                >
-                                                fas fa-external-link-alt
-                                                </v-icon>
-                                            </v-btn>
-                                        </template>
-                                        <span><strong>Ver Perfil</strong></span>
-                                    </v-tooltip>  
-                                </v-col>
-                            </v-row>      
-                            <v-divider></v-divider>    
-                        </v-col>
-                            
-                        
-                </v-container>            
+                <v-data-table
+                    :headers="columnasAyudante"
+                    :items="ayudantes"
+                    hide-default-footer
+                >
+                    <template v-slot:item.opciones="{ item }">
+                        <v-tooltip bottom color="primary">
+                            <template v-slot:activator="{ on }">
+                                <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on" @click="perfilEstudiante(item)" >
+                                    <v-icon  
+                                    color="primary"
+                                    >
+                                    fas fa-external-link-alt
+                                    </v-icon>
+                                </v-btn>
+                            </template>
+                            <span><strong>Ver Perfil</strong></span>
+                        </v-tooltip>                            
+                    </template>
+                </v-data-table>
+                <div style="text-align:right;" class="mt-3 mr-3" >
+                    <v-btn rounded color="secondary" class=" mb-4 "  @click="dialogAyudantes = false">
+                        <h4 class="white--text">Volver</h4>
+                    </v-btn>
+                </div> 
             </v-card>
         </v-dialog> 
 
@@ -134,6 +133,12 @@ export default {
             dialogAyudantes: false,
             ayudantes: [],
             ayudantesAux: [],
+
+            columnasAyudante:[
+                { text: 'Matricula', value: 'matricula',align: 'center'},
+                { text: 'Nombre Completo', value: 'nombre'},
+                {text:'Opciones', value:'opciones',align: 'center'},
+            ],
         }
     },
     beforeMount(){
@@ -162,6 +167,7 @@ export default {
                         plan:element.get_curso.get_curso.plan,
                         // escuela: element.get_curso.get_curso
                     }; 
+                    console.log(index);
                     this.listaInsCursosAux[index]=insCurso;                                                         
                 }
                 this.listaInsCursos = this.listaInsCursosAux;  
@@ -198,13 +204,14 @@ export default {
             var aux;    
             var url = `http://127.0.0.1:8000/api/v1/ayudanteCurso/`+id;
             axios.get(url,this.$store.state.config)
-            .then((result)=>{   
+            .then((result)=>{      
                 console.log(result);
                 for (let index = 0; index < result.data.data.ayudantesCurso.length; index++) {
                     const element = result.data.data.ayudantesCurso[index]; 
                     let estudiante = {
                         id: element.get_estudiante.id,
                         nombre: element.estudiante,
+                        matricula: element.get_estudiante.matricula,
                     }; 
                     this.ayudantesAux[index]=estudiante;                                                         
                 }
