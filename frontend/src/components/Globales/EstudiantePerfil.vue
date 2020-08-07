@@ -1073,7 +1073,7 @@ export default {
             console.log("exportar info del estudiante.") 
             console.log( "Info :"+this.$store.state.perfilEstudiante)
             
-            this.exportar(3,0,0,this.$store.state.perfilEstudiante.id);
+            this.exportar(3,0,0,this.id);
             // this.exportar(3,'2020-07-19','2020-07-21',1,1);
         },
         exportar(tipo, fechaIni,fechaTer,idEstudiante,escuela){
@@ -1520,11 +1520,16 @@ export default {
                     }
                 }
                 var auxcurso = 0;
-                for (let index = 0; index < this.cursosAyudante.length; index++) {
-                    const element = this.cursosAyudante[index];
-                    if (this.estudianteObservacion.curso == element.id) {
-                        auxcurso= element.id;
+                if (this.profesor == true) {
+                    for (let index = 0; index < this.cursosAyudante.length; index++) {
+                        const element = this.cursosAyudante[index];
+                        if (this.estudianteObservacion.curso == element.id) {
+                            auxcurso= element.id;
+                        }
                     }
+                }
+                else{
+                    auxcurso = null;
                 }
                 let post = {
                     "titulo": this.estudianteObservacion.titulo,
