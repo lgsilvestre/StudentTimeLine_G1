@@ -627,7 +627,7 @@
                     </v-card-title> 
                     <!-- <v-container fluid class=" text-left"> -->
                     <v-card-title class="text-justify" :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%;' :'font-size: 110%;'">Exportar las observaciones del siguiente Usuario?</v-card-title>
-                    <v-card-text>Nombre : {{ perfilEstudiante }}</v-card-text>
+                    <v-card-text>Nombre : {{ perfilEstudiante.nombre_completo }} </v-card-text>
                     
                     <!-- </v-container > -->
                     <div style="text-align:right;">
@@ -1027,30 +1027,21 @@ export default {
             
         },
         exportarEstudiante(){
-            console.log("exportar info del estudiante.")
-            //console.log( this.$store.state.perfilEstudiante.id)
+            console.log("exportar info del estudiante.") 
+            console.log( "Info :"+this.$store.state.perfilEstudiante)
             
-            this.exportar(3,0,0,this.$store.state.perfilEstudiante.id,0);
+            this.exportar(3,0,0,this.$store.state.perfilEstudiante.id);
             // this.exportar(3,'2020-07-19','2020-07-21',1,1);
         },
         exportar(tipo, fechaIni,fechaTer,idEstudiante,escuela){
-            //var fechaInicio=this.formatDate(fechaIni);
-            //var fechaTermino =this.formatDate(fechaTer);
-            //console.log("FECHA INI  "+ fechaInicio);
-            //console.log("FECHA fin  "+ fechaTermino);
-
-            // if(fechaInicio == 0 || fechaTermino== 0){
-            //     fechaInicio = 0
-            //     fechaTermino=0;;
-            // }
-            let post = {
+             let post = {
                     "tipo": tipo,
                     "fechaInicio" : 0,
                     "fechaFin": 0 ,
                     "id": idEstudiante,
                     "escuela": 0
                 };
-                console.log(post)
+                // console.log(post)
             var url = 'http://127.0.0.1:8000/api/v1/estudiante/exportarPDF';
             //console.log(post)
             axios.post(url,post,this.$store.state.config2)
@@ -1061,9 +1052,9 @@ export default {
                 
 
                 const url = URL.createObjectURL(new Blob([result.data], {
-                    type: 'application/x-pdf'
-                }))
-                const link = document.createElement('a');
+                     type: 'application/x-pdf'
+                 }))
+                 const link = document.createElement('a');
                 link.href = url;
                 link.setAttribute('download', 'Estudiante.pdf');
                 document.body.appendChild(link);

@@ -380,8 +380,7 @@
                 :search="buscar"
                 :loading="cargando"
                 style="font-size: 140%;"
-                class="elevation-1 "
-                >
+                class="elevation-1 " >
                     <template v-slot:item.actions="{ item }">
                         <v-tooltip bottom color="primary">
                             <template v-slot:activator="{ on }">
@@ -915,6 +914,7 @@
         },
         perfilEstudiante(item){
             var estudiantes = "estudiantes";
+            this.$store.state.perfilEstudiante = item;
             if (this.$store.state.usuario.usuario.rol == "admin") {
                 this.$router.push({path:'/administrador/'+estudiantes+'/id='+item.id});
             } else {
