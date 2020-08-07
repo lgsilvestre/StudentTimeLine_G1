@@ -552,67 +552,74 @@
                     <h5 class="white--text ">Agregar observacion</h5>
                 </v-card-title>
                     <v-container class="px-5 mt-5">
-                        <v-text-field  
-                        v-model="estudianteObservacion.titulo"
-                        label="Titulo" 
-                        outlined
-                        color="secondary"
-                        prepend-inner-icon="fas fa-check-circle"
-                        ></v-text-field>
+                        <v-form ref="form_añadirObservacion" style="margin:0;padding:0;" v-model="form_añadirObservacionValido" lazy-validation>
+                            <v-text-field  
+                            v-model="estudianteObservacion.titulo"
+                            label="Titulo" 
+                            outlined
+                            color="secondary"
+                            prepend-inner-icon="fas fa-check-circle"
+                            :rules="[v => !!v || 'El titulo es requerido']"
+                            ></v-text-field>
 
-                        <v-select   
-                        v-model="estudianteObservacion.tipo"
-                        :items="tipos"
-                        item-text="nombre"
-                        label="Tipo" outlined
-                        color="secondary"
-                        prepend-inner-icon="fas fa-check-circle"
-                        ></v-select >
+                            <v-select   
+                            v-model="estudianteObservacion.tipo"
+                            :items="tipos"
+                            item-text="nombre"
+                            label="Tipo" outlined
+                            color="secondary"
+                            prepend-inner-icon="fas fa-check-circle"
+                            :rules="[v => !!v || 'El tipo de observacion es requerido']"
+                            ></v-select >
 
-                        <v-select   
-                        v-model="estudianteObservacion.categoria"
-                        :items="categorias"
-                        item-text="nombre"
-                        item-value="id"
-                        label="Categoria"
-                        color="secondary"
-                        outlined
-                        :disabled="profesor == true"
-                        prepend-inner-icon="fas fa-check-circle"
-                        ></v-select>
-                        <v-select 
-                        v-if="profesor == true"
-                        v-model="estudianteObservacion.curso"
-                        :items="cursosAyudante"
-                        item-text="curso"
-                        item-value="id"
-                        label="Cursos"
-                        color="secondary"
-                        outlined
-                        prepend-inner-icon="fas fa-check-circle"
-                        ></v-select>
-                        <v-textarea
-                        v-model="estudianteObservacion.descripcion"
-                        outlined
-                        color="secondary"
-                        label="Descripcion"
-                        ></v-textarea>
-                        <div class="pb-1" style="text-align:right;">  
-                            <v-btn 
-                            :small="$vuetify.breakpoint.smAndDown ? true : false"
-                            rounded color="warning" 
-                            @click="resetAgregarObservacion">
-                                <h4 class="white--text">Cancelar</h4>
-                            </v-btn>
-                            <v-btn 
-                            :small="$vuetify.breakpoint.smAndDown ? true : false"
-                            rounded color="secondary" class="ml-2"
-                            :loading="cargando"  
-                            @click="agregarObservacion"
-                            >
-                                <h4 class="white--text">Agregar</h4>
-                            </v-btn>
-                        </div>  
+                            <v-select   
+                            v-model="estudianteObservacion.categoria"
+                            :items="categorias"
+                            item-text="nombre"
+                            item-value="id"
+                            label="Categoria"
+                            color="secondary"
+                            outlined
+                            :disabled="profesor == true"
+                            prepend-inner-icon="fas fa-check-circle"
+                            :rules="[v => !!v || 'La categoria es requerida']"
+                            ></v-select>
+                            <v-select 
+                            v-if="profesor == true"
+                            v-model="estudianteObservacion.curso"
+                            :items="cursosAyudante"
+                            item-text="curso"
+                            item-value="id"
+                            label="Cursos"
+                            color="secondary"
+                            outlined
+                            prepend-inner-icon="fas fa-check-circle"
+                            :rules="[v => !!v || 'El curso es requerido']"
+                            ></v-select>
+                            <v-textarea
+                            v-model="estudianteObservacion.descripcion"
+                            outlined
+                            color="secondary"
+                            label="Descripcion"
+                            :rules="[v => !!v || 'La descripcion es requerida.']"
+                            ></v-textarea>
+                            <div class="pb-1" style="text-align:right;">  
+                                <v-btn 
+                                :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                rounded color="warning" 
+                                @click="resetAgregarObservacion">
+                                    <h4 class="white--text">Cancelar</h4>
+                                </v-btn>
+                                <v-btn 
+                                :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                rounded color="secondary" class="ml-2"
+                                :loading="cargando"  
+                                @click="agregarObservacion"
+                                >
+                                    <h4 class="white--text">Agregar</h4>
+                                </v-btn>
+                            </div> 
+                        </v-form> 
                     </v-container>
                 
             </v-card>
@@ -956,6 +963,7 @@ export default {
             cursosAyudanteAux:[],
             // variables y reglas para validar el formulario
             form_EditarEstudianteValido:true,
+            form_añadirObservacionValido:true,
              reglas_matricula:[
             //  value => !!value || 'Requerido',
              value => value.length == 10 || 'La matricula debe compuesta de 10 numeros',
@@ -1479,84 +1487,88 @@ export default {
         },
 
         agregarObservacion(){
-            this.dessertsAux = [];
-            var url = 'http://127.0.0.1:8000/api/v1/observacion';
-            var auxTipo=0;
-            if (this.estudianteObservacion.tipo == "Positiva") {
-                auxTipo=1;
-            }
-            else{
-                if (this.estudianteObservacion.tipo == "Negativa") {
-                    auxTipo=2;
-                } else {
-                    if (this.estudianteObservacion.tipo == "Informativa") {
-                        auxTipo=3;
-                    } else {
-                        auxTipo=4;
-                    }
-                }
-            }
-            var auxcategoria=0;
-            if (this.profesor == true) {
-                auxcategoria = auxcategoria+1;
-            }
-            else{
-                for (let index = 0; index < this.categorias.length; index++) {
-                    const element = this.categorias[index];
-                    if (this.estudianteObservacion.categoria == element) {
-                        auxcategoria=index+1;
-                    }
-                }
-            }
-            var auxcurso = 0;
-            for (let index = 0; index < this.cursosAyudante.length; index++) {
-                const element = this.cursosAyudante[index];
-                if (this.estudianteObservacion.curso == element.id) {
-                    auxcurso= element.id;
-                }
-            }
-            let post = {
-                "titulo": this.estudianteObservacion.titulo,
-                "descripcion": this.estudianteObservacion.descripcion,
-                "ayudante": null, 
-                "estudiante": this.id,
-                "curso": auxcurso,
-                "categoria": auxcategoria,
-                "tipo": auxTipo,
-            }
-            console.log(post);
-            axios.post(url, post, this.$store.state.config)
-            .then((result) => {
-                console.log(result);
-                console.log(result.data);
-                this.alertAcept = true;
-                this.textoAcept = "Se agrego la observacion con exito."
-                this.resetAgregarObservacion();
-                this.obtenerEstudiante(3);
-            }).catch((error)=>{
-                if (error.message == 'Network Error') {
-                    console.log(error)
-                    this.alertError = true;
-                    this.textoError = "Error al crear una observacion, intente mas tarde."
-                    this.resetRegistrarUsuario();
+            var valido=this.$refs.form_añadirObservacion.validate();
+            if(valido == true){
+
+                this.dessertsAux = [];
+                var url = 'http://127.0.0.1:8000/api/v1/observacion';
+                var auxTipo=0;
+                if (this.estudianteObservacion.tipo == "Positiva") {
+                    auxTipo=1;
                 }
                 else{
-                    if (error.response.data.success == false) {
-                        console.log(error.response.data.code +' '+ error.response.data.message);
-                        console.log(error.response.data);
-                        this.textoError = error.response.data.message;
-                        this.alertError= true;      
-                        this.resetAgregarObservacion();
-                        
+                    if (this.estudianteObservacion.tipo == "Negativa") {
+                        auxTipo=2;
+                    } else {
+                        if (this.estudianteObservacion.tipo == "Informativa") {
+                            auxTipo=3;
+                        } else {
+                            auxTipo=4;
+                        }
                     }
-                    else{
+                }
+                var auxcategoria=0;
+                if (this.profesor == true) {
+                    auxcategoria = auxcategoria+1;
+                }
+                else{
+                    for (let index = 0; index < this.categorias.length; index++) {
+                        const element = this.categorias[index];
+                        if (this.estudianteObservacion.categoria == element) {
+                            auxcategoria=index+1;
+                        }
+                    }
+                }
+                var auxcurso = 0;
+                for (let index = 0; index < this.cursosAyudante.length; index++) {
+                    const element = this.cursosAyudante[index];
+                    if (this.estudianteObservacion.curso == element.id) {
+                        auxcurso= element.id;
+                    }
+                }
+                let post = {
+                    "titulo": this.estudianteObservacion.titulo,
+                    "descripcion": this.estudianteObservacion.descripcion,
+                    "ayudante": null, 
+                    "estudiante": this.id,
+                    "curso": auxcurso,
+                    "categoria": auxcategoria,
+                    "tipo": auxTipo,
+                }
+                console.log(post);
+                axios.post(url, post, this.$store.state.config)
+                .then((result) => {
+                    this.alertAcept = true;
+                    this.textoAcept = "Se agrego la observacion con exito."
+                    this.resetAgregarObservacion();
+                    this.obtenerEstudiante(3);
+                    this.$refs.form_añadirObservacion.reset();
+                }).catch((error)=>{
+                    if (error.message == 'Network Error') {
                         console.log(error)
                         this.alertError = true;
-                        this.textoError = "Error, intente mas tarde."
-                        this.resetAgregarObservacion();
+                        this.textoError = "Error al crear una observacion, intente mas tarde."
+                        this.resetRegistrarUsuario();
                     }
-                }                
-            });
+                    else{
+                        if (error.response.data.success == false) {
+                            console.log(error.response.data.code +' '+ error.response.data.message);
+                            console.log(error.response.data);
+                            this.textoError = error.response.data.message;
+                            this.alertError= true;      
+                            this.resetAgregarObservacion();
+                            
+                        }
+                        else{
+                            console.log(error)
+                            this.alertError = true;
+                            this.textoError = "Error, intente mas tarde."
+                            this.resetAgregarObservacion();
+                        }
+                    }                
+                });
+            }
+
         },
         cargarDatosModificarObservacion(observacion){
             this.dialogModificarObservacion = true;
@@ -1778,6 +1790,7 @@ export default {
             }
             this.estudianteObservacion.curso= '';
             this.estudianteObservacion.tipo= '';
+            this.$refs.form_añadirObservacion.reset()
         },
 
         resetModificarObservacion(){
