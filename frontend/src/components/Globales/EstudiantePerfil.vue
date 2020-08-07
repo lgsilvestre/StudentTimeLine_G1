@@ -1520,11 +1520,16 @@ export default {
                     }
                 }
                 var auxcurso = 0;
-                for (let index = 0; index < this.cursosAyudante.length; index++) {
-                    const element = this.cursosAyudante[index];
-                    if (this.estudianteObservacion.curso == element.id) {
-                        auxcurso= element.id;
+                if (this.profesor == true) {
+                    for (let index = 0; index < this.cursosAyudante.length; index++) {
+                        const element = this.cursosAyudante[index];
+                        if (this.estudianteObservacion.curso == element.id) {
+                            auxcurso= element.id;
+                        }
                     }
+                }
+                else{
+                    auxcurso = null;
                 }
                 let post = {
                     "titulo": this.estudianteObservacion.titulo,
