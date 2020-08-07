@@ -66,10 +66,11 @@ class Estudiante extends Model
                     ->where('estudiantes.id','=',$idEstudiante)
                     ->get());*/
             $data = collect(DB::table('observaciones')
-                    ->select('users.nombre AS profesor', 'cursos.nombre AS curso', 'categorias.nombre AS categoria','observaciones.titulo', 'observaciones.descripcion', 'observaciones.tipo')
+                    ->select('users.nombre AS profesor', 'cursos.nombre AS curso', 'categorias.nombre AS categoria','observaciones.titulo', 'observaciones.descripcion', 'tipo_observacions.descripcion AS tipo')
                     ->join('users', 'users.id','=', 'observaciones.creador')
                     ->leftjoin('cursos', 'observaciones.curso','=', 'cursos.id')
                     ->join('categorias', 'observaciones.categoria','=', 'categorias.id')
+                    ->join('tipo_observacions', 'observaciones.tipo','=', 'tipo_observacions.id')
                     ->where('observaciones.estudiante','=',$idEstudiante)
                     ->get());
             return $data;
