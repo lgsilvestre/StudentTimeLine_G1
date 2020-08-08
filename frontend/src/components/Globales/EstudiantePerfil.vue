@@ -634,7 +634,7 @@
                     </v-card-title> 
                     <!-- <v-container fluid class=" text-left"> -->
                     <v-card-title class="text-justify" :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%;' :'font-size: 110%;'">Exportar las observaciones del siguiente Usuario?</v-card-title>
-                    <v-card-text>Nombre : {{ perfilEstudiante.nombre_completo }} </v-card-text>
+                    <v-card-text>Nombre : {{ estudiante.nombre_completo }} </v-card-text>
                     
                     <!-- </v-container > -->
                     <div style="text-align:right;">
