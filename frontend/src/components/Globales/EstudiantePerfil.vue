@@ -1301,7 +1301,8 @@ export default {
                         const element = result.data.data.cursos[index];
                         contador ++;
                         let cursos ={
-                            id: element.curso,
+                            id: element.get_instanciacurso.curso,
+                            ayudante: element.ayudante,
                             curso: element.nombreCurso,
                         };
                         console.log("cursos");
@@ -1520,21 +1521,24 @@ export default {
                     }
                 }
                 var auxcurso = 0;
+                var auxayudante = null;
                 if (this.profesor == true) {
                     for (let index = 0; index < this.cursosAyudante.length; index++) {
                         const element = this.cursosAyudante[index];
                         if (this.estudianteObservacion.curso == element.id) {
+                            auxayudante=element.ayudante;
                             auxcurso= element.id;
                         }
                     }
                 }
                 else{
                     auxcurso = null;
+                    auxayudante = null;
                 }
                 let post = {
                     "titulo": this.estudianteObservacion.titulo,
                     "descripcion": this.estudianteObservacion.descripcion,
-                    "ayudante": null, 
+                    "ayudante": auxayudante, 
                     "estudiante": this.id,
                     "curso": auxcurso,
                     "categoria": auxcategoria,

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Ayudante_Con_Curso;
 use App\InstanciaCurso;
+use App\Observacion;
 use App\Profesor_Con_Curso;
 use Illuminate\Http\Request;
 use Validator;
@@ -252,6 +253,19 @@ class InstanciaCursoController extends Controller
                     'message' => 'La instancia de curso con el id '.$id.' no existe',
                     'data' => null
                 ], 409 );
+            }
+            $ayudantes = Ayudante_Con_Curso::withTrashed()->Where('curso', $id)->get();
+            $profesores = Profesor_Con_Curso::withTrashed()->Where('curso', $id)->get();
+            foreach($profesores as $profesor){
+                $profesor->forceDelete();
+            }
+            foreach($ayudantes as $ayudante){
+                $observaciones = Observacion::Where('ayudante', $ayudante->id)->get();
+                foreach($observaciones as $observacion){
+                    $observacion->ayudante = null;
+                    $observacion->save();
+                }
+                $ayudante->forceDelete();
             }
             $insCurso->forceDelete();
             return response()->json([
