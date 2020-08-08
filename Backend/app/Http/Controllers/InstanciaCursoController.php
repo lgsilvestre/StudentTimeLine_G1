@@ -130,10 +130,10 @@ class InstanciaCursoController extends Controller
      */
     public function show($id){
         try{
-            $insCursos = InstanciaCurso::Where('semestre', '=' , $id)->get();
+            $insCursos = InstanciaCurso::withTrashed()->Where('semestre', '=' , $id)->get();
             foreach($insCursos as $insCurso){
                 $insCurso->curso=$insCurso->getCurso->nombre;
-                $profesores = Profesor_Con_Curso::where('curso', $insCurso->id)->get();
+                $profesores = Profesor_Con_Curso::withTrashed()->where('curso', $insCurso->id)->get();
                 $listaProfesores = array();
                 foreach($profesores as $profesor){
                     $a = $profesor->getProfesor;
@@ -141,7 +141,7 @@ class InstanciaCursoController extends Controller
                     array_push($listaProfesores, $a);
                 }
                 $insCurso->listaProfesores = $listaProfesores;
-                $ayudantes = Ayudante_Con_Curso::where('curso', $insCurso->id)->get();
+                $ayudantes = Ayudante_Con_Curso::withTrashed()->where('curso', $insCurso->id)->get();
                 $listaAyudantes = array();
                 foreach($ayudantes as $ayudante){
                     $a = $ayudante->getEstudiante;

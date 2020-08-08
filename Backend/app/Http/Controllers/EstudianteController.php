@@ -228,7 +228,7 @@ class EstudianteController extends Controller
                     'data' => null
                 ], 409);
             }
-            $observaciones = Observacion::Where('estudiante', '=' , $estudiante['id'])->get(); 
+            $observaciones = Observacion::withTrashed()->Where('estudiante', '=' , $estudiante['id'])->get(); 
             foreach($observaciones as $observacion){
                 $observacion->estudiante=$observacion->getEstudiante->nombre_completo;
                 $observacion->creador=$observacion->getCreador->nombre;
@@ -243,8 +243,8 @@ class EstudianteController extends Controller
             $credenciales = JWTAuth::parseToken()->authenticate();
             $cursos =[];
             if($credenciales->rol=="profesor"){
-                $ayudanteEnCursos= Ayudante_Con_Curso::Where('estudiante', '=' , $estudiante['id'] )->get();
-                $cursosProfesor= Profesor_Con_Curso::Where('profesor', '=' ,$credenciales->id)->get();            
+                $ayudanteEnCursos= Ayudante_Con_Curso::withTrashed()->Where('estudiante', '=' , $estudiante['id'] )->get();
+                $cursosProfesor= Profesor_Con_Curso::withTrashed()->Where('profesor', '=' ,$credenciales->id)->get();            
 
                 foreach($cursosProfesor as $curso){
                     foreach($ayudanteEnCursos as $ayudanteEn){

@@ -29,7 +29,7 @@ class ObservacionController extends Controller
     {
         try{
             $credenciales = JWTAuth::parseToken()->authenticate();
-            $observaciones = Observacion::where('creador', $credenciales['id'])->get();
+            $observaciones = Observacion::withTrashed()->where('creador', $credenciales['id'])->get();
             foreach($observaciones as $observacion){
                 $observacion->estudiante=$observacion->getEstudiante->nombre_completo;
                 $observacion->creador=$observacion->getCreador->nombre;
@@ -295,7 +295,7 @@ class ObservacionController extends Controller
                     'data' => null
                 ], 409 );
             }else{
-                $observacion->delete();
+                $observacion->forceDelete();
                 return response()->json([
                     'success' => true,
                     'code' => 700,
