@@ -253,7 +253,7 @@ class InstanciaCursoController extends Controller
                     'data' => null
                 ], 409 );
             }
-            $insCurso->delete();
+            $insCurso->forceDelete();
             return response()->json([
                 'success' => true,
                 'code' => 700,
