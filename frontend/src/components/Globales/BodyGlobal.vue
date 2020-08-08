@@ -27,46 +27,46 @@
                     <v-divider></v-divider>
                     <v-row class="px-5 mt-5">
                         <v-col cols="3">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">Nombre</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 79%' : 'font-size: 100%' ">Nombre</h3>
                         </v-col>
                         <v-col cols="1">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">:</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 79%' : 'font-size: 100%' ">:</h3>
                         </v-col >
                         <v-col :cols="$vuetify.breakpoint.smAndDown ? 7 : 8">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">{{ datosUsuario.nombre}}</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 79%' : 'font-size: 100%' ">{{ datosUsuario.nombre}}</h3>
                         </v-col>
                     </v-row>
                     <v-row class="px-5">
                         <v-col cols="3">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">Rol</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 79%' : 'font-size: 100%' ">Rol</h3>
                         </v-col>
                         <v-col cols="1">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">:</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 79%' : 'font-size: 100%' ">:</h3>
                         </v-col >
                         <v-col :cols="$vuetify.breakpoint.smAndDown ? 7 : 8">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">{{ datosUsuario.rol}}</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 79%' : 'font-size: 100%' ">{{ datosUsuario.rol}}</h3>
                         </v-col>
                     </v-row>
                     <v-row class="px-5">
                         <v-col cols="3">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">Escuela</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 79%' : 'font-size: 100%' ">Escuela</h3>
                         </v-col>
                         <v-col cols="1">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">:</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 79%' : 'font-size: 100%' ">:</h3>
                         </v-col >
                         <v-col :cols="$vuetify.breakpoint.smAndDown ? 7 : 8">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">{{datosUsuario.escuela}}</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 79%' : 'font-size: 100%' ">{{datosUsuario.escuela}}</h3>
                         </v-col>
                     </v-row>
                     <v-row class="px-5 pb-5">
                         <v-col cols="3">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">Correo</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 79%' : 'font-size: 100%' ">Correo</h3>
                         </v-col>
                         <v-col cols="1">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">:</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 79%' : 'font-size: 100%' ">:</h3>
                         </v-col >
                         <v-col :cols="$vuetify.breakpoint.smAndDown ? 7 : 8">
-                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%' : 'font-size: 100%' ">{{ datosUsuario.email}}</h3>
+                            <h3 :style="$vuetify.breakpoint.smAndDown ? 'font-size: 79%' : 'font-size: 100%' ">{{ datosUsuario.email}}</h3>
                         </v-col>
                     </v-row>
                     
@@ -79,11 +79,31 @@
                 <v-card-title  class="headline primary text--center" primary-title > 
                     <h5 class="white--text ">Editar Perfil</h5>
                 </v-card-title>
-                <v-form ref="form"  @submit.prevent="modificarUsuario" class=" px-5 mt-7" >
+                <v-form ref="modUsuario"  v-model="formModificar" lazy-validation @submit.prevent="modificarUsuario" class=" px-5 mt-7" >
                     <v-text-field v-model="datosUsuarioModificar.nombre" label="Nombre de usuario" outlined
                     color="secondary"
-                    :rules="[() => !!datosUsuario.nombre ]"
+                    :rules="reglasNombre"
                     prepend-inner-icon="mdi-account"
+                    ></v-text-field>
+                    
+                    <v-text-field 
+                    v-model="datosUsuarioModificar.correo"
+                    label="Correo Electronico"
+                    outlined
+                    color="secondary"
+                    prepend-inner-icon="mdi-email"
+                    :rules="reglasEmail"
+                    hint="ejemplo@utalca.cl"
+     
+                    ></v-text-field>
+                    <v-text-field v-model="datosUsuarioModificar.contrasena" label="Contraseña "
+                    :prepend-inner-icon= "mostrar ? 'mdi-eye' : 'mdi-eye-off'"
+                    :type="mostrar ? 'text' : 'password'"
+                    outlined
+                    :rules="reglasContraseña"
+                    color="secondary"
+                    hint="Al menos 8 caracteres"
+                    @click:prepend-inner="mostrar = !mostrar"
                     ></v-text-field>
                     <v-file-input  accept="image/png, image/jpeg, image/bmp" 
                     label="Seleccione una imagen"
@@ -94,29 +114,16 @@
                     @change="convertirImagen"
                     v-model="datosUsuarioModificar.imagen">
                     </v-file-input>
-                    <v-text-field 
-                    v-model="datosUsuarioModificar.correo"
-                    label="Correo Electronico"
-                    outlined
-                    color="secondary"
-                    prepend-inner-icon="mdi-email"
-                    :rules="reglasCorreo"
-                    hint="ejemplo@utalca.cl"
-     
-                    ></v-text-field>
-                    <v-text-field v-model="datosUsuarioModificar.contrasena" label="Contraseña "
-                    :prepend-inner-icon= "mostrar ? 'mdi-eye' : 'mdi-eye-off'"
-                    :type="mostrar ? 'text' : 'password'"
-                    outlined
-                    color="secondary"
-                    hint="Al menos 8 caracteres"
-                    @click:prepend-inner="mostrar = !mostrar"
-                    ></v-text-field>
                     <div style="text-align:right;">
-                        <v-btn rounded color="primary" class="mb-4 ml-2" @click="reset"  > 
+                        <v-btn 
+                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                        rounded color="primary" class="mb-4 ml-2" @click="reset"  > 
                             Restablecer
                         </v-btn>
-                        <v-btn  :loading="cargando" rounded color="primary" class="mb-4 ml-2"    type="submit">
+                        <v-btn  
+                        :disabled="!formModificar"
+                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                        :loading="cargando" rounded color="primary" class="mb-4 ml-2"    type="submit">
                             <h4 class="white--text">Modificar</h4>
                         </v-btn>
                     </div>
@@ -173,7 +180,8 @@ export default {
             delay: 4000,
             mostrar: false, 
             cargando: false,
-            datosUsuarioModificar:[ {nombre:null},{correo:null},{contrasena:''} ,{imagen:null}],
+            formModificar: true,
+            datosUsuarioModificar:[ {nombre:''},{correo:''},{contrasena:''} ,{imagen:null}],
             datosUsuario:[], 
             datosUsuarioAux:[],
             roles: ['Administrador', 'Secretaría de Escuela', 'Profesor'],   
@@ -181,7 +189,6 @@ export default {
             // variables para la modificacion de usuario
             listaUsuarios:[],
             listaUsuariosAux:[],
-            
 
             //escuela
             listaEscuela:[{id:''},{nombre:''},{cod:''}],
@@ -191,11 +198,16 @@ export default {
             //prueba de imagen
             imagenMiniatura:null,
             correo:'',
-            reglasCorreo:[
-                v => /.+@utalca.cl/.test(v) || /.+@alumnos.utalca.cl/.test(v) || 'Correo invalido', 
-            ]
-            
-            
+            reglasNombre:[
+                v => /^[a-zA-Z ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',
+                v => /^[a-zA-Z ]+$/.test(v) || 'Nombre no Válido.'
+            ],
+            reglasEmail: [
+                v => /.+@utalca.cl/.test(v) || /.+@alumnos.utalca.cl/.test(v) || 'Correo no Válido', 
+            ],
+            reglasContraseña:[
+                v => /^[a-zA-Z0-9!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]{8,}$/.test(v)  || 'Contraseña muy corta',
+            ],
         }
     },
     computed:{
@@ -204,65 +216,15 @@ export default {
     },
     beforeMount() {
         this.obtenerUsuario();
+        
+    },
+    mounted(){
+        this.reset();
     },
     methods:{
         reset () {
-        this.$refs.form.reset();
-      },
-      /**
-       * Valida que el correo ingresado por el usuario
-       * contenga @utalca.cl o @alumnos.utalca.cl
-       */
-      validarCorreo(correoElectronico){
-          if(correoElectronico != null){
-               var utalca = correoElectronico.indexOf("@utalca.cl");
-                var al_utalca =correoElectronico.indexOf("@alumnos.utalca.cl");
-                if(utalca == -1 && al_utalca ==-1){
-                    return false;
-                }
-                return true;
-          }
-          return false;
-      },
-      /**
-       * Valida que la contraseña del usuario
-       * sea de un largo mayor o igual a 8 caracteres.
-       */
-      validarContrasena(contrasena){
-          if(contrasena != null){
-              if(contrasena.length >= 8){
-                  return true;
-              }
-              return false;
-          }
-          return false;
-      },
-      /**
-       * Valida que el nombre del usuario no 
-       * contenga numeros
-       */
-      validarNombre(nombre){
-          if(nombre!=null){
-
-              var val0= nombre.indexOf("0"); 
-              var val1= nombre.indexOf("1");
-              var val2= nombre.indexOf("2");  
-              var val3= nombre.indexOf("3"); 
-              var val4= nombre.indexOf("4"); 
-              var val5= nombre.indexOf("5"); 
-              var val6= nombre.indexOf("6"); 
-              var val7= nombre.indexOf("7"); 
-              var val8= nombre.indexOf("8");
-              var val9= nombre.indexOf("9");
-                 if(val0 >= 0 || val1  >= 0 || val2  >= 0 || val3  >= 0 || val4  >= 0 || val5  >= 0 || val6  >= 0 
-              || val7  >= 0 || val8  >= 0 || val9  >= 0 ){
-                  console.log("nombre es invalido puto")
-                    return false;
-                }
-                return true;
-          }
-          return false;
-      },
+            this.$refs.modUsuario.reset();
+        },
         /**
          * Convierte la imagen cargada a base 64.
          */
@@ -334,122 +296,92 @@ export default {
             // validamos que el correo puede ser null o segun la regla establecida
             // validar correo alumno.talca.cl
             this.cargando = true;
-           var validarCorreo= this.validarCorreo(this.datosUsuarioModificar.correo);
-           var validarContrasena =this.validarContrasena(this.datosUsuarioModificar.contrasena);
-           var nombreValido = this.validarNombre(this.datosUsuarioModificar.nombre);
-           if(validarCorreo == true || validarContrasena == true || nombreValido == true || this.datosUsuarioModificar.imagen!= null){
-               var correo=this.datosUsuarioModificar.correo;
-               var contrana=this.datosUsuarioModificar.contrasena;
-               var nombre = this.datosUsuarioModificar.nombre;
-               if(validarCorreo == false){
-                   correo = null;
-                //    console.log("correo invalido")
-               }
-               if(validarContrasena == false){
-                   contrana=null;
-                //    console.log("contraseña invalido")
-               }
-               if(nombreValido == false){
-                   nombre = null;
-                //    console.log("nombre invalido")
-               }
-                var url =`http://127.0.0.1:8000/api/v1/usuario/${this.datosUsuario.id}`;
-                let put ={
-                    "nombre": nombre,
-                    "foto":this.imagenMiniatura,
-                    "password": contrana,
-                    "email" : correo,
+            var url =`http://127.0.0.1:8000/api/v1/usuario/${this.datosUsuario.id}`;
+            let put ={
+                "nombre": this.datosUsuarioModificar.nombre,
+                "foto":this.imagenMiniatura,
+                "password": this.datosUsuarioModificar.contrasena,
+                "email" : this.datosUsuarioModificar.correo,
+            }
+            axios.put(url,put,this.$store.state.config)
+            .then((result)=>{
+                if (result.data.success == true){
+                    this.obtenerUsuario();
+                    this.resetModificacionUsuario();
+                    this.cargando = false;
+                    this.alertAcept = true;
+                    var mensaje=result.data.message;
+                    this.textoAcept=mensaje;
+                    this.reset();
                 }
-                axios.put(url,put,this.$store.state.config)
-                    .then((result)=>{
-                    if (result.data.success == true){
-                        this.obtenerUsuario();
-                        this.resetModificacionUsuario();
-                        this.cargando = false;
-                        this.alertAcept = true;
-                        var mensaje=result.data.message;
-                        this.textoAcept=mensaje;
-                        this.reset();
-                    }
-                    }).catch((error)=>{
-                        console.log(error);
+            }).catch((error)=>{
+                console.log(error);
+                console.log(error.response.data);
+                this.resetModificacionUsuario();
+                if (error.message == 'Network Error') {
+                    console.log(error);
+                    this.cargando = false;
+                    this.alertError = true;
+                    var mensaje="La modificación del perfil fue realizada con exito";
+                    this.textoError=mensaje;
+                    this.reset();
+                } else 
+                if (error.response.data.success == false) {
+                    switch (error.response.data.code) {
+                    case 601:
+                        console.log(error.response.data.code +' '+ error.response.data.message);
                         console.log(error.response.data);
-                        this.resetModificacionUsuario();
-                        if (error.message == 'Network Error') {
-                            console.log(error);
-                            this.cargando = false;
-                            this.alertError = true;
-                            var mensaje="La modificación del perfil fue realizada con exito";
-                            this.textoError=mensaje;
-                            this.reset();
-                        } else {
-                        if (error.response.data.success == false) {
-                            switch (error.response.data.code) {
-                            case 601:
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
-                                this.cargando = false;
-                                this.alertError = true;
-                                var mensaje=result.data.message;
-                                this.textoError="Error en los datos ingresados";
-                                this.reset();
-                                break;
-                            case 602:
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
-                                this.cargando = false;
-                                this.alertError = true;
-                                var mensaje=result.data.message;
-                                this.textoError="El usuario no existe.";
-                                this.reset();
-                                break;
-                            case 603:
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
-                                this.cargando = false;
-                                this.alertError = true;
-                                this.textoError="El usuario no tiene los permisos necesarios para realizar esta operacion.";
-                                break;
-                            case 604:
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
-                                this.cargando = false;
-                                this.alertError = true;
-                                var mensaje="Error en la base de datos";
-                                this.textoError=mensaje;
-                                this.reset()
-                                break;
-                            
-                            default:
-                                break;
-                            }
-                        }
-                        }
-                    });
-
-           }
-        if(validarCorreo == false && validarContrasena == false && nombreValido == false && this.datosUsuarioModificar.imagen== null){
-            this.cargando = false;
-            this.alertError = true;
-            var mensaje='Datos ingresados invalidos';
-            this.textoError=mensaje;
-            this.reset();
-        }
+                        this.cargando = false;
+                        this.alertError = true;
+                        var mensaje=result.data.message;
+                        this.textoError="Error en los datos ingresados";
+                        this.reset();
+                        break;
+                    case 602:
+                        console.log(error.response.data.code +' '+ error.response.data.message);
+                        console.log(error.response.data);
+                        this.cargando = false;
+                        this.alertError = true;
+                        var mensaje=result.data.message;
+                        this.textoError="El usuario no existe.";
+                        this.reset();
+                        break;
+                    case 603:
+                        console.log(error.response.data.code +' '+ error.response.data.message);
+                        console.log(error.response.data);
+                        this.cargando = false;
+                        this.alertError = true;
+                        this.textoError="El usuario no tiene los permisos necesarios para realizar esta operacion.";
+                        break;
+                    case 604:
+                        console.log(error.response.data.code +' '+ error.response.data.message);
+                        console.log(error.response.data);
+                        this.cargando = false;
+                        this.alertError = true;
+                        var mensaje="Error en la base de datos";
+                        this.textoError=mensaje;
+                        this.reset()
+                        break;
+                    default:
+                        break;
+                    }
+                }
+                
+            });
+        },
+        resetModificacionUsuario(){
+            this.datosUsuarioModificar.nombre=null;
+            this.datosUsuarioModificar.correo=null;
+            this.datosUsuarioModificar.contrasena=null;
+            this.datosUsuarioModificar.imagen=null;
+            this.imagenMiniatura=null;
+            this.alertError= false;
+            this.textoError= '';
+            this.alertAcept= false;
+            this.textoAcept= '';
             
-
-    },
-    resetModificacionUsuario(){
-        this.datosUsuarioModificar.nombre=null;
-        this.datosUsuarioModificar.correo=null;
-        this.datosUsuarioModificar.contrasena=null;
-        this.datosUsuarioModificar.imagen=null;
-        this.imagenMiniatura=null;
-        this.alertError= false;
-        this.textoError= '';
-        this.alertAcept= false;
-        this.textoAcept= '';
-        
-    },
+        },
+    
     }
 }
 </script>

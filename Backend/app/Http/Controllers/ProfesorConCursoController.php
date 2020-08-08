@@ -242,7 +242,7 @@ class ProfesorConCursoController extends Controller
                     'data' => null
                 ], 409 );
             }else{
-                $profesorCurso->delete();
+                $profesorCurso->forceDelete();
                 return response()->json([
                     'success' => true,
                     'code' => 700,

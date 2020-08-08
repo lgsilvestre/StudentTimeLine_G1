@@ -67,8 +67,17 @@ const routes = [
       },
       {
         //Enrutamiento de la vista del administrador
-        path: 'estudiantes/id=:id',
+        path: ':enrutamiento/id=:id',
         name: 'estudiantesPerfilAdministrador',
+        component: () =>import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/EstudiantePerfil.vue'),
+        meta: {
+            admin: true
+        },
+      },
+      {
+        //Enrutamiento de la vista del administrador
+        path: 'cursos/:enrutamiento/id=:id',
+        name: 'estudiantesPerfilAdministrador2',
         component: () =>import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/EstudiantePerfil.vue'),
         meta: {
             admin: true
@@ -159,8 +168,18 @@ const routes = [
             },
             {
                 //Enrutamiento de la vista del administrador
-                path: 'estudiantes/id=:id',
+                path: ':enrutamiento/id=:id',
                 name: 'estudiantesPerfilSecretariaEscuela',
+                component: () =>
+                    import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/EstudiantePerfil.vue'),
+                meta: {
+                    secretariaEscuela: true
+                },
+            },
+            {
+                //Enrutamiento de la vista del administrador
+                path: 'cursos/:enrutamiento/id=:id',
+                name: 'estudiantesPerfilSecretariaEscuela2',
                 component: () =>
                     import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/EstudiantePerfil.vue'),
                 meta: {
@@ -239,7 +258,7 @@ const routes = [
             },
             {
                 //Enrutamiento de la vista del administrador
-                path: 'estudiantes/id=:id',
+                path: ':enrutamiento/id=:id',
                 name: 'estudiantesPerfilProfesor',
                 component: () =>
                     import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/EstudiantePerfil.vue'),
