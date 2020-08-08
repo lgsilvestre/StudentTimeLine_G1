@@ -833,8 +833,9 @@
         </v-dialog>
 
         <!-- Muestra una lista con los ayudantes de uns  instancia curso -->
-        <v-dialog v-model="dialogAyudantesInsCurso" ref="form" persistent max-width="450px">
-            <v-card class="mx-auto" max-width="450"  >
+        <v-dialog v-model="dialogAyudantesInsCurso" ref="form" 
+         max-width="450px">
+            <v-card class="mx-auto  pb-5" max-width="450"  >
                 <v-card-title
                     class="headline primary text--center"
                     primary-title
@@ -872,12 +873,7 @@
                             </v-tooltip>
                         </template>
                     </v-data-table>
-                    <div style="text-align:right;" class="mt-3 mr-3" >
-                        <v-btn rounded color="secondary" class=" mb-4 "  @click="resetAyudantesDeInstanciaCurso">
-                            <h4 class="white--text">Volver</h4>
-                        </v-btn>
-                       
-                    </div> 
+                   
             </v-card>
         </v-dialog>
 
@@ -1031,7 +1027,7 @@ export default {
                 {text:'Opciones', value:'opciones',align: 'center'},
             ],
             headersProfesor:[
-                { width:350},
+               
                 { text: 'Nombre Completo', value: 'nombre',align: 'start' },
                 {text:'Opciones', value:'opciones',align: 'end'},
                 // {with:10},           

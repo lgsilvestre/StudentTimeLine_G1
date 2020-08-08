@@ -451,7 +451,9 @@
       reglasCodigoCarrera: [
         value => !!value || 'Requerido',
         value => value  >= 0 || 'El valor debe ser mayor o igual a 0', 
+        value => (value || '').length <= 4 || 'Max. 40 caracteres',
       ],
+      
     }),
     computed: {
     },

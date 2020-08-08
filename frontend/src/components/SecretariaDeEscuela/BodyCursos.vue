@@ -48,7 +48,7 @@
                 </v-img>
                 <!-- <v-container> -->
                     <v-data-iterator :items="listaSemestres" :search="search" :sort-by="sortBy.toLowerCase()" class="px-2 py-2" :loading="cargando"
-                    :items-per-page.sync="itemsPerPage">
+                    >
                         <template v-slot:default="props">
                             <v-row >
                                 <v-col v-for="item in props.items" :key="item.nomCurso" cols="12" sm="6" md="4" lg="3">
@@ -187,7 +187,7 @@
                     <h5 class="white--text ">Modificar Semestre</h5>
                 </v-card-title>
                 <v-container class="px-5 mt-5" >
-                    <v-form  ref="form_modificarSemestre" v-model="formularioModificarSemestreValido" lazy-validation> >
+                    <v-form  ref="form_modificarSemestre" v-model="formularioModificarSemestreValido" lazy-validation> 
                         <v-row >
                             <v-col cols="6" >
                                 <strong>Año</strong>
