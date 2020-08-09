@@ -248,7 +248,6 @@
                                                 
                                             </v-container>
                                         
-                                            
                                         </v-card>
                                     </v-dialog>
                                     <v-dialog  v-model="dialogRestaurarUsuarioEliminado" ref="form" persistent max-width="500px">
@@ -363,7 +362,6 @@
                                     </v-container> 
                                 </v-card>                        
                             </v-dialog>
-
                             <v-dialog v-model="dialogEliminar" ref="form" persistent max-width="500px" transition="scroll-y-reverse-transition">
                                 <v-card class="mx-auto" max-width="500px"  >
                                     <v-card-title
@@ -502,7 +500,8 @@ export default {
             datosUsuario:[ {nombre:''},{escuela:''},{escuelaAux:''},{role:''},{correo:''},{contrasena:''} ,{imagen:null}],  
             listaEscuela:[
                 { text: 'ID',align: 'start',value: 'id',sortable: false},
-                { text: 'Nombre', value: 'nombre',sortable: false, },                
+                { text: 'Nombre', value: 'nombre',sortable: false, }, 
+                { text: 'Opciones', value: 'opciones',sortable: false, },                
             ],            
             listaEscuelaAux:[],
             roles: ['Administrador', 'Secretaría de Escuela', 'Profesor'],   
@@ -563,9 +562,8 @@ export default {
                 this.modificarUsuario();
             }
         },
-
         obtenerListaUsuariosEliminados(){
-             this.dialogListaUsuariosEliminado = true;
+            this.dialogListaUsuariosEliminado = true;
             this.listaUsuariosAux = [];
             var aux;
             var url = 'http://127.0.0.1:8000/api/v1/usuario/disabled';
@@ -710,7 +708,6 @@ export default {
         },
         /**
          * Obtiene una lista de todos los usuarios registrados en la base de datos.
-         * Desde el bakend no envian: contraseña y (rol) aun esta por definir.
          */
         obtenerUsuarios(){
             this.cargando = true;
