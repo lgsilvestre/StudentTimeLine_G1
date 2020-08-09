@@ -165,6 +165,7 @@ export default {
                         seccion:element.seccion,
                         nomCurso: element.curso,
                         plan:element.get_curso.get_curso.plan,
+                        idCurso: element.idInstanciaCurso,
                         // escuela: element.get_curso.get_curso
                     }; 
                     console.log(index);
@@ -239,7 +240,7 @@ export default {
         
         setDialogAyudantes(){        
             for (let index = 0; index < this.listaInsCursos.length; index++){
-                this.obtenerListaAyudantes(this.listaInsCursos[index].id);
+                this.obtenerListaAyudantes(this.listaInsCursos[index].idCurso);
             }
         },
 
