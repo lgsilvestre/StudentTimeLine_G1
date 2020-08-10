@@ -236,7 +236,7 @@
                 >
                 <h5 class="white--text ">Cerrar Semestre</h5>
                 </v-card-title> 
-                <v-card-title class="text-justify" style="font-size: 100%;">Esta seguro que desea cerrar el siguiente semestre?</v-card-title>
+                <v-card-title class="text-justify" style="font-size: 100%;">Esta seguro que desea cerrar el semestre?</v-card-title>
                 <v-card-text>Año : {{ semestreActual_1.anio }}</v-card-text>
                 <v-card-text>Semetre : {{ semestreActual_1.semestre }}</v-card-text>
                 <div style="text-align:right;">
@@ -251,7 +251,7 @@
     </v-dialog>
 
     <!-- dialofo para re-abrir el semestre -->
-    <v-dialog v-model="dialogReAbrirSemestre" ref="form" persistent max-width="450px">
+    <v-dialog v-model="dialogReAbrirSemestre" ref="form" persistent max-width="450px"> 
         <v-card class="mx-auto" max-width="450"  >
             <v-card-title
                 class="headline primary text--center"
@@ -259,7 +259,7 @@
                 >
                 <h5 class="white--text ">Cerrar Semestre</h5>
                 </v-card-title> 
-                <v-card-title class="text-justify" style="font-size: 100%;">Esta seguro que desea reabrir el siguiente semestre?</v-card-title>
+                <v-card-title class="text-justify" style="font-size: 100%;">Esta seguro que desea reabrir el semestre?</v-card-title>
                 <v-card-text>Año : {{ semestreActual_1.anio }}</v-card-text>
                 <v-card-text>Semetre : {{ semestreActual_1.semestre }}</v-card-text>
                 <div style="text-align:right;">

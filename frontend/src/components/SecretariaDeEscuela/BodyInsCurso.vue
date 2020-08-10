@@ -108,17 +108,28 @@
                                                 <p class="mt-0 mb-0  text-truncate font-weight-black  "  style=" font-size: 115%;" > Sección: {{ item.seccion}} </p>
                                             </v-card-text>
                                         </v-col>
-                                        <v-col cols="12"  class=" pt-0 pl-2  pb-0 " >
+
+                                        <v-col cols="5" class=" pt-0 pl-1 pr-0 pb-0" >
+                                            <v-card-text class="pt-0 pl-2 pr-0 pr-0 pb-0 ">
+                                                <p class=" mt-0 mb-1   font-weight-black  text-truncate" style=" font-size: 115%;"   >Profesor/es: </p>
+                                            </v-card-text>
+                                        </v-col>
+                                        <v-col cols="7"  class="pt-0 pl-0 pr-0 pb-0  mb-1" >
                                             <div style="text-align:left;">
-                                            <v-btn width="120px"  outlined x-small  @click="mostrarProfesoresDeCurso(item)">
-                                                    Profesor/es:Ver
-                                                </v-btn>
+                                            <v-btn class="pt-0  pb-0 "  outlined x-small  @click="mostrarProfesoresDeCurso(item)">
+                                                    Ver
+                                            </v-btn>
                                             </div>
                                         </v-col>
-                                        <v-col cols="12"  class=" pt-1 pl-2  pb-0 " >
+                                        <v-col cols="5" class=" pt-0 pl-1 pr-0 pb-0" >
+                                            <v-card-text class="pt-0 pl-2 pr-0 pb-0 ">
+                                                <p class=" mt-0 mb-1   font-weight-black  text-truncate" style=" font-size: 115%;"   >ayudante/s: </p>
+                                            </v-card-text>
+                                        </v-col>
+                                        <v-col cols="7"  class=" pt-0 pl-0  pb-0 " >
                                             <div style="text-align:left;">
-                                            <v-btn width="120px"  outlined x-small  @click="mostrarAyudantesDeCurso(item)">
-                                                    Ayudante/s :Ver
+                                            <v-btn  outlined x-small  @click="mostrarAyudantesDeCurso(item)">
+                                                    Ver
                                                 </v-btn>
                                             </div>
                                         </v-col>
@@ -372,23 +383,34 @@
                     <h5 class="white--text ">Modificar Curso</h5>
                 </v-card-title>
                 <v-container class="px-5 mt-5">
-                    
-                    <v-select  v-model="InstanciaModificar.seccion"
-                        :items="listaDeSeccionesDisponibles"
-                        item-text="nombre"
-                        item-value="id"
-                        label="Seccion"
-                        outlined
-                        :small-chips="$vuetify.breakpoint.smAndDown ? true : false"
-                        :rules="[() => !!InstanciaModificar.seccion ||'Requerido']"
-                        prepend-inner-icon="mdi-school"
-                    ></v-select>
+                    <v-row>
+                        <v-col cols="6" >
+                            <strong><h3>Curso</h3></strong>
+                        </v-col>
+                        <v-col cols="6" >
+                            <strong><h3>Sección</h3></strong>
+                        </v-col>
+                        <v-col cols="6" >
+                           <v-list-item-title> {{ InstanciaModificar.nomCurso }} </v-list-item-title>
+                        </v-col>
+                        <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
+                            <v-select  v-model="InstanciaModificar.seccion"
+                                :items="listaDeSeccionesDisponibles"
+                                item-text="nombre"
+                                item-value="id"
+                                outlined
+                                :small-chips="$vuetify.breakpoint.smAndDown ? true : false"
+                                :rules="[() => !!InstanciaModificar.seccion ||'Requerido']"
+                                prepend-inner-icon="mdi-school"
+                                dense
+                            ></v-select>
+                        </v-col>
+                    </v-row>
                      <v-divider></v-divider>
-                        <strong  v-if="numeroDeCursosModificar>0"><h3 class="pt-5">Eliga el profesor: </h3></strong>
+                        <strong ><h3 class="pt-5">Eliga el profesor: </h3></strong>
                         <v-form ref="forModificarInsCurso" style="margin:0;padding:0;" v-model="form_modificarInsCurso" lazy-validation>
                              <v-select
                                     class="pt-3"
-                                    v-if="numeroDeCursosModificar>0"
                                     v-model="profesorSeleccionado"
                                     label="Profesor"
                                     :items="listaProfesores"
@@ -406,6 +428,7 @@
                                     item-value="id"
                                     outlined
                                     prepend-inner-icon="mdi-school"
+                                    clearable
                                 >                               
                                 </v-select>
                                 <v-select
@@ -417,6 +440,7 @@
                                     item-value="id"
                                     outlined
                                     prepend-inner-icon="mdi-school"
+                                    clearable
                                 >                               
                                 </v-select> 
                                 <v-select
@@ -428,6 +452,7 @@
                                     item-value="id"
                                     outlined
                                     prepend-inner-icon="mdi-school"
+                                    clearable
                                 >                               
                                 </v-select> 
                                 <v-select
@@ -438,7 +463,8 @@
                                     item-text="nombre"
                                     item-value="id"
                                     outlined
-                                    prepend-inner-icon="mdi-school" >  </v-select>   
+                                    prepend-inner-icon="mdi-school"
+                                    clearable >  </v-select>   
                                                         
             
                          <div style="text-align:left;"   >
@@ -486,7 +512,7 @@
                     <h5 class="white--text ">Eliminar Curso</h5>
                     </v-card-title> 
                     <!-- <v-container fluid class=" text-left"> -->
-                    <v-card-title class="text-justify" style="font-size: 100%;">Esta seguro que desea eliminar el siguiente Curso?</v-card-title>
+                    <v-card-title class="text-justify" style="font-size: 100%;">Esta seguro que desea cerrar  Curso?</v-card-title>
                     <v-card-text>Curso : {{ this.datosInsCurso.nomCurso }}</v-card-text>
                     <!-- </v-container > -->
                     <div style="text-align:right;">
@@ -615,7 +641,9 @@
                                     item-value="id"
                                     :rules="[() => !!profesorSeleccionado ||'Requerido']"
                                     outlined
-                                    prepend-inner-icon="mdi-school"> 
+                                    prepend-inner-icon="mdi-school"
+                                    
+                                    >
                                 </v-select> 
                                 <v-select
                                     v-if=" profesorSeleccionado!='' && contadorCursos>1"
@@ -624,9 +652,10 @@
                                     :items="listaProfesores"
                                     item-text="nombre"
                                     item-value="id"
-                                    :rules="[() => !!profesorSeleccionado2 ||'Requerido']"
                                     outlined
                                     prepend-inner-icon="mdi-school"
+                                    clearable
+                                    
                                 >                               
                                 </v-select>
                                 <v-select
@@ -636,9 +665,9 @@
                                     :items="listaProfesores"
                                     item-text="nombre"
                                     item-value="id"
-                                    :rules="[() => !!profesorSeleccionado3 ||'Requerido']"
                                     outlined
                                     prepend-inner-icon="mdi-school"
+                                    clearable
                                 >                               
                                 </v-select> 
                                 <v-select
@@ -648,9 +677,9 @@
                                     :items="listaProfesores"
                                     item-text="nombre"
                                     item-value="id"
-                                    :rules="[() => !!profesorSeleccionado4 ||'Requerido']"
                                     outlined
                                     prepend-inner-icon="mdi-school"
+                                    clearable
                                 >                               
                                 </v-select> 
                                 <v-select
@@ -660,9 +689,9 @@
                                     :items="listaProfesores"
                                     item-text="nombre"
                                     item-value="id"
-                                    :rules="[() => !!profesorSeleccionado5 ||'Requerido']"
                                     outlined
-                                    prepend-inner-icon="mdi-school" >  </v-select>   
+                                    prepend-inner-icon="mdi-school" 
+                                    clearable>  </v-select>   
                                                         
             
                          <div style="text-align:left;"   >
@@ -738,7 +767,6 @@
                         <strong ><h3 class="pt-5">Seleccione el o los ayudantes: </h3></strong>
                             <v-autocomplete
                                 class="pt-3"
-                                v-if="contadorAyudante>0"
                                 v-model="ayudanteSeleccionado"
                                 label="Buscar ayudante"
                                 :items="listaProspectosAyudante"
@@ -748,6 +776,7 @@
                                 outlined
                                 prepend-inner-icon="mdi-school"
                                 solo
+                                
                             > 
                             </v-autocomplete> 
                             <v-autocomplete
@@ -757,10 +786,10 @@
                                 :items="listaProspectosAyudante"
                                 item-text="nombre"
                                 item-value="id"
-                                :rules="[() => !!ayudanteSeleccionado2 ||'Requerido']"
                                 outlined
                                 prepend-inner-icon="mdi-school"
                                 solo
+                                clearable
                             >                               
                             </v-autocomplete>
                             <v-autocomplete
@@ -770,10 +799,10 @@
                                 :items="listaProspectosAyudante"
                                 item-text="nombre"
                                 item-value="id"
-                                :rules="[() => !!ayudanteSeleccionado3 ||'Requerido']"
                                 outlined
                                 prepend-inner-icon="mdi-school"
                                 solo
+                                clearable
                             >                               
                             </v-autocomplete> 
                             <v-autocomplete
@@ -783,10 +812,10 @@
                                 :items="listaProspectosAyudante"
                                 item-text="nombre"
                                 item-value="id"
-                                :rules="[() => !!ayudanteSeleccionado4 ||'Requerido']"
                                 outlined
                                 prepend-inner-icon="mdi-school"
                                 solo
+                                clearable
                             >                               
                             </v-autocomplete> 
                             <v-autocomplete
@@ -796,10 +825,10 @@
                                 :items="listaProspectosAyudante"
                                 item-text="nombre"
                                 item-value="id"
-                                :rules="[() => !!ayudanteSeleccionado5 ||'Requerido']"
                                 outlined
                                 prepend-inner-icon="mdi-school"
                                 solo
+                                clearable
                             >                               
                             </v-autocomplete>  
                         <div style="text-align:left;"   >
@@ -945,11 +974,23 @@ export default {
 
             cargando: false,
             seleccionados: [],
-            profesorSeleccionado: '',
-            profesorSeleccionado2: '',
-            profesorSeleccionado3: '',
-            profesorSeleccionado4: '',
-            profesorSeleccionado5: '',
+            profesorSeleccionado: null,
+            profesorSeleccionado2: null,
+            profesorSeleccionado3: null,
+            profesorSeleccionado4: null,
+            profesorSeleccionado5: null,
+
+            profesorSeleccionadoAux: null,
+            profesorSeleccionadoAux2: null,
+            profesorSeleccionadoAux3: null,
+            profesorSeleccionadoAux4: null,
+            profesorSeleccionadoAux5: null,
+
+            profesorConCurso: null,
+            profesorConCurso2: null,
+            profesorConCurso3: null,
+            profesorConCurs4: null,
+            profesorConCurso5: null,
       
             colInsCursos:[
                 {text:'ID', value:'id'},
@@ -1019,6 +1060,11 @@ export default {
             ayudanteSeleccionado3: '',
             ayudanteSeleccionado4: '',
             ayudanteSeleccionado5: '',
+            ayudanteSeleccionadoAux: '',
+            ayudanteSeleccionadoAux2: '',
+            ayudanteSeleccionadoAux3: '',
+            ayudanteSeleccionadoAux4: '',
+            ayudanteSeleccionadoAux5: '',
             dialogAyudantesInsCurso:false,
             AyudanteDeInstanciaCurso:'',
             headersAyudante:[
@@ -1033,11 +1079,12 @@ export default {
                 // {with:10},           
                  ],
             numeroDeProfesoresModificar:0,
+            numeroDeAyudantesModificar:0,
             contadorProfesores:1,
             InstanciaModificar:'',
             
             //varaibles para añadir instancias de cursos a un semestre
-            numeroDeCursosModificar:5,
+            numeroDeCursosModificar:0,
             numProfesor:0,
             contadorCursos:1,
             contadorAyudante:1,
@@ -1085,25 +1132,21 @@ export default {
             this.$refs.form_AsignarCurso.validate()
         },
         sumarProfesor(){
-            // numeroDeProfesoresModificar:05,//
-            // contadorProfesores:1,
-            // si asigno el primer profesor y quiere añadir otro.
-
-            console.log("Contador de profesores: "+this.contadorProfesores);
-            console.log("Numero de profesores que puedo agregar: "+this.numeroDeProfesoresModificar);
-            if(this.contadorProfesores ==1 &&  this.profesorSeleccionado!='' && this.contadorProfesores<this.numeroDeProfesoresModificar){
+            //console.log("Contador de profesores: "+this.contadorProfesores);
+            //console.log("Numero de profesores que puedo agregar: "+this.numeroDeProfesoresModificar);
+            if(this.contadorProfesores ==1 &&  this.profesorSeleccionado!=''){
                 this.contadorProfesores++;
             }
             //se asigno el segundo profesor y quiere añadir otro
-            if(this.contadorProfesores == 2 && this.profesorSeleccionado2!='' && this.contadorProfesores<this.numeroDeProfesoresModificar){
+            if(this.contadorProfesores == 2 && this.profesorSeleccionado2!='' ){
                 this.contadorProfesores++;
             }
             //se asigno el tercer profesor y quiere añadir otro
-            if(this.contadorProfesores == 3 && this.profesorSeleccionado3!='' && this.contadorProfesores<this.numeroDeProfesoresModificar){
+            if(this.contadorProfesores == 3 && this.profesorSeleccionado3!=''){
                 this.contadorProfesores++;
             }
             //se asigno el cuarto profesor y quiere añadir otro
-            if(this.contadorProfesores == 4 && this.profesorSeleccionado4!='' && this.contadorProfesores<this.numeroDeProfesoresModificar){
+            if(this.contadorProfesores == 4 && this.profesorSeleccionado4!='' ){
                 this.contadorProfesores++;
             }
             
@@ -1204,6 +1247,8 @@ export default {
          * Permite vincular un ayudante a una instancia de curso
          */
         sumarAyudante(){
+            console.log("Contador de ayudante: "+this.contadorAyudante);
+            console.log("Numero de profesores que puedo agregar: "+this.numeroDeAyudantesModificar);
              if(this.contadorAyudante ==1 &&  this.ayudanteSeleccionado!=''){
                 this.contadorAyudante++;
             }
@@ -1435,35 +1480,35 @@ export default {
         //agregaremos al ayudante a la instancia del curso
         asignarAyudanteInstanciaCurso(){
             var idInstancia= this.datosInsCurso.id;
-            if(idInstancia !=null && this.ayudanteSeleccionado!='' ){
+            if(idInstancia !=null && this.ayudanteSeleccionado!=''&& this.ayudanteSeleccionado!= this.ayudanteSeleccionadoAux ){
                 let post = {
                     "estudiante" :  this.ayudanteSeleccionado,
                     "curso":  idInstancia,
                 };
                 this.asignartAyudante(post);
             }
-            if(idInstancia !=null && this.ayudanteSeleccionado2!='' ){
+            if(idInstancia !=null && this.ayudanteSeleccionado2!='' && this.ayudanteSeleccionado2!= this.ayudanteSeleccionadoAux2 ){
                 let post = {
                     "estudiante" :  this.ayudanteSeleccionado2,
                     "curso":  idInstancia,
                 };
                 this.asignartAyudante(post);
             }
-            if(idInstancia !=null && this.ayudanteSeleccionado3!='' ){
+            if(idInstancia !=null && this.ayudanteSeleccionado3!='' && this.ayudanteSeleccionado3!= this.ayudanteSeleccionadoAux3){
                 let post = {
                     "estudiante" :  this.ayudanteSeleccionado3,
                     "curso":  idInstancia,
                 };
                 this.asignartAyudante(post);
             }
-            if(idInstancia !=null && this.ayudanteSeleccionado4!='' ){
+            if(idInstancia !=null && this.ayudanteSeleccionado4!=''&& this.ayudanteSeleccionado4!= this.ayudanteSeleccionadoAux4 ){
                 let post = {
                     "estudiante" :  this.ayudanteSeleccionado4,
                     "curso":  idInstancia,
                 };
                 this.asignartAyudante(post);
             }
-            if(idInstancia !=null && this.ayudanteSeleccionado5!='' ){
+            if(idInstancia !=null && this.ayudanteSeleccionado5!=''&& this.ayudanteSeleccionado5!= this.ayudanteSeleccionadoAux5){
                 let post = {
                     "estudiante" :  this.ayudanteSeleccionado5,
                     "curso":  idInstancia,
@@ -1521,6 +1566,13 @@ export default {
             this.ayudanteSeleccionado3='';
             this.ayudanteSeleccionado4='';
             this.ayudanteSeleccionado5='';
+
+            this.ayudanteSeleccionadoAux='';
+            this.ayudanteSeleccionadoAux2='';
+            this.ayudanteSeleccionadoAux3='';
+            this.ayudanteSeleccionadoAux4='';
+            this.ayudanteSeleccionadoAux5='';
+
             this.contadorAyudante=1;
             this.$refs.formAsignarAyudante.reset()
             
@@ -1921,7 +1973,6 @@ export default {
             /* crear profesor con curso */
             axios.post(url2, post2, this.$store.state.config)
             .then((result) => {
-                // console.log(result)
                 this.textoAlertas = "Se asignó el profesor correctamente"
                 this.alertaExito=true;
                 
@@ -1960,16 +2011,95 @@ export default {
          */
         resetModificarInstanciaCurso(){
             this.InstanciaModificar= '';
-            this.profesorSeleccionado = '';
-            this.profesorSeleccionado2='';
-            this.profesorSeleccionado3='';
-            this.profesorSeleccionado4='';
-            this.profesorSeleccionado5='';
+            this.profesorSeleccionado = null;
+            this.profesorSeleccionado2=null;
+            this.profesorSeleccionado3=null;
+            this.profesorSeleccionado4=null;
+            this.profesorSeleccionado5=null;
+            this.ayudanteSeleccionadoAux=null;
+            this.ayudanteSeleccionadoAux2=null;
+            this.ayudanteSeleccionadoAux3=null;
+            this.ayudanteSeleccionadoAux4=null;
+            this.ayudanteSeleccionadoAux5=null;
+            this.profesorConCurso=null;
+            this.profesorConCurso1=null;
+            this.profesorConCurso2=null;
+            this.profesorConCurso3=null;
+            this.profesorConCurso4=null;
+            this.profesorConCurso5=null;
             this.contadorProfesores=1;
             this.numeroDeProfesoresModificar=0;
 
             
             // this.obtenerInstanciasCursos();
+        },
+        DesvincularUnProfesorInsCurso(id){
+            var url = 'http://127.0.0.1:8000/api/v1/profesorConCurso/'+id;
+             console.log(url)
+                axios.delete(url,this.$store.state.config)
+                .then((result)=>{
+                if (result.statusText=='OK') {
+                    this.alertaExito = true;
+                    this.textoAlertas = "Se desvinculo el el profesor con exito "
+                    
+                    this.obtenerInstanciasCursos();
+                    this.dialogProfesoresInsCurso=false;
+                }
+                }).catch((error)=>{
+                    if (error.message == 'Network Error') {
+                        this.alertaError = true;
+                        this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
+                    }
+                    if(error.response.data.code == 701){
+                                this.textoAlertas = 'No existe la relacion entre el profesor y el curso';
+                                this.alertaError = true;
+                    }
+                    if(error.response.data.code == 702){
+                                this.textoAlertas = 'Error en la base de datos.';
+                                this.alertaError = true;
+                    }               
+                });
+        },
+        modificarProfesores(profesorPrincipal, ProfesorAux,idProfesorConCurso,insCurso,num){
+            console.log("==================="+num+"==================")
+            console.log(profesorPrincipal)
+            console.log(ProfesorAux)
+            console.log(insCurso)
+            console.log(idProfesorConCurso)
+            console.log("===========================================")
+            console.log()
+           
+
+            if( ProfesorAux!= null && idProfesorConCurso!= null && profesorPrincipal!=null &&ProfesorAux!=profesorPrincipal){
+                console.log("Cambiamos al profesor principal por uno nuevo.")
+                this.DesvincularUnProfesorInsCurso(idProfesorConCurso);
+                let post2 = {
+                "profesor" :  profesorPrincipal,
+                "curso":  insCurso,
+                };
+            console.log(post2)
+            this.agregarProfesorCurso(post2)
+            }
+            // Eliminar profesor de una instancia de curso
+            if(ProfesorAux!= null && idProfesorConCurso!=null && profesorPrincipal==null ){
+                console.log("Eliminar profesor pricipal")
+                console.log(profesorPrincipal)
+                this.DesvincularUnProfesorInsCurso( idProfesorConCurso);
+            }
+            // Agregar profesor a instancia de curso
+            if(ProfesorAux==null && idProfesorConCurso==null && profesorPrincipal!=null ){
+                console.log("añadimos un nuevo profesor")
+                let post2 = {
+                "profesor" :  profesorPrincipal,
+                "curso":  insCurso,
+                };
+                console.log(post2)
+            
+                this.agregarProfesorCurso(post2)
+            }
+            // if(this.profesorSeleccionadoAux == this.profesorSeleccionado ){
+            //     console.log("SON IGUALES, por tanto no se hace nada")
+            // }
         },
         modificarInstanciaCurso(){
             var url =`http://127.0.0.1:8000/api/v1/instanciaCurso/${this.InstanciaModificar.id}`;
@@ -1978,54 +2108,14 @@ export default {
             };
             axios.put(url,put,this.$store.state.config)
             .then((result)=>{
-                var contProfesores=0;  
                 var ins_curso=this.InstanciaModificar.id;
-                 if(this.profesorSeleccionado != '' && contProfesores<this.numeroDeProfesoresModificar){
-                    let post2 = {
-                        "profesor" :  this.profesorSeleccionado,
-                        "curso":  ins_curso,
-                        };
-                    
-                    this.agregarProfesorCurso(post2)
-                    contProfesores++;
-                }
-                if(this.profesorSeleccionado2 != ''  && contProfesores<this.numeroDeProfesoresModificar){
-                    let post2 = {
-                        "profesor" :  this.profesorSeleccionado2,
-                        "curso":  ins_curso,
-                        };
-                    this.agregarProfesorCurso(post2)
-                    contProfesores++;
-                }
-                if(this.profesorSeleccionado3 != '' && contProfesores<this.numeroDeProfesoresModificar){
-                    let post2 = {
-                        "profesor" :  this.profesorSeleccionado3,
-                        "curso":  ins_curso,
-                        };
-                    
-                    this.agregarProfesorCurso(post2);
-                    contProfesores++;
-                }
-                if(this.profesorSeleccionado4 != '' && contProfesores<this.numeroDeProfesoresModificar){
-                    let post2 = {
-                        "profesor" :  this.profesorSeleccionado4,
-                        "curso":  ins_curso,
-                        };
-                    
-                    this.agregarProfesorCurso(post2)
-                    contProfesores++;
-                }
-                if(this.profesorSeleccionado5 != '' && contProfesores<this.numeroDeProfesoresModificar){
-                    let post2 = {
-                        "profesor" :  this.profesorSeleccionado5,
-                        "curso":  ins_curso,
-                        };
-                    
-                    this.agregarProfesorCurso(post2)
-                    contProfesores++;
-                }
-              
-              
+                console.log("MODIFICAR PROFESORES")
+                this.modificarProfesores(this.profesorSeleccionado,this.profesorSeleccionadoAux,this.profesorConCurso,ins_curso,1)
+                this.modificarProfesores(this.profesorSeleccionado2,this.profesorSeleccionadoAux2,this.profesorConCurso2,ins_curso,2)
+                this.modificarProfesores(this.profesorSeleccionado3,this.profesorSeleccionadoAux3,this.profesorConCurso3,ins_curso,3)
+                this.modificarProfesores(this.profesorSeleccionado4,this.profesorSeleccionadoAux4,this.profesorConCurso4,ins_curso,4)
+                this.modificarProfesores(this.profesorSeleccionado5,this.profesorSeleccionadoAux5,this.profesorConCurso5,ins_curso,5)
+
                 this.cerrarDialogModificarInstanciaCurso();
                 this.alertaExito = true;
                 this.textoAlertas = this.ModificacionExitosa;
@@ -2111,7 +2201,40 @@ export default {
                 var numeroMaxProfesores=5;
                 numeroMaxProfesores= numeroMaxProfesores - curso.listaProfesores.length
                 this.numeroDeProfesoresModificar=numeroMaxProfesores;
+                this.contadorProfesores =5-numeroMaxProfesores;
                 this.dialogModificarInsCurso = true;
+                var listaProfesores=curso.listaProfesores
+
+                console.log("Numero de profesorees que puedo añadir :"+this.numeroDeProfesoresModificar )
+                 for( let index=0; index < curso.listaProfesores.length; index++){
+                     if(index == 0){
+                         this.profesorSeleccionado= curso.listaProfesores[0].id;
+                         this.profesorSeleccionadoAux=curso.listaProfesores[0].id;
+                         this.profesorConCurso =curso.listaProfesores[0].idProfesorConCurso                       
+                     }
+                     if(index == 1){
+                         this.profesorSeleccionado2= curso.listaProfesores[1].id;
+                         this.profesorSeleccionadoAux2=curso.listaProfesores[1].id;
+                         this.profesorConCurso2 =curso.listaProfesores[1].idProfesorConCurso                       
+                     }
+                     if(index == 2){
+                        this.profesorSeleccionado3= curso.listaProfesores[2].id;
+                        this.profesorSeleccionadoAux3 =curso.listaProfesores[2].id;
+                        this.profesorConCurso3 =curso.listaProfesores[2].idProfesorConCurso
+                     }
+                     if(index == 3){
+                         this.profesorSeleccionado4= curso.listaProfesores[3].id;
+                         this.profesorSeleccionadoAux4 = curso.listaProfesores[3].id;
+                         this.profesorConCurso4 =curso.listaProfesores[3].idProfesorConCurso
+                     }
+                     if(index == 4){
+                         this.profesorSeleccionado5= curso.listaProfesores[4].id;
+                         this.profesorSeleccionadoAux5=curso.listaProfesores[4].id;
+                         this.profesorConCurso5 =curso.listaProfesores[4].idProfesorConCurso
+                     }
+                 }
+
+                 
 
             }
             if(item=='Cerrar curso'){
@@ -2122,6 +2245,39 @@ export default {
             if(item=='Añadir ayudante'){
                 this.datosInsCurso= curso;
                 this.dialogAsignarAyudante=true;
+                var numeroMaxAyudantes=5;
+                numeroMaxAyudantes= numeroMaxAyudantes - curso.listaAyudantes.length
+                this.numeroDeAyudantesModificar=numeroMaxAyudantes;
+                this.contadorAyudante = 5-numeroMaxAyudantes
+                if(this.contadorAyudante == 0){
+                    this.contadorAyudante = 1
+                }
+
+
+                
+                var listaAyudantes=curso.listaAyudantes
+                 for( let index=0; index < curso.listaAyudantes.length; index++){
+                     if(index == 0){
+                         this.ayudanteSeleccionado= curso.listaAyudantes[0].id;
+                         this.ayudanteSeleccionadoAux=curso.listaAyudantes[0].id;
+                     }
+                     if(index == 1){
+                         this.ayudanteSeleccionado2= curso.listaAyudantes[1].id;
+                         this.ayudanteSeleccionadoAux2=curso.listaAyudantes[1].id;
+                     }
+                     if(index == 2){
+                         this.ayudanteSeleccionado3= curso.listaAyudantes[2].id;
+                         this.ayudanteSeleccionadoAux3 =curso.listaAyudantes[2].id;
+                     }
+                     if(index == 3){
+                         this.ayudanteSeleccionado4= curso.listaAyudantes[3].id;
+                         this. ayudanteSeleccionadoAux4 = curso.listaAyudantes[3].id;
+                     }
+                     if(index == 4){
+                         this.ayudanteSeleccionado5= curso.listaAyudantes[4].id;
+                         this.ayudanteSeleccionadoAux5=curso.listaAyudantes[4].id;
+                     }
+                 }
 
             }
 
