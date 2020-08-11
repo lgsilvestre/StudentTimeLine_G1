@@ -483,7 +483,7 @@ export default {
          */
         registrarSemestre(){
             var valido=this.$refs.form_nuevoSemestre.validate();
-            console.log("semestre valido :" + valido)
+            // console.log("semestre valido :" + valido)
             if(valido == true){
 
                 var año_Aux = new Date().getFullYear()
