@@ -125,7 +125,7 @@ class ProfesorConCursoController extends Controller
             }
             foreach ($cursos as $curso){
                 $curso->profesor= $curso->getProfesor->nombre;
-                $curso->idInstanciaCurso=$curso->getCurso->curso;
+                $curso->idInstanciaCurso=$curso->getCurso->id;
                 $curso->curso= $curso->getCurso->getCurso->nombre;
                 $curso->semestre=$curso->getCurso->getSemestre->semestre;
                 $curso->anio=$curso->getCurso->getSemestre->anio;
@@ -242,7 +242,7 @@ class ProfesorConCursoController extends Controller
                     'data' => null
                 ], 409 );
             }else{
-                $profesorCurso->delete();
+                $profesorCurso->forceDelete();
                 return response()->json([
                     'success' => true,
                     'code' => 700,

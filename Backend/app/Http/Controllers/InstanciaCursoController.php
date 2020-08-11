@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Ayudante_Con_Curso;
 use App\InstanciaCurso;
+use App\Observacion;
 use App\Profesor_Con_Curso;
 use Illuminate\Http\Request;
 use Validator;
@@ -32,10 +34,11 @@ class InstanciaCursoController extends Controller
             foreach($insCursos as $insCurso){
                 $insCurso->curso=$insCurso->getCurso->nombre;
                 $profesores = Profesor_Con_Curso::where('curso', $insCurso->id)->get();
+                $listaProfesores = array();
                 foreach($profesores as $profesor){
-                    $insCurso->idProfesor= $profesor->id;
-                    $insCurso->nombreProfesor= $profesor->getProfesor->nombre;
+                    array_push($listaProfesores,  $insCurso->nombreProfesor= $profesor->getProfesor);
                 }
+                $insCurso->listaProfesores = $listaProfesores;
             }
             return response()->json([
                 'success' => true,
@@ -128,9 +131,25 @@ class InstanciaCursoController extends Controller
      */
     public function show($id){
         try{
-            $insCursos = InstanciaCurso::Where('semestre', '=' , $id)->get();
+            $insCursos = InstanciaCurso::withTrashed()->Where('semestre', '=' , $id)->get();
             foreach($insCursos as $insCurso){
                 $insCurso->curso=$insCurso->getCurso->nombre;
+                $profesores = Profesor_Con_Curso::withTrashed()->where('curso', $insCurso->id)->get();
+                $listaProfesores = array();
+                foreach($profesores as $profesor){
+                    $a = $profesor->getProfesor;
+                    $a->idProfesorConCurso = $profesor->id;
+                    array_push($listaProfesores, $a);
+                }
+                $insCurso->listaProfesores = $listaProfesores;
+                $ayudantes = Ayudante_Con_Curso::withTrashed()->where('curso', $insCurso->id)->get();
+                $listaAyudantes = array();
+                foreach($ayudantes as $ayudante){
+                    $a = $ayudante->getEstudiante;
+                    $a->idAyudanteConCurso = $ayudante->id;
+                    array_push($listaAyudantes, $a);
+                }
+                $insCurso->listaAyudantes = $listaAyudantes;
             }
             return response()->json([
                 'success' => true,
@@ -172,11 +191,9 @@ class InstanciaCursoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $entradas = $request->only('semestre', 'curso', 'seccion');
+        $entradas = $request->only('seccion');
         $validator = Validator::make($entradas, [
-            'semestre' => ['nullable', 'numeric'],
-            'curso' => [' nullable', 'numeric'],
-            'seccion' => [' nullable', 'string'],
+            'seccion' => ['nullable', 'string']
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -185,12 +202,6 @@ class InstanciaCursoController extends Controller
                 'message' => 'Error en datos ingresados',
                 'data' => ['error'=>$validator->errors()]
             ], 422);
-        }
-        if(!array_key_exists ("semestre" , $entradas)){
-            $entradas['semestre'] = null;
-        }
-        if(!array_key_exists ("curso" , $entradas)){
-            $entradas['curso'] = null;
         }
         if(!array_key_exists ("seccion" , $entradas)){
             $entradas['seccion'] = null;
@@ -204,12 +215,6 @@ class InstanciaCursoController extends Controller
                     'message' => 'La instancia de escuela con el id '.$id.' no existe',
                     'data' => null
                 ], 409);
-            }
-            if($entradas['semestre']!=null){
-                $insCurso->semestre = $entradas['semestre'];
-            }
-            if($entradas['curso']!=null){
-                $insCurso->curso = $entradas['curso'];
             }
             if($entradas['seccion']!=null){
                 $insCurso->seccion = $entradas['seccion'];
@@ -249,7 +254,20 @@ class InstanciaCursoController extends Controller
                     'data' => null
                 ], 409 );
             }
-            $insCurso->delete();
+            $ayudantes = Ayudante_Con_Curso::withTrashed()->Where('curso', $id)->get();
+            $profesores = Profesor_Con_Curso::withTrashed()->Where('curso', $id)->get();
+            foreach($profesores as $profesor){
+                $profesor->forceDelete();
+            }
+            foreach($ayudantes as $ayudante){
+                $observaciones = Observacion::Where('ayudante', $ayudante->id)->get();
+                foreach($observaciones as $observacion){
+                    $observacion->ayudante = null;
+                    $observacion->save();
+                }
+                $ayudante->forceDelete();
+            }
+            $insCurso->forceDelete();
             return response()->json([
                 'success' => true,
                 'code' => 700,

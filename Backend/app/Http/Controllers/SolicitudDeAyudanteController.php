@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Estudiante;
+use App\Curso;
+use App\InstanciaCurso;
+use App\Escuela;
 use Mail;
 use App\Mail\Correo;
 use Illuminate\Http\Request;
@@ -11,7 +14,7 @@ use Illuminate\Http\Response;
 use Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Mail\EmergencyCallReceived;
-use \App\Mail\SendMailSolicitud;
+use \App\Mail\SendMail;
 
 
 class SolicitudDeAyudanteController extends Controller
@@ -48,20 +51,26 @@ class SolicitudDeAyudanteController extends Controller
         try{
             $credenciales = JWTAuth::parseToken()->authenticate();
             $estudiante = Estudiante::Where('id',  $entradas['estudiante'])->first();
+            $instanciaCurso = InstanciaCurso::where('id', $entradas['curso'])->first();
+            $curso = Curso::where('id', $instanciaCurso['curso'])->first();
             $secretarias=User::Where('rol', 'secretaria de escuela')->where('escuela', $estudiante['escuela'])->get();
+            $escuela = Escuela::where('id', $estudiante['escuela'])->first();
             $details = array(
+                'opcion' => 2,
                 'nombreProfesor' => $credenciales->nombre,
-                'escuela' => $credenciales->getEscuela->nombre,
+                'escuelaProfesor' => $credenciales->getEscuela->nombre,
+                'escuelaEstudiante' => $escuela['nombre'],
                 'estudiante' => $estudiante['nombre_completo'],
-                'rut' => $estudiante->rut,
-                'matricula' => $estudiante->matricula,
-                'curso' => $entradas['curso'],
+                'rut' => $estudiante['rut'],
+                'matricula' => $estudiante['matricula'],
+                'seccion' => $instanciaCurso['seccion'],
+                'curso' => $curso['nombre'],
                 'nota' => $entradas['nota'],
                 'meses' => $entradas['meses'],
                 'horas' => $entradas['horas']
             );
             foreach($secretarias as $secretaria){
-                \Mail::to($secretaria->email)->send(new SendMailSolicitud($details));
+                \Mail::to($secretaria->email)->send(new SendMail($details));
             }
             return response()->json([
                 'success' => true,

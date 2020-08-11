@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Ayudante_Con_Curso;
+use App\InstanciaCurso;
+use App\Observacion;
+use App\Profesor_Con_Curso;
 use App\Semestre;
 use Illuminate\Http\Request;
 use Validator;
@@ -221,6 +225,22 @@ class SemestreController extends Controller
                 ], 409 );
             }else{
                 $semestre->delete();
+                $instanciasCursos = InstanciaCurso::Where('semestre', $id)->get();
+                foreach($instanciasCursos as $instanciaCurso){
+                    $profesores = Profesor_Con_Curso::Where('curso', $instanciaCurso->id)->get();
+                    $instanciaCurso->delete();
+                    foreach($profesores as $profesor){
+                        $profesor->delete();
+                    }
+                    $ayudantes = Ayudante_Con_Curso::Where('curso', $instanciaCurso->id)->get();
+                    foreach($ayudantes as $ayudante){
+                        $observaciones = Observacion::Where('ayudante', $ayudante->id)->get();
+                        $ayudante->delete();
+                        foreach($observaciones as $observacion){
+                            $observacion->delete();
+                        }
+                    }
+                }
                 return response()->json([
                     'success' => true,
                     'code' => 700,
@@ -273,6 +293,22 @@ class SemestreController extends Controller
                     'message' => "La semestre no se logro recuperar",
                     'data' => ['semestre'=>$semestre]
                 ], 409);
+            }
+            $instanciasCursos = InstanciaCurso::onlyTrashed()->Where('semestre', $id)->get();
+            foreach($instanciasCursos as $instanciaCurso){
+                $profesores = Profesor_Con_Curso::onlyTrashed()->Where('curso', $instanciaCurso->id)->get();
+                $instanciaCurso->restore();
+                foreach($profesores as $profesor){
+                    $profesor->restore();
+                }
+                $ayudantes = Ayudante_Con_Curso::onlyTrashed()->Where('curso', $instanciaCurso->id)->get();
+                foreach($ayudantes as $ayudante){
+                    $observaciones = Observacion::onlyTrashed()->Where('ayudante', $ayudante->id)->get();
+                    $ayudante->restore();
+                    foreach($observaciones as $observacion){
+                        $observacion->restore();
+                    }
+                }
             }
             return response()->json([
                 'success' => true,

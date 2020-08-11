@@ -15,4 +15,8 @@ class Ayudante_Con_Curso extends Model
     public function getInstanciacurso(){
         return $this->belongsTo('App\InstanciaCurso','curso');
     }
+
+    public function getEstudiante(){
+        return $this->belongsTo('App\Estudiante','estudiante');
+    }
 }

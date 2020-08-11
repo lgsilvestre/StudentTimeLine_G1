@@ -208,7 +208,10 @@ export default new Vuex.Store({
                 .then((result) => {
                     console.log(result.statusText);
                 });
-        }
+        },
+        // guardarPerfil() {
+        //     //this.state
+        // }
 
     },
     methods: {

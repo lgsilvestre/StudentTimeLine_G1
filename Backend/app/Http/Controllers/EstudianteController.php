@@ -18,7 +18,7 @@ class EstudianteController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['permission:create estudiante'], ['only' => ['create', 'store']]);
+        $this->middleware(['permission:create estudiante'], ['only' => ['create', 'store', 'estudiantesAyudantes']]);
         $this->middleware(['permission:read estudiante'], ['only' => ['index','edit']]);
         $this->middleware(['permission:update estudiante'], ['only' => 'update']);
         $this->middleware(['permission:delete estudiante'], ['only' => 'delete']);
@@ -47,6 +47,38 @@ class EstudianteController extends Controller
             return response()->json([
                 'success' => false,
                 'code' => 101,
+                'message' => 'Error al solicitar peticion a la base de datos',
+                'data' => ['error'=>$ex]
+            ], 409);
+        }
+    }
+
+    /**
+     * Metodo que se encarga de listar a todos estudiantes
+     * Errores code inician 1000
+     * @return \Illuminate\Http\Response
+     */
+    public function estudiantesAyudantes(){
+        try{
+            $credenciales = JWTAuth::parseToken()->authenticate();
+            if($credenciales->rol=="admin"){
+                $estudiantes = Estudiante::Where('situacion_academica', 'Regular')->get();
+            }else if($credenciales->rol=="secretaria de escuela"){
+                $estudiantes = Estudiante::Where('situacion_academica', 'Regular')->where(function ($query) use ($credenciales) {
+                    return $query->where('escuela', '=' , $credenciales->escuela)
+                            ->orWhere('escuela', '=' , $credenciales->escuelaAux);
+                    })->get();
+            }
+            return response()->json([
+                'success' => true,
+                'code' => 1000,
+                'message' => "La operacion se a realizado con exito",
+                'data' => ['estudiantes'=>$estudiantes]
+            ], 200);
+        } catch(\Illuminate\Database\QueryException $ex){ 
+            return response()->json([
+                'success' => false,
+                'code' => 1001,
                 'message' => 'Error al solicitar peticion a la base de datos',
                 'data' => ['error'=>$ex]
             ], 409);
@@ -196,7 +228,7 @@ class EstudianteController extends Controller
                     'data' => null
                 ], 409);
             }
-            $observaciones = Observacion::Where('estudiante', '=' , $estudiante['id'])->get(); 
+            $observaciones = Observacion::withTrashed()->Where('estudiante', '=' , $estudiante['id'])->get(); 
             foreach($observaciones as $observacion){
                 $observacion->estudiante=$observacion->getEstudiante->nombre_completo;
                 $observacion->creador=$observacion->getCreador->nombre;
@@ -211,12 +243,13 @@ class EstudianteController extends Controller
             $credenciales = JWTAuth::parseToken()->authenticate();
             $cursos =[];
             if($credenciales->rol=="profesor"){
-                $ayudanteEnCursos= Ayudante_Con_Curso::Where('estudiante', '=' , $estudiante['id'] )->get();
-                $cursosProfesor= Profesor_Con_Curso::Where('profesor', '=' ,$credenciales->id)->get();            
+                $ayudanteEnCursos= Ayudante_Con_Curso::withTrashed()->Where('estudiante', '=' , $estudiante['id'] )->get();
+                $cursosProfesor= Profesor_Con_Curso::withTrashed()->Where('profesor', '=' ,$credenciales->id)->get();            
 
                 foreach($cursosProfesor as $curso){
                     foreach($ayudanteEnCursos as $ayudanteEn){
                         if($ayudanteEn->curso == $curso->curso){
+                            $ayudanteEn->ayudante = $ayudanteEn->id;
                             $ayudanteEn->nombreCurso = $ayudanteEn->getInstanciacurso->getCurso->nombre;
                             $ayudanteEn->seccion = $ayudanteEn->getInstanciacurso->seccion;
                             $cursos[]=$ayudanteEn;
@@ -251,18 +284,22 @@ class EstudianteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id){
-        $entradas = $request->only('nombre_completo', 'situacion_academica', 'porcentaje_avance', 'creditos_aprobados', 'escuela');
+        $entradas = $request->only('matricula', 'rut', 'nombre_completo', 'correo' , 'anho_ingreso', 'situacion_academica', 'porcentaje_avance', 'creditos_aprobados', 'escuela', 'foto');
         if(array_key_exists ("rut" , $entradas)){
             if(gettype($entradas['rut']=="integer")){
                 $entradas['rut'] = strval($entradas['rut']);
             }
         }
         $validator = Validator::make($entradas, [
+            'matricula' => ['nullable','numeric'],
+            'rut' => ['nullable','string'],
             'nombre_completo' => ['nullable','string'],
+            'correo' => ['nullable','email'],
+            'anho_ingreso' => ['nullable','numeric'],
             'situacion_academica' => ['nullable', 'string'], //Cambiar lo de la foreign key dps
             'porcentaje_avance' => ['nullable', 'numeric'], //Cambiar lo de la foreign key dps
             'creditos_aprobados' => ['nullable','numeric'], 
-            'escuela' => ['nullable','numeric'],
+            'escuela' => ['nullable','numeric']
         ]);
         //respuesta cuando falla
         if ($validator->fails()) {

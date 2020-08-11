@@ -1,4 +1,4 @@
-<template>
+<template>  
   <v-container>
     <v-row >
       <v-col cols="12" md="2"  
@@ -61,35 +61,38 @@
                     <h5 class="white--text ">Agregar una escuela</h5>
                     </v-card-title>
                     <v-container class="px-5 mt-5" color="primary">
-                      <v-text-field 
-                      v-model="escuela.nombre"
-                      label="Nombre de la escuela"
-                      outlined
-                      :rules="reglasNombreEscuela"
-                      color="secondary"
-                      prepend-inner-icon="fas fa-scroll"
-                      ></v-text-field>
-                      <v-text-field 
-                      v-model="escuela.cod"
-                      label="Codigo de carrera"
-                      outlined
-                      :rules="reglasCodigoCarrera"
-                      color="secondary"
-                      prepend-inner-icon="fas fa-hashtag"
-                      >
-                      </v-text-field>
-                      <div class="pb-1" style="text-align:right;">
-                        <v-btn 
-                        :small="$vuetify.breakpoint.smAndDown ? true : false"
-                        rounded color="warning" @click="resetCreacionEscuela">
-                          <h4 class="white--text">Cancelar</h4>
-                        </v-btn>
-                        <v-btn 
-                        :small="$vuetify.breakpoint.smAndDown ? true : false"
-                        rounded color="secondary" class="ml-2" @click="crearEscuela" >
-                          <h4 class="white--text">Guardar</h4>
-                        </v-btn>
-                      </div>
+                      <v-form ref="agregarEscuela" v-model="formAgregar" lazy-validation>
+                        <v-text-field 
+                        v-model="escuela.nombre"
+                        label="Nombre de la escuela"
+                        outlined
+                        :rules="reglasNombreEscuela"
+                        color="secondary"
+                        prepend-inner-icon="fas fa-scroll"
+                        ></v-text-field>
+                        <v-text-field 
+                        v-model="escuela.cod"
+                        label="Codigo de carrera"
+                        outlined
+                        :rules="reglasCodigoCarrera"
+                        color="secondary"
+                        prepend-inner-icon="fas fa-hashtag"
+                        >
+                        </v-text-field>
+                        <div class="pb-1" style="text-align:right;">
+                          <v-btn 
+                          :small="$vuetify.breakpoint.smAndDown ? true : false"
+                          rounded color="warning" @click="resetCreacionEscuela">
+                            <h4 class="white--text">Cancelar</h4>
+                          </v-btn>
+                          <v-btn
+                          :disabled="!formAgregar"
+                          :small="$vuetify.breakpoint.smAndDown ? true : false"
+                          rounded color="secondary" class="ml-2" @click="validarCrearEscuela" >
+                            <h4 class="white--text">Guardar</h4>
+                          </v-btn>
+                        </div>
+                      </v-form>
                     </v-container>
                   </v-card>
                 </v-dialog>
@@ -122,8 +125,8 @@
                       </v-toolbar>
                       <v-container style="background-color: #F7FFF7;">
                           <v-row>
-                              <v-col cols="12" md="1"></v-col>
-                              <v-col cols="12" md="10" >
+                              <v-col cols="12" md="2"></v-col>
+                              <v-col cols="12" md="8" >
                                   <v-card elevation="1">
                                   <v-img class="mx-auto white--text align-end justify-center"  
                                       width="100%" height="180px"       
@@ -168,7 +171,7 @@
                                   background-color="white"
                                   ></v-text-field>
                                   <v-data-table  
-                                      :headers="headers" 
+                                      :headers="headers2" 
                                       :items="listaEscuelasEliminadas"
                                       :search="buscar2" 
                                       :loading="cargando" 
@@ -191,7 +194,7 @@
                                   </v-data-table>
                                   </v-card>
                               </v-col>
-                              <v-col cols="12" md="1"></v-col>
+                              <v-col cols="12" md="2"></v-col>
                           </v-row>
                           
                       </v-container>
@@ -276,37 +279,40 @@
                 <h5 class="white--text ">Modificar Escuela</h5>
               </v-card-title>
               <v-container class="px-5 pt-7">
-                <v-text-field
-                v-model="escuelaEditar.nombre"
-                label="Nombre de Escuela"
-                :rules="reglasNombreEscuela"
-                outlined
-                prepend-inner-icon="fas fa-scroll"
-                >
-                </v-text-field>                                  
-                <v-text-field
-                v-model="escuelaEditar.cod"
-                label="Codigo Carrera"
-                :rules="reglasCodigoCarrera"                                      
-                outlined
-                prepend-inner-icon="fas fa-hashtag"
-                >
-                </v-text-field> 
-                <div class=" pb-1" style="text-align:right;">
-                  <v-btn 
-                  :small="$vuetify.breakpoint.smAndDown ? true : false"
-                  rounded color="warning" @click="resetEditarEscuela">
-                    <h4 class="white--text">Cancelar</h4>
-                  </v-btn>
-                  <v-btn 
-                  :small="$vuetify.breakpoint.smAndDown ? true : false"
-                  rounded color="secondary" class="ml-2" @click="editarEscuela(escuelaEditar)">
-                    <h4 class="white--text">Modificar</h4>
-                  </v-btn>
-                </div>    
+                <v-form ref="modificarEscuela" v-model="formModificar" lazy-validation>
+                  <v-text-field
+                  v-model="escuelaEditar.nombre"
+                  label="Nombre de Escuela"
+                  :rules="reglasNombreEscuela"
+                  outlined
+                  prepend-inner-icon="fas fa-scroll"
+                  >
+                  </v-text-field>                                  
+                  <v-text-field
+                  v-model="escuelaEditar.cod"
+                  label="Codigo Carrera"
+                  :rules="reglasCodigoCarrera"                                      
+                  outlined
+                  prepend-inner-icon="fas fa-hashtag"
+                  >
+                  </v-text-field> 
+                  <div class=" pb-1" style="text-align:right;">
+                    <v-btn 
+                    :small="$vuetify.breakpoint.smAndDown ? true : false"
+                    rounded color="warning" @click="resetEditarEscuela">
+                      <h4 class="white--text">Cancelar</h4>
+                    </v-btn>
+                    <v-btn 
+                    :disabled="!formModificar"
+                    :small="$vuetify.breakpoint.smAndDown ? true : false"
+                    rounded color="secondary" class="ml-2" @click="validarModificarEscuela(escuelaEditar)">
+                      <h4 class="white--text">Modificar</h4>
+                    </v-btn>
+                  </div>
+                </v-form>
               </v-container>         
             </v-card>
-            </v-dialog>
+          </v-dialog>
             <v-dialog transition="scroll-y-reverse-transition" v-model="dialogEliminar" persistent max-width="500px">
               <v-card
               class="mx-auto"
@@ -401,6 +407,8 @@
       buscar2: '',
       dialog: false,
       keyDialog: 1,
+      formAgregar: true,
+      formModificar: true,
       dialogModificar: false,
       keyDialogModicar: 1,
       dialogEliminar: false,
@@ -414,10 +422,20 @@
       cargar: null,
       cargando: true,
       headers: [
-        { text: 'ID',align: 'start',value: 'id',sortable: true},
-        { text: 'Nombre', value: 'nombre',sortable: true},
-        { text: 'Codigo carrera', value: 'cod_car',sortable: true },
-        { text: 'Opciones', value: 'actions', sortable: false, align:'center' },
+        //{ text: 'ID',align: 'start',value: 'id',sortable: true},
+        { text: '', value: '',sortable: false, width:50},
+        { text: 'Nombre', value: 'nombre',sortable: true, width:350},
+        { text: 'Codigo carrera', value: 'cod_car',sortable: true , align:'center',width:350  },
+        { text: 'Opciones', value: 'actions', sortable: false, align:'end',class:'pr-12'},
+        { text: '', value: '',sortable: false, width:50},
+      ],
+      headers2: [
+        //{ text: 'ID',align: 'start',value: 'id',sortable: true},
+        { text: '', value: '',sortable: false, width:50},
+        { text: 'Nombre', value: 'nombre',sortable: true, width:350},
+        { text: 'Codigo carrera', value: 'cod_car',sortable: true , align:'center',width:350  },
+        { text: 'Opciones', value: 'actions', sortable: false, align:'end',class:'pr-6'},
+        { text: '', value: '',sortable: false, width:50},
       ],
       desserts:[],
       dessertsAux:[],
@@ -433,7 +451,9 @@
       reglasCodigoCarrera: [
         value => !!value || 'Requerido',
         value => value  >= 0 || 'El valor debe ser mayor o igual a 0', 
+        value => (value || '').length <= 4 || 'Max. 40 caracteres',
       ],
+      
     }),
     computed: {
     },
@@ -444,6 +464,16 @@
       this.obtenerEscuelasEliminadas();
     },
     methods: {
+      validarCrearEscuela(){
+        if(this.$refs.agregarEscuela.validate()){
+            this.crearEscuela();
+        }
+      },
+      validarModificarEscuela(escuelaEditar){
+        if(this.$refs.modificarEscuela.validate()){
+            this.editarEscuela(escuelaEditar);
+        }
+      },
       ModificarEscuela(item){
         console.log(item.id);
         this.escuelaEditar.id = item.id;
@@ -744,11 +774,11 @@
         this.dialog = false;
         this.escuela.nombre='';
         this.escuela.cod=null;
-        this.keyDialog ++;
+        this.$refs.agregarEscuela.reset();
       },
       resetEditarEscuela(){
         this.dialogModificar=false;
-        this.keyDialogModicar ++;
+        this.$refs.modificarEscuela.reset();
       },
     },
   }
