@@ -489,60 +489,63 @@
                     <h5 class="white--text ">Crear Solicitud de Ayudante</h5>
                 </v-card-title>
                 <v-container class="px-5 mt-5">
-                    <v-text-field
-                        v-model="estudiante.nombre_completo"
-                        label="Nombre Estudiante"             
-                        :disabled="true"           
-                        outlined
-                        prepend-inner-icon="mdi-account"
-                    ></v-text-field>
-                    <v-select
-                        v-model="datosSolicitud.curso"
-                        label="Curso"
-                        :items="listaCursos"
-                        item-text="descripcion"
-                        item-value="id"
-                        :rules="[() => !!datosSolicitud.curso ||'Requerido']"
-                        outlined
-                        prepend-inner-icon="mdi-school"
-                    >                                
-                    </v-select>                    
-                    <v-text-field
-                        v-model="datosSolicitud.nota"
-                        prepend-inner-icon="far fa-star"    
-                        :rules="reglasNumeros"                    
-                        label="Nota Aprobación del Módulo"
-                        outlined                       
-                    >
-                    </v-text-field>
-                    <v-text-field
-                        v-model="datosSolicitud.meses"
-                        prepend-inner-icon="far fa-clock"
-                        :rules="reglasNumeros"                    
-                        label="N° Meses de Trabajo"
-                        outlined                           
-                    >
-                    </v-text-field> 
-                    <v-text-field
-                        v-model="datosSolicitud.horas"
-                        prepend-inner-icon="far fa-clock"
-                        :rules="reglasNumeros"                    
-                        label="N° Horas Mensuales"
-                        outlined                           
-                    >
-                    </v-text-field>                  
-                    <div class="pb-1" style="text-align:right;">  
-                        <v-btn 
-                        :small="$vuetify.breakpoint.smAndDown ? true : false"
-                        rounded color="warning" @click="resetDialogSolicitud()">
-                            <h4 class="white--text">Cancelar</h4>
-                        </v-btn>
-                        <v-btn 
-                        :small="$vuetify.breakpoint.smAndDown ? true : false"
-                        rounded color="secondary" class="ml-2" @click="enviarSolicitud()" >
-                            <h4 class="white--text">Registrar</h4>
-                        </v-btn>
-                    </div>  
+                    <v-form ref="solicitud" v-model="formSolicitud" lazy-validation>
+                        <v-text-field
+                            v-model="estudiante.nombre_completo"
+                            label="Nombre Estudiante"             
+                            :disabled="true"           
+                            outlined
+                            prepend-inner-icon="mdi-account"
+                        ></v-text-field>
+                        <v-select
+                            v-model="datosSolicitud.curso"
+                            label="Curso"
+                            :items="listaCursos"
+                            item-text="descripcion"
+                            item-value="id"
+                            :rules="[() => !!datosSolicitud.curso ||'Requerido']"
+                            outlined
+                            prepend-inner-icon="mdi-school"
+                        >                                
+                        </v-select>                    
+                        <v-text-field
+                            v-model="datosSolicitud.nota"
+                            prepend-inner-icon="far fa-star"    
+                            :rules="reglasNumeros"                    
+                            label="Nota Aprobación del Módulo"
+                            outlined                       
+                        >
+                        </v-text-field>
+                        <v-text-field
+                            v-model="datosSolicitud.meses"
+                            prepend-inner-icon="far fa-clock"
+                            :rules="reglasNumeros"                    
+                            label="N° Meses de Trabajo"
+                            outlined                           
+                        >
+                        </v-text-field> 
+                        <v-text-field
+                            v-model="datosSolicitud.horas"
+                            prepend-inner-icon="far fa-clock"
+                            :rules="reglasNumeros"                    
+                            label="N° Horas Mensuales"
+                            outlined                           
+                        >
+                        </v-text-field>                  
+                        <div class="pb-1" style="text-align:right;">  
+                            <v-btn 
+                            :small="$vuetify.breakpoint.smAndDown ? true : false"
+                            rounded color="warning" @click="resetDialogSolicitud()">
+                                <h4 class="white--text">Cancelar</h4>
+                            </v-btn>
+                            <v-btn 
+                            :disable="!formSolicitud"
+                            :small="$vuetify.breakpoint.smAndDown ? true : false"
+                            rounded color="secondary" class="ml-2" @click="enviarSolicitud()" >
+                                <h4 class="white--text">Registrar</h4>
+                            </v-btn>
+                        </div>  
+                    </v-form>
                 </v-container>
             </v-card>
         </v-dialog>
@@ -1001,8 +1004,8 @@ export default {
                 v => !!v || 'Requerido',                
                 v => /^[0-9]+$/.test(v) || 'Solo numeros',
             ],
-            datosSolicitud: { estudiante:'', curso:'', nota:'', horas:'',meses:''},
-            
+            datosSolicitud: { curso:'', nota:'', horas:'',meses:''},
+            formSolicitud: true,
             tipos:['Positiva','Negativa','Informativa','Otro'],
             nuevaCategoria: '',
             categorias:[],
@@ -1274,7 +1277,6 @@ export default {
             }
             
         },
-
 
         resetEditarEstudiante(){
             this.dialogAEditarEstudiante = false;
@@ -1948,12 +1950,12 @@ export default {
         },
 
         resetDialogSolicitud(){
-            this.dialogSolicitud = false;
-            this.datosSolicitud.estudiante = '';
+            this.dialogSolicitud = false;        
             this.datosSolicitud.curso = '';
             this.datosSolicitud.nota = '';
             this.datosSolicitud.meses = '';
             this.datosSolicitud.horas = '';
+            this.$refs.solicitud.resetValidation();
         },
 
         enviarSolicitud(){
