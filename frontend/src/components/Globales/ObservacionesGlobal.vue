@@ -16,7 +16,7 @@
                             <v-col cols="12" class="pt-1">
                                 <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" >Mis observaciones</strong>
                             </v-col>
-                            <v-col cols="7" sm="9" md="9" class="align-self-end" >
+                            <v-col cols="12" sm="9" md="9" class="align-self-end" >
                                 <v-text-field
                                     v-model="buscar"
                                     append-icon="mdi-magnify"
@@ -34,29 +34,29 @@
                         </v-row>
                     </v-card-title>
                     </v-img>
-                <v-data-table
-                :headers="headers"
-                :items="listaObservaciones"
-                :search="buscar"
-                :loading="cargando"
-                style="font-size: 140%;"
-                class="elevation-1 "
-                >
-                    <template v-slot:item.actions="{ item }">
-                        <v-tooltip bottom color="primary">
-                            <template v-slot:activator="{ on }">
-                                <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on" @click="perfilEstudiante(item)">
-                                    <v-icon  
-                                    color="primary"
-                                    >
-                                    fas fa-external-link-alt
-                                    </v-icon>
-                                </v-btn>
-                            </template>
-                            <span><strong>Ver Perfil</strong></span>
-                        </v-tooltip>
-                    </template>                                                         
-                </v-data-table>
+                    <v-data-table
+                    :headers="headers"
+                    :items="listaObservaciones"
+                    :search="buscar"
+                    :loading="cargando"
+                    style="font-size: 140%;"
+                    class="elevation-1 "
+                    >
+                        <template v-slot:[`item.actions`]="{ item }">
+                            <v-tooltip bottom color="primary">
+                                <template v-slot:activator="{ on }">
+                                    <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on" @click="perfilEstudiante(item)">
+                                        <v-icon  
+                                        color="primary"
+                                        >
+                                        fas fa-external-link-alt
+                                        </v-icon>
+                                    </v-btn>
+                                </template>
+                                <span><strong>Ver Perfil</strong></span>
+                            </v-tooltip>
+                        </template>                                                         
+                    </v-data-table>
                 </v-card>
             </v-col>
             <v-col cols="12" md="1">
@@ -144,13 +144,13 @@
             perfilEstudiante(item){
                 var observaciones = "observaciones";
                 if (this.$store.state.usuario.usuario.rol == "admin") {
-                    this.$router.push({path:'/administrador/'+observaciones+'/id='+item.id});
+                    this.$router.push({path:'/administrador/'+observaciones+'/id='+item.idestudiante});
                 } else {
                     if (this.$store.state.usuario.usuario.rol == "secretaria de escuela") {
-                        this.$router.push({path:'/secretariaEscuela/'+observaciones+'/id='+item.id});
+                        this.$router.push({path:'/secretariaEscuela/'+observaciones+'/id='+item.idestudiante});
                     } else {
                         if (this.$store.state.usuario.usuario.rol == "profesor") {
-                            this.$router.push({path:'/profesor/'+observaciones+'/id='+item.id});
+                            this.$router.push({path:'/profesor/'+observaciones+'/id='+item.idestudiante});
                         }
                     }
                 }
@@ -173,8 +173,8 @@
                                 tipo:element.tipo,
                                 estudiante:element.estudiante,
                                 fecha:fechaaux2[0],
-                                idobservacion:element.id,
-                                id:element.get_estudiante.id,
+                                idestudiante:element.get_estudiante.id,
+                                id:element.id,
                             };
                             // console.log(escuela);
                             this.listaObservacionesAux[contador]=observacion;
