@@ -105,6 +105,31 @@
             </v-card>
         </v-dialog> 
 
+     <!-- Alertas -->
+
+    <!-- Alerta de Error -->
+
+    <v-snackbar v-model="alertaError" :timeout="timeout"
+        bottom color= "warning" left class="pb-12"  >
+        <v-icon color="white"   
+            class="mr-3"                      
+        >
+        fas fa-exclamation-triangle 
+        </v-icon>
+    
+        <strong> {{textoAlertas }}</strong>
+        <v-btn
+            icon
+            @click="alertaError = false"
+            >
+            <v-icon     
+                color="white"                         
+            >
+            fas fa-times-circle
+            </v-icon>                
+        </v-btn>
+    </v-snackbar>     
+
     </v-container>
 </template>
 <script>
@@ -123,6 +148,9 @@ export default {
             ayudantes: [],
             ayudantesAux: [],
 
+            timeout: 6000,
+            textoAlertas: '',
+            alertaError: false,
             columnasAyudante:[
                 { text: 'Matricula', value: 'matricula',align: 'center'},
                 { text: 'Nombre Completo', value: 'nombre'},
