@@ -487,60 +487,64 @@
                     <h5 class="white--text ">Crear Solicitud de Ayudante</h5>
                 </v-card-title>
                 <v-container class="px-5 mt-5">
-                    <v-text-field
-                        v-model="estudiante.nombre_completo"
-                        label="Nombre Estudiante"             
-                        :disabled="true"           
-                        outlined
-                        prepend-inner-icon="mdi-account"
-                    ></v-text-field>
-                    <v-select
-                        v-model="datosSolicitud.curso"
-                        label="Curso"
-                        :items="listaCursos"
-                        item-text="descripcion"
-                        item-value="id"
-                        :rules="[() => !!datosSolicitud.curso ||'Requerido']"
-                        outlined
-                        prepend-inner-icon="mdi-school"
-                    >                                
-                    </v-select>                    
-                    <v-text-field
-                        v-model="datosSolicitud.nota"
-                        prepend-inner-icon="far fa-star"    
-                        :rules="reglasNumeros"                    
-                        label="Nota Aprobación del Módulo"
-                        outlined                       
-                    >
-                    </v-text-field>
-                    <v-text-field
-                        v-model="datosSolicitud.meses"
-                        prepend-inner-icon="far fa-clock"
-                        :rules="reglasNumeros"                    
-                        label="N° Meses de Trabajo"
-                        outlined                           
-                    >
-                    </v-text-field> 
-                    <v-text-field
-                        v-model="datosSolicitud.horas"
-                        prepend-inner-icon="far fa-clock"
-                        :rules="reglasNumeros"                    
-                        label="N° Horas Mensuales"
-                        outlined                           
-                    >
-                    </v-text-field>                  
-                    <div class="pb-1" style="text-align:right;">  
-                        <v-btn 
-                        :small="$vuetify.breakpoint.smAndDown ? true : false"
-                        rounded color="warning" @click="resetDialogSolicitud()">
-                            <h4 class="white--text">Cancelar</h4>
-                        </v-btn>
-                        <v-btn 
-                        :small="$vuetify.breakpoint.smAndDown ? true : false"
-                        rounded color="secondary" class="ml-2" @click="enviarSolicitud()" >
-                            <h4 class="white--text">Registrar</h4>
-                        </v-btn>
-                    </div>  
+                    <v-form  ref="form_solicitudEstudiante" style="margin:0;padding:0;" v-model="form_solicitarEstudianteValido" lazy-validation> 
+
+                        <v-text-field
+                            v-model="estudiante.nombre_completo"
+                            label="Nombre Estudiante"             
+                            :disabled="true"           
+                            outlined
+                            prepend-inner-icon="mdi-account"
+                        ></v-text-field>
+                        <v-select
+                            v-model="datosSolicitud.curso"
+                            label="Curso"
+                            :items="listaCursos"
+                            item-text="descripcion"
+                            item-value="id"
+                            :rules="[() => !!datosSolicitud.curso ||'Requerido']"
+                            outlined
+                            prepend-inner-icon="mdi-school"
+                        >                                
+                        </v-select>                    
+                        <v-text-field
+                            v-model="datosSolicitud.nota"
+                            prepend-inner-icon="far fa-star"    
+                            :rules="reglasNumeros"                    
+                            label="Nota Aprobación del Módulo"
+                            outlined                       
+                        >
+                        </v-text-field>
+                        <v-text-field
+                            v-model="datosSolicitud.meses"
+                            prepend-inner-icon="far fa-clock"
+                            :rules="reglasNumeros"                    
+                            label="N° Meses de Trabajo"
+                            outlined                           
+                        >
+                        </v-text-field> 
+                        <v-text-field
+                            v-model="datosSolicitud.horas"
+                            prepend-inner-icon="far fa-clock"
+                            :rules="reglasNumeros"                    
+                            label="N° Horas Mensuales"
+                            outlined                           
+                        >
+                        </v-text-field>                  
+                        <div class="pb-1" style="text-align:right;">  
+                            <v-btn 
+                            :small="$vuetify.breakpoint.smAndDown ? true : false"
+                            rounded color="warning" @click="resetDialogSolicitud()">
+                                <h4 class="white--text">Cancelar</h4>
+                            </v-btn>
+                            <v-btn 
+                            :small="$vuetify.breakpoint.smAndDown ? true : false"
+                            rounded color="secondary" class="ml-2" @click="enviarSolicitud()"
+                            :disabled="!form_solicitarEstudianteValido" >
+                                <h4 class="white--text">Registrar</h4>
+                            </v-btn>
+                        </div> 
+                     </v-form> 
                 </v-container>
             </v-card>
         </v-dialog>
@@ -1017,6 +1021,7 @@ export default {
             // variables y reglas para validar el formulario
             form_EditarEstudianteValido:true,
             form_añadirObservacionValido:true,
+            form_solicitarEstudianteValido:true,
             formCategoria: true,
              reglas_matricula:[
              value => !!value || 'Requerido',
@@ -1955,30 +1960,36 @@ export default {
         },
 
         enviarSolicitud(){
-            let post = {
-                "estudiante": this.id,
-                "curso": this.datosSolicitud.curso,
-                "nota": this.datosSolicitud.nota,
-                "horas": this.datosSolicitud.horas,
-                "meses": this.datosSolicitud.meses,
-            }
-            var url = this.$store.state.rutaDinamica+`api/v1/solicitudDeAyudante/enviar`;
-
-            axios.post(url, post, this.$store.state.config)
-            .then((result) => {
-                console.log(result);
-                console.log(result.data);
-                this.alertAcept = true;
-                this.textoAcept = "Se envió la solicitud con exito"
-                this.resetDialogSolicitud();
-            }).catch((error)=>{
-                if (error.message == 'Network Error') {
-                    console.log(error)
-                    this.alertError = true;
-                    this.textoError = "Error al enviar la solicitud, intente mas tarde."
+            // form_solicitarEstudianteValido
+            var valido=this.$refs.form_solicitudEstudiante.validate();
+            // console.log("semestre valido :" + valido)
+            if(valido == true){
+                
+                let post = {
+                    "estudiante": this.id,
+                    "curso": this.datosSolicitud.curso,
+                    "nota": this.datosSolicitud.nota,
+                    "horas": this.datosSolicitud.horas,
+                    "meses": this.datosSolicitud.meses,
+                }
+                var url = this.$store.state.rutaDinamica+`api/v1/solicitudDeAyudante/enviar`;
+    
+                axios.post(url, post, this.$store.state.config)
+                .then((result) => {
+                    console.log(result);
+                    console.log(result.data);
+                    this.alertAcept = true;
+                    this.textoAcept = "Se envió la solicitud con exito"
                     this.resetDialogSolicitud();
-                }                            
-            });
+                }).catch((error)=>{
+                    if (error.message == 'Network Error') {
+                        console.log(error)
+                        this.alertError = true;
+                        this.textoError = "Error al enviar la solicitud, intente mas tarde."
+                        this.resetDialogSolicitud();
+                    }                            
+                });
+            }
         },
     }
 }
