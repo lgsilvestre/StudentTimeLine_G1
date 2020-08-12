@@ -1054,7 +1054,8 @@ export default {
             ],
             headersProfesor:[
                
-                { text: 'Nombre Completo', value: 'nombre',align: 'start' }
+                { text: 'Nombre Completo', value: 'nombre',align: 'start' },
+                { text: 'Correo', value: 'email' }
  
                 // {with:10},           
                  ],
@@ -1601,7 +1602,7 @@ export default {
         mostrarProfesoresDeCurso(item){
             this.dialogProfesoresInsCurso = true;
             this.profesoresDeInstanciaCurso=item
-            // console.log(item);
+            //  console.log(item);
         },  
         /**
          * Desvincula un profesor de una instancia de curso
@@ -2143,18 +2144,18 @@ export default {
             };
             axios.put(url,put,this.$store.state.config)
             .then((result)=>{
-                // var ins_curso=this.InstanciaModificar.id;
-                // this.modificarProfesores(this.profesorSeleccionado,this.profesorSeleccionadoAux,this.profesorConCurso,ins_curso,1)
-                // this.modificarProfesores(this.profesorSeleccionado2,this.profesorSeleccionadoAux2,this.profesorConCurso2,ins_curso,2)
-                // this.modificarProfesores(this.profesorSeleccionado3,this.profesorSeleccionadoAux3,this.profesorConCurso3,ins_curso,3)
-                // this.modificarProfesores(this.profesorSeleccionado4,this.profesorSeleccionadoAux4,this.profesorConCurso4,ins_curso,4)
-                // this.modificarProfesores(this.profesorSeleccionado5,this.profesorSeleccionadoAux5,this.profesorConCurso5,ins_curso,5)
+                var ins_curso=this.InstanciaModificar.id;
+                this.modificarProfesores(this.profesorSeleccionado,this.profesorSeleccionadoAux,this.profesorConCurso,ins_curso,1)
+                this.modificarProfesores(this.profesorSeleccionado2,this.profesorSeleccionadoAux2,this.profesorConCurso2,ins_curso,2)
+                this.modificarProfesores(this.profesorSeleccionado3,this.profesorSeleccionadoAux3,this.profesorConCurso3,ins_curso,3)
+                this.modificarProfesores(this.profesorSeleccionado4,this.profesorSeleccionadoAux4,this.profesorConCurso4,ins_curso,4)
+                this.modificarProfesores(this.profesorSeleccionado5,this.profesorSeleccionadoAux5,this.profesorConCurso5,ins_curso,5)
 
-                // this.cerrarDialogModificarInstanciaCurso();
-                // this.alertaExito = true;
-                // this.textoAlertas = this.ModificacionExitosa;
-                // this.obtenerInstanciasCursos(); 
-                // this.resetModificarInstanciaCurso();
+                this.cerrarDialogModificarInstanciaCurso();
+                this.alertaExito = true;
+                this.textoAlertas = this.ModificacionExitosa;
+                this.obtenerInstanciasCursos(); 
+                this.resetModificarInstanciaCurso();
                 
            }).catch((error)=>{                
                 if (error.message == 'Network Error') {
@@ -2183,12 +2184,20 @@ export default {
                            this.obtenerInstanciasCursos(); 
                             this.cerrarDialogModificarInstanciaCurso();
                         }
-                    }else{
-                            this.textoAlertas = "Error en los datos ingresados";
+                        if(error.response.data.code == 409){
+                            console.log("hola")
+                            this.textoAlertas = error.response.data.message;
                             this.alertaError = true;
                             this.obtenerInstanciasCursos(); 
                             this.cerrarDialogModificarInstanciaCurso();
-                        }          
+                        }
+                    }
+                    // else{
+                    //         this.textoAlertas = "Error en los datos ingresados";
+                    //         this.alertaError = true;
+                    //         this.obtenerInstanciasCursos(); 
+                    //         this.cerrarDialogModificarInstanciaCurso();
+                    //     }          
                 }                  
             });
         },
