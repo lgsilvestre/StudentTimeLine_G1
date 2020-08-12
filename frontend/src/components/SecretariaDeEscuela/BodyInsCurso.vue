@@ -269,12 +269,12 @@
                                 prepend-inner-icon="mdi-account"
                             ></v-text-field>
                             <v-select
-                                v-model="datosCurso.escuela"
+                                v-model="datosCurso.idEscuela"
                                 label="Escuela"
                                 :items="listaEscuela"
-                                item-text="nombre"
+                                item-text="nomEscuela"
                                 item-value="id"
-                                :rules="[() => !!datosCurso.escuela ||'Requerido']"
+                                :rules="[() => !!datosCurso.idEscuela ||'Requerido']"
                                 outlined
                                 prepend-inner-icon="mdi-school"
                             ></v-select>   
@@ -309,14 +309,14 @@
                             :rules="[() => !!datosCurso.plan ||'Requerido']"
                             prepend-inner-icon="mdi-account"
                         ></v-text-field>
-                        <v-select  v-model="datosCurso.escuela"
+                        <v-select  v-model="datosCurso.nomEscuela"
                             :items="listaEscuela"
-                            item-text="nombre"
+                            item-text="nomEscuela"
                             item-value="id"
                             label="Escuela"
                             outlined
                             :small-chips="$vuetify.breakpoint.smAndDown ? true : false"
-                            :rules="[() => !!datosCurso.escuela ||'Requerido']"
+                            :rules="[() => !!datosCurso.nomEscuela ||'Requerido']"
                             prepend-inner-icon="mdi-school"
                         ></v-select>
                         <div style="text-align:right;" class="mb-1 " >
@@ -1337,8 +1337,8 @@ export default {
                 for (let index = 0; index < result.data.data.escuelas.length; index++) {
                 const element = result.data.data.escuelas[index];
                 let escuela = {
-                    id: element.id,
-                    nombre: element.nombre,
+                    idEscuela: element.id,
+                    nomEscuela: element.nombre,
                 };
                 // console.log(escuela);
                 this.listaEscuelaAux[index]=escuela;
@@ -1398,12 +1398,14 @@ export default {
             .then((result)=>{
                 for( let index=0; index < result.data.data.cursos.length; index++){
                     const element = result.data.data.cursos[index];
+                    // console.log(element.get_escuela.id)
                     let curso = {
                         id: element.id,
                         nombre: element.nombre,
                         plan: element.plan,
                         descripcion: element.descripcion,
                         nomEscuela: element.escuela,
+                        idEscuela :element.get_escuela.id
                     };
                     this.listaCursosAux[index]=curso;
                 }
@@ -1690,12 +1692,8 @@ export default {
         },
 
         setModificarCurso(item){
-            // this.datosCurso.id= item.id;
-            // this.datosCurso.nombre = item.nombre;
-            // this.datosCurso.plan = item.plan;
-            // this.datosCurso.escuela = item.escuela;
-            // this.datosCurso.descripcion = item.descripcion;
-            this.datosCurso=item;
+
+             this.datosCurso=item;
             this.dialogModificarCurso = true;
         },
         resetModificarCurso(){
@@ -1703,8 +1701,6 @@ export default {
             this.dialogModificarCurso = false;
         },
         modificarCurso(){
-            // console.log("inicio mod curso");
-
             var url = this.$store.state.rutaDinamica+`api/v1/curso/${this.datosCurso.id}`;
             let put ={                
                 "nombre": this.datosCurso.nombre,
@@ -1756,13 +1752,8 @@ export default {
         },
         
         setEliminarCurso(item){
-            // console.log("seteando curso")
-            this.datosCurso.id= item.id;
-            this.datosCurso.nombre = item.nombre;
-            this.datosCurso.plan = item.plan;
-            this.datosCurso.escuela = item.escuela;
-            this.datosCurso.descripcion = item.descripcion;
-            this.dialogEliminarCurso = true;
+             this.datosCurso= item
+             this.dialogEliminarCurso = true;
         },
         resetEliminarCurso(){
             this.datosCurso.id= '';
@@ -1773,7 +1764,7 @@ export default {
             this.dialogEliminarCurso = false;
         },
         eliminarCurso(){
-            var url = this.$store.state.rutaDinamica+'api/v1/curso/'+this.datosCurso.id;
+           var url = this.$store.state.rutaDinamica+'api/v1/curso/'+this.datosCurso.id;
             axios.delete(url,this.$store.state.config)
             .then((result)=>{
             if (result.statusText=='OK') {
