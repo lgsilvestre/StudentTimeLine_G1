@@ -535,7 +535,7 @@ export default {
             this.dialogListaUsuariosEliminado = true;
             this.listaUsuariosAux = [];
             var aux;
-            var url = 'http://127.0.0.1:8000/api/v1/usuario/disabled';
+            var url = this.$store.state.rutaDinamica+'api/v1/usuario/disabled';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 for (let index = 0; index < result.data.data.usuarios.length; index++) {
@@ -580,7 +580,7 @@ export default {
         },
         restaurarUsuario(){
             this.dialogRestaurarUsuarioEliminado= false;
-             var url =`http://127.0.0.1:8000/api/v1/usuario/restore/${this.datosUsuario.id}`;
+             var url =this.$store.state.rutaDinamica+`api/v1/usuario/restore/${this.datosUsuario.id}`;
             axios.post(url,null,this.$store.state.config)
             .then((result)=>{
             if (result.data.success == true) {
@@ -643,7 +643,7 @@ export default {
 
         obtenerEscuelas(){
             this.listaEscuelaAux = [];
-            var url = 'http://127.0.0.1:8000/api/v1/escuela';
+            var url = this.$store.state.rutaDinamica+'api/v1/escuela';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 for (let index = 0; index < result.data.data.escuelas.length; index++) {
@@ -682,7 +682,7 @@ export default {
             this.cargando = true;
             this.listaUsuariosAux = [];
             var aux;
-            var url = 'http://127.0.0.1:8000/api/v1/usuario';
+            var url = this.$store.state.rutaDinamica+'api/v1/usuario';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 for (let index = 0; index < result.data.data.usuarios.length; index++) {
@@ -745,7 +745,7 @@ export default {
             "email": this.datosUsuario.correo,
             "password": this.datosUsuario.contrasena,
             }
-            var url = 'http://127.0.0.1:8000/api/v1/usuario';
+            var url = this.$store.state.rutaDinamica+'api/v1/usuario';
             console.log(post);
             axios.post(url, post, this.$store.state.config)
             .then((result) => {
@@ -846,7 +846,7 @@ export default {
             if ( this.datosUsuario.role == "Profesor") {
                 aux = "profesor"
             };
-            var url =`http://127.0.0.1:8000/api/v1/usuario/${this.datosUsuario.id}`;
+            var url =this.$store.state.rutaDinamica+`api/v1/usuario/${this.datosUsuario.id}`;
             let put ={
                 "nombre": this.datosUsuario.nombre,
                 "escuela": this.datosUsuario.escuela,
@@ -914,7 +914,7 @@ export default {
         },
 
         eliminarUsuario(){
-            var url = 'http://127.0.0.1:8000/api/v1/usuario/'+this.datosUsuario.id;
+            var url = this.$store.state.rutaDinamica+'api/v1/usuario/'+this.datosUsuario.id;
                 axios.delete(url,this.$store.state.config)
                 .then((result)=>{
                 if (result.statusText=='OK') {

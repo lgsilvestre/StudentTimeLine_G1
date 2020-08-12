@@ -51,11 +51,12 @@
                                         class="headline primary text--center"
                                         primary-title
                                         >
-                                        <h5 class="white--text ">Agregar estudiantes</h5>
+                                        <h5 class="white--text " :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 70%;' : 'font-size: 90%;'">Agregar estudiantes</h5>
                                         <v-spacer></v-spacer>
                                         <v-btn
                                             v-if="botonesAgregarEstudiantes==false"
                                             color="primary"
+                                            :small="$vuetify.breakpoint.smAndDown ? true : false"
                                             elevation="0"
                                             rounded
                                             dense
@@ -67,7 +68,7 @@
                                             v-if="botonesAgregarEstudiantes"
                                             color="primary"
                                             elevation="0"
-                                            small
+                                            :small="$vuetify.breakpoint.smAndDown ? true : false"
                                             fab
                                             @click="dialogAgregarEstudiante = ! dialogAgregarEstudiante"
                                         > 
@@ -633,7 +634,7 @@
             {
                 let formData = new FormData();
                 formData.append('file',this.file);
-                var url = 'http://127.0.0.1:8000/api/v1/estudiante/importar';
+                var url = this.$store.state.rutaDinamica+'api/v1/estudiante/importar';
                 axios.post(url,formData,this.$store.state.config)
                 .then((result)=>{
                     //console.log(result);
@@ -658,7 +659,7 @@
         obtenerEstudiantes(){
             this.cargando = true;
             this.listaEstudiantes = [];
-            var url = 'http://127.0.0.1:8000/api/v1/estudiante';
+            var url = this.$store.state.rutaDinamica+'api/v1/estudiante';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                //console.log(result.data);
@@ -711,7 +712,7 @@
             console.log("semestre valido :" + valido)
             if(valido == true){
 
-                var url = 'http://127.0.0.1:8000/api/v1/estudiante';
+                var url = this.$store.state.rutaDinamica+'api/v1/estudiante';
                 var escuelaAux = 1;
                 for (let index = 0; index < this.listaEscuela.length; index++) {
                     const element = this.listaEscuela[index];
@@ -772,7 +773,7 @@
         },
         obtenerEscuelas(){
             this.listaEscuelaAux = [];
-            var url = 'http://127.0.0.1:8000/api/v1/escuela';
+            var url = this.$store.state.rutaDinamica+'api/v1/escuela';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 if (result.data.success == true) {
@@ -864,7 +865,7 @@
                     "escuela": escuela
                 };
                 console.log(post)
-            var url = 'http://127.0.0.1:8000/api/v1/estudiante/exportar';
+            var url = this.$store.state.rutaDinamica+'api/v1/estudiante/exportar';
             axios.post(url,post,this.$store.state.config2)
             .then((result)=>{
                 console.log(result.data);

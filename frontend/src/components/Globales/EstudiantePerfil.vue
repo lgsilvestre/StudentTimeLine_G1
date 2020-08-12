@@ -243,7 +243,7 @@
                                         </v-row>
                                         <v-row style="margin: 0; padding: 0;">
                                             <v-col cols="4" lg="3"  xl="2" style="margin: 0; padding: 0;">
-                                                <h5 >Categoria</h5>
+                                                <h5 >Categoría</h5>
                                             </v-col>
 
                                             <v-col cols="8" lg="9"  xl="10" style="margin: 0; padding: 0;">
@@ -272,7 +272,7 @@
                                             </v-col>
                                         </v-row>
                                     
-                                        <h5 class="mt-4"> Descripcion</h5 >  
+                                        <h5 class="mt-4"> Descripción</h5 >  
                                     <div  class="DIV  mb-2" style=" height:150px; overflow: auto; font-size: 90%"> 
                                         {{observacion.descripcion}}  
                                     </div>
@@ -306,8 +306,6 @@
                                         
                                     </div>
                                     </v-container>
-                                   
-                                    
                                 </v-card>
                                 </v-timeline-item>
                             </v-timeline>
@@ -330,7 +328,7 @@
                         label="Titulo" 
                         outlined
                         color="secondary"
-                        prepend-inner-icon="fas fa-check-circle"
+                        prepend-inner-icon="fas fa-heading"
                         ></v-text-field>
 
                         <v-select   
@@ -339,7 +337,7 @@
                         item-text="nombre"
                         label="Tipo" outlined
                         color="secondary"
-                        prepend-inner-icon="fas fa-check-circle"
+                        prepend-inner-icon="fas fa-exclamation-circle"
                         ></v-select >
 
                         <v-select 
@@ -347,11 +345,11 @@
                         :items="categorias"
                         item-text="nombre"
                         item-value="id"
-                        label="Categoria"
+                        label="Categoría"
                         color="secondary"
                         outlined
                         :disabled="profesor == true"
-                        prepend-inner-icon="fas fa-check-circle"
+                        prepend-inner-icon="fas fa-list-ol"
                         ></v-select>
 
                         <v-select 
@@ -363,7 +361,7 @@
                         label="Cursos"
                         color="secondary"
                         outlined
-                        prepend-inner-icon="fas fa-check-circle"
+                        prepend-inner-icon="fas fa-book"
                         ></v-select>
 
 
@@ -433,7 +431,7 @@
             </v-row>
             <v-row style="margin: 0; padding: 0;">
                 <v-col cols="4" lg="3"  xl="2" style="margin: 0; padding: 0;">
-                    <h5 >Categoria</h5>
+                    <h5 >Categoría</h5>
                 </v-col>
 
                 <v-col cols="8" lg="9"  xl="10" style="margin: 0; padding: 0;">
@@ -461,7 +459,7 @@
                     <h5 >:  ninguno</h5>
                 </v-col>
             </v-row>
-            <h5 class="mt-4"> Descripcion</h5 >
+            <h5 class="mt-4"> Descripción</h5 >
             <div  class="DIV  mb-2" style=" height:150px; overflow: auto; font-size: 90%"> 
                 {{estudianteEliminarObservacion.descripcion}}  
             </div>
@@ -552,7 +550,7 @@
         <v-dialog v-model="dialogAgregarObservacion" persistent max-width="500px" >
             <v-card class="mx-auto" max-width="500" >
                 <v-card-title class="headline primary text--center" primary-title >
-                    <h5 class="white--text ">Agregar observacion</h5>
+                    <h5 class="white--text ">Agregar observación</h5>
                 </v-card-title>
                     <v-container class="px-5 mt-5">
                         <v-form ref="form_añadirObservacion" style="margin:0;padding:0;" v-model="form_añadirObservacionValido" lazy-validation>
@@ -581,12 +579,12 @@
                                     :items="categorias"
                                     item-text="nombre"
                                     item-value="id"
-                                    label="Categoria"
+                                    label="Categoría"
                                     color="secondary"
                                     outlined
                                     :disabled="profesor == true"
                                     prepend-inner-icon="fas fa-list-ol"
-                                    :rules="[v => !!v || 'La categoria es requerida']"
+                                    :rules="[v => !!v || 'La categoría es requerida']"
                                     ></v-select>
                                 </v-col>
                                 <v-col cols="1">
@@ -600,7 +598,7 @@
                                                 </v-icon>
                                             </v-btn>
                                         </template>
-                                        <span><strong>Agregar Categoria</strong></span>
+                                        <span><strong>Agregar Categoría</strong></span>
                                     </v-tooltip>
                                 </v-col>
                             </v-row>
@@ -613,7 +611,7 @@
                             label="Cursos"
                             color="secondary"
                             outlined
-                            prepend-inner-icon="fas fa-check-circle"
+                            prepend-inner-icon="fas fa-book"
                             :rules="[v => !!v || 'El curso es requerido']"
                             ></v-select>
                             <v-textarea
@@ -1089,7 +1087,7 @@ export default {
         obtenerEscuelas(estudiante){
             if (this.admin == true) {
                 this.listaEscuelaAux = [];
-                var url = 'http://127.0.0.1:8000/api/v1/escuela';
+                var url = this.$store.state.rutaDinamica+'api/v1/escuela';
                 axios.get(url,this.$store.state.config)
                 .then((result)=>{
                     if (result.data.success == true) {
@@ -1156,7 +1154,7 @@ export default {
                     "escuela": 0
                 };
                 // console.log(post)
-            var url = 'http://127.0.0.1:8000/api/v1/estudiante/exportarPDF';
+            var url = this.$store.state.rutaDinamica+'api/v1/estudiante/exportarPDF';
             //console.log(post)
             axios.post(url,post,this.$store.state.config2)
             .then((result)=>{
@@ -1195,7 +1193,7 @@ export default {
 
         obtenerCategorias(){
             this.categoriasAux = [];
-            var url = 'http://127.0.0.1:8000/api/v1/categoria';
+            var url = this.$store.state.rutaDinamica+'api/v1/categoria';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 if (result.data.success == true) {
@@ -1221,7 +1219,7 @@ export default {
         },
 
         agregarCategoria(){
-            var url = 'http://127.0.0.1:8000/api/v1/categoria';
+            var url = this.$store.state.rutaDinamica+'api/v1/categoria';
             let post ={
                 "nombre": this.nuevaCategoria,
             };
@@ -1287,7 +1285,7 @@ export default {
         modificarEstudiante() {
             var valido=this.$refs.form_EditarEstudiante.validate();
             if(valido == true){
-                var url = 'http://127.0.0.1:8000/api/v1/estudiante/'+this.id;
+                var url = this.$store.state.rutaDinamica+'api/v1/estudiante/'+this.id;
                 if (this.imagenMiniatura == null) {
                     this.imagenMiniatura = null;
                 }
@@ -1396,7 +1394,7 @@ export default {
             }
             
             
-            var url = 'http://127.0.0.1:8000/api/v1/estudiante/'+ this.id+'/edit';
+            var url = this.$store.state.rutaDinamica+'api/v1/estudiante/'+ this.id+'/edit';
 
             axios.get(url,this.$store.state.config)
             .then((result)=>{
@@ -1561,7 +1559,7 @@ export default {
         obtenerCursosUsuario(){
             this.listaCursosAux = [];
             // var url =`http://127.0.0.1:8000/api/v1/instanciacurso/${this.$store.state.usuario.usuario.id}`;
-            var url = `http://127.0.0.1:8000/api/v1/profesorConCurso/${this.$store.state.usuario.usuario.id}`;
+            var url = this.$store.state.rutaDinamica+`api/v1/profesorConCurso/${this.$store.state.usuario.usuario.id}`;
             
             axios.get(url,this.$store.state.config)
             .then((result)=>{   
@@ -1613,7 +1611,7 @@ export default {
             if(valido == true){
 
                 this.dessertsAux = [];
-                var url = 'http://127.0.0.1:8000/api/v1/observacion';
+                var url = this.$store.state.rutaDinamica+'api/v1/observacion';
                 var auxTipo=0;
                 if (this.estudianteObservacion.tipo == "Positiva") {
                     auxTipo=1;
@@ -1792,7 +1790,7 @@ export default {
                 "tipo": auxTipo,
             }
             console.log(put);
-            var url = 'http://127.0.0.1:8000/api/v1/observacion/'+ this.estudianteModificarObservacion.id;
+            var url = this.$store.state.rutaDinamica+'api/v1/observacion/'+ this.estudianteModificarObservacion.id;
             console.log(url);
             axios.put(url, put, this.$store.state.config)
             .then((result) => {
@@ -1874,7 +1872,7 @@ export default {
             }
         },
         EliminarObservacion(){
-            var url = 'http://127.0.0.1:8000/api/v1/observacion/'+this.estudianteEliminarObservacion.id;
+            var url = this.$store.state.rutaDinamica+'api/v1/observacion/'+this.estudianteEliminarObservacion.id;
             axios.delete(url, this.$store.state.config)
             .then((result) => {
                 //console.log(result);
@@ -1920,7 +1918,7 @@ export default {
             }
             this.estudianteObservacion.curso= '';
             this.estudianteObservacion.tipo= '';
-            this.$refs.form_añadirObservacion.reset()
+            this.$refs.form_añadirObservacion.resetValidation();
         },
 
         resetModificarObservacion(){
@@ -1968,7 +1966,7 @@ export default {
                 "horas": this.datosSolicitud.horas,
                 "meses": this.datosSolicitud.meses,
             }
-            var url = `http://127.0.0.1:8000/api/v1/solicitudDeAyudante/enviar`;
+            var url = this.$store.state.rutaDinamica+`api/v1/solicitudDeAyudante/enviar`;
 
             axios.post(url, post, this.$store.state.config)
             .then((result) => {

@@ -128,7 +128,7 @@ export default {
             "email": this.email,
         };
         console.log(this.email);
-        var url = 'http://127.0.0.1:8000/api/v1/auth/sendRestartPassword';
+        var url = this.$store.state.rutaDinamica+'api/v1/auth/sendRestartPassword';
         axios.post(url,post)
         .then((result)=>{
           console.log(result.data);

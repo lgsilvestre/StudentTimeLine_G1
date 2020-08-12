@@ -158,7 +158,7 @@
             obtenerObservaciones(){
                 this.listaObservaciones= [];
                 this.listaObservacionesAux = [];
-                var url = 'http://127.0.0.1:8000/api/v1/observacion';
+                var url = this.$store.state.rutaDinamica+'api/v1/observacion';
                 axios.get(url,this.$store.state.config)
                 .then((result)=>{
                     if (result.data.success == true) {

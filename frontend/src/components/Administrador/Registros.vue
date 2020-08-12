@@ -16,7 +16,7 @@
                             <v-col cols="12" class="pt-1" >
                                 <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 130%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" > Registros</strong>
                             </v-col>
-                            <v-col  cols="7" sm="9" md="9" class="align-self-end" >
+                            <v-col  cols="12" sm="9" md="9" class="align-self-end" >
                                 <v-text-field
                                     v-model="buscar"
                                     append-icon="mdi-magnify"
@@ -144,7 +144,7 @@
             obtenerRegistros(){
                 this.cargando = true;
                 this.listaRegistrosAux= [];
-                var url="http://127.0.0.1:8000/api/v1/log";
+                var url=this.$store.state.rutaDinamica+"api/v1/log";
                 axios.get(url,this.$store.state.config)
                 .then((result)=>{
                     for (let index = 0; index < result.data.data.logs.length; index++) {
