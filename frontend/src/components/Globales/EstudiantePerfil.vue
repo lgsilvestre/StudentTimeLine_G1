@@ -1030,8 +1030,8 @@ export default {
             ],
             reglas_Nombre:[
                     value => !!value || 'Requerido',
+                    v => /^[a-zA-Z ]+$/.test(v) || 'Nombre no Válido.',
                     v => /^[a-zA-Z ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',
-                    v => /^[a-zA-Z ]+$/.test(v) || 'Nombre no Válido.'
             ],
             regla_Email: [
                 value => !!value || 'Requerido',
