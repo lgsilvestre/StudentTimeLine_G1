@@ -350,8 +350,20 @@ class EstudianteController extends Controller
                     'data' => null
                 ], 409);
             }
+            if($entradas['matricula'] != null){
+                $estudiante->matricula = $entradas['matricula'];
+            }
+            if($entradas['rut'] != null){
+                $estudiante->rut = $entradas['rut'];
+            }
             if($entradas['nombre_completo'] != null){
                 $estudiante->nombre_completo = $entradas['nombre_completo'];
+            }
+            if($entradas['correo'] != null){
+                $estudiante->correo = $entradas['correo'];
+            }
+            if($entradas['anho_ingreso'] != null){
+                $estudiante->anho_ingreso = $entradas['anho_ingreso'];
             }
             if($entradas['situacion_academica'] != null){
                 $estudiante->situacion_academica = $entradas['situacion_academica'];
