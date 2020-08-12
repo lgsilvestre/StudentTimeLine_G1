@@ -148,7 +148,7 @@ export default {
             this.listaInsCursosAux = [];
             var aux;    
             this.listaInsCursos =[];
-            var url = `http://127.0.0.1:8000/api/v1/profesorConCurso/${this.$store.state.usuario.usuario.id}`;
+            var url = this.$store.state.rutaDinamica +`api/v1/profesorConCurso/${this.$store.state.usuario.usuario.id}`;
             axios.get(url,this.$store.state.config)
             .then((result)=>{   
                 for (let index = 0; index < result.data.data.cursos.length; index++) {
@@ -198,7 +198,7 @@ export default {
             this.ayudantes = [];
             this.ayudantesAux = [];
             var aux;    
-            var url = `http://127.0.0.1:8000/api/v1/ayudanteCurso/`+id;
+            var url = this.$store.state.rutaDinamica+`api/v1/ayudanteCurso/`+id;
             axios.get(url,this.$store.state.config)
             .then((result)=>{      
                 console.log(result);
