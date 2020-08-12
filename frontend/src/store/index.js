@@ -39,6 +39,7 @@ export default new Vuex.Store({
         mensajeErrorLogin: '',
         perfilEstudiante: '',
         infoSemestre: null,
+        rutaEstatica: 'http://127.0.0.1:8000/',
     },
     mutations: {
         calcularRol(state, nuevoSemestre) {
@@ -69,7 +70,7 @@ export default new Vuex.Store({
                 "email": lista.email,
                 "password": lista.pass,
             };
-            var url = 'http://127.0.0.1:8000/api/v1/auth/login';
+            var url = state.rutaEstatica+'api/v1/auth/login';
             axios.post(url, post)
                 .then((result) => {
                     //console.log(result.data.data);
@@ -136,7 +137,7 @@ export default new Vuex.Store({
                 });
         },
         unLogin(state) {
-            var url = 'http://127.0.0.1:8000/api/v1/auth/logout';
+            var url = state.rutaEstatica+'api/v1/auth/logout';
             axios.get(url, state.config)
                 .then((result) => {
                     console.log(result);
@@ -184,7 +185,7 @@ export default new Vuex.Store({
                 "email": nuevoUsuario.correo,
                 "password": nuevoUsuario.contrasena,
             }
-            var url = 'http://127.0.0.1:8000/api/v1/usuario';
+            var url =  state.rutaEstatica+'api/v1/usuario';
             // console.log(state.config);
             console.log(url)
             console.log(post)
@@ -203,7 +204,7 @@ export default new Vuex.Store({
                 "email": datosUsuario.correo,
                 "password": datosUsuario.contrasena,
             }
-            var url = 'http://127.0.0.1:8000/api/v1/usuario/' + state.usuario.data.user.id;
+            var url =  state.rutaEstatica+'api/v1/usuario/' + state.usuario.data.user.id;
             console.log(state.config);
             axios.put(url, put, state.config)
                 .then((result) => {
@@ -216,9 +217,6 @@ export default new Vuex.Store({
 
     },
     methods: {
-        hola() {
-            console.log('hola po olvidona');
-        }
     },
     actions: {},
     modules: {}
