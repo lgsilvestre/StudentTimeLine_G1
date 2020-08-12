@@ -74,7 +74,7 @@
                 </v-card-title> 
             </v-img>
 
-            <v-data-iterator :items="listaInsCursos" :search="search" :sort-by="sortBy.toLowerCase()" class="px-2 py-2" :loading="cargando">
+            <v-data-iterator :items="listaInsCursos" :search="search" :sort-by="sortBy.toLowerCase()" class="px-2 py-2" :loading="cargando" ref="tablaCursos">
                 <template v-slot:default="props">
                     <v-row>
                         <v-col v-for="item in props.items" :key="item.id" cols="12"  sm="6" md="4" lg="4">
@@ -1419,6 +1419,7 @@ export default {
         obtenerInstanciasCursos(){
             this.cargando=true;
             this.listaInsCursosAux = [];
+            this.listaInsCursos=[];
             var aux;            
             var url = `http://127.0.0.1:8000/api/v1/instanciaCurso/${this.$store.infoSemestre.id}`;
             axios.get(url,this.$store.state.config)
@@ -1438,8 +1439,8 @@ export default {
                     this.listaInsCursosAux[index]=insCurso;                                                         
                 }
                 this.listaInsCursos = this.listaInsCursosAux; 
-                // console.log('INSTANCIAS DE CURSOS')
-                //  console.log(this.listaInsCursos);
+                 console.log('INSTANCIAS DE CURSOS')
+                  console.log(this.listaInsCursos);
                 this.cargando = false;              
             }
             ).catch((error)=>{
@@ -1602,7 +1603,14 @@ export default {
         mostrarProfesoresDeCurso(item){
             this.dialogProfesoresInsCurso = true;
             this.profesoresDeInstanciaCurso=item
-            //  console.log(item);
+            // this.obtenerInstanciasCursos();
+            // var lista = this.listaInsCursos;
+            // for (var instancia of lista) {
+            //     if(instancia.id == item.id ){
+
+            //         this.profesoresDeInstanciaCurso=instancia
+            //     }
+            // }
         },  
         /**
          * Desvincula un profesor de una instancia de curso
@@ -1957,14 +1965,6 @@ export default {
                                 
                                 this.agregarProfesorCurso(post2)
                             }
-                              
-                        }
-                        else{
-                            // console.log('NO FUNCIONO')
-                            this.alertaError = true;
-                            this.textoAlertas = "Error al asignar profesores al curso."
-                            this.cerrarDialogAsignarCurso();                            
-                            this.obtenerInstanciasCursos();
                         }
     
                         }).catch((error)=>{
@@ -1987,10 +1987,10 @@ export default {
                         });                                                            
                     } 
                     // Reseteamos las variables.
-                            this.cerrarDialogAsignarCurso();
-                            // obtenemos la lista de instancias de cursos con sus modificaciones
-                            this.obtenerInstanciasCursos(); 
+                    this.cerrarDialogAsignarCurso();
+                    // obtenemos la lista de instancias de cursos con sus modificaciones
             }
+            
         },
         /**
          * Abre el dialog para la la creación de una una instancia de curso.
@@ -2037,6 +2037,8 @@ export default {
                 }                    
             });
             }
+            console.log("OBTENIENDO LAS NUEVAS INSTANCIAS")
+            this.obtenerInstanciasCursos(); 
         },
         /**
          * Cierra el dialog de modificar instancia curso.
