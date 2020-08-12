@@ -43,6 +43,7 @@ export default new Vuex.Store({
     mutations: {
         calcularRol(state, nuevoSemestre) {
             this.infoSemestre = nuevoSemestre
+            state.infoSemestre = this.infoSemestre;
             nuevoSemestre
             if (state.admin) {
                 router.push({ path: '/administrador/cursos/' + this.infoSemestre.anio + '-' + this.infoSemestre.semestre });

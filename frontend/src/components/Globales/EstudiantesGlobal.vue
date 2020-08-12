@@ -108,8 +108,7 @@
                                                         v-model="estudianteImportar.matricula"
                                                         label="Matricula" outlined
                                                         color="secondary"
-                                                        prepend-inner-icon="fas fa-graduation-cap"
-                                                        type="number"
+                                                        prepend-inner-icon="fas fa-graduation-cap"                                                        
                                                         :rules="reglas_matricula"
                                                         ></v-text-field>
 
@@ -381,7 +380,7 @@
                 :loading="cargando"
                 style="font-size: 140%;"
                 class="elevation-1 " >
-                    <template v-slot:item.actions="{ item }">
+                    <template v-slot:actions="{ item }">
                         <v-tooltip bottom color="primary">
                             <template v-slot:activator="{ on }">
                                 <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on" @click="perfilEstudiante(item)">
@@ -538,7 +537,8 @@
          form_AgregarEstudiantesMasivoValido:true,
          reglas_matricula:[
              value => !!value || 'Requerido',
-             value => value.length == 10 || 'La matricula debe compuesta de 10 numeros',
+             value => /^[0-9]+$/.test(value) || 'Matricula solo debe incluir numeros',
+             value => value.length == 10 || 'La matricula debe compuesta de 10 numeros',             
          ],
          reglas_rut:[
              value => !!value || 'Requerido',
@@ -546,8 +546,8 @@
          ],
          reglas_Nombre:[
                 value => !!value || 'Requerido',
-                v => /^[a-zA-Z ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',
-                v => /^[a-zA-Z ]+$/.test(v) || 'Nombre no Válido.'
+                v => /^[a-zA-Z ]+$/.test(v) || 'Nombre no Válido.',
+                v => /^[a-zA-Z ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',            
         ],
         regla_Email: [
             value => !!value || 'Requerido',
@@ -559,6 +559,7 @@
         ],
         regla_anio:[
             value => !!value || 'Requerido',
+            value => /^[0-9]+$/.test(value) || 'El año debe estar compuesto solo por numeros',
             value => value <= new Date().getFullYear()|| 'El año no debe ser mayor al actual',
             value => value >= 1981 || 'El año no debe ser menor a 1981'
         ],

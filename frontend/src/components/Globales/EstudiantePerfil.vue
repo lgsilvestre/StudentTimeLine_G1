@@ -490,7 +490,7 @@
                 </v-card-title>
                 <v-container class="px-5 mt-5">
                     <v-text-field
-                        v-model="perfilEstudiante.nombre_completo"
+                        v-model="estudiante.nombre_completo"
                         label="Nombre Estudiante"             
                         :disabled="true"           
                         outlined
@@ -571,19 +571,36 @@
                             prepend-inner-icon="fas fa-check-circle"
                             :rules="[v => !!v || 'El tipo de observacion es requerido']"
                             ></v-select >
-
-                            <v-select   
-                            v-model="estudianteObservacion.categoria"
-                            :items="categorias"
-                            item-text="nombre"
-                            item-value="id"
-                            label="Categoria"
-                            color="secondary"
-                            outlined
-                            :disabled="profesor == true"
-                            prepend-inner-icon="fas fa-check-circle"
-                            :rules="[v => !!v || 'La categoria es requerida']"
-                            ></v-select>
+                            <v-row no-gutters>
+                                <v-col cols="12" md="11">
+                                    <v-select   
+                                    v-model="estudianteObservacion.categoria"
+                                    :items="categorias"
+                                    item-text="nombre"
+                                    item-value="id"
+                                    label="Categoria"
+                                    color="secondary"
+                                    outlined
+                                    :disabled="profesor == true"
+                                    prepend-inner-icon="fas fa-check-circle"
+                                    :rules="[v => !!v || 'La categoria es requerida']"
+                                    ></v-select>
+                                </v-col>
+                                <v-col cols="12" md="1" >
+                                    <v-tooltip bottom color="primary">
+                                        <template v-slot:activator="{ on }">
+                                            <v-btn :disabled="profesor == true" color="primary" class="mt-2 ml-2" icon v-on="on" @click="dialogCrearCategoria = true">
+                                                <v-icon  
+                                                color="primary"
+                                                >
+                                                fas fa-plus
+                                                </v-icon>
+                                            </v-btn>
+                                        </template>
+                                        <span><strong>Agregar Categoria</strong></span>
+                                    </v-tooltip>
+                                </v-col>
+                            </v-row>
                             <v-select 
                             v-if="profesor == true"
                             v-model="estudianteObservacion.curso"
@@ -634,7 +651,7 @@
                     </v-card-title> 
                     <!-- <v-container fluid class=" text-left"> -->
                     <v-card-title class="text-justify" :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%;' :'font-size: 110%;'">Exportar las observaciones del siguiente Usuario?</v-card-title>
-                    <v-card-text>Nombre : {{ perfilEstudiante.nombre_completo }} </v-card-text>
+                    <v-card-text>Nombre : {{ estudiante.nombre_completo }} </v-card-text>
                     
                     <!-- </v-container > -->
                     <div style="text-align:right;">
@@ -729,11 +746,12 @@
                             <div style="text-align:right;" class="mb-1">
                                 <v-btn rounded color="warning" 
                                 :small="$vuetify.breakpoint.smAndDown ? true : false"
-                                @click="dialogAEditarEstudiante = !dialogAEditarEstudiante"
+                                @click="resetEditarEstudiante()"
                                 >
                                     <h4 class="white--text">Cancelar</h4>
                                 </v-btn>
-                                <v-btn 
+                                <v-btn form_EditarEstudianteValido
+                                :disabled="!form_EditarEstudianteValido"
                                 @click="modificarEstudiante"
                                 :small="$vuetify.breakpoint.smAndDown ? true : false"
                                 rounded color="secondary" class="ml-2"   >
@@ -745,6 +763,40 @@
                 
             </v-card>
         </v-dialog> 
+
+        <v-dialog v-model="dialogCrearCategoria" persistent max-width="500px" >
+            <v-card class="mx-auto" max-width="500" >
+                <v-card-title class="headline primary text--center" primary-title >
+                    <h5 class="white--text ">Crear Categoria</h5>
+                </v-card-title>
+                <v-container class="px-5 mt-5">
+                    <v-form ref="formCrearCategoria" v-model="formCategoria" lazy-validation>                                        
+                        <v-text-field
+                            v-model="nuevaCategoria"                                                                                            
+                            label="Nombre Nueva Categoria"
+                            :rules="regla_categoria"
+                            required
+                            outlined                                                          
+                        >
+                        </v-text-field>
+                        <div class="pb-1" style="text-align:right;">  
+                            <v-btn 
+                            :small="$vuetify.breakpoint.smAndDown ? true : false"
+                            rounded color="warning" @click="resetCrearCategoria()">
+                                <h4 class="white--text">Cancelar</h4>
+                            </v-btn>
+                            <v-btn 
+                            :disabled="!formCategoria"
+                            :small="$vuetify.breakpoint.smAndDown ? true : false"
+                            rounded color="secondary" class="ml-2" @click="agregarCategoria()" >
+                                <h4 class="white--text">Agregar</h4>
+                            </v-btn>
+                        </div>
+                    </v-form>
+                </v-container>
+            </v-card>
+        </v-dialog> 
+
         <!-- Alertas -->
         <!-- alerta de exito de la modificacion -->
         <v-snackbar v-model="alertAcept" :timeout=delay
@@ -790,6 +842,7 @@ export default {
             dialogModificarObservacion: false,
             dialogEliminarObservacion: false,
             dialogSolicitud: false,
+            dialogCrearCategoria: false,
             alertError: false,
             textoError: '',
             alertAcept: false,
@@ -951,6 +1004,7 @@ export default {
             datosSolicitud: { estudiante:'', curso:'', nota:'', horas:'',meses:''},
             
             tipos:['Positiva','Negativa','Informativa','Otro'],
+            nuevaCategoria: '',
             categorias:['Ayudantía','Práctica','Copia','Otro','En Observación - 1 por Tercera','En Observación - 1 por Segunda','Se Retira','Eliminado por Rendimiento','Titulado','Eliminado Art. 31 E','Eliminado Art. 31 B'],
             id : null,
             enrutamiento: null,
@@ -964,21 +1018,23 @@ export default {
             // variables y reglas para validar el formulario
             form_EditarEstudianteValido:true,
             form_añadirObservacionValido:true,
+            formCategoria: true,
              reglas_matricula:[
-            //  value => !!value || 'Requerido',
+             value => !!value || 'Requerido',
+             value => /^[0-9]+$/.test(value) || 'Matricula solo debe incluir numeros',
              value => value.length == 10 || 'La matricula debe compuesta de 10 numeros',
             ],
             reglas_rut:[
-                // value => !!value || 'Requerido',
+                value => !!value || 'Requerido',
                 value =>/^\d{1,2}\.\d{3}\.\d{3}[\-][0-9kK]{1}/.test(value) && value.length <= 12 || 'El Rut debe ser por ejemplo: 1.111.111-1',
             ],
             reglas_Nombre:[
-                    // value => !!value || 'Requerido',
+                    value => !!value || 'Requerido',
                     v => /^[a-zA-Z ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',
                     v => /^[a-zA-Z ]+$/.test(v) || 'Nombre no Válido.'
             ],
             regla_Email: [
-                // value => !!value || 'Requerido',
+                value => !!value || 'Requerido',
                 v => /.+@utalca.cl/.test(v) || /.+@alumnos.utalca.cl/.test(v) || 'Correo no Válido', 
             ],
             regla_Contraseña:[
@@ -986,9 +1042,13 @@ export default {
                 v => /^[a-zA-Z0-9!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]{8,}$/.test(v)  || 'Contraseña muy corta',
             ],
             regla_anio:[
-                // value => !!value || 'Requerido',
+                value => !!value || 'Requerido',
+                value => /^[0-9]+$/.test(value) || 'El año debe estar compuesto solo por numeros',
                 value => value <= new Date().getFullYear()|| 'El año no debe ser mayor al actual',
                 value => value >= 1981 || 'El año no debe ser menor a 1981'
+            ],
+            regla_categoria:[
+                value => !!value || 'Requerido',
             ],
         }
     },
@@ -1122,6 +1182,18 @@ export default {
             });
         },
 
+        obtenerCategorias(){
+
+        },
+
+        resetCrearCategoria(){
+            this.$refs.formCrearCategoria.reset();    
+            this.dialogCrearCategoria = false;
+        },
+
+        agregarCategoria(){
+            console.log("agrego categoria");
+        },
 
         /**
          * Convierte la imagen cargada a base 64.
@@ -1161,6 +1233,12 @@ export default {
                 }
             }
             
+        },
+
+
+        resetEditarEstudiante(){
+            this.dialogAEditarEstudiante = false;
+            this.$refs.form_EditarEstudiante.resetValidation();
         },
 
         modificarEstudiante() {
@@ -1231,9 +1309,8 @@ export default {
             
         },
         editarEstudiante(){
-            this.dialogAEditarEstudiante = true;
             this.cargarInfoEditarEstudiante();
-
+            this.dialogAEditarEstudiante = true;
         },
 
         obtenerEstudiante(opcion){
