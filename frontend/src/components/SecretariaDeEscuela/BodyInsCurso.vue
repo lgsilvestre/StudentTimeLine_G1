@@ -2143,45 +2143,52 @@ export default {
             };
             axios.put(url,put,this.$store.state.config)
             .then((result)=>{
-                var ins_curso=this.InstanciaModificar.id;
-                this.modificarProfesores(this.profesorSeleccionado,this.profesorSeleccionadoAux,this.profesorConCurso,ins_curso,1)
-                this.modificarProfesores(this.profesorSeleccionado2,this.profesorSeleccionadoAux2,this.profesorConCurso2,ins_curso,2)
-                this.modificarProfesores(this.profesorSeleccionado3,this.profesorSeleccionadoAux3,this.profesorConCurso3,ins_curso,3)
-                this.modificarProfesores(this.profesorSeleccionado4,this.profesorSeleccionadoAux4,this.profesorConCurso4,ins_curso,4)
-                this.modificarProfesores(this.profesorSeleccionado5,this.profesorSeleccionadoAux5,this.profesorConCurso5,ins_curso,5)
+                // var ins_curso=this.InstanciaModificar.id;
+                // this.modificarProfesores(this.profesorSeleccionado,this.profesorSeleccionadoAux,this.profesorConCurso,ins_curso,1)
+                // this.modificarProfesores(this.profesorSeleccionado2,this.profesorSeleccionadoAux2,this.profesorConCurso2,ins_curso,2)
+                // this.modificarProfesores(this.profesorSeleccionado3,this.profesorSeleccionadoAux3,this.profesorConCurso3,ins_curso,3)
+                // this.modificarProfesores(this.profesorSeleccionado4,this.profesorSeleccionadoAux4,this.profesorConCurso4,ins_curso,4)
+                // this.modificarProfesores(this.profesorSeleccionado5,this.profesorSeleccionadoAux5,this.profesorConCurso5,ins_curso,5)
 
-                this.cerrarDialogModificarInstanciaCurso();
-                this.alertaExito = true;
-                this.textoAlertas = this.ModificacionExitosa;
-                this.obtenerInstanciasCursos(); 
-                this.resetModificarInstanciaCurso();
+                // this.cerrarDialogModificarInstanciaCurso();
+                // this.alertaExito = true;
+                // this.textoAlertas = this.ModificacionExitosa;
+                // this.obtenerInstanciasCursos(); 
+                // this.resetModificarInstanciaCurso();
                 
            }).catch((error)=>{                
                 if (error.message == 'Network Error') {
-                    console.log(error);
-                    this.resetModificarInstanciaCurso();
                     this.alertaError = true;
                     this.textoAlertas = "Error al modificar el curso, intente mas tarde."
+                    this.obtenerInstanciasCursos(); 
+                    this.cerrarDialogModificarInstanciaCurso();
                 }
                 else{
-                    console.log(error.response);
                     if(error.response.data.success == false){
                         if(error.response.data.code == 301){
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;
-                            this.resetModificarInstanciaCurso();
+                            this.obtenerInstanciasCursos(); 
+                            this.cerrarDialogModificarInstanciaCurso();
                         }
                         if(error.response.data.code == 602){
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;
-                            this.resetModificarInstanciaCurso();
+                            this.obtenerInstanciasCursos(); 
+                            this.cerrarDialogModificarInstanciaCurso();
                         }
                         if(error.response.data.code == 603){
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;
-                            this.resetModificarInstanciaCurso();
+                           this.obtenerInstanciasCursos(); 
+                            this.cerrarDialogModificarInstanciaCurso();
                         }
-                    }           
+                    }else{
+                            this.textoAlertas = "Error en los datos ingresados";
+                            this.alertaError = true;
+                            this.obtenerInstanciasCursos(); 
+                            this.cerrarDialogModificarInstanciaCurso();
+                        }          
                 }                  
             });
         },
