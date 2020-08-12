@@ -574,8 +574,8 @@
                             prepend-inner-icon="fas fa-exclamation-circle"
                             :rules="[v => !!v || 'El tipo de observacion es requerido']"
                             ></v-select >
-                            <v-row no-gutters>
-                                <v-col cols="12" md="11">
+                            <v-row no-gutters  >
+                                <v-col cols="11">
                                     <v-select   
                                     v-model="estudianteObservacion.categoria"
                                     :items="categorias"
@@ -589,10 +589,10 @@
                                     :rules="[v => !!v || 'La categoria es requerida']"
                                     ></v-select>
                                 </v-col>
-                                <v-col cols="12" md="1" >
+                                <v-col cols="1">
                                     <v-tooltip bottom color="primary">
                                         <template v-slot:activator="{ on }">
-                                            <v-btn :disabled="profesor == true" color="primary" class="mt-2 ml-2" icon v-on="on" @click="dialogCrearCategoria = true">
+                                            <v-btn :disabled="profesor == true" color="primary" class=" mt-2 ml-2" icon v-on="on" @click="dialogCrearCategoria = true">
                                                 <v-icon  
                                                 color="primary"
                                                 >
@@ -746,7 +746,7 @@
                             prepend-icon=""   
                             prepend-inner-icon="mdi-camera"
                             @change="convertirImagen"
-                            v-model="estudianteEditar.foto">
+                            v-model="fotoEstudianteAux">
                             </v-file-input>
                             <div style="text-align:right;" class="mb-1">
                                 <v-btn rounded color="warning" 
@@ -896,6 +896,7 @@ export default {
                 situacion_academica: '',
                 escuelaid:'',
             },
+            fotoEstudianteAux: null,
             estudianteEditar:{
                 anho_ingreso: '',
                 correo: '',
@@ -1026,7 +1027,7 @@ export default {
              reglas_matricula:[
              value => !!value || 'Requerido',
              value => /^[0-9]+$/.test(value) || 'Matricula solo debe incluir numeros',
-             value => value.length == 10 || 'La matricula debe compuesta de 10 numeros',
+             value => /^[0-9]{10}$/.test(value) || 'La matricula debe compuesta de 10 numeros',
             ],
             reglas_rut:[
                 value => !!value || 'Requerido',
@@ -1308,6 +1309,7 @@ export default {
                         console.log('se cargo el estudiante');
                         this.alertAcept = true;
                         this.textoAcept = 'Se agregó el estudiante correctamente ';
+                        this.dialogAEditarEstudiante = false;
                         this.obtenerEstudiante(1);
                     //}
                 })

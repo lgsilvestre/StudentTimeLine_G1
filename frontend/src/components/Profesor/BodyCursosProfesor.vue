@@ -11,7 +11,7 @@
                             <v-spacer></v-spacer> -->
                             <v-row class="px-5">
                                 <v-col cols="12" class="pt-1">
-                                    <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" >Cursos {{semestre}}</strong>
+                                    <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" >Cursos</strong>
                                 </v-col>
                                 <v-col cols="7" sm="9" md="9" class="align-self-end" >
                                     <v-text-field
@@ -35,8 +35,7 @@
                          <template v-slot:default="props">
                             <v-row>
                                 <v-col v-for="item in props.items" :key="item.nomCurso" cols="12" sm="6" md="4" lg="4">
-                                    <v-card class=" ml-2 mr-2"  dark color="#F7FFF7"  style=" border-style:solid; border-color:rgba(0,0,0,0.5);"
-                                >
+                                    <v-card  class="mx-1" style="background-color:#F7FFF7; border-style:solid; border-color:rgba(0,0,0,0.5);">
                                         <v-container class="pt-0 mt-0 pb-0">
                                             <v-row>
                                                 <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0">
@@ -48,7 +47,6 @@
                                                     </v-card-title>
                                                 </v-col>
                                                 <v-col cols="12" class=" pt-0 pl-1 pr-0 pb-0">
-                                                    
                                                     <v-card-text class="pt-0 pl-2 pr-0 pb-0 ">
                                                         <div class="text--primary " >
                                                             <p class=" mt-0 mb-1   font-weight-black  text-truncate" style=" font-size: 115%;"  >Nombre: {{ item.nomCurso }}</p>
@@ -58,7 +56,19 @@
                                                         </div>
                                                     </v-card-text>
                                                 </v-col>
-                                                <v-col cols="12" class=" pt-1 pl-0 pr-0 pb-0  text-right" >
+                                                <v-col cols="5" class=" pt-0 pl-1 pr-0 pb-0" >
+                                                    <v-card-text class="pt-0 pl-2 pr-0 pr-0 pb-0 ">
+                                                        <p class=" mt-0 mb-1   font-weight-black  text-truncate" style=" font-size: 115%;"   >Ayudante/s: </p>
+                                                    </v-card-text>
+                                                </v-col>
+                                                <v-col cols="7"  class="pt-0 pl-0 pr-0 pb-0  mb-1" >
+                                                    <div style="text-align:left;">
+                                                    <v-btn class="pt-0  pb-0 "  outlined x-small  @click="dialogAyudantes=true">
+                                                            Ver
+                                                    </v-btn>
+                                                    </div>
+                                                </v-col>
+                                                <!-- <v-col cols="12" class=" pt-1 pl-0 pr-0 pb-0  text-right" >
                                                     <v-tooltip bottom color="primary">
                                                         <template v-slot:activator="{ on }">
                                                             <v-btn color="white" text icon x-small class="mr-2 mb-1" v-on="on" @click="dialogAyudantes=true">
@@ -69,7 +79,7 @@
                                                         </template>
                                                         <span><strong>Mostrar Ayudantes</strong></span>
                                                     </v-tooltip>    
-                                                </v-col>
+                                                </v-col> -->
                                             </v-row>
                                         </v-container>
                                     </v-card>
@@ -168,6 +178,7 @@ export default {
                 }
                 this.listaInsCursos = this.listaInsCursosAux;  
                 this.setDialogAyudantes(); 
+                this.cargando= false;
             }
             ).catch((error)=>{
                 if (error.message == 'Network Error') {

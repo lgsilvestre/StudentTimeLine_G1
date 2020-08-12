@@ -125,7 +125,7 @@
                                         </v-col>
                                         <v-col cols="5" class=" pt-0 pl-1 pr-0 pb-0" >
                                             <v-card-text class="pt-0 pl-2 pr-0 pb-0 ">
-                                                <p class=" mt-0 mb-1   font-weight-black  text-truncate" style=" font-size: 115%;"   >ayudante/s: </p>
+                                                <p class=" mt-0 mb-1   font-weight-black  text-truncate" style=" font-size: 115%;"   >Ayudante/s: </p>
                                             </v-card-text>
                                         </v-col>
                                         <v-col cols="7"  class=" pt-0 pl-0  pb-0 " >
