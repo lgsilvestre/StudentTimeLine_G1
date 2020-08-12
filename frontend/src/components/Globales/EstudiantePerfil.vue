@@ -243,7 +243,7 @@
                                         </v-row>
                                         <v-row style="margin: 0; padding: 0;">
                                             <v-col cols="4" lg="3"  xl="2" style="margin: 0; padding: 0;">
-                                                <h5 >Categoria</h5>
+                                                <h5 >Categoría</h5>
                                             </v-col>
 
                                             <v-col cols="8" lg="9"  xl="10" style="margin: 0; padding: 0;">
@@ -272,7 +272,7 @@
                                             </v-col>
                                         </v-row>
                                     
-                                        <h5 class="mt-4"> Descripcion</h5 >  
+                                        <h5 class="mt-4"> Descripción</h5 >  
                                     <div  class="DIV  mb-2" style=" height:150px; overflow: auto; font-size: 90%"> 
                                         {{observacion.descripcion}}  
                                     </div>
@@ -328,7 +328,7 @@
                         label="Titulo" 
                         outlined
                         color="secondary"
-                        prepend-inner-icon="fas fa-check-circle"
+                        prepend-inner-icon="fas fa-heading"
                         ></v-text-field>
 
                         <v-select   
@@ -337,7 +337,7 @@
                         item-text="nombre"
                         label="Tipo" outlined
                         color="secondary"
-                        prepend-inner-icon="fas fa-check-circle"
+                        prepend-inner-icon="fas fa-exclamation-circle"
                         ></v-select >
 
                         <v-select 
@@ -345,11 +345,11 @@
                         :items="categorias"
                         item-text="nombre"
                         item-value="id"
-                        label="Categoria"
+                        label="Categoría"
                         color="secondary"
                         outlined
                         :disabled="profesor == true"
-                        prepend-inner-icon="fas fa-check-circle"
+                        prepend-inner-icon="fas fa-list-ol"
                         ></v-select>
 
                         <v-select 
@@ -361,7 +361,7 @@
                         label="Cursos"
                         color="secondary"
                         outlined
-                        prepend-inner-icon="fas fa-check-circle"
+                        prepend-inner-icon="fas fa-book"
                         ></v-select>
 
 
@@ -431,7 +431,7 @@
             </v-row>
             <v-row style="margin: 0; padding: 0;">
                 <v-col cols="4" lg="3"  xl="2" style="margin: 0; padding: 0;">
-                    <h5 >Categoria</h5>
+                    <h5 >Categoría</h5>
                 </v-col>
 
                 <v-col cols="8" lg="9"  xl="10" style="margin: 0; padding: 0;">
@@ -459,7 +459,7 @@
                     <h5 >:  ninguno</h5>
                 </v-col>
             </v-row>
-            <h5 class="mt-4"> Descripcion</h5 >
+            <h5 class="mt-4"> Descripción</h5 >
             <div  class="DIV  mb-2" style=" height:150px; overflow: auto; font-size: 90%"> 
                 {{estudianteEliminarObservacion.descripcion}}  
             </div>
@@ -487,67 +487,70 @@
                     <h5 class="white--text ">Crear Solicitud de Ayudante</h5>
                 </v-card-title>
                 <v-container class="px-5 mt-5">
-                    <v-text-field
-                        v-model="estudiante.nombre_completo"
-                        label="Nombre Estudiante"             
-                        :disabled="true"           
-                        outlined
-                        prepend-inner-icon="mdi-account"
-                    ></v-text-field>
-                    <v-select
-                        v-model="datosSolicitud.curso"
-                        label="Curso"
-                        :items="listaCursos"
-                        item-text="descripcion"
-                        item-value="id"
-                        :rules="[() => !!datosSolicitud.curso ||'Requerido']"
-                        outlined
-                        prepend-inner-icon="mdi-school"
-                    >                                
-                    </v-select>                    
-                    <v-text-field
-                        v-model="datosSolicitud.nota"
-                        prepend-inner-icon="far fa-star"    
-                        :rules="reglasNumeros"                    
-                        label="Nota Aprobación del Módulo"
-                        outlined                       
-                    >
-                    </v-text-field>
-                    <v-text-field
-                        v-model="datosSolicitud.meses"
-                        prepend-inner-icon="far fa-clock"
-                        :rules="reglasNumeros"                    
-                        label="N° Meses de Trabajo"
-                        outlined                           
-                    >
-                    </v-text-field> 
-                    <v-text-field
-                        v-model="datosSolicitud.horas"
-                        prepend-inner-icon="far fa-clock"
-                        :rules="reglasNumeros"                    
-                        label="N° Horas Mensuales"
-                        outlined                           
-                    >
-                    </v-text-field>                  
-                    <div class="pb-1" style="text-align:right;">  
-                        <v-btn 
-                        :small="$vuetify.breakpoint.smAndDown ? true : false"
-                        rounded color="warning" @click="resetDialogSolicitud()">
-                            <h4 class="white--text">Cancelar</h4>
-                        </v-btn>
-                        <v-btn 
-                        :small="$vuetify.breakpoint.smAndDown ? true : false"
-                        rounded color="secondary" class="ml-2" @click="enviarSolicitud()" >
-                            <h4 class="white--text">Registrar</h4>
-                        </v-btn>
-                    </div>  
+                    <v-form ref="solicitud" v-model="formSolicitud" lazy-validation>
+                        <v-text-field
+                            v-model="estudiante.nombre_completo"
+                            label="Nombre Estudiante"             
+                            :disabled="true"           
+                            outlined
+                            prepend-inner-icon="mdi-account"
+                        ></v-text-field>
+                        <v-select
+                            v-model="datosSolicitud.curso"
+                            label="Curso"
+                            :items="listaCursos"
+                            item-text="descripcion"
+                            item-value="id"
+                            :rules="[() => !!datosSolicitud.curso ||'Requerido']"
+                            outlined
+                            prepend-inner-icon="mdi-school"
+                        >                                
+                        </v-select>                    
+                        <v-text-field
+                            v-model="datosSolicitud.nota"
+                            prepend-inner-icon="far fa-star"    
+                            :rules="reglasNumeros"                    
+                            label="Nota Aprobación del Módulo"
+                            outlined                       
+                        >
+                        </v-text-field>
+                        <v-text-field
+                            v-model="datosSolicitud.meses"
+                            prepend-inner-icon="far fa-clock"
+                            :rules="reglasNumeros"                    
+                            label="N° Meses de Trabajo"
+                            outlined                           
+                        >
+                        </v-text-field> 
+                        <v-text-field
+                            v-model="datosSolicitud.horas"
+                            prepend-inner-icon="far fa-clock"
+                            :rules="reglasNumeros"                    
+                            label="N° Horas Mensuales"
+                            outlined                           
+                        >
+                        </v-text-field>                  
+                        <div class="pb-1" style="text-align:right;">  
+                            <v-btn 
+                            :small="$vuetify.breakpoint.smAndDown ? true : false"
+                            rounded color="warning" @click="resetDialogSolicitud()">
+                                <h4 class="white--text">Cancelar</h4>
+                            </v-btn>
+                            <v-btn 
+                            :disable="!formSolicitud"
+                            :small="$vuetify.breakpoint.smAndDown ? true : false"
+                            rounded color="secondary" class="ml-2" @click="enviarSolicitud()" >
+                                <h4 class="white--text">Registrar</h4>
+                            </v-btn>
+                        </div>  
+                    </v-form>
                 </v-container>
             </v-card>
         </v-dialog>
         <v-dialog v-model="dialogAgregarObservacion" persistent max-width="500px" >
             <v-card class="mx-auto" max-width="500" >
                 <v-card-title class="headline primary text--center" primary-title >
-                    <h5 class="white--text ">Agregar observacion</h5>
+                    <h5 class="white--text ">Agregar observación</h5>
                 </v-card-title>
                     <v-container class="px-5 mt-5">
                         <v-form ref="form_añadirObservacion" style="margin:0;padding:0;" v-model="form_añadirObservacionValido" lazy-validation>
@@ -569,25 +572,25 @@
                             prepend-inner-icon="fas fa-exclamation-circle"
                             :rules="[v => !!v || 'El tipo de observacion es requerido']"
                             ></v-select >
-                            <v-row no-gutters>
-                                <v-col cols="12" md="11">
+                            <v-row no-gutters  >
+                                <v-col cols="11">
                                     <v-select   
                                     v-model="estudianteObservacion.categoria"
                                     :items="categorias"
                                     item-text="nombre"
                                     item-value="id"
-                                    label="Categoria"
+                                    label="Categoría"
                                     color="secondary"
                                     outlined
                                     :disabled="profesor == true"
                                     prepend-inner-icon="fas fa-list-ol"
-                                    :rules="[v => !!v || 'La categoria es requerida']"
+                                    :rules="[v => !!v || 'La categoría es requerida']"
                                     ></v-select>
                                 </v-col>
-                                <v-col cols="12" md="1" >
+                                <v-col cols="1">
                                     <v-tooltip bottom color="primary">
                                         <template v-slot:activator="{ on }">
-                                            <v-btn :disabled="profesor == true" color="primary" class="mt-2 ml-2" icon v-on="on" @click="dialogCrearCategoria = true">
+                                            <v-btn :disabled="profesor == true" color="primary" class=" mt-2 ml-2" icon v-on="on" @click="dialogCrearCategoria = true">
                                                 <v-icon  
                                                 color="primary"
                                                 >
@@ -595,7 +598,7 @@
                                                 </v-icon>
                                             </v-btn>
                                         </template>
-                                        <span><strong>Agregar Categoria</strong></span>
+                                        <span><strong>Agregar Categoría</strong></span>
                                     </v-tooltip>
                                 </v-col>
                             </v-row>
@@ -608,7 +611,7 @@
                             label="Cursos"
                             color="secondary"
                             outlined
-                            prepend-inner-icon="fas fa-check-circle"
+                            prepend-inner-icon="fas fa-book"
                             :rules="[v => !!v || 'El curso es requerido']"
                             ></v-select>
                             <v-textarea
@@ -741,7 +744,7 @@
                             prepend-icon=""   
                             prepend-inner-icon="mdi-camera"
                             @change="convertirImagen"
-                            v-model="estudianteEditar.foto">
+                            v-model="fotoEstudianteAux">
                             </v-file-input>
                             <div style="text-align:right;" class="mb-1">
                                 <v-btn rounded color="warning" 
@@ -891,6 +894,7 @@ export default {
                 situacion_academica: '',
                 escuelaid:'',
             },
+            fotoEstudianteAux: null,
             estudianteEditar:{
                 anho_ingreso: '',
                 correo: '',
@@ -999,8 +1003,8 @@ export default {
                 v => !!v || 'Requerido',                
                 v => /^[0-9]+$/.test(v) || 'Solo numeros',
             ],
-            datosSolicitud: { estudiante:'', curso:'', nota:'', horas:'',meses:''},
-            
+            datosSolicitud: { curso:'', nota:'', horas:'',meses:''},
+            formSolicitud: true,
             tipos:['Positiva','Negativa','Informativa','Otro'],
             nuevaCategoria: '',
             categorias:[],
@@ -1017,11 +1021,12 @@ export default {
             // variables y reglas para validar el formulario
             form_EditarEstudianteValido:true,
             form_añadirObservacionValido:true,
+            form_solicitarEstudianteValido:true,
             formCategoria: true,
              reglas_matricula:[
              value => !!value || 'Requerido',
              value => /^[0-9]+$/.test(value) || 'Matricula solo debe incluir numeros',
-             value => value.length == 10 || 'La matricula debe compuesta de 10 numeros',
+             value => /^[0-9]{10}$/.test(value) || 'La matricula debe compuesta de 10 numeros',
             ],
             reglas_rut:[
                 value => !!value || 'Requerido',
@@ -1273,7 +1278,6 @@ export default {
             
         },
 
-
         resetEditarEstudiante(){
             this.dialogAEditarEstudiante = false;
             this.$refs.form_EditarEstudiante.resetValidation();
@@ -1304,6 +1308,7 @@ export default {
                         console.log('se cargo el estudiante');
                         this.alertAcept = true;
                         this.textoAcept = 'Se agregó el estudiante correctamente ';
+                        this.dialogAEditarEstudiante = false;
                         this.obtenerEstudiante(1);
                     //}
                 })
@@ -1914,7 +1919,7 @@ export default {
             }
             this.estudianteObservacion.curso= '';
             this.estudianteObservacion.tipo= '';
-            this.$refs.form_añadirObservacion.reset()
+            this.$refs.form_añadirObservacion.resetValidation();
         },
 
         resetModificarObservacion(){
@@ -1946,39 +1951,45 @@ export default {
         },
 
         resetDialogSolicitud(){
-            this.dialogSolicitud = false;
-            this.datosSolicitud.estudiante = '';
+            this.dialogSolicitud = false;        
             this.datosSolicitud.curso = '';
             this.datosSolicitud.nota = '';
             this.datosSolicitud.meses = '';
             this.datosSolicitud.horas = '';
+            this.$refs.solicitud.resetValidation();
         },
 
         enviarSolicitud(){
-            let post = {
-                "estudiante": this.id,
-                "curso": this.datosSolicitud.curso,
-                "nota": this.datosSolicitud.nota,
-                "horas": this.datosSolicitud.horas,
-                "meses": this.datosSolicitud.meses,
-            }
-            var url = this.$store.state.rutaDinamica+`api/v1/solicitudDeAyudante/enviar`;
-
-            axios.post(url, post, this.$store.state.config)
-            .then((result) => {
-                console.log(result);
-                console.log(result.data);
-                this.alertAcept = true;
-                this.textoAcept = "Se envió la solicitud con exito"
-                this.resetDialogSolicitud();
-            }).catch((error)=>{
-                if (error.message == 'Network Error') {
-                    console.log(error)
-                    this.alertError = true;
-                    this.textoError = "Error al enviar la solicitud, intente mas tarde."
+            // form_solicitarEstudianteValido
+            var valido=this.$refs.form_solicitudEstudiante.validate();
+            // console.log("semestre valido :" + valido)
+            if(valido == true){
+                
+                let post = {
+                    "estudiante": this.id,
+                    "curso": this.datosSolicitud.curso,
+                    "nota": this.datosSolicitud.nota,
+                    "horas": this.datosSolicitud.horas,
+                    "meses": this.datosSolicitud.meses,
+                }
+                var url = this.$store.state.rutaDinamica+`api/v1/solicitudDeAyudante/enviar`;
+    
+                axios.post(url, post, this.$store.state.config)
+                .then((result) => {
+                    console.log(result);
+                    console.log(result.data);
+                    this.alertAcept = true;
+                    this.textoAcept = "Se envió la solicitud con exito"
                     this.resetDialogSolicitud();
-                }                            
-            });
+                }).catch((error)=>{
+                    if (error.message == 'Network Error') {
+                        console.log(error)
+                        this.alertError = true;
+                        this.textoError = "Error al enviar la solicitud, intente mas tarde."
+                        this.resetDialogSolicitud();
+                    }                            
+                });
+            }
         },
     }
 }

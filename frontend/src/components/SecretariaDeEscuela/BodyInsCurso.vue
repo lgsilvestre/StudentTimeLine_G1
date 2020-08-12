@@ -107,33 +107,27 @@
                                         <v-col cols="12" class=" pt-0 pl-1 pr-0 pb-0" >
                                             <v-card-text class="pt-0 pl-2 pr-0 pb-0 ">
                                                 <p class=" mt-0 mb-1   font-weight-black  text-truncate" style=" font-size: 115%;"   >Nombre: {{ item.nomCurso }}</p>
-                                                <p class="mt-0 mb-0  text-truncate font-weight-black  "  style=" font-size: 115%;" > Sección: {{ item.seccion}} </p>
+                                                <p class="mt-0 mb-1  text-truncate font-weight-black  "  style=" font-size: 115%;" > Sección: {{ item.seccion}} </p>
                                             </v-card-text>
                                         </v-col>
 
-                                        <v-col cols="5" class=" pt-0 pl-1 pr-0 pb-0" >
-                                            <v-card-text class="pt-0 pl-2 pr-0 pr-0 pb-0 ">
-                                                <p class=" mt-0 mb-1   font-weight-black  text-truncate" style=" font-size: 115%;"   >Profesor/es: </p>
-                                            </v-card-text>
-                                        </v-col>
-                                        <v-col cols="7"  class="pt-0 pl-0 pr-0 pb-0  mb-1" >
-                                            <div style="text-align:left;">
-                                            <v-btn class="pt-0  pb-0 "  outlined x-small  @click="mostrarProfesoresDeCurso(item)">
-                                                    Ver
-                                            </v-btn>
-                                            </div>
-                                        </v-col>
-                                        <v-col cols="5" class=" pt-0 pl-1 pr-0 pb-0" >
-                                            <v-card-text class="pt-0 pl-2 pr-0 pb-0 ">
-                                                <p class=" mt-0 mb-1   font-weight-black  text-truncate" style=" font-size: 115%;"   >ayudante/s: </p>
-                                            </v-card-text>
-                                        </v-col>
-                                        <v-col cols="7"  class=" pt-0 pl-0  pb-0 " >
-                                            <div style="text-align:left;">
-                                            <v-btn  outlined x-small  @click="mostrarAyudantesDeCurso(item)">
+                                        <v-col cols="12" class=" pt-1 pl-1 pr-0 pb-0" >
+                                            <v-card-text class="pt-0 pl-2 pr-0 pr-0 pb-0 font-weight-black text-truncate" style=" font-size: 100%;">
+                                                Profesor/es: 
+                                                <v-btn class="pt-0  pb-0 "  outlined x-small  @click="mostrarProfesoresDeCurso(item)">
                                                     Ver
                                                 </v-btn>
-                                            </div>
+                                            </v-card-text>
+                                        </v-col>
+                                    
+                                        <v-col cols="12" class=" pt-1 pl-1 pr-0 pb-2" >
+                                            <v-card-text class="pt-0 pl-2 pr-0 pr-0 pb-0 font-weight-black text-truncate" style=" font-size: 100%;">
+                                                Ayudante/s :
+                                                <v-btn  outlined x-small  @click="mostrarAyudantesDeCurso(item)">
+                                                    Ver
+                                                </v-btn>
+                                            </v-card-text>
+                                            
                                         </v-col>
                                         
                                     </v-row>
@@ -214,8 +208,8 @@
                                 </v-card-title>
                             </v-img>
                             <v-data-table  :headers="colCursos" :items="listaCursos"
-                                :search="buscarCursos" :loading="cargando" :items-per-page="10"  class="ml-5">            
-                                <template v-slot:item.opciones="{ item }">
+                                :search="buscarCursos" :loading="cargando" :items-per-page="10" >            
+                                <template v-slot:[`item.opciones`]="{ item }">
                                 <!-- boton para modificar usuario seleccionado -->
                                     <v-tooltip bottom color="primary">
                                         <template v-slot:activator="{ on }">
@@ -380,7 +374,7 @@
                             <strong><h3>Sección</h3></strong>
                         </v-col>
                         <v-col cols="6" >
-                           <v-list-item-title> {{ InstanciaModificar.nomCurso }} </v-list-item-title>
+                            <v-list-item-title> {{ InstanciaModificar.nomCurso }} </v-list-item-title>
                         </v-col>
                         <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
                             <v-select  v-model="InstanciaModificar.seccion"
@@ -395,12 +389,12 @@
                             ></v-select>
                         </v-col>
                     </v-row>
-                     <v-divider></v-divider>
+                    <v-divider></v-divider>
                         <strong ><h3 class="pt-5">Eliga el profesor: </h3></strong>
                         <v-form ref="forModificarInsCurso" style="margin:0;padding:0;" v-model="form_modificarInsCurso" lazy-validation>
-                             <v-select
+                            <v-select
                                     class="pt-3"
-                                     v-if=" contadorProfesores>=1"
+                                    v-if=" contadorProfesores>=1"
                                     v-model="profesorSeleccionado"
                                     label="Profesor"
                                     :items="listaProfesores"
@@ -457,7 +451,7 @@
                                     clearable >  </v-select>   
                                                         
             
-                         <div style="text-align:left;"   >
+                        <div style="text-align:left;"   >
                             <v-btn 
                             x-small
                             fab color="primary" 
@@ -566,7 +560,6 @@
                                 </v-card-title>
                                 </v-img>  
                                 <v-data-table
-                                class="ml-4 mr-0 "
                                     v-model="seleccionados"
                                     :headers="colCursos2"
                                     :items="listaCursos"
@@ -594,15 +587,17 @@
                     <h5 class="white--text">Asignar Cursos</h5>
                 </v-card-title>
                 <v-container class="px-5">
+                    <v-row>
+                        <v-col cols="6" >
+                            <strong><h3>Curso</h3></strong>
+                        </v-col>
+                        <v-col cols="6">
+                            <strong><h3>Sección</h3></strong>
+                        </v-col>
+                    </v-row>
                         <v-form  ref="formAsignarCurso" style="margin:0;padding:0;" v-model="form_AsignarCurso" lazy-validation>
                     <v-row v-for="(item, index) in seleccionados" :key="index">
 
-                            <v-col cols="6" >
-                                <strong><h3>Curso</h3></strong>
-                            </v-col>
-                            <v-col cols="6">
-                                <strong><h3>Sección</h3></strong>
-                            </v-col>
                             <v-col cols="6" >
                                 <v-list-item-title> {{item.nombre}}</v-list-item-title>
                             </v-col>
@@ -856,7 +851,7 @@
                     :items="AyudanteDeInstanciaCurso.listaAyudantes"
                     
                     hide-default-footer  >
-                    <template v-slot:item.opciones="{ item }">
+                    <template v-slot:[`item.opciones`]="{ item }">
                             <v-tooltip bottom color="primary">
                             <template v-slot:activator="{ on }">
                                 <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on" @click="EnrutarAsiPerfilDeUsuario(item)" >
@@ -941,7 +936,6 @@ export default {
             datosCurso: [{id:''},{nombre:''},{plan:''},{escuela:''},{descripcion:''}],
             datosInsCurso: [{id:''},{semestre:''},{curso:''},{nomCurso:''}],
             listaDeSeccionesDisponibles:['A','B','C','D','E','F','G','H'],
-
             cargando: false,
             seleccionados: [],
             profesorSeleccionado: null,
@@ -949,36 +943,33 @@ export default {
             profesorSeleccionado3: null,
             profesorSeleccionado4: null,
             profesorSeleccionado5: null,
-
             profesorSeleccionadoAux: null,
             profesorSeleccionadoAux2: null,
             profesorSeleccionadoAux3: null,
             profesorSeleccionadoAux4: null,
             profesorSeleccionadoAux5: null,
-
             profesorConCurso: null,
             profesorConCurso2: null,
             profesorConCurso3: null,
             profesorConCurs4: null,
             profesorConCurso5: null,
-      
             colInsCursos:[
                 {text:'ID', value:'id'},
                 // {text:'Semestre', value:'semestre'},
                 {text:'Curso', value:'nomCurso'},   
-                {text:'Opciones', value:'opciones'},                
+                {text:'Opciones', value:'opciones', sortable:false},                
             ],
             colCursos:[
                 // {text:'ID', value:'id'},
-                {text:'Nombre', value:'nombre',align: 'start',width:300},
+                {text:'Nombre', value:'nombre',align: 'start'},
                 {text:'Plan', value:'plan',align:'center'},   
                 {text:'Escuela', value:'nomEscuela',align:'center'},
                 // {text:'Descripcion', value:'descripcion'},
-                {text:'Opciones', value:'opciones',align: 'end',},
+                {text:'Opciones', value:'opciones',align: 'center', sortable:false},
             ],
             colCursos2:[
-                {text:'Nombre', value:'nombre',align: 'start',width:250},
-                {text:'Plan', value:'plan',align: 'center',width:300},   
+                {text:'Nombre', value:'nombre',align: 'start'},
+                {text:'Plan', value:'plan'},   
                 {text:'Escuela', value:'nomEscuela',align: 'center'},
                 // {text:'Descripcion', value:'descripcion',align: 'start'},
             ],
@@ -1050,15 +1041,13 @@ export default {
             headersAyudante:[
                 { text: 'Matricula', value: 'matricula',align: 'center'},
                 { text: 'Nombre Completo', value: 'nombre_completo'},
-                {text:'Opciones', value:'opciones',align: 'center'},
+                {text:'Ir', value:'opciones',align: 'center',sortable:false},
             ],
             headersProfesor:[
-               
                 { text: 'Nombre Completo', value: 'nombre',align: 'start' },
                 { text: 'Correo', value: 'email' }
- 
                 // {with:10},           
-                 ],
+                ],
             numeroDeProfesoresModificar:0,
             numeroDeAyudantesModificar:0,
             contadorProfesores:1,
