@@ -184,24 +184,7 @@
                                                                     color="secondary"
                                                                     background-color="white"
                                                                     ></v-text-field>
-                                                                </v-col> 
-                                                                <v-col  cols="5" sm="3" md="3" class="align-self-end" style="text-align:right;">
-                                                                    <v-tooltip bottom color="primary">
-                                                                    <template v-slot:activator="{ on }">
-                                                                        <v-btn
-                                                                        class="ml-2"
-                                                                        fab
-                                                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
-                                                                        bottom
-                                                                        left
-                                                                        v-on="on"
-                                                                        >
-                                                                            <v-icon  color="secondary">fas fa-envelope</v-icon>
-                                                                        </v-btn>
-                                                                    </template>
-                                                                    <span><strong>Contactar</strong></span>
-                                                                    </v-tooltip>
-                                                                </v-col>             
+                                                                </v-col>           
                                                             </v-row> 
                                                             </v-card-title>
                                                         </v-img>
@@ -248,7 +231,6 @@
                                                 
                                             </v-container>
                                         
-                                            
                                         </v-card>
                                     </v-dialog>
                                     <v-dialog  v-model="dialogRestaurarUsuarioEliminado" ref="form" persistent max-width="500px">
@@ -363,7 +345,6 @@
                                     </v-container> 
                                 </v-card>                        
                             </v-dialog>
-
                             <v-dialog v-model="dialogEliminar" ref="form" persistent max-width="500px" transition="scroll-y-reverse-transition">
                                 <v-card class="mx-auto" max-width="500px"  >
                                     <v-card-title
@@ -502,7 +483,8 @@ export default {
             datosUsuario:[ {nombre:''},{escuela:''},{escuelaAux:''},{role:''},{correo:''},{contrasena:''} ,{imagen:null}],  
             listaEscuela:[
                 { text: 'ID',align: 'start',value: 'id',sortable: false},
-                { text: 'Nombre', value: 'nombre',sortable: false, },                
+                { text: 'Nombre', value: 'nombre',sortable: false, }, 
+                { text: 'Opciones', value: 'opciones',sortable: false, },                
             ],            
             listaEscuelaAux:[],
             roles: ['Administrador', 'Secretaría de Escuela', 'Profesor'],   
@@ -563,9 +545,8 @@ export default {
                 this.modificarUsuario();
             }
         },
-
         obtenerListaUsuariosEliminados(){
-             this.dialogListaUsuariosEliminado = true;
+            this.dialogListaUsuariosEliminado = true;
             this.listaUsuariosAux = [];
             var aux;
             var url = 'http://127.0.0.1:8000/api/v1/usuario/disabled';
@@ -710,7 +691,6 @@ export default {
         },
         /**
          * Obtiene una lista de todos los usuarios registrados en la base de datos.
-         * Desde el bakend no envian: contraseña y (rol) aun esta por definir.
          */
         obtenerUsuarios(){
             this.cargando = true;
