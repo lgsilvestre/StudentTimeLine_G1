@@ -219,7 +219,7 @@
                                     :color="observacion.color"
                                 >
                                     <v-card-title class="headline  text--center"   primary-title >
-                                        <div class="v-markdown" id="hola" href="#hola">
+                                        <div class="v-markdown" >
                                             <h5 class="white--text " >{{observacion.titulo}}</h5>
                                         </div>
                                         
@@ -558,7 +558,7 @@
                             label="Titulo" 
                             outlined
                             color="secondary"
-                            prepend-inner-icon="fas fa-check-circle"
+                            prepend-inner-icon="fas fa-heading"
                             :rules="[v => !!v || 'El titulo es requerido']"
                             ></v-text-field>
 
@@ -568,7 +568,7 @@
                             item-text="nombre"
                             label="Tipo" outlined
                             color="secondary"
-                            prepend-inner-icon="fas fa-check-circle"
+                            prepend-inner-icon="fas fa-exclamation-circle"
                             :rules="[v => !!v || 'El tipo de observacion es requerido']"
                             ></v-select >
                             <v-row no-gutters>
@@ -582,7 +582,7 @@
                                     color="secondary"
                                     outlined
                                     :disabled="profesor == true"
-                                    prepend-inner-icon="fas fa-check-circle"
+                                    prepend-inner-icon="fas fa-list-ol"
                                     :rules="[v => !!v || 'La categoria es requerida']"
                                     ></v-select>
                                 </v-col>
@@ -617,7 +617,7 @@
                             v-model="estudianteObservacion.descripcion"
                             outlined
                             color="secondary"
-                            label="Descripcion"
+                            label="Descripción"
                             :rules="[v => !!v || 'La descripcion es requerida.']"
                             ></v-textarea>
                             <div class="pb-1" style="text-align:right;">  
@@ -799,7 +799,7 @@
 
         <!-- Alertas -->
         <!-- alerta de exito de la modificacion -->
-        <v-snackbar v-model="alertAcept" :timeout=delay
+        <v-snackbar v-model="alertAcept" :timeout=delay 
         bottom color="secondary" left class="mb-1 pb-12 pr-0 mr-0" >
             <div>
                 <v-icon color="white" class="mr-2">
