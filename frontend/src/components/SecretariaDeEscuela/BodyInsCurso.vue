@@ -1439,8 +1439,6 @@ export default {
                     this.listaInsCursosAux[index]=insCurso;                                                         
                 }
                 this.listaInsCursos = this.listaInsCursosAux; 
-                 console.log('INSTANCIAS DE CURSOS')
-                  console.log(this.listaInsCursos);
                 this.cargando = false;              
             }
             ).catch((error)=>{
@@ -1531,6 +1529,7 @@ export default {
             this.opcionesAlAsignarAyudante(this.ayudanteSeleccionado3,this.ayudanteSeleccionadoAux3,this.idAyudanteConCurso3,idInstancia,3)
             this.opcionesAlAsignarAyudante(this.ayudanteSeleccionado4,this.ayudanteSeleccionadoAux4,this.idAyudanteConCurso4,idInstancia,4)
             this.opcionesAlAsignarAyudante(this.ayudanteSeleccionado5,this.ayudanteSeleccionadoAux5,this.idAyudanteConCurso5,idInstancia,5)
+            this.obtenerInstanciasCursos();
             this.CerrarDialogAsignarAyudante();
             
 
@@ -1603,14 +1602,6 @@ export default {
         mostrarProfesoresDeCurso(item){
             this.dialogProfesoresInsCurso = true;
             this.profesoresDeInstanciaCurso=item
-            // this.obtenerInstanciasCursos();
-            // var lista = this.listaInsCursos;
-            // for (var instancia of lista) {
-            //     if(instancia.id == item.id ){
-
-            //         this.profesoresDeInstanciaCurso=instancia
-            //     }
-            // }
         },  
         /**
          * Desvincula un profesor de una instancia de curso
@@ -1925,8 +1916,6 @@ export default {
                     axios.post(url, post, this.$store.state.config)
                     .then((result) => {
                         ins_curso= result.data.data.insCurso.id;
-                        console.log( result)
-                        console.log( ins_curso)
                             if(ins_curso != 0){
                             if(profesor1 != null){
                                 let post2 = {
@@ -2024,20 +2013,17 @@ export default {
                     this.resetAsignarCurso();
                 }
                 if(error.response.data.code == 301){
-                    console.log(error.response.data.code +' '+ error.response.data.message);
-                    console.log(error.response.data);
+
                     this.alertaError = true;      
                     this.textoAlertas = error.response.data.message;
                 }    
                 if(error.response.data.code == 302){
-                    console.log(error.response.data.code +' '+ error.response.data.message);
-                    console.log(error.response.data);
                     this.alertaError = true;      
                     this.textoAlertas = error.response.data.message;
                 }                    
             });
             }
-            console.log("OBTENIENDO LAS NUEVAS INSTANCIAS")
+            // console.log("OBTENIENDO LAS NUEVAS INSTANCIAS")
             this.obtenerInstanciasCursos(); 
         },
         /**
