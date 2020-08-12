@@ -47,9 +47,9 @@ class Estudiante extends Model
                     ->join('escuelas', 'escuelas.id','=', 'estudiantes.escuela')
                     ->join('observaciones', 'estudiantes.id','=', 'observaciones.estudiante')
                     ->groupBy('matricula','rut','nombre_completo','correo','anho_ingreso','situacion_academica','porcentaje_avance','creditos_aprobados','escuelas.nombre')
-                    ->whereBetween('observaciones.created_at',[$fechaInicio,$fechaFin])
+                    ->where('observaciones.created_at', '>=', $fechaInicio.' 00:00:00')
+                    ->Where('observaciones.created_at', '<=', $fechaFin.' 23:59:59')
                     ->get());
-            #dump($data);
             return $data;
         }
         elseif($tipo == 3)
