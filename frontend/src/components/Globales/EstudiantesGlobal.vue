@@ -51,11 +51,12 @@
                                         class="headline primary text--center"
                                         primary-title
                                         >
-                                        <h5 class="white--text ">Agregar estudiantes</h5>
+                                        <h5 class="white--text " :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 70%;' : 'font-size: 90%;'">Agregar estudiantes</h5>
                                         <v-spacer></v-spacer>
                                         <v-btn
                                             v-if="botonesAgregarEstudiantes==false"
                                             color="primary"
+                                            :small="$vuetify.breakpoint.smAndDown ? true : false"
                                             elevation="0"
                                             rounded
                                             dense
@@ -67,7 +68,7 @@
                                             v-if="botonesAgregarEstudiantes"
                                             color="primary"
                                             elevation="0"
-                                            small
+                                            :small="$vuetify.breakpoint.smAndDown ? true : false"
                                             fab
                                             @click="dialogAgregarEstudiante = ! dialogAgregarEstudiante"
                                         > 

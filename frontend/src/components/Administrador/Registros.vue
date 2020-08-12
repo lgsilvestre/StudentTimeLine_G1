@@ -16,7 +16,7 @@
                             <v-col cols="12" class="pt-1" >
                                 <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 130%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" > Registros</strong>
                             </v-col>
-                            <v-col  cols="7" sm="9" md="9" class="align-self-end" >
+                            <v-col  cols="12" sm="9" md="9" class="align-self-end" >
                                 <v-text-field
                                     v-model="buscar"
                                     append-icon="mdi-magnify"
