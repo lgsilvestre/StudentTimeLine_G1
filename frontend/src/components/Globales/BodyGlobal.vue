@@ -4,11 +4,10 @@
             <v-col cols="12" md="0"  lg="1" >
             </v-col>
             <v-col  cols="12" md="6" lg="5">
-                <v-card elevation="1" > 
+                <v-card elevation="5" > 
                     <v-img
-                        class="mx-auto white--text align-end justify-center"
+                        class="mx-auto white--text align-end justify-center accent"
                         width="100%"
-                        src="@/assets/Globales/fondo.jpg"
                     >
                     <v-card-title
                     class="headline  text--center"
@@ -75,7 +74,7 @@
             <v-col cols="12" md="1" lg="1">
             </v-col>
             <v-col cols="12" md="5" lg="4">
-                <v-card elevation="1" shaped>
+                <v-card elevation="5" shaped>
                 <v-card-title  class="headline primary text--center" primary-title > 
                     <h5 class="white--text ">Editar Perfil</h5>
                 </v-card-title>
@@ -117,13 +116,13 @@
                     <div style="text-align:right;">
                         <v-btn 
                         :small="$vuetify.breakpoint.smAndDown ? true : false"
-                        rounded color="primary" class="mb-4 ml-2" @click="reset"  > 
+                        rounded color="warning" class="mb-4 ml-2" @click="reset"  > 
                             Restablecer
                         </v-btn>
                         <v-btn  
                         :disabled="!formModificar"
                         :small="$vuetify.breakpoint.smAndDown ? true : false"
-                        :loading="cargando" rounded color="primary" class="mb-4 ml-2"    type="submit">
+                        :loading="cargando" rounded color="secondary" class="mb-4 ml-2"    type="submit">
                             <h4 class="white--text">Modificar</h4>
                         </v-btn>
                     </div>

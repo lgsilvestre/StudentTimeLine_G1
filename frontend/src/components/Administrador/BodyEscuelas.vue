@@ -5,12 +5,11 @@
       align-self="end">
       </v-col>
       <v-col cols="12" md="8">
-        <v-card>
+        <v-card elevation="10">
           <v-img
-            class="mx-auto white--text align-end justify-center"
+            class="mx-auto white--text align-end justify-center accent"
             width="100%"
             height="180px"
-            src="@/assets/Globales/fondo3.jpg"
           >
           
           <v-card-title class="white--text" style="padding:0;"> 
@@ -178,7 +177,7 @@
                                       :items-per-page="10" 
                                       class="elevation-1 "
                                       >            
-                                      <template v-slot:item.actions="{ item }">
+                                      <template v-slot:[`item.actions`]="{ item }">
                                       <!-- boton para modificar usuario seleccionado -->
                                       <v-tooltip bottom color="primary">
                                           <template v-slot:activator="{ on }">
@@ -241,7 +240,7 @@
           :search="buscar"
           class="elevation-1 "
           >
-            <template v-slot:item.actions="{ item }">
+            <template v-slot:[`item.actions`]="{ item }">
               <v-tooltip bottom color="primary">
                 <template v-slot:activator="{ on }">
                   <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on" @click="ModificarEscuela(item)">
@@ -423,11 +422,11 @@
       cargando: true,
       headers: [
         //{ text: 'ID',align: 'start',value: 'id',sortable: true},
-        { text: '', value: '',sortable: false, width:50},
-        { text: 'Nombre', value: 'nombre',sortable: true, width:350},
-        { text: 'Codigo carrera', value: 'cod_car',sortable: true , align:'center',width:350  },
+        { text: '', value: '',sortable: false, width:10},
+        { text: 'Nombre', value: 'nombre',sortable: true},
+        { text: 'Codigo carrera', value: 'cod_car',sortable: true , align:'center'},
         { text: 'Opciones', value: 'actions', sortable: false, align:'end',class:'pr-12'},
-        { text: '', value: '',sortable: false, width:50},
+        { text: '', value: '',sortable: false, width:10},
       ],
       headers2: [
         //{ text: 'ID',align: 'start',value: 'id',sortable: true},

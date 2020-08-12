@@ -33,7 +33,7 @@
                     <v-col class="d-none d-sm-none d-md-block " md="1"> 
                     </v-col>
                     <v-col  sm="12" md="6" lg="4" >
-                        <v-card elevation="1" shaped>
+                        <v-card elevation="10" shaped>
                             <v-card-title
                             class="headline primary text--center"
                             primary-title
@@ -71,7 +71,7 @@
                                     type="error">
                                         {{mensajeErrorLogin}}
                                     </v-alert>
-                                    <v-btn rounded large block color="primary" 
+                                    <v-btn rounded large block color="secondary" 
                                         :loading="cargaLogin"
                                         @click="login(lista)"
                                         >

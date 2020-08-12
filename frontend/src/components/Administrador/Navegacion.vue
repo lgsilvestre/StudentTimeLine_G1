@@ -1,6 +1,6 @@
 <template>
     <v-navigation-drawer app right v-model="drawers.drawer" :mini-variant="drawers.miniVarianteAdm"  :permanent="$vuetify.breakpoint.mdAndUp" :temporary="$vuetify.breakpoint.smAndDown"
-        src="@/assets/Globales/background-panel-02.jpg"
+        color="secondary"
     >
     <v-tooltip left color="primary" :disabled="!drawers.miniVarianteAdm">
         <template v-slot:activator="{ on }">
@@ -90,7 +90,7 @@
         
     </v-list>
     <template v-slot:append >
-        <v-list-item class=" difuminado" style="background-color: #FF6B6B" @click="unLogin">
+        <v-list-item class=" difuminado" style="background-color: #6C5192" @click="unLogin">
             <v-list-item-icon >
                 <v-icon color="white" style="font-size: 125%">fas fa-power-off</v-icon>
             </v-list-item-icon>

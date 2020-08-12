@@ -3,10 +3,10 @@
         <v-row >
             <v-col cols="12" md="1"></v-col>
             <v-col cols="12" md="10">
-                <v-card >
-                    <v-img class="mx-auto white--text align-end justify-center"
+                <v-card elevation="10">
+                    <v-img class="mx-auto white--text align-end justify-center accent"
                         width="100%" height="180px"       
-                        src="@/assets/Globales/fondo3.jpg" >                    
+                        >                    
                         <v-card-title class="white--text" style="padding:0;">     
                             <!-- Titulo -->
                             <v-row class="px-5 ">
