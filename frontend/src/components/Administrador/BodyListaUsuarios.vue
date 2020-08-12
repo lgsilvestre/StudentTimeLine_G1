@@ -184,24 +184,7 @@
                                                                     color="secondary"
                                                                     background-color="white"
                                                                     ></v-text-field>
-                                                                </v-col> 
-                                                                <v-col  cols="5" sm="3" md="3" class="align-self-end" style="text-align:right;">
-                                                                    <v-tooltip bottom color="primary">
-                                                                    <template v-slot:activator="{ on }">
-                                                                        <v-btn
-                                                                        class="ml-2"
-                                                                        fab
-                                                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
-                                                                        bottom
-                                                                        left
-                                                                        v-on="on"
-                                                                        >
-                                                                            <v-icon  color="secondary">fas fa-envelope</v-icon>
-                                                                        </v-btn>
-                                                                    </template>
-                                                                    <span><strong>Contactar</strong></span>
-                                                                    </v-tooltip>
-                                                                </v-col>             
+                                                                </v-col>           
                                                             </v-row> 
                                                             </v-card-title>
                                                         </v-img>
