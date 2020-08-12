@@ -199,8 +199,8 @@ export default {
             imagenMiniatura:null,
             correo:'',
             reglasNombre:[
+                v => /^[a-zA-Z ]+$/.test(v) || 'Nombre no Válido.',
                 v => /^[a-zA-Z ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',
-                v => /^[a-zA-Z ]+$/.test(v) || 'Nombre no Válido.'
             ],
             reglasEmail: [
                 v => /.+@utalca.cl/.test(v) || /.+@alumnos.utalca.cl/.test(v) || 'Correo no Válido', 

@@ -198,7 +198,7 @@
                     <!-- <v-container fluid class=" text-left"> -->
                     <v-card-title class="text-justify" :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%;' :'font-size: 110%;'">Esta seguro que desea restaurar la siguiente Escuela?</v-card-title>
                     <v-card-text>Nombre : {{ this.escuelaEditar.nombre }}</v-card-text>
-                    <v-card-text>Codigo de Escuela : {{ this.escuelaEditar.cod_car }}</v-card-text>                    
+                    <v-card-text>Código de Escuela : {{ this.escuelaEditar.cod_car }}</v-card-text>                    
                     <!-- </v-container > -->
                     <div style="text-align:right;">
                         <v-btn 
@@ -277,7 +277,7 @@
                   </v-text-field>                                  
                   <v-text-field
                   v-model="escuelaEditar.cod"
-                  label="Codigo Carrera"
+                  label="Código Carrera"
                   :rules="reglasCodigoCarrera"                                      
                   outlined
                   prepend-inner-icon="fas fa-hashtag"
@@ -313,7 +313,7 @@
                 </v-card-title>
                 <v-card-title class="text-justify" :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%;' :'font-size: 110%;'">Esta seguro que desea eliminar la siguiente Escuela?</v-card-title>
                 <v-card-text class="pt-2">Nombre Escuela: {{ escuelaEliminar.nombre }}</v-card-text>
-                <v-card-text>Codigo Carrera: {{ escuelaEliminar.cod }}</v-card-text>   
+                <v-card-text>Código Carrera: {{ escuelaEliminar.cod }}</v-card-text>   
                 <div class="px-5  pb-4" style="text-align:right;">
                   <v-btn 
                   :small="$vuetify.breakpoint.smAndDown ? true : false"
@@ -438,7 +438,8 @@
       reglasCodigoCarrera: [
         value => !!value || 'Requerido',
         value => value  >= 0 || 'El valor debe ser mayor o igual a 0', 
-        value => (value || '').length <= 4 || 'Max. 40 caracteres',
+        value =>  /^[0-9]+$/.test(value) || 'Código de Carrera solo debe contener Números',
+        value =>  /^[0-9]{1,999999}$/.test(value) || 'Max. 999999 caracteres',
       ],
       
     }),
