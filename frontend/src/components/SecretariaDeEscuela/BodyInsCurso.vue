@@ -319,12 +319,6 @@
                             :rules="[() => !!datosCurso.escuela ||'Requerido']"
                             prepend-inner-icon="mdi-school"
                         ></v-select>
-                        <!-- <v-text-field v-model="datosCurso.descripcion" label="Descripcion del Curso" outlined
-                            color="secondary"
-                            :rules="[() => !!datosCurso.descripcion ||'Requerido']"
-                            prepend-inner-icon="mdi-account"
-                        ></v-text-field> -->
-                        
                         <div style="text-align:right;" class="mb-1 " >
                             <v-btn 
                             :small="$vuetify.breakpoint.smAndDown ? true : false"
@@ -1700,11 +1694,12 @@ export default {
         },
 
         setModificarCurso(item){
-            this.datosCurso.id= item.id;
-            this.datosCurso.nombre = item.nombre;
-            this.datosCurso.plan = item.plan;
-            this.datosCurso.escuela = item.escuela;
+            // this.datosCurso.id= item.id;
+            // this.datosCurso.nombre = item.nombre;
+            // this.datosCurso.plan = item.plan;
+            // this.datosCurso.escuela = item.escuela;
             // this.datosCurso.descripcion = item.descripcion;
+            this.datosCurso=item;
             this.dialogModificarCurso = true;
         },
         resetModificarCurso(){
