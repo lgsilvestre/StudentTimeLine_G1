@@ -381,7 +381,7 @@
                 :loading="cargando"
                 style="font-size: 140%;"
                 class="elevation-1 " >
-                    <template v-slot:item.actions="{ item }">
+                    <template v-slot:actions="{ item }">
                         <v-tooltip bottom color="primary">
                             <template v-slot:activator="{ on }">
                                 <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on" @click="perfilEstudiante(item)">
