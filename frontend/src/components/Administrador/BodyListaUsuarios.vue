@@ -200,7 +200,8 @@
                                                             <!-- boton para modificar usuario seleccionado -->
                                                             <v-tooltip bottom color="primary">
                                                                 <template v-slot:activator="{ on }">
-                                                                <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on" @click="restaurarUsuarioEliminado(item)">
+                                                                <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on" @click="restaurarUsuarioEliminado(item)"
+                                                                >
                                                                     <v-icon color="secondary"  >
                                                                         fas fa-trash-restore-alt
                                                                     </v-icon>
@@ -800,26 +801,33 @@ export default {
        * para solucionar este problema, se deferan definir nuevamente los roles.
        */
         MostrarPanelModificar(item){
-            this.modUsuarioActivo = true;            
-            this.datosUsuario.id= item.id;
-            this.datosUsuario.nombre= item.nombre;            
-            this.datosUsuario.imagen= item.imagen;
-            this.datosUsuario.correo= item.correo;
-            this.datosUsuario.contrasena= item.contrasena;            
-            if (item.role == "admin") {
-                this.datosUsuario.role= this.roles[0];
-            };
-            if (item.role  == "secretaria de escuela") {
-                this.datosUsuario.role= this.roles[1];
-            };
-            if (item.role  == "profesor") {
-                this.datosUsuario.role= this.roles[2];
-            };
-            for(var numEscuela = 0; numEscuela < this.listaEscuela.length; numEscuela++){                        
-                if(item.escuela == this.listaEscuela[numEscuela].nombre){                                                   
-                    this.datosUsuario.escuela = this.listaEscuela[numEscuela].id;
-                }
-            };  
+            var idUsuario= this.$store.state.usuario.usuario.id
+            if(idUsuario != item.id){
+
+                this.modUsuarioActivo = true;            
+                this.datosUsuario.id= item.id;
+                this.datosUsuario.nombre= item.nombre;            
+                this.datosUsuario.imagen= item.imagen;
+                this.datosUsuario.correo= item.correo;
+                this.datosUsuario.contrasena= item.contrasena;            
+                if (item.role == "admin") {
+                    this.datosUsuario.role= this.roles[0];
+                };
+                if (item.role  == "secretaria de escuela") {
+                    this.datosUsuario.role= this.roles[1];
+                };
+                if (item.role  == "profesor") {
+                    this.datosUsuario.role= this.roles[2];
+                };
+                for(var numEscuela = 0; numEscuela < this.listaEscuela.length; numEscuela++){                        
+                    if(item.escuela == this.listaEscuela[numEscuela].nombre){                                                   
+                        this.datosUsuario.escuela = this.listaEscuela[numEscuela].id;
+                    }
+                 };  
+            }else{
+                this.alertaError = true;
+                this.textoAlertas = "Para modificar su cuenta diríjase a perfil."
+            }
             
         },
 
@@ -950,22 +958,28 @@ export default {
             
         },
         EliminarUsuario(item){
-            this.datosUsuario.id= item.id;
-            this.datosUsuario.nombre= item.nombre;
-            this.datosUsuario.escuela= item.escuela;
-            this.datosUsuario.imagen= item.imagen;
-            this.datosUsuario.correo= item.correo;
-            this.datosUsuario.contrasena= item.contrasena;
-            if (item.role == "admin") {
-                this.datosUsuario.role= this.roles[0];
-            };
-            if (item.role  == "secretaria de escuela") {
-                this.datosUsuario.role= this.roles[1];
-            };
-            if (item.role  == "profesor") {
-                this.datosUsuario.role= this.roles[1];
-            };
-            this.dialogEliminar = true;
+             var idUsuario= this.$store.state.usuario.usuario.id
+            if(idUsuario != item.id){
+                this.datosUsuario.id= item.id;
+                this.datosUsuario.nombre= item.nombre;
+                this.datosUsuario.escuela= item.escuela;
+                this.datosUsuario.imagen= item.imagen;
+                this.datosUsuario.correo= item.correo;
+                this.datosUsuario.contrasena= item.contrasena;
+                if (item.role == "admin") {
+                    this.datosUsuario.role= this.roles[0];
+                };
+                if (item.role  == "secretaria de escuela") {
+                    this.datosUsuario.role= this.roles[1];
+                };
+                if (item.role  == "profesor") {
+                    this.datosUsuario.role= this.roles[1];
+                };
+                this.dialogEliminar = true;
+            }else{
+                this.alertaError = true;
+                this.textoAlertas = "No puede eliminar su propia cuenta"
+            }
         },
     }
 }

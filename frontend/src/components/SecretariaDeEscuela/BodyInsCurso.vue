@@ -208,7 +208,7 @@
                                 </v-card-title>
                             </v-img>
                             <v-data-table  :headers="colCursos" :items="listaCursos"
-                                :search="buscarCursos" :loading="cargando" :items-per-page="10"  class="ml-5">            
+                                :search="buscarCursos" :loading="cargando" :items-per-page="10" >            
                                 <template v-slot:[`item.opciones`]="{ item }">
                                 <!-- boton para modificar usuario seleccionado -->
                                     <v-tooltip bottom color="primary">
@@ -560,7 +560,6 @@
                                 </v-card-title>
                                 </v-img>  
                                 <v-data-table
-                                class="ml-4 mr-0 "
                                     v-model="seleccionados"
                                     :headers="colCursos2"
                                     :items="listaCursos"
@@ -588,15 +587,17 @@
                     <h5 class="white--text">Asignar Cursos</h5>
                 </v-card-title>
                 <v-container class="px-5">
+                    <v-row>
+                        <v-col cols="6" >
+                            <strong><h3>Curso</h3></strong>
+                        </v-col>
+                        <v-col cols="6">
+                            <strong><h3>Sección</h3></strong>
+                        </v-col>
+                    </v-row>
                         <v-form  ref="formAsignarCurso" style="margin:0;padding:0;" v-model="form_AsignarCurso" lazy-validation>
                     <v-row v-for="(item, index) in seleccionados" :key="index">
 
-                            <v-col cols="6" >
-                                <strong><h3>Curso</h3></strong>
-                            </v-col>
-                            <v-col cols="6">
-                                <strong><h3>Sección</h3></strong>
-                            </v-col>
                             <v-col cols="6" >
                                 <v-list-item-title> {{item.nombre}}</v-list-item-title>
                             </v-col>
@@ -935,7 +936,6 @@ export default {
             datosCurso: [{id:''},{nombre:''},{plan:''},{escuela:''},{descripcion:''}],
             datosInsCurso: [{id:''},{semestre:''},{curso:''},{nomCurso:''}],
             listaDeSeccionesDisponibles:['A','B','C','D','E','F','G','H'],
-
             cargando: false,
             seleccionados: [],
             profesorSeleccionado: null,
@@ -943,36 +943,33 @@ export default {
             profesorSeleccionado3: null,
             profesorSeleccionado4: null,
             profesorSeleccionado5: null,
-
             profesorSeleccionadoAux: null,
             profesorSeleccionadoAux2: null,
             profesorSeleccionadoAux3: null,
             profesorSeleccionadoAux4: null,
             profesorSeleccionadoAux5: null,
-
             profesorConCurso: null,
             profesorConCurso2: null,
             profesorConCurso3: null,
             profesorConCurs4: null,
             profesorConCurso5: null,
-      
             colInsCursos:[
                 {text:'ID', value:'id'},
                 // {text:'Semestre', value:'semestre'},
                 {text:'Curso', value:'nomCurso'},   
-                {text:'Opciones', value:'opciones'},                
+                {text:'Opciones', value:'opciones', sortable:false},                
             ],
             colCursos:[
                 // {text:'ID', value:'id'},
-                {text:'Nombre', value:'nombre',align: 'start',width:300},
+                {text:'Nombre', value:'nombre',align: 'start'},
                 {text:'Plan', value:'plan',align:'center'},   
                 {text:'Escuela', value:'nomEscuela',align:'center'},
                 // {text:'Descripcion', value:'descripcion'},
-                {text:'Opciones', value:'opciones',align: 'end',},
+                {text:'Opciones', value:'opciones',align: 'center', sortable:false},
             ],
             colCursos2:[
-                {text:'Nombre', value:'nombre',align: 'start',width:250},
-                {text:'Plan', value:'plan',align: 'center',width:300},   
+                {text:'Nombre', value:'nombre',align: 'start'},
+                {text:'Plan', value:'plan'},   
                 {text:'Escuela', value:'nomEscuela',align: 'center'},
                 // {text:'Descripcion', value:'descripcion',align: 'start'},
             ],
@@ -1044,15 +1041,13 @@ export default {
             headersAyudante:[
                 { text: 'Matricula', value: 'matricula',align: 'center'},
                 { text: 'Nombre Completo', value: 'nombre_completo'},
-                {text:'Opciones', value:'opciones',align: 'center'},
+                {text:'Ir', value:'opciones',align: 'center',sortable:false},
             ],
             headersProfesor:[
-               
                 { text: 'Nombre Completo', value: 'nombre',align: 'start' },
                 { text: 'Correo', value: 'email' }
- 
                 // {with:10},           
-                 ],
+                ],
             numeroDeProfesoresModificar:0,
             numeroDeAyudantesModificar:0,
             contadorProfesores:1,
