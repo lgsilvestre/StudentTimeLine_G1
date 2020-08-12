@@ -74,10 +74,10 @@
                 </v-card-title> 
             </v-img>
 
-            <v-data-iterator :items="listaInsCursos" :search="search" :sort-by="sortBy.toLowerCase()" class="px-2 py-2" :loading="cargando">
+            <v-data-iterator :items="listaInsCursos" :search="search" :sort-by="sortBy.toLowerCase()" class="px-2 py-2" :loading="cargando" ref="tablaCursos">
                 <template v-slot:default="props">
                     <v-row>
-                        <v-col v-for="item in props.items" :key="item.nomCurso" cols="12"  sm="6" md="4" lg="4">
+                        <v-col v-for="item in props.items" :key="item.id" cols="12"  sm="6" md="4" lg="4">
                             <v-card  class="mx-1" style="background-color:#F7FFF7; border-style:solid; border-color:rgba(0,0,0,0.5);" >
                                 <v-container class="pt-0 mt-0 pb-0 ">
                                     <v-row >
@@ -319,12 +319,6 @@
                             :rules="[() => !!datosCurso.escuela ||'Requerido']"
                             prepend-inner-icon="mdi-school"
                         ></v-select>
-                        <!-- <v-text-field v-model="datosCurso.descripcion" label="Descripcion del Curso" outlined
-                            color="secondary"
-                            :rules="[() => !!datosCurso.descripcion ||'Requerido']"
-                            prepend-inner-icon="mdi-account"
-                        ></v-text-field> -->
-                        
                         <div style="text-align:right;" class="mb-1 " >
                             <v-btn 
                             :small="$vuetify.breakpoint.smAndDown ? true : false"
@@ -594,7 +588,7 @@
         </v-dialog>
 
         <!-- Dialog para asignar cursos a un semestre -->
-        <v-dialog v-model="dialogAsignarCurso" max-width="500">
+        <v-dialog v-model="dialogAsignarCurso" persistent max-width="500">
             <v-card class="mx-auto" max-width="500" >
                 <v-card-title primary-title class="headline primary text--center">
                     <h5 class="white--text">Asignar Cursos</h5>
@@ -603,10 +597,10 @@
                         <v-form  ref="formAsignarCurso" style="margin:0;padding:0;" v-model="form_AsignarCurso" lazy-validation>
                     <v-row v-for="(item, index) in seleccionados" :key="index">
 
-                            <v-col cols="6" v-if="index==0">
+                            <v-col cols="6" >
                                 <strong><h3>Curso</h3></strong>
                             </v-col>
-                            <v-col cols="6" v-if="index==0">
+                            <v-col cols="6">
                                 <strong><h3>Sección</h3></strong>
                             </v-col>
                             <v-col cols="6" >
@@ -1060,7 +1054,8 @@ export default {
             ],
             headersProfesor:[
                
-                { text: 'Nombre Completo', value: 'nombre',align: 'start' }
+                { text: 'Nombre Completo', value: 'nombre',align: 'start' },
+                { text: 'Correo', value: 'email' }
  
                 // {with:10},           
                  ],
@@ -1128,45 +1123,52 @@ export default {
             }
         },
         sumarProfesor(){
-            // console.log("Contador de profesores: "+this.contadorProfesores);
-            //console.log("Numero de profesores que puedo agregar: "+this.numeroDeProfesoresModificar);
+             console.log("Contador de profesores: "+this.contadorProfesores);
+            console.log("Numero de profesores que puedo agregar: "+this.numeroDeProfesoresModificar);
             if(this.contadorProfesores ==1 &&  this.profesorSeleccionado!=null){
                 this.contadorProfesores++;
+                // console.log("Nuevo valor del contador: "+ this.contadorProfesores)
             }
             //se asigno el segundo profesor y quiere añadir otro
             if(this.contadorProfesores == 2 && this.profesorSeleccionado2!=null ){
                 this.contadorProfesores++;
+                // console.log("Nuevo valor del contador: "+ this.contadorProfesores)
             }
             //se asigno el tercer profesor y quiere añadir otro
             if(this.contadorProfesores == 3 && this.profesorSeleccionado3!=null){
                 this.contadorProfesores++;
+                // console.log("Nuevo valor del contador: "+ this.contadorProfesores)
             }
             //se asigno el cuarto profesor y quiere añadir otro
             if(this.contadorProfesores == 4 && this.profesorSeleccionado4!=null ){
                 
                 this.contadorProfesores++;
+                // console.log("Nuevo valor del contador: "+ this.contadorProfesores)
             }
             
         },
         restarProfesor(){
 
-              if(this.contadorProfesores== 2 ){
+            if(this.contadorProfesores== 2 ){
                 this.contadorProfesores--;
-                this.profesorSeleccionado2=''
-                //  console.log("++++++++++++++++++++++++++++++++++++++++")
-                // console.log("Numero de profesores --"+  this.profesorSeleccionado2)
-                // console.log("Valor del contador de cursos : "+ this.contadorCursos)
-                
+                this.profesorSeleccionado2=null;
+                this.profesorSeleccionado3=null;
+                this.profesorSeleccionado4=null;
+                this.profesorSeleccionado5=null;
+          
             }
             //se asigno el tercer profesor y quiere añadir otro
             if(this.contadorProfesores == 3 ){
                 this.contadorProfesores--;
-                this.profesorSeleccionado3=''
+                this.profesorSeleccionado3=null;
+                this.profesorSeleccionado4=null;
+                this.profesorSeleccionado5=null;
             }
             //se asigno el cuarto profesor y quiere añadir otro
             if(this.contadorProfesores == 4 ){
                 this.contadorProfesores--;
-                this.profesorSeleccionado4=''
+                this.profesorSeleccionado4=null;
+                this.profesorSeleccionado5=null;
             }
             if(this.contadorProfesores == 5 ){
                 this.contadorProfesores--;
@@ -1199,21 +1201,27 @@ export default {
 
             if(this.contadorAyudante== 2 ){
                 this.contadorAyudante--;
-                this.ayudanteSeleccionado2=''     
+                this.ayudanteSeleccionado2=null;  
+                this.ayudanteSeleccionado3=null;
+                this.ayudanteSeleccionado4=null;
+                this.ayudanteSeleccionado5=null;   
             }
             //se asigno el tercer profesor y quiere añadir otro
             if(this.contadorAyudante == 3 ){
                 this.contadorAyudante--;
-                this.ayudanteSeleccionado3=''
+                this.ayudanteSeleccionado3=null;
+                this.ayudanteSeleccionado4=null;
+                this.ayudanteSeleccionado5=null;
             }
             //se asigno el cuarto profesor y quiere añadir otro
             if(this.contadorAyudante == 4 ){
                 this.contadorAyudante--;
-                this.ayudanteSeleccionado4=''
+                this.ayudanteSeleccionado4=null;
+                this.ayudanteSeleccionado5=null;
             }
             if(this.contadorAyudante == 5 ){
                 this.contadorAyudante--;
-                this.ayudanteSeleccionado5=''
+                this.ayudanteSeleccionado5=null;
             }
         },
         /**
@@ -1227,27 +1235,27 @@ export default {
             // }
             
            
-             if(this.contadorCursos ==1 &&  this.profesorSeleccionado!=''){
+             if(this.contadorCursos ==1 &&  this.profesorSeleccionado!=null){
                 this.contadorCursos++;
                 // console.log("Numero de profesores ++"+  this.profesorSeleccionado)
                 // console.log("Valor del contador de cursos : "+ this.contadorCursos)
             }
             //se asigno el segundo profesor y quiere añadir otro
-            if(this.contadorCursos == 2 && this.profesorSeleccionado2!=''){
+            if(this.contadorCursos == 2 && this.profesorSeleccionado2!=null){
                 this.contadorCursos++;
                 // console.log("==============================")
                 // console.log("Numero de profesores ++"+  this.profesorSeleccionado2)
                 // console.log("Valor del contador de cursos : "+ this.contadorCursos)
             }
             //se asigno el tercer profesor y quiere añadir otro
-            if(this.contadorCursos == 3 && this.profesorSeleccionado3!=''){
+            if(this.contadorCursos == 3 && this.profesorSeleccionado3!=null){
                 this.contadorCursos++;
                 //  console.log("==============================")
                 // console.log("Numero de profesores ++"+  this.profesorSeleccionado3)
                 // console.log("Valor del contador de cursos : "+ this.contadorCursos)
             }
             //se asigno el cuarto profesor y quiere añadir otro
-            if(this.contadorCursos == 4 && this.profesorSeleccionado4!=''){
+            if(this.contadorCursos == 4 && this.profesorSeleccionado4!=null){
                 this.contadorCursos++;
                 //  console.log("==============================")
                 // console.log("Numero de profesores ++"+  this.profesorSeleccionado4)
@@ -1411,6 +1419,7 @@ export default {
         obtenerInstanciasCursos(){
             this.cargando=true;
             this.listaInsCursosAux = [];
+            this.listaInsCursos=[];
             var aux;            
             var url = this.$store.state.rutaDinamica+`api/v1/instanciaCurso/${this.$store.infoSemestre.id}`;
             axios.get(url,this.$store.state.config)
@@ -1430,8 +1439,6 @@ export default {
                     this.listaInsCursosAux[index]=insCurso;                                                         
                 }
                 this.listaInsCursos = this.listaInsCursosAux; 
-                // console.log('INSTANCIAS DE CURSOS')
-                //  console.log(this.listaInsCursos);
                 this.cargando = false;              
             }
             ).catch((error)=>{
@@ -1522,6 +1529,7 @@ export default {
             this.opcionesAlAsignarAyudante(this.ayudanteSeleccionado3,this.ayudanteSeleccionadoAux3,this.idAyudanteConCurso3,idInstancia,3)
             this.opcionesAlAsignarAyudante(this.ayudanteSeleccionado4,this.ayudanteSeleccionadoAux4,this.idAyudanteConCurso4,idInstancia,4)
             this.opcionesAlAsignarAyudante(this.ayudanteSeleccionado5,this.ayudanteSeleccionadoAux5,this.idAyudanteConCurso5,idInstancia,5)
+            this.obtenerInstanciasCursos();
             this.CerrarDialogAsignarAyudante();
             
         },
@@ -1592,7 +1600,6 @@ export default {
         mostrarProfesoresDeCurso(item){
             this.dialogProfesoresInsCurso = true;
             this.profesoresDeInstanciaCurso=item
-            // console.log(item);
         },  
         /**
          * Desvincula un profesor de una instancia de curso
@@ -1683,11 +1690,12 @@ export default {
         },
 
         setModificarCurso(item){
-            this.datosCurso.id= item.id;
-            this.datosCurso.nombre = item.nombre;
-            this.datosCurso.plan = item.plan;
-            this.datosCurso.escuela = item.escuela;
+            // this.datosCurso.id= item.id;
+            // this.datosCurso.nombre = item.nombre;
+            // this.datosCurso.plan = item.plan;
+            // this.datosCurso.escuela = item.escuela;
             // this.datosCurso.descripcion = item.descripcion;
+            this.datosCurso=item;
             this.dialogModificarCurso = true;
         },
         resetModificarCurso(){
@@ -1793,11 +1801,11 @@ export default {
         asignarCursos(){
             if(this.seleccionados.length != 0){
                 //profesores seleccionados.
-                this.profesorSeleccionado = '';
-                this.profesorSeleccionado2='';
-                this.profesorSeleccionado3='';
-                this.profesorSeleccionado4='';
-                this.profesorSeleccionado5='';
+                this.profesorSeleccionado = null;
+                this.profesorSeleccionado2=null;
+                this.profesorSeleccionado3=null;
+                this.profesorSeleccionado4=null;
+                this.profesorSeleccionado5=null;
                 this.dialogAsignarCurso = true; 
                 //this.resetSeccion();
                 //this.resetProfesores();    
@@ -1868,11 +1876,11 @@ export default {
          * La asignacion de cursos a una instancia de curso.
          */
         resetAsignarCurso(){
-            this.profesorSeleccionado = '';
-            this.profesorSeleccionado2='';
-            this.profesorSeleccionado3='';
-            this.profesorSeleccionado4='';
-            this.profesorSeleccionado5='';
+            this.profesorSeleccionado = null;
+            this.profesorSeleccionado2=null;
+            this.profesorSeleccionado3=null;
+            this.profesorSeleccionado4=null;
+            this.profesorSeleccionado5=null;
             this.seleccionados = [];
 
         },
@@ -1884,8 +1892,14 @@ export default {
             /**variables para el correcto funcionamiento de la consulta. */
             let ins_curso=0;
             let profe_Selec="";
+            var profesor1=this.profesorSeleccionado;
+            var profesor2=this.profesorSeleccionado2;
+            var profesor3=this.profesorSeleccionado3;
+            var profesor4=this.profesorSeleccionado4;
+            var profesor5=this.profesorSeleccionado5;
+
             this.dialogAsignarCurso = true
-            if( this.profesorSeleccionado!='' ){
+            if( this.seleccionados!=null ){
                 for(let i = 0; i < this.seleccionados.length ; i++){
                     /* datos instancia curso */
                     let post = {
@@ -1898,54 +1912,43 @@ export default {
                     .then((result) => {
                         ins_curso= result.data.data.insCurso.id;
                             if(ins_curso != 0){
-                            if(this.profesorSeleccionado != ''){
+                            if(profesor1 != null){
                                 let post2 = {
-                                    "profesor" :  this.profesorSeleccionado,
+                                    "profesor" : profesor1,
                                     "curso":  ins_curso,
                                     };
                                 this.agregarProfesorCurso(post2)
                             }
-                            if(this.profesorSeleccionado2 != ''){
+                            if(profesor2 != null){
                                 let post2 = {
-                                    "profesor" :  this.profesorSeleccionado2,
+                                    "profesor" :  profesor2,
                                     "curso":  ins_curso,
                                     };
                                 this.agregarProfesorCurso(post2)
                                 }
-                            if(this.profesorSeleccionado3 != ''){
+                            if(profesor3 != null){
                                 let post2 = {
-                                    "profesor" :  this.profesorSeleccionado3,
+                                    "profesor" :  profesor3,
                                     "curso":  ins_curso,
                                     };
                                 
                                 this.agregarProfesorCurso(post2)
                             }
-                            if(this.profesorSeleccionado4 != ''){
+                            if(profesor4 != null){
                                 let post2 = {
-                                    "profesor" :  this.profesorSeleccionado4,
+                                    "profesor" :  profesor4,
                                     "curso":  ins_curso,
                                     };
                                 this.agregarProfesorCurso(post2)
                             }
-                            if(this.profesorSeleccionado5 != ''){
+                            if(profesor5 != null){
                                 let post2 = {
-                                    "profesor" :  this.profesorSeleccionado5,
+                                    "profesor" :  profesor5,
                                     "curso":  ins_curso,
                                     };
                                 
                                 this.agregarProfesorCurso(post2)
                             }
-                            // Reseteamos las variables.
-                            this.cerrarDialogAsignarCurso();
-                            // obtenemos la lista de instancias de cursos con sus modificaciones
-                            this.obtenerInstanciasCursos();   
-                        }
-                        else{
-                            // console.log('NO FUNCIONO')
-                            this.alertaError = true;
-                            this.textoAlertas = "Error al asignar profesores al curso."
-                            this.cerrarDialogAsignarCurso();                            
-                            this.obtenerInstanciasCursos();
                         }
     
                         }).catch((error)=>{
@@ -1967,7 +1970,11 @@ export default {
                             }   
                         });                                                            
                     } 
+                    // Reseteamos las variables.
+                    this.cerrarDialogAsignarCurso();
+                    // obtenemos la lista de instancias de cursos con sus modificaciones
             }
+            
         },
         /**
          * Abre el dialog para la la creación de una una instancia de curso.
@@ -2001,19 +2008,18 @@ export default {
                     this.resetAsignarCurso();
                 }
                 if(error.response.data.code == 301){
-                    console.log(error.response.data.code +' '+ error.response.data.message);
-                    console.log(error.response.data);
+
                     this.alertaError = true;      
                     this.textoAlertas = error.response.data.message;
                 }    
                 if(error.response.data.code == 302){
-                    console.log(error.response.data.code +' '+ error.response.data.message);
-                    console.log(error.response.data);
                     this.alertaError = true;      
                     this.textoAlertas = error.response.data.message;
                 }                    
             });
             }
+            // console.log("OBTENIENDO LAS NUEVAS INSTANCIAS")
+            this.obtenerInstanciasCursos(); 
         },
         /**
          * Cierra el dialog de modificar instancia curso.
@@ -2146,30 +2152,45 @@ export default {
                 
            }).catch((error)=>{                
                 if (error.message == 'Network Error') {
-                    console.log(error);
-                    this.resetModificarInstanciaCurso();
                     this.alertaError = true;
                     this.textoAlertas = "Error al modificar el curso, intente mas tarde."
+                    this.obtenerInstanciasCursos(); 
+                    this.cerrarDialogModificarInstanciaCurso();
                 }
                 else{
-                    console.log(error.response);
                     if(error.response.data.success == false){
                         if(error.response.data.code == 301){
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;
-                            this.resetModificarInstanciaCurso();
+                            this.obtenerInstanciasCursos(); 
+                            this.cerrarDialogModificarInstanciaCurso();
                         }
                         if(error.response.data.code == 602){
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;
-                            this.resetModificarInstanciaCurso();
+                            this.obtenerInstanciasCursos(); 
+                            this.cerrarDialogModificarInstanciaCurso();
                         }
                         if(error.response.data.code == 603){
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;
-                            this.resetModificarInstanciaCurso();
+                           this.obtenerInstanciasCursos(); 
+                            this.cerrarDialogModificarInstanciaCurso();
                         }
-                    }           
+                        if(error.response.data.code == 409){
+                            console.log("hola")
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true;
+                            this.obtenerInstanciasCursos(); 
+                            this.cerrarDialogModificarInstanciaCurso();
+                        }
+                    }
+                    // else{
+                    //         this.textoAlertas = "Error en los datos ingresados";
+                    //         this.alertaError = true;
+                    //         this.obtenerInstanciasCursos(); 
+                    //         this.cerrarDialogModificarInstanciaCurso();
+                    //     }          
                 }                  
             });
         },
