@@ -107,7 +107,7 @@
                                         <v-col cols="12" class=" pt-0 pl-1 pr-0 pb-0" >
                                             <v-card-text class="pt-0 pl-2 pr-0 pb-0 ">
                                                 <p class=" mt-0 mb-1   font-weight-black  text-truncate" style=" font-size: 115%;"   >Nombre: {{ item.nomCurso }}</p>
-                                                <p class="mt-0 mb-0  text-truncate font-weight-black  "  style=" font-size: 115%;" > Sección: {{ item.seccion}} </p>
+                                                <p class="mt-0 mb-1  text-truncate font-weight-black  "  style=" font-size: 115%;" > Sección: {{ item.seccion}} </p>
                                             </v-card-text>
                                         </v-col>
 
