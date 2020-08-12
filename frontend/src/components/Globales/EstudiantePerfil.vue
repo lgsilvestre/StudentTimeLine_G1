@@ -550,7 +550,7 @@
         <v-dialog v-model="dialogAgregarObservacion" persistent max-width="500px" >
             <v-card class="mx-auto" max-width="500" >
                 <v-card-title class="headline primary text--center" primary-title >
-                    <h5 class="white--text ">Agregar observacion</h5>
+                    <h5 class="white--text ">Agregar observación</h5>
                 </v-card-title>
                     <v-container class="px-5 mt-5">
                         <v-form ref="form_añadirObservacion" style="margin:0;padding:0;" v-model="form_añadirObservacionValido" lazy-validation>
