@@ -231,7 +231,7 @@ class AyudanteConCursoController extends Controller
                     'data' => null
                 ], 409 );
             }else{
-                $ayudanteCurso->delete();
+                $ayudanteCurso->forceDelete();
                 return response()->json([
                     'success' => true,
                     'code' => 700,

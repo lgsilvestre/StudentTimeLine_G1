@@ -219,7 +219,7 @@
                                     :color="observacion.color"
                                 >
                                     <v-card-title class="headline  text--center"   primary-title >
-                                        <div class="v-markdown" id="hola" href="#hola">
+                                        <div class="v-markdown" >
                                             <h5 class="white--text " >{{observacion.titulo}}</h5>
                                         </div>
                                         
@@ -558,7 +558,7 @@
                             label="Titulo" 
                             outlined
                             color="secondary"
-                            prepend-inner-icon="fas fa-check-circle"
+                            prepend-inner-icon="fas fa-heading"
                             :rules="[v => !!v || 'El titulo es requerido']"
                             ></v-text-field>
 
@@ -568,7 +568,7 @@
                             item-text="nombre"
                             label="Tipo" outlined
                             color="secondary"
-                            prepend-inner-icon="fas fa-check-circle"
+                            prepend-inner-icon="fas fa-exclamation-circle"
                             :rules="[v => !!v || 'El tipo de observacion es requerido']"
                             ></v-select >
                             <v-row no-gutters>
@@ -582,7 +582,7 @@
                                     color="secondary"
                                     outlined
                                     :disabled="profesor == true"
-                                    prepend-inner-icon="fas fa-check-circle"
+                                    prepend-inner-icon="fas fa-list-ol"
                                     :rules="[v => !!v || 'La categoria es requerida']"
                                     ></v-select>
                                 </v-col>
@@ -617,7 +617,7 @@
                             v-model="estudianteObservacion.descripcion"
                             outlined
                             color="secondary"
-                            label="Descripcion"
+                            label="Descripción"
                             :rules="[v => !!v || 'La descripcion es requerida.']"
                             ></v-textarea>
                             <div class="pb-1" style="text-align:right;">  
@@ -801,7 +801,7 @@
 
         <!-- Alertas -->
         <!-- alerta de exito de la modificacion -->
-        <v-snackbar v-model="alertAcept" :timeout=delay
+        <v-snackbar v-model="alertAcept" :timeout=delay 
         bottom color="secondary" left class="mb-1 pb-12 pr-0 mr-0" >
             <div>
                 <v-icon color="white" class="mr-2">
@@ -877,10 +877,8 @@ export default {
                         }
                     },
                 },
-                colors: ['#4ECDC4', '#FF6B6B', '#FFE66D', '#2196F3'],
+                colors: ['#4ECDC4', '#FF6B6B', '#1A535C', '#2196F3'],
                 labels: ["Positiva", "Negativa", "Informativa", "Otro"],
-                
-                
             },
             estudiante:{
                 anho_ingreso: '',
@@ -1284,7 +1282,7 @@ export default {
         },
 
         modificarEstudiante() {
-             var valido=this.$refs.form_EditarEstudiante.validate();
+            var valido=this.$refs.form_EditarEstudiante.validate();
             if(valido == true){
                 var url = 'http://127.0.0.1:8000/api/v1/estudiante/'+this.id;
                 if (this.imagenMiniatura == null) {
@@ -1420,7 +1418,8 @@ export default {
                         const element = result.data.data.cursos[index];
                         contador ++;
                         let cursos ={
-                            id: element.curso,
+                            id: element.get_instanciacurso.curso,
+                            ayudante: element.ayudante,
                             curso: element.nombreCurso,
                         };
                         console.log("cursos");
@@ -1463,7 +1462,7 @@ export default {
                                 this.seriesaux[1] = this.seriesaux[1]+1;
                             } else {
                                 if (element.tipo == "Informativa") {
-                                    auxcolor="accent";
+                                    auxcolor="primary";
                                     auxicono="fas fa-info";
                                     this.seriesaux[2] = this.seriesaux[2]+1;
                                 } else {
@@ -1493,7 +1492,7 @@ export default {
                                     speed: 350
                                 }
                             },
-                            colors: ['#4ECDC4', '#FF6B6B', '#FFE66D', '#2196F3'],
+                            colors: ['#4ECDC4', '#FF6B6B', '#1A535C', '#2196F3'],
                             labels: ["Positiva", "Negativa", "Informativa", "Otro"],
                         };
                         //var chart = new ApexCharts(el, chartOptions);
@@ -1639,21 +1638,24 @@ export default {
                     }
                 }
                 var auxcurso = 0;
+                var auxayudante = null;
                 if (this.profesor == true) {
                     for (let index = 0; index < this.cursosAyudante.length; index++) {
                         const element = this.cursosAyudante[index];
                         if (this.estudianteObservacion.curso == element.id) {
+                            auxayudante=element.ayudante;
                             auxcurso= element.id;
                         }
                     }
                 }
                 else{
                     auxcurso = null;
+                    auxayudante = null;
                 }
                 let post = {
                     "titulo": this.estudianteObservacion.titulo,
                     "descripcion": this.estudianteObservacion.descripcion,
-                    "ayudante": null, 
+                    "ayudante": auxayudante, 
                     "estudiante": this.id,
                     "curso": auxcurso,
                     "categoria": auxcategoria,

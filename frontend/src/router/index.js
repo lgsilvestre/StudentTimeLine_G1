@@ -333,7 +333,6 @@ router.beforeEach((to, from, next) => {
                 next();
             }
         } else {
-            console.log('holaaa3');
             next();
         }
     };

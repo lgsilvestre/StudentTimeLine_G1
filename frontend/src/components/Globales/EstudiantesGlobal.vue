@@ -193,7 +193,7 @@
                                                             </v-btn>
                                                         </div>
                                                 
-                                                   </v-form>
+                                                </v-form>
                                             </v-container>
                                             <v-container v-if="containerAgregarEstudianteImportar" class="px-5 mt-5">
                                                 <v-form ref="form_agregarEstudiantesMasiva" style="margin:0;padding:0;" v-model="form_AgregarEstudiantesMasivoValido" lazy-validation > 
@@ -208,7 +208,7 @@
                                                         prepend-icon=""   
                                                         prepend-inner-icon="fas fa-file-excel"
                                                         :rules="[v => !!v || 'El archivo es requerido']" >
-                                                     </v-file-input>
+                                                    </v-file-input>
 
                                                     <div style="text-align:right;" class="mb-1">
                                                         <v-btn rounded color="warning" 
@@ -314,7 +314,6 @@
                                                                 ></v-date-picker>
 
                                                             </v-menu>
-                                                           
                                                         </v-col>
                                                         <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">  
                                                             <v-menu ref="menu2" v-model="menu2" :close-on-content-click="false"
@@ -381,7 +380,7 @@
                 :loading="cargando"
                 style="font-size: 140%;"
                 class="elevation-1 " >
-                    <template v-slot:item.actions="{ item }">
+                    <template v-slot:[`item.actions`]="{ item }">
                         <v-tooltip bottom color="primary">
                             <template v-slot:activator="{ on }">
                                 <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on" @click="perfilEstudiante(item)">
