@@ -243,7 +243,7 @@
                                         </v-row>
                                         <v-row style="margin: 0; padding: 0;">
                                             <v-col cols="4" lg="3"  xl="2" style="margin: 0; padding: 0;">
-                                                <h5 >Categoria</h5>
+                                                <h5 >Categoría</h5>
                                             </v-col>
 
                                             <v-col cols="8" lg="9"  xl="10" style="margin: 0; padding: 0;">
@@ -272,7 +272,7 @@
                                             </v-col>
                                         </v-row>
                                     
-                                        <h5 class="mt-4"> Descripcion</h5 >  
+                                        <h5 class="mt-4"> Descripción</h5 >  
                                     <div  class="DIV  mb-2" style=" height:150px; overflow: auto; font-size: 90%"> 
                                         {{observacion.descripcion}}  
                                     </div>
@@ -345,7 +345,7 @@
                         :items="categorias"
                         item-text="nombre"
                         item-value="id"
-                        label="Categoria"
+                        label="Categoría"
                         color="secondary"
                         outlined
                         :disabled="profesor == true"
@@ -431,7 +431,7 @@
             </v-row>
             <v-row style="margin: 0; padding: 0;">
                 <v-col cols="4" lg="3"  xl="2" style="margin: 0; padding: 0;">
-                    <h5 >Categoria</h5>
+                    <h5 >Categoría</h5>
                 </v-col>
 
                 <v-col cols="8" lg="9"  xl="10" style="margin: 0; padding: 0;">
@@ -459,7 +459,7 @@
                     <h5 >:  ninguno</h5>
                 </v-col>
             </v-row>
-            <h5 class="mt-4"> Descripcion</h5 >
+            <h5 class="mt-4"> Descripción</h5 >
             <div  class="DIV  mb-2" style=" height:150px; overflow: auto; font-size: 90%"> 
                 {{estudianteEliminarObservacion.descripcion}}  
             </div>
@@ -579,12 +579,12 @@
                                     :items="categorias"
                                     item-text="nombre"
                                     item-value="id"
-                                    label="Categoria"
+                                    label="Categoría"
                                     color="secondary"
                                     outlined
                                     :disabled="profesor == true"
                                     prepend-inner-icon="fas fa-list-ol"
-                                    :rules="[v => !!v || 'La categoria es requerida']"
+                                    :rules="[v => !!v || 'La categoría es requerida']"
                                     ></v-select>
                                 </v-col>
                                 <v-col cols="12" md="1" >
@@ -598,7 +598,7 @@
                                                 </v-icon>
                                             </v-btn>
                                         </template>
-                                        <span><strong>Agregar Categoria</strong></span>
+                                        <span><strong>Agregar Categoría</strong></span>
                                     </v-tooltip>
                                 </v-col>
                             </v-row>
