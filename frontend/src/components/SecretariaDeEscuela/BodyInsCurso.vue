@@ -77,7 +77,7 @@
             <v-data-iterator :items="listaInsCursos" :search="search" :sort-by="sortBy.toLowerCase()" class="px-2 py-2" :loading="cargando">
                 <template v-slot:default="props">
                     <v-row>
-                        <v-col v-for="item in props.items" :key="item.nomCurso" cols="12"  sm="6" md="4" lg="4">
+                        <v-col v-for="item in props.items" :key="item.id" cols="12"  sm="6" md="4" lg="4">
                             <v-card  class="mx-1" style="background-color:#F7FFF7; border-style:solid; border-color:rgba(0,0,0,0.5);" >
                                 <v-container class="pt-0 mt-0 pb-0 ">
                                     <v-row >
