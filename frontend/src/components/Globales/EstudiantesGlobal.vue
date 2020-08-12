@@ -104,7 +104,7 @@
                                                 </v-row>
                                                 </v-container>
                                             <v-container class="px-5 mt-5" color="primary" v-if="containerAgregarEstudianteUnico">
-                                                   <v-form ref="form_AgregarEstudiante" style="margin:0;padding:0;" v-model="form_AgregarEstudianteValido" lazy-validation>
+                                                    <v-form ref="form_AgregarEstudiante" style="margin:0;padding:0;" v-model="form_AgregarEstudianteValido" lazy-validation>
                                                         <v-text-field  
                                                         v-model="estudianteImportar.matricula"
                                                         label="Matricula" outlined
@@ -271,6 +271,7 @@
                                                 <v-col cols="5" class="mt-5">
                                                     <h4 class="mb-8">Por Escuela :</h4>
                                                     <h4 class="pt-5" >Por rango de fecha:</h4>
+                                                    <h5 class="pt-0">Alumnos con obs.*</h5>
                                                 </v-col>
                                                 <v-col cols="6">
                                                     <v-row class="mt-1 pt-1 mb-0 pb-0">

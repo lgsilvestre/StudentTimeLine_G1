@@ -588,15 +588,17 @@
                     <h5 class="white--text">Asignar Cursos</h5>
                 </v-card-title>
                 <v-container class="px-5">
+                    <v-row>
+                        <v-col cols="6" >
+                            <strong><h3>Curso</h3></strong>
+                        </v-col>
+                        <v-col cols="6">
+                            <strong><h3>Sección</h3></strong>
+                        </v-col>
+                    </v-row>
                         <v-form  ref="formAsignarCurso" style="margin:0;padding:0;" v-model="form_AsignarCurso" lazy-validation>
                     <v-row v-for="(item, index) in seleccionados" :key="index">
 
-                            <v-col cols="6" >
-                                <strong><h3>Curso</h3></strong>
-                            </v-col>
-                            <v-col cols="6">
-                                <strong><h3>Sección</h3></strong>
-                            </v-col>
                             <v-col cols="6" >
                                 <v-list-item-title> {{item.nombre}}</v-list-item-title>
                             </v-col>
@@ -1044,7 +1046,7 @@ export default {
             headersAyudante:[
                 { text: 'Matricula', value: 'matricula',align: 'center'},
                 { text: 'Nombre Completo', value: 'nombre_completo'},
-                {text:'Opciones', value:'opciones',align: 'center'},
+                {text:'Opciones', value:'opciones',align: 'center',sortable:false},
             ],
             headersProfesor:[
                
