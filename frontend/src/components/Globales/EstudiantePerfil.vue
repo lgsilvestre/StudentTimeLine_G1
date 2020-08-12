@@ -875,10 +875,8 @@ export default {
                         }
                     },
                 },
-                colors: ['#4ECDC4', '#FF6B6B', '#FFE66D', '#2196F3'],
+                colors: ['#4ECDC4', '#FF6B6B', '#1A535C', '#2196F3'],
                 labels: ["Positiva", "Negativa", "Informativa", "Otro"],
-                
-                
             },
             estudiante:{
                 anho_ingreso: '',
@@ -1242,7 +1240,7 @@ export default {
         },
 
         modificarEstudiante() {
-             var valido=this.$refs.form_EditarEstudiante.validate();
+            var valido=this.$refs.form_EditarEstudiante.validate();
             if(valido == true){
                 var url = 'http://127.0.0.1:8000/api/v1/estudiante/'+this.id;
                 if (this.imagenMiniatura == null) {
@@ -1422,7 +1420,7 @@ export default {
                                 this.seriesaux[1] = this.seriesaux[1]+1;
                             } else {
                                 if (element.tipo == "Informativa") {
-                                    auxcolor="accent";
+                                    auxcolor="primary";
                                     auxicono="fas fa-info";
                                     this.seriesaux[2] = this.seriesaux[2]+1;
                                 } else {
@@ -1452,7 +1450,7 @@ export default {
                                     speed: 350
                                 }
                             },
-                            colors: ['#4ECDC4', '#FF6B6B', '#FFE66D', '#2196F3'],
+                            colors: ['#4ECDC4', '#FF6B6B', '#1A535C', '#2196F3'],
                             labels: ["Positiva", "Negativa", "Informativa", "Otro"],
                         };
                         //var chart = new ApexCharts(el, chartOptions);

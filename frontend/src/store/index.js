@@ -72,7 +72,7 @@ export default new Vuex.Store({
             var url = 'http://127.0.0.1:8000/api/v1/auth/login';
             axios.post(url, post)
                 .then((result) => {
-                    console.log(result.data.data);
+                    //console.log(result.data.data);
                     state.usuario = result.data.data;
                     state.tk = 'Bearer ' + state.usuario.token;
                     state.config.headers.Authorization = state.tk;
@@ -100,7 +100,7 @@ export default new Vuex.Store({
                 })
                 .catch((error) => {
                     if (error.message == 'Network Error') {
-                        console.log(error);
+                        //console.log(error);
                         state.verificacionLogin = true;
                         state.cargaLogin = false;
                         state.mensajeErrorLogin = 'Error al comunicarse con el servidor, intente más tarde';
@@ -108,22 +108,22 @@ export default new Vuex.Store({
                         if (error.response.data.success == false) {
                             switch (error.response.data.code) {
                                 case 2:
-                                    console.log(error.response.data.code + ' ' + error.response.data.message);
-                                    console.log(error.response.data);
+                                    //console.log(error.response.data.code + ' ' + error.response.data.message);
+                                    //console.log(error.response.data);
                                     state.verificacionLogin = true;
                                     state.cargaLogin = false;
                                     state.mensajeErrorLogin = error.response.data.message;
                                     break;
                                 case 3:
-                                    console.log(error.response.data.code + ' ' + error.response.data.message);
-                                    console.log(error.response.data);
+                                    //console.log(error.response.data.code + ' ' + error.response.data.message);
+                                    //console.log(error.response.data);
                                     state.verificacionLogin = true;
                                     state.cargaLogin = false;
                                     state.mensajeErrorLogin = error.response.data.message;
                                     break;
                                 case 4:
-                                    console.log(error.response.data.code + ' ' + error.response.data.message);
-                                    console.log(error.response.data);
+                                    //console.log(error.response.data.code + ' ' + error.response.data.message);
+                                    //console.log(error.response.data);
                                     state.verificacionLogin = true;
                                     state.cargaLogin = false;
                                     state.mensajeErrorLogin = error.response.data.message;
