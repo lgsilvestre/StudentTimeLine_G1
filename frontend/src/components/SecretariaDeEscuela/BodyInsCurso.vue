@@ -1288,7 +1288,7 @@ export default {
         obtenerProfesores(){
             this.listaProfesoresAux = [];
             var aux;
-            var url = 'http://127.0.0.1:8000/api/v1/usuario/indexProfesor';
+            var url = this.$store.state.rutaDinamica+'api/v1/usuario/indexProfesor';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 for (let index = 0; index < result.data.data.usuarios.length; index++) {
@@ -1311,8 +1311,8 @@ export default {
                 else{
                     if (error.response.data.success == false) {
                         if(error.response.data.code == 101){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
+                            // console.log(error.response.data.code +' '+ error.response.data.message);
+                            // console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;                            
                         }                        
@@ -1323,7 +1323,7 @@ export default {
 
         obtenerEscuelas(){
             this.listaEscuelaAux = [];
-            var url = 'http://127.0.0.1:8000/api/v1/escuela';
+            var url = this.$store.state.rutaDinamica+'api/v1/escuela';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 for (let index = 0; index < result.data.data.escuelas.length; index++) {
@@ -1345,8 +1345,8 @@ export default {
                 else{
                     if (error.response.data.success == false) {
                         if(error.response.data.code == 101){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
+                            // console.log(error.response.data.code +' '+ error.response.data.message);
+                            // console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;                            
                         }                        
@@ -1358,7 +1358,7 @@ export default {
         //Metodo para obtener los datos del semestre al cual ingresamos.
         obtenerDatosSemestre(){
             var aux;
-            var url = `http://127.0.0.1:8000/api/v1/semestre/${this.$route.params.id}`;
+            var url = this.$store.state.rutaDinamica+`api/v1/semestre/${this.$route.params.id}`;
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 // console.log("obtener semestres")        
@@ -1374,10 +1374,10 @@ export default {
                     this.listaSemestresAux[index]=semestre;
                 }
                 this.listaSemestres = this.listaSemestresAux;
-                console.log(this.listaSemestres)
+                // console.log(this.listaSemestres)
             }
             ).catch((error)=>{
-                console.log(error.response)
+                // console.log(error.response)
             });
         },
 
@@ -1385,7 +1385,7 @@ export default {
         obtenerCursos(){
             this.listaCursosAux = [];
             var aux;
-            var url = `http://127.0.0.1:8000/api/v1/curso`;
+            var url = this.$store.state.rutaDinamica+`api/v1/curso`;
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 for( let index=0; index < result.data.data.cursos.length; index++){
@@ -1402,7 +1402,7 @@ export default {
                 this.listaCursos = this.listaCursosAux;                    
             }
             ).catch((error)=>{ 
-                console.log(error.response)
+                // console.log(error.response)
             });
         },
 
@@ -1412,7 +1412,7 @@ export default {
             this.cargando=true;
             this.listaInsCursosAux = [];
             var aux;            
-            var url = `http://127.0.0.1:8000/api/v1/instanciaCurso/${this.$store.infoSemestre.id}`;
+            var url = this.$store.state.rutaDinamica+`api/v1/instanciaCurso/${this.$store.infoSemestre.id}`;
             axios.get(url,this.$store.state.config)
             .then((result)=>{   
                 // console.log(result)
@@ -1436,7 +1436,7 @@ export default {
             }
             ).catch((error)=>{
                 this.cargando = false;
-                console.log(error.response)
+                // console.log(error.response)
             });
         },
         mostrarAyudantesDeCurso(item){
@@ -1455,7 +1455,7 @@ export default {
              this.listaProspectosAyudante = [];
              this.listaProspectosAyudanteAux = [];
             var aux;
-            var url = `http://127.0.0.1:8000/api/v1/estudiante/estudiantesAyudantes `;
+            var url = this.$store.state.rutaDinamica+`api/v1/estudiante/estudiantesAyudantes `;
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 
@@ -1472,7 +1472,7 @@ export default {
               
             }
             ).catch((error)=>{ 
-                console.log(error.response)
+                // console.log(error.response)
             });
         },
 
@@ -1524,13 +1524,11 @@ export default {
             this.opcionesAlAsignarAyudante(this.ayudanteSeleccionado5,this.ayudanteSeleccionadoAux5,this.idAyudanteConCurso5,idInstancia,5)
             this.CerrarDialogAsignarAyudante();
             
-
-
         },
         asignartAyudante(post){
-            var url ='http://127.0.0.1:8000/api/v1/ayudanteCurso'; 
+            var url = this.$store.state.rutaDinamica+'api/v1/ayudanteCurso'; 
             /* crear profesor con curso */
-            console.log(post)
+            // console.log(post)
             if(post.estudiante!='' && post.curso!=''){
                 axios.post(url, post, this.$store.state.config)
             .then((result) => {
@@ -1541,7 +1539,7 @@ export default {
                 
             }).catch((error)=>{
                 if (error.message == 'Network Error') {
-                    console.log(error)  
+                    // console.log(error)  
                     this.alertaError = true;
                     this.textoAlertas = "Error al asignar el profesor intente mas tarde."
                     this.resetAsignarCurso();
@@ -1553,8 +1551,8 @@ export default {
                 //     this.textoAlertas = error.response.data.message;
                 // }    
                 if(error.response.data.code == 302){
-                    console.log(error.response.data.code +' '+ error.response.data.message);
-                    console.log(error.response.data);
+                    // console.log(error.response.data.code +' '+ error.response.data.message);
+                    // console.log(error.response.data);
                     this.alertaError = true;      
                     this.textoAlertas = error.response.data.message;
                 }                    
@@ -1601,7 +1599,7 @@ export default {
          */
         desvincularProfesorInstanciaCurso(item, listaDeProfesores){
             if(listaDeProfesores.length>1){
-                var url = 'http://127.0.0.1:8000/api/v1/profesorConCurso/'+item.idProfesorConCurso;
+                var url = this.$store.state.rutaDinamica+ 'api/v1/profesorConCurso/'+item.idProfesorConCurso;
                 axios.delete(url,this.$store.state.config)
                 .then((result)=>{
                 if (result.statusText=='OK') {
@@ -1647,20 +1645,20 @@ export default {
                     "escuela": escuela,
                     "descripcion": 'sin descripcion',
                     }
-                    var url = 'http://127.0.0.1:8000/api/v1/curso';
-                    console.log(post)
+                    var url = this.$store.state.rutaDinamica+'api/v1/curso';
+                    // console.log(post)
                     axios.post(url, post, this.$store.state.config)
                     .then((result) => {
-                        console.log(result)
+                        // console.log(result)
                         this.alertaExito = true;
                         this.textoAlertas = "Se creó el curso con exito."
                         this.resetCrearCurso();
                         this.obtenerCursos(); 
                         this.KeyDialogCrearCurso ++; 
                     }).catch((error)=>{
-                        console.log(error);
+                        // console.log(error);
                         if (error.message == 'Network Error') {
-                            console.log(error)
+                            // console.log(error)
                             this.alertaError = true;
                             this.textoAlertas = "Error al crear el curso, intente mas tarde."
                             this.resetCrearCurso();
@@ -1668,13 +1666,11 @@ export default {
                         };                        
                     });
                 }else{
-                    console.log("ERROR EN LOS DATOS INGRESADOS")
+                    // console.log("ERROR EN LOS DATOS INGRESADOS")
                     this.alertaError = true;
                     this.textoAlertas = "Es necesario rellenar todos los campos."
-    
                 }
             }
-
         },
 
         resetCrearCurso(){
@@ -1699,9 +1695,9 @@ export default {
             this.dialogModificarCurso = false;
         },
         modificarCurso(){
-            console.log("inicio mod curso");
+            // console.log("inicio mod curso");
 
-            var url =`http://127.0.0.1:8000/api/v1/curso/${this.datosCurso.id}`;
+            var url = this.$store.state.rutaDinamica+`api/v1/curso/${this.datosCurso.id}`;
             let put ={                
                 "nombre": this.datosCurso.nombre,
                 "plan": this.datosCurso.plan,
@@ -1718,12 +1714,12 @@ export default {
                 }
             }).catch((error)=>{                
                 if (error.message == 'Network Error') {
-                    console.log(error)
+                    // console.log(error)
                     this.alertaError = true;
                     this.textoAlertas = "Error al modificar el curso, intente mas tarde."
                 }
                 else{
-                    console.log(error.response);
+                    // console.log(error.response);
                     // if(error.response.data.success == false){
                     //     if(error.response.data.code == 601){
                     //         console.log(error.response.data.code +' '+ error.response.data.message);
@@ -1752,7 +1748,7 @@ export default {
         },
         
         setEliminarCurso(item){
-            console.log("seteando curso")
+            // console.log("seteando curso")
             this.datosCurso.id= item.id;
             this.datosCurso.nombre = item.nombre;
             this.datosCurso.plan = item.plan;
@@ -1769,7 +1765,7 @@ export default {
             this.dialogEliminarCurso = false;
         },
         eliminarCurso(){
-            var url = 'http://127.0.0.1:8000/api/v1/curso/'+this.datosCurso.id;
+            var url = this.$store.state.rutaDinamica+'api/v1/curso/'+this.datosCurso.id;
             axios.delete(url,this.$store.state.config)
             .then((result)=>{
             if (result.statusText=='OK') {
@@ -1780,7 +1776,7 @@ export default {
             }
             }).catch((error)=>{
                 if (error.message == 'Network Error') {
-                    console.log(error)
+                    // console.log(error)
                     this.alertaError = true;
                     this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
                 }
@@ -1815,7 +1811,7 @@ export default {
          * Desvincula un ayudante de una instancia curso.
          */
         desvincularAyudanteInstanciaCurso(idAyudanteConCurso){
-            var url = 'http://127.0.0.1:8000/api/v1/ayudanteCurso/'+idAyudanteConCurso;
+            var url = this.$store.state.rutaDinamica+'api/v1/ayudanteCurso/'+idAyudanteConCurso;
             axios.delete(url,this.$store.state.config)
             .then((result)=>{
             if (result.statusText=='OK') {
@@ -1826,7 +1822,7 @@ export default {
             }
             }).catch((error)=>{
                 if (error.message == 'Network Error') {
-                    console.log(error)
+                    // console.log(error)
                     this.alertaError = true;
                     this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
                 }
@@ -1897,7 +1893,7 @@ export default {
                         "curso": this.seleccionados[i].id,
                         "seccion":  this.seleccionados[i].seccion,
                     }
-                    var url = 'http://127.0.0.1:8000/api/v1/instanciaCurso';   
+                    var url = this.$store.state.rutaDinamica+'api/v1/instanciaCurso';   
                     axios.post(url, post, this.$store.state.config)
                     .then((result) => {
                         ins_curso= result.data.data.insCurso.id;
@@ -1953,7 +1949,7 @@ export default {
                         }
     
                         }).catch((error)=>{
-                            console.log( error.response.data);
+                            // console.log( error.response.data);
                             if (error.message == 'Network Error') {
                                 this.alertaError = true;
                                 this.textoAlertas = "Error al asignar el curso, intente mas tarde."
@@ -1989,7 +1985,7 @@ export default {
          * creada
          */
         agregarProfesorCurso(post2){
-            var url2 = 'http://127.0.0.1:8000/api/v1/profesorConCurso'; 
+            var url2 = this.$store.state.rutaDinamica+'api/v1/profesorConCurso'; 
             /* crear profesor con curso */
             if(post2.curso!='' && post2.profesor!=''){
                 axios.post(url2, post2, this.$store.state.config)
@@ -2056,7 +2052,7 @@ export default {
             // this.obtenerInstanciasCursos();
         },
         DesvincularUnProfesorInsCurso(id){
-            var url = 'http://127.0.0.1:8000/api/v1/profesorConCurso/'+id;
+            var url = this.$store.state.rutaDinamica+'api/v1/profesorConCurso/'+id;
              console.log(url)
                 axios.delete(url,this.$store.state.config)
                 .then((result)=>{
@@ -2129,7 +2125,7 @@ export default {
             // }
         },
         modificarInstanciaCurso(){
-            var url =`http://127.0.0.1:8000/api/v1/instanciaCurso/${this.InstanciaModificar.id}`;
+            var url =this.$store.state.rutaDinamica+`api/v1/instanciaCurso/${this.InstanciaModificar.id}`;
             let put ={                
                 "seccion": this.InstanciaModificar.seccion,
             };
@@ -2199,7 +2195,7 @@ export default {
          * Deshabilita una instancia de curso en la base de datos.
          */
         eliminarInstanciaCurso(){
-            var url = 'http://127.0.0.1:8000/api/v1/instanciaCurso/'+this.datosInsCurso.id;
+            var url = this.$store.state.rutaDinamica+'api/v1/instanciaCurso/'+this.datosInsCurso.id;
             axios.delete(url,this.$store.state.config)
             .then((result)=>{
                 this.obtenerInstanciasCursos();
