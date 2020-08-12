@@ -111,29 +111,23 @@
                                             </v-card-text>
                                         </v-col>
 
-                                        <v-col cols="5" class=" pt-0 pl-1 pr-0 pb-0" >
-                                            <v-card-text class="pt-0 pl-2 pr-0 pr-0 pb-0 ">
-                                                <p class=" mt-0 mb-1   font-weight-black  text-truncate" style=" font-size: 115%;"   >Profesor/es: </p>
-                                            </v-card-text>
-                                        </v-col>
-                                        <v-col cols="7"  class="pt-0 pl-0 pr-0 pb-0  mb-1" >
-                                            <div style="text-align:left;">
-                                            <v-btn class="pt-0  pb-0 "  outlined x-small  @click="mostrarProfesoresDeCurso(item)">
-                                                    Ver
-                                            </v-btn>
-                                            </div>
-                                        </v-col>
-                                        <v-col cols="5" class=" pt-0 pl-1 pr-0 pb-0" >
-                                            <v-card-text class="pt-0 pl-2 pr-0 pb-0 ">
-                                                <p class=" mt-0 mb-1   font-weight-black  text-truncate" style=" font-size: 115%;"   >ayudante/s: </p>
-                                            </v-card-text>
-                                        </v-col>
-                                        <v-col cols="7"  class=" pt-0 pl-0  pb-0 " >
-                                            <div style="text-align:left;">
-                                            <v-btn  outlined x-small  @click="mostrarAyudantesDeCurso(item)">
+                                        <v-col cols="12" class=" pt-1 pl-1 pr-0 pb-0" >
+                                            <v-card-text class="pt-0 pl-2 pr-0 pr-0 pb-0 font-weight-black text-truncate" style=" font-size: 100%;">
+                                                Profesor/es: 
+                                                <v-btn class="pt-0  pb-0 "  outlined x-small  @click="mostrarProfesoresDeCurso(item)">
                                                     Ver
                                                 </v-btn>
-                                            </div>
+                                            </v-card-text>
+                                        </v-col>
+                                    
+                                        <v-col cols="12" class=" pt-1 pl-1 pr-0 pb-2" >
+                                            <v-card-text class="pt-0 pl-2 pr-0 pr-0 pb-0 font-weight-black text-truncate" style=" font-size: 100%;">
+                                                Ayudante/s :
+                                                <v-btn  outlined x-small  @click="mostrarAyudantesDeCurso(item)">
+                                                    Ver
+                                                </v-btn>
+                                            </v-card-text>
+                                            
                                         </v-col>
                                         
                                     </v-row>
@@ -215,7 +209,7 @@
                             </v-img>
                             <v-data-table  :headers="colCursos" :items="listaCursos"
                                 :search="buscarCursos" :loading="cargando" :items-per-page="10"  class="ml-5">            
-                                <template v-slot:item.opciones="{ item }">
+                                <template v-slot:[`item.opciones`]="{ item }">
                                 <!-- boton para modificar usuario seleccionado -->
                                     <v-tooltip bottom color="primary">
                                         <template v-slot:activator="{ on }">
@@ -380,7 +374,7 @@
                             <strong><h3>Sección</h3></strong>
                         </v-col>
                         <v-col cols="6" >
-                           <v-list-item-title> {{ InstanciaModificar.nomCurso }} </v-list-item-title>
+                            <v-list-item-title> {{ InstanciaModificar.nomCurso }} </v-list-item-title>
                         </v-col>
                         <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
                             <v-select  v-model="InstanciaModificar.seccion"
@@ -395,12 +389,12 @@
                             ></v-select>
                         </v-col>
                     </v-row>
-                     <v-divider></v-divider>
+                    <v-divider></v-divider>
                         <strong ><h3 class="pt-5">Eliga el profesor: </h3></strong>
                         <v-form ref="forModificarInsCurso" style="margin:0;padding:0;" v-model="form_modificarInsCurso" lazy-validation>
-                             <v-select
+                            <v-select
                                     class="pt-3"
-                                     v-if=" contadorProfesores>=1"
+                                    v-if=" contadorProfesores>=1"
                                     v-model="profesorSeleccionado"
                                     label="Profesor"
                                     :items="listaProfesores"
@@ -457,7 +451,7 @@
                                     clearable >  </v-select>   
                                                         
             
-                         <div style="text-align:left;"   >
+                        <div style="text-align:left;"   >
                             <v-btn 
                             x-small
                             fab color="primary" 
@@ -856,7 +850,7 @@
                     :items="AyudanteDeInstanciaCurso.listaAyudantes"
                     
                     hide-default-footer  >
-                    <template v-slot:item.opciones="{ item }">
+                    <template v-slot:[`item.opciones`]="{ item }">
                             <v-tooltip bottom color="primary">
                             <template v-slot:activator="{ on }">
                                 <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on" @click="EnrutarAsiPerfilDeUsuario(item)" >
