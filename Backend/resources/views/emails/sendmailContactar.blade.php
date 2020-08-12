@@ -404,7 +404,7 @@ a.es-button {
                       <td class="es-m-txt-l es-p5t es-p30r es-p30l" bgcolor="#4ecdc4" align="left"><h2 style="color: #666666;font-size: 18px;text-align: center"><b>- DETALLE&nbsp;📪 -</b></h2></td> 
                      </tr> 
                      <tr> 
-                      <td align="left" bgcolor="#ffffff"><p style="font-size: 16px"><h1>{{$details['descripcion']}}</h1><br><br></p></td> 
+                      <td align="left" bgcolor="#ffffff"><p style="font-size: 16px"><h3>{{$details['descripcion']}}</h3><br><br></p></td> 
                      </tr> 
                    </table></td> 
                  </tr> 
