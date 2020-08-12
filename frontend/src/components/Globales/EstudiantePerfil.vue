@@ -306,8 +306,6 @@
                                         
                                     </div>
                                     </v-container>
-                                   
-                                    
                                 </v-card>
                                 </v-timeline-item>
                             </v-timeline>
@@ -1085,7 +1083,7 @@ export default {
         obtenerEscuelas(estudiante){
             if (this.admin == true) {
                 this.listaEscuelaAux = [];
-                var url = 'http://127.0.0.1:8000/api/v1/escuela';
+                var url = this.$store.state.rutaDinamica+'api/v1/escuela';
                 axios.get(url,this.$store.state.config)
                 .then((result)=>{
                     if (result.data.success == true) {
@@ -1152,7 +1150,7 @@ export default {
                     "escuela": 0
                 };
                 // console.log(post)
-            var url = 'http://127.0.0.1:8000/api/v1/estudiante/exportarPDF';
+            var url = this.$store.state.rutaDinamica+'api/v1/estudiante/exportarPDF';
             //console.log(post)
             axios.post(url,post,this.$store.state.config2)
             .then((result)=>{
@@ -1191,7 +1189,7 @@ export default {
 
         obtenerCategorias(){
             this.categoriasAux = [];
-            var url = 'http://127.0.0.1:8000/api/v1/categoria';
+            var url = this.$store.state.rutaDinamica+'api/v1/categoria';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 if (result.data.success == true) {
@@ -1217,7 +1215,7 @@ export default {
         },
 
         agregarCategoria(){
-            var url = 'http://127.0.0.1:8000/api/v1/categoria';
+            var url = this.$store.state.rutaDinamica+'api/v1/categoria';
             let post ={
                 "nombre": this.nuevaCategoria,
             };
@@ -1284,7 +1282,7 @@ export default {
         modificarEstudiante() {
             var valido=this.$refs.form_EditarEstudiante.validate();
             if(valido == true){
-                var url = 'http://127.0.0.1:8000/api/v1/estudiante/'+this.id;
+                var url = this.$store.state.rutaDinamica+'api/v1/estudiante/'+this.id;
                 if (this.imagenMiniatura == null) {
                     this.imagenMiniatura = null;
                 }
@@ -1392,7 +1390,7 @@ export default {
             }
             
             
-            var url = 'http://127.0.0.1:8000/api/v1/estudiante/'+ this.id+'/edit';
+            var url = this.$store.state.rutaDinamica+'api/v1/estudiante/'+ this.id+'/edit';
 
             axios.get(url,this.$store.state.config)
             .then((result)=>{
@@ -1557,7 +1555,7 @@ export default {
         obtenerCursosUsuario(){
             this.listaCursosAux = [];
             // var url =`http://127.0.0.1:8000/api/v1/instanciacurso/${this.$store.state.usuario.usuario.id}`;
-            var url = `http://127.0.0.1:8000/api/v1/profesorConCurso/${this.$store.state.usuario.usuario.id}`;
+            var url = this.$store.state.rutaDinamica+`api/v1/profesorConCurso/${this.$store.state.usuario.usuario.id}`;
             
             axios.get(url,this.$store.state.config)
             .then((result)=>{   
@@ -1609,7 +1607,7 @@ export default {
             if(valido == true){
 
                 this.dessertsAux = [];
-                var url = 'http://127.0.0.1:8000/api/v1/observacion';
+                var url = this.$store.state.rutaDinamica+'api/v1/observacion';
                 var auxTipo=0;
                 if (this.estudianteObservacion.tipo == "Positiva") {
                     auxTipo=1;
@@ -1788,7 +1786,7 @@ export default {
                 "tipo": auxTipo,
             }
             console.log(put);
-            var url = 'http://127.0.0.1:8000/api/v1/observacion/'+ this.estudianteModificarObservacion.id;
+            var url = this.$store.state.rutaDinamica+'api/v1/observacion/'+ this.estudianteModificarObservacion.id;
             console.log(url);
             axios.put(url, put, this.$store.state.config)
             .then((result) => {
@@ -1870,7 +1868,7 @@ export default {
             }
         },
         EliminarObservacion(){
-            var url = 'http://127.0.0.1:8000/api/v1/observacion/'+this.estudianteEliminarObservacion.id;
+            var url = this.$store.state.rutaDinamica+'api/v1/observacion/'+this.estudianteEliminarObservacion.id;
             axios.delete(url, this.$store.state.config)
             .then((result) => {
                 //console.log(result);
@@ -1964,7 +1962,7 @@ export default {
                 "horas": this.datosSolicitud.horas,
                 "meses": this.datosSolicitud.meses,
             }
-            var url = `http://127.0.0.1:8000/api/v1/solicitudDeAyudante/enviar`;
+            var url = this.$store.state.rutaDinamica+`api/v1/solicitudDeAyudante/enviar`;
 
             axios.post(url, post, this.$store.state.config)
             .then((result) => {

@@ -129,7 +129,7 @@ export default {
             "password": this.reiniciocontrasena.contrasena,
             "codigo": this.codigo,
         };
-        var url = 'http://127.0.0.1:8000/api/v1/auth/restartPassword';
+        var url = this.$store.state.rutaDinamica+'api/v1/auth/restartPassword';
         axios.post(url,post)
         .then((result)=>{
             console.log(result.data);

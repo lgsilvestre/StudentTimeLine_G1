@@ -144,7 +144,7 @@
             obtenerRegistros(){
                 this.cargando = true;
                 this.listaRegistrosAux= [];
-                var url="http://127.0.0.1:8000/api/v1/log";
+                var url=this.$store.state.rutaDinamica+"api/v1/log";
                 axios.get(url,this.$store.state.config)
                 .then((result)=>{
                     for (let index = 0; index < result.data.data.logs.length; index++) {

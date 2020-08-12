@@ -251,7 +251,7 @@ import axios from 'axios'
           this.listaSecEscuelaAux = [];
           var c1 = 0;
           var c2 = 0;
-          var url = 'http://127.0.0.1:8000/api/v1/usuario/listarEncargados';
+          var url = this.$store.state.rutaDinamica+'api/v1/usuario/listarEncargados';
           
           axios.get(url,this.$store.state.config)
           .then((result)=>{                
@@ -309,7 +309,7 @@ import axios from 'axios'
               "descripcion": this.datosContactar.descripcion,
           };                     
           console.log(post.destinatarios);
-          var url = 'http://127.0.0.1:8000/api/v1/usuario/contactar';
+          var url = this.$store.state.rutaDinamica+'api/v1/usuario/contactar';
           axios.post(url, post, this.$store.state.config)
           .then((result)=>{       
                   this.cargando = false;

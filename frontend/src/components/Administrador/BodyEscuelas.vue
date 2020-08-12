@@ -479,7 +479,7 @@
       obtenerEscuelas(){
         this.cargando =true;
         this.dessertsAux = [];
-        var url = 'http://127.0.0.1:8000/api/v1/escuela';
+        var url = this.$store.state.rutaDinamica+'api/v1/escuela';
         axios.get(url,this.$store.state.config)
           .then((result)=>{
             // console.log(result);
@@ -525,7 +525,7 @@
       obtenerEscuelasEliminadas(){
         this.cargando =true;
         this.listaEscuelasEliminadasAux = [];
-        var url = 'http://127.0.0.1:8000/api/v1/escuela/disabled';
+        var url = this.$store.state.rutaDinamica+'api/v1/escuela/disabled';
         axios.get(url,this.$store.state.config)
           .then((result)=>{
             //console.log(result);
@@ -577,7 +577,7 @@
       restaurarEscuelaEliminada(){
         
         //console.log("id: "+this.escuelaEditar.id);
-        var url =`http://127.0.0.1:8000/api/v1/escuela/restore/${this.escuelaEditar.id}`;
+        var url =this.$store.state.rutaDinamica+`api/v1/escuela/restore/${this.escuelaEditar.id}`;
         axios.post(url,null,this.$store.state.config)
         .then((result)=>{
         if (result.data.success == true) {
@@ -616,7 +616,7 @@
 
       crearEscuela(){
         this.dessertsAux = [];
-        var url = 'http://127.0.0.1:8000/api/v1/escuela';
+        var url = this.$store.state.rutaDinamica+'api/v1/escuela';
         let post ={
           "nombre": this.escuela.nombre,
           "cod_escuela":this.escuela.cod,
@@ -661,7 +661,7 @@
         });
       },
       editarEscuela(item) {
-        var url = 'http://127.0.0.1:8000/api/v1/escuela/'+item.id;
+        var url = this.$store.state.rutaDinamica+'api/v1/escuela/'+item.id;
         let put ={
           "nombre": this.escuelaEditar.nombre,
           "cod_escuela":  this.escuelaEditar.cod,
@@ -717,7 +717,7 @@
         });
       },
       borrarEscuela (item) {
-        var url = 'http://127.0.0.1:8000/api/v1/escuela/'+item.id;
+        var url = this.$store.state.rutaDinamica+'api/v1/escuela/'+item.id;
         axios.delete(url,this.$store.state.config)
         .then((result)=>{
           if (result.data.success == true) {
