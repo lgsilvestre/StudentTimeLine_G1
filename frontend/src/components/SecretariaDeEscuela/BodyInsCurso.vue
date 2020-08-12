@@ -1128,45 +1128,52 @@ export default {
             }
         },
         sumarProfesor(){
-            // console.log("Contador de profesores: "+this.contadorProfesores);
-            //console.log("Numero de profesores que puedo agregar: "+this.numeroDeProfesoresModificar);
+             console.log("Contador de profesores: "+this.contadorProfesores);
+            console.log("Numero de profesores que puedo agregar: "+this.numeroDeProfesoresModificar);
             if(this.contadorProfesores ==1 &&  this.profesorSeleccionado!=null){
                 this.contadorProfesores++;
+                // console.log("Nuevo valor del contador: "+ this.contadorProfesores)
             }
             //se asigno el segundo profesor y quiere añadir otro
             if(this.contadorProfesores == 2 && this.profesorSeleccionado2!=null ){
                 this.contadorProfesores++;
+                // console.log("Nuevo valor del contador: "+ this.contadorProfesores)
             }
             //se asigno el tercer profesor y quiere añadir otro
             if(this.contadorProfesores == 3 && this.profesorSeleccionado3!=null){
                 this.contadorProfesores++;
+                // console.log("Nuevo valor del contador: "+ this.contadorProfesores)
             }
             //se asigno el cuarto profesor y quiere añadir otro
             if(this.contadorProfesores == 4 && this.profesorSeleccionado4!=null ){
                 
                 this.contadorProfesores++;
+                // console.log("Nuevo valor del contador: "+ this.contadorProfesores)
             }
             
         },
         restarProfesor(){
 
-              if(this.contadorProfesores== 2 ){
+            if(this.contadorProfesores== 2 ){
                 this.contadorProfesores--;
-                this.profesorSeleccionado2=''
-                //  console.log("++++++++++++++++++++++++++++++++++++++++")
-                // console.log("Numero de profesores --"+  this.profesorSeleccionado2)
-                // console.log("Valor del contador de cursos : "+ this.contadorCursos)
-                
+                this.profesorSeleccionado2=null;
+                this.profesorSeleccionado3=null;
+                this.profesorSeleccionado4=null;
+                this.profesorSeleccionado5=null;
+          
             }
             //se asigno el tercer profesor y quiere añadir otro
             if(this.contadorProfesores == 3 ){
                 this.contadorProfesores--;
-                this.profesorSeleccionado3=''
+                this.profesorSeleccionado3=null;
+                this.profesorSeleccionado4=null;
+                this.profesorSeleccionado5=null;
             }
             //se asigno el cuarto profesor y quiere añadir otro
             if(this.contadorProfesores == 4 ){
                 this.contadorProfesores--;
-                this.profesorSeleccionado4=''
+                this.profesorSeleccionado4=null;
+                this.profesorSeleccionado5=null;
             }
             if(this.contadorProfesores == 5 ){
                 this.contadorProfesores--;
@@ -1199,21 +1206,27 @@ export default {
 
             if(this.contadorAyudante== 2 ){
                 this.contadorAyudante--;
-                this.ayudanteSeleccionado2=''     
+                this.ayudanteSeleccionado2=null;  
+                this.ayudanteSeleccionado3=null;
+                this.ayudanteSeleccionado4=null;
+                this.ayudanteSeleccionado5=null;   
             }
             //se asigno el tercer profesor y quiere añadir otro
             if(this.contadorAyudante == 3 ){
                 this.contadorAyudante--;
-                this.ayudanteSeleccionado3=''
+                this.ayudanteSeleccionado3=null;
+                this.ayudanteSeleccionado4=null;
+                this.ayudanteSeleccionado5=null;
             }
             //se asigno el cuarto profesor y quiere añadir otro
             if(this.contadorAyudante == 4 ){
                 this.contadorAyudante--;
-                this.ayudanteSeleccionado4=''
+                this.ayudanteSeleccionado4=null;
+                this.ayudanteSeleccionado5=null;
             }
             if(this.contadorAyudante == 5 ){
                 this.contadorAyudante--;
-                this.ayudanteSeleccionado5=''
+                this.ayudanteSeleccionado5=null;
             }
         },
         /**
