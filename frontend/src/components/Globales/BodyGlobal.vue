@@ -123,7 +123,7 @@
                         <v-btn  
                         :disabled="!formModificar"
                         :small="$vuetify.breakpoint.smAndDown ? true : false"
-                        :loading="cargando" rounded color="primary" class="mb-4 ml-2"    type="submit">
+                        :loading="cargando" rounded color="secondary" class="mb-4 ml-2"    type="submit">
                             <h4 class="white--text">Modificar</h4>
                         </v-btn>
                     </div>
