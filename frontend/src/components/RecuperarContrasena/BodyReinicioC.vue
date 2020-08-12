@@ -19,22 +19,26 @@
                                         <h5 class="white--text ">Reiniciar su contraseña </h5>
                                         </v-card-title>
                                         <v-container class="px-5">
-                                            <v-text-field 
-                                                class="pt-5"
-                                                v-model="reiniciocontrasena.contrasena"
-                                                :prepend-inner-icon="mostrar ? 'mdi-eye' : 'mdi-eye-off'"
-                                                :type="mostrar ? 'text' : 'password'"
-                                                label="Ingrese su nueva contraseña"
-                                                color="secondary"
-                                                outlined
-                                                @click:prepend-inner= "mostrar = !mostrar"
-                                            ></v-text-field>
-                                            <v-btn rounded block color="primary"
-                                            :loading="RCstatus" 
-                                            @click="reinicioContrasena"
-                                            >
-                                                Reiniciar contraseña
-                                            </v-btn>  
+                                            <v-form ref="RC"  v-model="formRecuperar" lazy-validation>
+                                                <v-text-field 
+                                                    class="pt-5"
+                                                    v-model="reiniciocontrasena.contrasena"
+                                                    :prepend-inner-icon="mostrar ? 'mdi-eye' : 'mdi-eye-off'"
+                                                    :type="mostrar ? 'text' : 'password'"
+                                                    hint="Mínimo 8 Caracteres"
+                                                    label="Ingrese su nueva contraseña"
+                                                    color="secondary"
+                                                    outlined
+                                                    :rules="reglasContraseña"
+                                                    @click:prepend-inner= "mostrar = !mostrar"
+                                                ></v-text-field>
+                                                <v-btn rounded block color="primary"
+                                                :loading="RCstatus" 
+                                                @click="reinicioContrasena"
+                                                >
+                                                    Reiniciar contraseña
+                                                </v-btn>  
+                                            </v-form>
                                         </v-container>
                                     </v-card>
                                 </v-col>
@@ -110,6 +114,11 @@ export default {
             delay: 4000,
             reiniciocontrasena:[{contrasena:''}],
             codigo : this.$route.params.codigo,
+
+            formRecuperar: true,
+            reglasContraseña:[
+                v => /^[a-zA-Z0-9!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]{8,}$/.test(v)  || 'Contraseña no Válida',
+            ],
         }
     },
     methods:{
@@ -130,8 +139,10 @@ export default {
                 this.textoAcept= result.data.message;
                 this.email = '';
             } 
+            this.$refs.RC.reset();
         })
         .catch((error)=>{
+            this.$refs.RC.reset();
         if (error.message == 'Network Error') {
             console.log(error);
             this.RCstatus=false;

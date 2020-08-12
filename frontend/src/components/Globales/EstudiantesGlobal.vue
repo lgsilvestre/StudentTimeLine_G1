@@ -117,6 +117,7 @@
                                                         label="Rut" outlined
                                                         color="secondary"
                                                         prepend-inner-icon="fas fa-address-card"
+                                                        hint="Ingrese rut sin puntos, guion o dígito verificador"
                                                         :rules="reglas_rut"
                                                         ></v-text-field>
 
@@ -538,11 +539,12 @@
          reglas_matricula:[
              value => !!value || 'Requerido',
              value => /^[0-9]+$/.test(value) || 'Matricula solo debe incluir numeros',
-             value => value.length == 10 || 'La matricula debe compuesta de 10 numeros',             
+             value => /^[0-9]{10}$/.test(value) || 'La matricula debe compuesta de 10 numeros',             
          ],
          reglas_rut:[
-             value => !!value || 'Requerido',
-             value =>/^\d{1,2}\.\d{3}\.\d{3}[\-][0-9kK]{1}/.test(value) && value.length <= 12 || 'El Rut debe ser por ejemplo: 1.111.111-1',
+            value => !!value || 'Requerido',
+            value => /^[0-9]+$/.test(value) || 'El rut debe estar compuesto solo por numeros',                
+            value => /^[0-9]{7,8}$/.test(value) || 'El rut debe contener entre 7 y 8 dígitos',
          ],
          reglas_Nombre:[
                 value => !!value || 'Requerido',
@@ -901,6 +903,9 @@
         resetImportarEstudiantes(){
             this.file = null;
             this.dialogAgregarEstudiante= false;
+            this.botonesAgregarEstudiantes= true;
+            this.containerAgregarEstudianteImportar= false;
+            this.$refs.form_agregarEstudiantesMasiva.reset();
         },
         resetUnicoEstudiante(){
             this.estudianteImportar.matricula='';
@@ -911,7 +916,8 @@
             this.estudianteImportar.situacion_academica="";
             this.estudianteImportar.escuela="";
             this.estudianteImportar.foto=null;
-            this.dialogAgregarEstudiante= false;
+            this.dialogAgregarEstudiante= false;       
+            this.$refs.form_AgregarEstudiante.reset();
         },
         perfilEstudiante(item){
             var estudiantes = "estudiantes";

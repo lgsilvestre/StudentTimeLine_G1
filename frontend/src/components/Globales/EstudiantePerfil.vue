@@ -628,6 +628,7 @@
                                     <h4 class="white--text">Cancelar</h4>
                                 </v-btn>
                                 <v-btn 
+                                :disabled="!form_añadirObservacionValido"
                                 :small="$vuetify.breakpoint.smAndDown ? true : false"
                                 rounded color="secondary" class="ml-2"
                                 :loading="cargando"  
@@ -687,6 +688,7 @@
                             v-model="estudianteEditar.rut"
                             label="Rut" outlined
                             color="secondary"
+                            hint="Ingrese rut sin puntos, guion o dígito verificador"
                             prepend-inner-icon="fas fa-address-card"
                             :rules="reglas_rut"
                             ></v-text-field>
@@ -1005,7 +1007,8 @@ export default {
             
             tipos:['Positiva','Negativa','Informativa','Otro'],
             nuevaCategoria: '',
-            categorias:['Ayudantía','Práctica','Copia','Otro','En Observación - 1 por Tercera','En Observación - 1 por Segunda','Se Retira','Eliminado por Rendimiento','Titulado','Eliminado Art. 31 E','Eliminado Art. 31 B'],
+            categorias:[],
+            categoriasAux: [],
             id : null,
             enrutamiento: null,
             dialogExportar:false,
@@ -1026,12 +1029,17 @@ export default {
             ],
             reglas_rut:[
                 value => !!value || 'Requerido',
-                value =>/^\d{1,2}\.\d{3}\.\d{3}[\-][0-9kK]{1}/.test(value) && value.length <= 12 || 'El Rut debe ser por ejemplo: 1.111.111-1',
+                value => /^[0-9]+$/.test(value) || 'El rut debe estar compuesto solo por numeros',                
+                value => /^[0-9]{7,8}$/.test(value) || 'El rut debe contener entre 7 y 8 dígitos',
             ],
             reglas_Nombre:[
                     value => !!value || 'Requerido',
                     v => /^[a-zA-Z ]+$/.test(v) || 'Nombre no Válido.',
                     v => /^[a-zA-Z ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',
+            ],
+            reglas_Descripcion:[
+                    value => !!value || 'Requerido',
+                    v => /^\s.{1,500}$/.test(v) || 'Largo del Nombre no Válido',
             ],
             regla_Email: [
                 value => !!value || 'Requerido',
@@ -1072,6 +1080,7 @@ export default {
         this.enrutamiento = this.$route.params.enrutamiento;
         this.obtenerEstudiante(1);
         this.obtenerCursosUsuario();
+        this.obtenerCategorias();
     },
 
     methods:{
@@ -1183,7 +1192,25 @@ export default {
         },
 
         obtenerCategorias(){
-
+            this.categoriasAux = [];
+            var url = 'http://127.0.0.1:8000/api/v1/categoria';
+            axios.get(url,this.$store.state.config)
+            .then((result)=>{
+                if (result.data.success == true) {
+                    for (let index = 0; index < result.data.data.categorias.length; index++) {
+                        const element = result.data.data.categorias[index];
+                        let categoria = {
+                            nombre: element.nombre,
+                        };
+                        this.categoriasAux[index]=categoria;
+                    }
+                    this.categorias = this.categoriasAux;
+                }
+            })
+            .catch((error) => {
+                this.alertError = true;
+                this.textoError = error.response.data.message;
+            });
         },
 
         resetCrearCategoria(){
@@ -1192,7 +1219,22 @@ export default {
         },
 
         agregarCategoria(){
-            console.log("agrego categoria");
+            var url = 'http://127.0.0.1:8000/api/v1/categoria';
+            let post ={
+                "nombre": this.nuevaCategoria,
+            };
+            axios.post(url,post,this.$store.state.config)
+            .then((result)=>{
+                this.obtenerCategorias();
+                this.dialogCrearCategoria = false;
+                this.alertAcept = true;
+                this.textoAcept = "Se agregó la categoria con exito";
+            })
+            .catch((error) => {
+                this.dialogCrearCategoria = false;
+                this.alertError = true;
+                this.textoError = error.response.data.message;
+            });
         },
 
         /**
