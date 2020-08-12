@@ -55,10 +55,12 @@ class SolicitudDeAyudanteController extends Controller
             $curso = Curso::where('id', $instanciaCurso['curso'])->first();
             $secretarias=User::Where('rol', 'secretaria de escuela')->where('escuela', $estudiante['escuela'])->get();
             $escuela = Escuela::where('id', $estudiante['escuela'])->first();
+         
             $details = array(
                 'opcion' => 2,
                 'nombreProfesor' => $credenciales->nombre,
                 'escuelaProfesor' => $credenciales->getEscuela->nombre,
+                'escuelaEncargado' => $credenciales->getEscuela->nombre,
                 'escuelaEstudiante' => $escuela['nombre'],
                 'estudiante' => $estudiante['nombre_completo'],
                 'rut' => $estudiante['rut'],
@@ -69,6 +71,7 @@ class SolicitudDeAyudanteController extends Controller
                 'meses' => $entradas['meses'],
                 'horas' => $entradas['horas']
             );
+         
             foreach($secretarias as $secretaria){
                 \Mail::to($secretaria->email)->send(new SendMail($details));
             }
