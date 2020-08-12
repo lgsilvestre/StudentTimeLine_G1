@@ -293,6 +293,35 @@ class UsuarioController extends Controller{
                 'data' =>  $ex,
                 'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
             ]);
+
+            if($ex->errorInfo[1]==1264){
+                return response()->json([
+                    'success' => false,
+                    'code' => 302,
+                    'message' => "Error: el id de la escuela debe ser mayor a 0",
+                    'data' => ['error'=>$ex]
+                ], 409  );
+            }else if($ex->errorInfo[1]==1452){
+                if(strlen(strstr($ex->errorInfo[2],'FOREIGN KEY (`escuela`) REFERENCES `escuelas` (`id`)'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: Escuela inexistente en nuestros registros ",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+
+                }
+            }else if($ex->errorInfo[1]==1062){
+                if(strlen(strstr($ex->errorInfo[2],'users_email_unique'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El correo ingresado ya existe en el sistema, por favor ingrese otro",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+                }
+            }
+
             return response()->json([
                 'success' => false,
                 'code' => 302,

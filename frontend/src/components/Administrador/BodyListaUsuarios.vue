@@ -168,9 +168,9 @@
                                                             <v-card-title class="white--text" style="padding:0;">
                                                             <v-row class="px-5">
                                                                 <v-col cols="12"  >
-                                                                    <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" > Usuarios Eliminados</strong>
+                                                                    <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 130%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" > Usuarios Eliminados</strong>
                                                                 </v-col>
-                                                                <v-col  cols="7" sm="9" md="9" class="align-self-end" >
+                                                                <v-col  cols="12" sm="9" md="9" class="align-self-end" >
                                                                     <v-text-field
                                                                     v-model="buscar2"
                                                                     append-icon="mdi-magnify"
@@ -188,20 +188,6 @@
                                                             </v-row> 
                                                             </v-card-title>
                                                         </v-img>
-                                                        <v-text-field
-                                                        v-model="buscar2"
-                                                        append-icon="mdi-magnify"
-                                                        label="Buscar"
-                                                        hide-details
-                                                        outlined
-                                                        rounded=""
-                                                        clearable
-                                                        dense
-                                                        solo
-                                                        class="px-5 py-2 -sm-flex d-md-none"
-                                                        color="secondary"
-                                                        background-color="white"
-                                                        ></v-text-field>
                                                         <v-data-table  
                                                             :headers="columnas" 
                                                             :items="listaUsuariosEliminados"
@@ -210,7 +196,7 @@
                                                             :items-per-page="10" 
                                                             class="elevation-1 "
                                                             >            
-                                                            <template v-slot:item.opciones="{ item }">
+                                                            <template v-slot:[`item.opciones`]="{ item }">
                                                             <!-- boton para modificar usuario seleccionado -->
                                                             <v-tooltip bottom color="primary">
                                                                 <template v-slot:activator="{ on }">
@@ -379,7 +365,7 @@
                     <!-- propiedades tablas -->
                     <v-data-table  :headers="columnas" :items="listaUsuarios"
                         :search="buscar" :loading="cargando" :items-per-page="10"  >            
-                        <template v-slot:item.opciones="{ item }" >
+                        <template v-slot:[`item.opciones`]="{ item }" >
                             <!-- boton para modificar usuario seleccionado -->
                             <v-tooltip bottom color="primary">
                                 <template v-slot:activator="{ on }">
@@ -549,7 +535,7 @@ export default {
             this.dialogListaUsuariosEliminado = true;
             this.listaUsuariosAux = [];
             var aux;
-            var url = 'http://127.0.0.1:8000/api/v1/usuario/disabled';
+            var url = this.$store.state.rutaDinamica+'api/v1/usuario/disabled';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 for (let index = 0; index < result.data.data.usuarios.length; index++) {
@@ -594,7 +580,7 @@ export default {
         },
         restaurarUsuario(){
             this.dialogRestaurarUsuarioEliminado= false;
-             var url =`http://127.0.0.1:8000/api/v1/usuario/restore/${this.datosUsuario.id}`;
+             var url =this.$store.state.rutaDinamica+`api/v1/usuario/restore/${this.datosUsuario.id}`;
             axios.post(url,null,this.$store.state.config)
             .then((result)=>{
             if (result.data.success == true) {
@@ -657,7 +643,7 @@ export default {
 
         obtenerEscuelas(){
             this.listaEscuelaAux = [];
-            var url = 'http://127.0.0.1:8000/api/v1/escuela';
+            var url = this.$store.state.rutaDinamica+'api/v1/escuela';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 for (let index = 0; index < result.data.data.escuelas.length; index++) {
@@ -696,7 +682,7 @@ export default {
             this.cargando = true;
             this.listaUsuariosAux = [];
             var aux;
-            var url = 'http://127.0.0.1:8000/api/v1/usuario';
+            var url = this.$store.state.rutaDinamica+'api/v1/usuario';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 for (let index = 0; index < result.data.data.usuarios.length; index++) {
@@ -759,7 +745,7 @@ export default {
             "email": this.datosUsuario.correo,
             "password": this.datosUsuario.contrasena,
             }
-            var url = 'http://127.0.0.1:8000/api/v1/usuario';
+            var url = this.$store.state.rutaDinamica+'api/v1/usuario';
             console.log(post);
             axios.post(url, post, this.$store.state.config)
             .then((result) => {
@@ -860,7 +846,7 @@ export default {
             if ( this.datosUsuario.role == "Profesor") {
                 aux = "profesor"
             };
-            var url =`http://127.0.0.1:8000/api/v1/usuario/${this.datosUsuario.id}`;
+            var url =this.$store.state.rutaDinamica+`api/v1/usuario/${this.datosUsuario.id}`;
             let put ={
                 "nombre": this.datosUsuario.nombre,
                 "escuela": this.datosUsuario.escuela,
@@ -928,7 +914,7 @@ export default {
         },
 
         eliminarUsuario(){
-            var url = 'http://127.0.0.1:8000/api/v1/usuario/'+this.datosUsuario.id;
+            var url = this.$store.state.rutaDinamica+'api/v1/usuario/'+this.datosUsuario.id;
                 axios.delete(url,this.$store.state.config)
                 .then((result)=>{
                 if (result.statusText=='OK') {

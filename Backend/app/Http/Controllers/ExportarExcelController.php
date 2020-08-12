@@ -25,13 +25,12 @@ class ExportarExcelController extends Controller
 
     public function exportar(Request $request)
     {
-        
         /*
         $request = new Request([
-            'tipo'=> 1,
-            'fechaInicio'=> '2020-05-19',
-            'fechaFin'=>'2020-08-03',
-            'id'=> 0,
+            'tipo'=> 2,
+            'fechaInicio'=> '2020-08-12',
+            'fechaFin'=>'2020-08-12',
+            'id'=> 1,
             'escuela'=> 1
         ]);*/
 

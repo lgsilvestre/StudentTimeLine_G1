@@ -123,7 +123,7 @@
                         <v-btn  
                         :disabled="!formModificar"
                         :small="$vuetify.breakpoint.smAndDown ? true : false"
-                        :loading="cargando" rounded color="primary" class="mb-4 ml-2"    type="submit">
+                        :loading="cargando" rounded color="secondary" class="mb-4 ml-2"    type="submit">
                             <h4 class="white--text">Modificar</h4>
                         </v-btn>
                     </div>
@@ -199,8 +199,8 @@ export default {
             imagenMiniatura:null,
             correo:'',
             reglasNombre:[
+                v => /^[a-zA-Z ]+$/.test(v) || 'Nombre no Válido.',
                 v => /^[a-zA-Z ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',
-                v => /^[a-zA-Z ]+$/.test(v) || 'Nombre no Válido.'
             ],
             reglasEmail: [
                 v => /.+@utalca.cl/.test(v) || /.+@alumnos.utalca.cl/.test(v) || 'Correo no Válido', 
@@ -243,7 +243,7 @@ export default {
          * Obtiene la informacino del usuario logeado.
          */
         obtenerUsuario(){
-            var url =`http://127.0.0.1:8000/api/v1/usuario/${this.$store.state.usuario.usuario.id}/edit`;
+            var url =this.$store.state.rutaDinamica+`api/v1/usuario/${this.$store.state.usuario.usuario.id}/edit`;
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 this.$store.state.usuario.usuario =result.data.data.usuario;
@@ -296,7 +296,7 @@ export default {
             // validamos que el correo puede ser null o segun la regla establecida
             // validar correo alumno.talca.cl
             this.cargando = true;
-            var url =`http://127.0.0.1:8000/api/v1/usuario/${this.datosUsuario.id}`;
+            var url =this.$store.state.rutaDinamica+`api/v1/usuario/${this.datosUsuario.id}`;
             let put ={
                 "nombre": this.datosUsuarioModificar.nombre,
                 "foto":this.imagenMiniatura,
