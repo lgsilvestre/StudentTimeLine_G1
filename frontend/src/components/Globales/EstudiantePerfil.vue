@@ -328,7 +328,7 @@
                         label="Titulo" 
                         outlined
                         color="secondary"
-                        prepend-inner-icon="fas fa-check-circle"
+                        prepend-inner-icon="fas fa-heading"
                         ></v-text-field>
 
                         <v-select   
@@ -337,7 +337,7 @@
                         item-text="nombre"
                         label="Tipo" outlined
                         color="secondary"
-                        prepend-inner-icon="fas fa-check-circle"
+                        prepend-inner-icon="fas fa-exclamation-circle"
                         ></v-select >
 
                         <v-select 
@@ -349,7 +349,7 @@
                         color="secondary"
                         outlined
                         :disabled="profesor == true"
-                        prepend-inner-icon="fas fa-check-circle"
+                        prepend-inner-icon="fas fa-list-ol"
                         ></v-select>
 
                         <v-select 
@@ -361,7 +361,7 @@
                         label="Cursos"
                         color="secondary"
                         outlined
-                        prepend-inner-icon="fas fa-check-circle"
+                        prepend-inner-icon="fas fa-book"
                         ></v-select>
 
 
@@ -608,7 +608,7 @@
                             label="Cursos"
                             color="secondary"
                             outlined
-                            prepend-inner-icon="fas fa-check-circle"
+                            prepend-inner-icon="fas fa-book"
                             :rules="[v => !!v || 'El curso es requerido']"
                             ></v-select>
                             <v-textarea
@@ -1914,7 +1914,7 @@ export default {
             }
             this.estudianteObservacion.curso= '';
             this.estudianteObservacion.tipo= '';
-            this.$refs.form_añadirObservacion.reset()
+            this.$refs.form_añadirObservacion.resetValidation();
         },
 
         resetModificarObservacion(){
