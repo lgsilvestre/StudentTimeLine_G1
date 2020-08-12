@@ -52,34 +52,18 @@
                                                             <p class=" mt-0 mb-1   font-weight-black  text-truncate" style=" font-size: 115%;"  >Nombre: {{ item.nomCurso }}</p>
                                                             <p class="mt-0 mb-1  text-truncate font-weight-black  "  style=" font-size: 115%;"  > Seccion: {{ item.seccion }} </p>
                                                             <p class="mt-0 mb-1  text-truncate font-weight-black  "  style=" font-size: 115%;"  > Plan : {{ item.plan }} </p>
-                                                            <p class="mt-0 mb-1  text-truncate font-weight-black  "  style=" font-size: 115%;"   > Año de inscripción: {{ item.anio }} - {{ item.semestre }} </p>
+                                                            <p class="mt-0 mb-0  text-truncate font-weight-black  "  style=" font-size: 115%;"   > Año de inscripción: {{ item.anio }} - {{ item.semestre }} </p>
                                                         </div>
                                                     </v-card-text>
                                                 </v-col>
-                                                <v-col cols="5" class=" pt-0 pl-1 pr-0 pb-0" >
-                                                    <v-card-text class="pt-0 pl-2 pr-0 pr-0 pb-0 ">
-                                                        <p class=" mt-0 mb-1   font-weight-black  text-truncate" style=" font-size: 115%;"   >Ayudante/s: </p>
+                                                <v-col cols="12" class=" pt-1 pl-1 pr-0 pb-2" >
+                                                    <v-card-text class="pt-0 pl-2 pr-0 pr-0 pb-0 font-weight-black text-truncate" style=" font-size: 100%;">
+                                                        Ayudante/s: 
+                                                        <v-btn class="pt-0  pb-0 "  outlined x-small  @click="dialogAyudantes = true">
+                                                            Ver
+                                                        </v-btn>
                                                     </v-card-text>
                                                 </v-col>
-                                                <v-col cols="7"  class="pt-0 pl-0 pr-0 pb-0  mb-1" >
-                                                    <div style="text-align:left;">
-                                                    <v-btn class="pt-0  pb-0 "  outlined x-small  @click="dialogAyudantes=true">
-                                                            Ver
-                                                    </v-btn>
-                                                    </div>
-                                                </v-col>
-                                                <!-- <v-col cols="12" class=" pt-1 pl-0 pr-0 pb-0  text-right" >
-                                                    <v-tooltip bottom color="primary">
-                                                        <template v-slot:activator="{ on }">
-                                                            <v-btn color="white" text icon x-small class="mr-2 mb-1" v-on="on" @click="dialogAyudantes=true">
-                                                                <v-icon color="primary">
-                                                                    fas fa-user-friends
-                                                                </v-icon>
-                                                            </v-btn>
-                                                        </template>
-                                                        <span><strong>Mostrar Ayudantes</strong></span>
-                                                    </v-tooltip>    
-                                                </v-col> -->
                                             </v-row>
                                         </v-container>
                                     </v-card>
@@ -142,7 +126,7 @@ export default {
             columnasAyudante:[
                 { text: 'Matricula', value: 'matricula',align: 'center'},
                 { text: 'Nombre Completo', value: 'nombre'},
-                {text:'Opciones', value:'opciones',align: 'center'},
+                {text:'Ir', value:'opciones',align: 'center', sortable: false,},
             ],
         }
     },
