@@ -588,7 +588,7 @@
         </v-dialog>
 
         <!-- Dialog para asignar cursos a un semestre -->
-        <v-dialog v-model="dialogAsignarCurso" max-width="500">
+        <v-dialog v-model="dialogAsignarCurso" persistent max-width="500">
             <v-card class="mx-auto" max-width="500" >
                 <v-card-title primary-title class="headline primary text--center">
                     <h5 class="white--text">Asignar Cursos</h5>
@@ -597,10 +597,10 @@
                         <v-form  ref="formAsignarCurso" style="margin:0;padding:0;" v-model="form_AsignarCurso" lazy-validation>
                     <v-row v-for="(item, index) in seleccionados" :key="index">
 
-                            <v-col cols="6" v-if="index==0">
+                            <v-col cols="6" >
                                 <strong><h3>Curso</h3></strong>
                             </v-col>
-                            <v-col cols="6" v-if="index==0">
+                            <v-col cols="6">
                                 <strong><h3>Sección</h3></strong>
                             </v-col>
                             <v-col cols="6" >
@@ -1235,27 +1235,27 @@ export default {
             // }
             
            
-             if(this.contadorCursos ==1 &&  this.profesorSeleccionado!=''){
+             if(this.contadorCursos ==1 &&  this.profesorSeleccionado!=null){
                 this.contadorCursos++;
                 // console.log("Numero de profesores ++"+  this.profesorSeleccionado)
                 // console.log("Valor del contador de cursos : "+ this.contadorCursos)
             }
             //se asigno el segundo profesor y quiere añadir otro
-            if(this.contadorCursos == 2 && this.profesorSeleccionado2!=''){
+            if(this.contadorCursos == 2 && this.profesorSeleccionado2!=null){
                 this.contadorCursos++;
                 // console.log("==============================")
                 // console.log("Numero de profesores ++"+  this.profesorSeleccionado2)
                 // console.log("Valor del contador de cursos : "+ this.contadorCursos)
             }
             //se asigno el tercer profesor y quiere añadir otro
-            if(this.contadorCursos == 3 && this.profesorSeleccionado3!=''){
+            if(this.contadorCursos == 3 && this.profesorSeleccionado3!=null){
                 this.contadorCursos++;
                 //  console.log("==============================")
                 // console.log("Numero de profesores ++"+  this.profesorSeleccionado3)
                 // console.log("Valor del contador de cursos : "+ this.contadorCursos)
             }
             //se asigno el cuarto profesor y quiere añadir otro
-            if(this.contadorCursos == 4 && this.profesorSeleccionado4!=''){
+            if(this.contadorCursos == 4 && this.profesorSeleccionado4!=null){
                 this.contadorCursos++;
                 //  console.log("==============================")
                 // console.log("Numero de profesores ++"+  this.profesorSeleccionado4)
@@ -1806,11 +1806,11 @@ export default {
         asignarCursos(){
             if(this.seleccionados.length != 0){
                 //profesores seleccionados.
-                this.profesorSeleccionado = '';
-                this.profesorSeleccionado2='';
-                this.profesorSeleccionado3='';
-                this.profesorSeleccionado4='';
-                this.profesorSeleccionado5='';
+                this.profesorSeleccionado = null;
+                this.profesorSeleccionado2=null;
+                this.profesorSeleccionado3=null;
+                this.profesorSeleccionado4=null;
+                this.profesorSeleccionado5=null;
                 this.dialogAsignarCurso = true; 
                 //this.resetSeccion();
                 //this.resetProfesores();    
@@ -1881,11 +1881,11 @@ export default {
          * La asignacion de cursos a una instancia de curso.
          */
         resetAsignarCurso(){
-            this.profesorSeleccionado = '';
-            this.profesorSeleccionado2='';
-            this.profesorSeleccionado3='';
-            this.profesorSeleccionado4='';
-            this.profesorSeleccionado5='';
+            this.profesorSeleccionado = null;
+            this.profesorSeleccionado2=null;
+            this.profesorSeleccionado3=null;
+            this.profesorSeleccionado4=null;
+            this.profesorSeleccionado5=null;
             this.seleccionados = [];
 
         },
@@ -1897,8 +1897,14 @@ export default {
             /**variables para el correcto funcionamiento de la consulta. */
             let ins_curso=0;
             let profe_Selec="";
+            var profesor1=this.profesorSeleccionado;
+            var profesor2=this.profesorSeleccionado2;
+            var profesor3=this.profesorSeleccionado3;
+            var profesor4=this.profesorSeleccionado4;
+            var profesor5=this.profesorSeleccionado5;
+
             this.dialogAsignarCurso = true
-            if( this.profesorSeleccionado!='' ){
+            if( this.seleccionados!=null ){
                 for(let i = 0; i < this.seleccionados.length ; i++){
                     /* datos instancia curso */
                     let post = {
@@ -1906,52 +1912,52 @@ export default {
                         "curso": this.seleccionados[i].id,
                         "seccion":  this.seleccionados[i].seccion,
                     }
+                    // console.log("hola")
                     var url = 'http://127.0.0.1:8000/api/v1/instanciaCurso';   
                     axios.post(url, post, this.$store.state.config)
                     .then((result) => {
                         ins_curso= result.data.data.insCurso.id;
+                        console.log( result)
+                        console.log( ins_curso)
                             if(ins_curso != 0){
-                            if(this.profesorSeleccionado != ''){
+                            if(profesor1 != null){
                                 let post2 = {
-                                    "profesor" :  this.profesorSeleccionado,
+                                    "profesor" : profesor1,
                                     "curso":  ins_curso,
                                     };
                                 this.agregarProfesorCurso(post2)
                             }
-                            if(this.profesorSeleccionado2 != ''){
+                            if(profesor2 != null){
                                 let post2 = {
-                                    "profesor" :  this.profesorSeleccionado2,
+                                    "profesor" :  profesor2,
                                     "curso":  ins_curso,
                                     };
                                 this.agregarProfesorCurso(post2)
                                 }
-                            if(this.profesorSeleccionado3 != ''){
+                            if(profesor3 != null){
                                 let post2 = {
-                                    "profesor" :  this.profesorSeleccionado3,
+                                    "profesor" :  profesor3,
                                     "curso":  ins_curso,
                                     };
                                 
                                 this.agregarProfesorCurso(post2)
                             }
-                            if(this.profesorSeleccionado4 != ''){
+                            if(profesor4 != null){
                                 let post2 = {
-                                    "profesor" :  this.profesorSeleccionado4,
+                                    "profesor" :  profesor4,
                                     "curso":  ins_curso,
                                     };
                                 this.agregarProfesorCurso(post2)
                             }
-                            if(this.profesorSeleccionado5 != ''){
+                            if(profesor5 != null){
                                 let post2 = {
-                                    "profesor" :  this.profesorSeleccionado5,
+                                    "profesor" :  profesor5,
                                     "curso":  ins_curso,
                                     };
                                 
                                 this.agregarProfesorCurso(post2)
                             }
-                            // Reseteamos las variables.
-                            this.cerrarDialogAsignarCurso();
-                            // obtenemos la lista de instancias de cursos con sus modificaciones
-                            this.obtenerInstanciasCursos();   
+                              
                         }
                         else{
                             // console.log('NO FUNCIONO')
@@ -1980,6 +1986,10 @@ export default {
                             }   
                         });                                                            
                     } 
+                    // Reseteamos las variables.
+                            this.cerrarDialogAsignarCurso();
+                            // obtenemos la lista de instancias de cursos con sus modificaciones
+                            this.obtenerInstanciasCursos(); 
             }
         },
         /**
