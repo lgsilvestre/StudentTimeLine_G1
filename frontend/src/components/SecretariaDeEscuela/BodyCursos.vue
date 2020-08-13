@@ -259,7 +259,7 @@
                 >
                 <h5 class="white--text ">Cerrar Semestre</h5>
                 </v-card-title> 
-                <v-card-title class="text-justify" style="font-size: 100%;">Esta seguro que desea reabrir el semestre?</v-card-title>
+                <v-card-title class="text-justify" style="font-size: 100%;">Está seguro que desea reabrir el semestre?</v-card-title>
                 <v-card-text>Año : {{ semestreActual_1.anio }}</v-card-text>
                 <v-card-text>Semetre : {{ semestreActual_1.semestre }}</v-card-text>
                 <div style="text-align:right;">
@@ -381,9 +381,9 @@ export default {
                 ],
 
                 //Texto
-                errorServidor:"Error al comunicarse con el servidor, intente más tarde",
+                errorServidor:"Error al comunicarse con el servidor, inténtelo más tarde",
                 exitoCreacionSemestre:"Se creó el semestre satisfactoriamente.",
-                ErrorCreacionSemetre:"Error al crear El semestre.",
+                ErrorCreacionSemetre:"Error al crear el semestre.",
                 ErrorSemestreDuplicado:"Error el semestre ya se encuentra registrado.",
                 ErrorDatosIngresados:"Error en los datos Ingresados",
                 usuarioValido:true,
@@ -502,7 +502,7 @@ export default {
                     if (result.data.success==true){
                         this.dialogAñadirSemestre = false;
                         
-                        this.textoAlertas = "Semestre registrado exitosamente";
+                        this.textoAlertas = "El semestre se ha registrado correctamente.";
                         this.alertaExito=true;
                         this.obtenerListaDeSemestres(); 
                     }
@@ -556,7 +556,7 @@ export default {
                             this.dialogModificarSemestre = false;
                             this.añoActual= new Date().getFullYear();
                             this.semestreActual= 1;
-                            this.textoAlertas = "Se creó el semestre con exito."
+                            this.textoAlertas = "El semestre ha sido creado correctamente."
                             this.alertaExito=true;
                             this.obtenerListaDeSemestres();
 
@@ -565,7 +565,7 @@ export default {
                         
                         if (error.message == 'Network Error') {
                             ///console.log(error)
-                            this.textoAlertas = "Error al modificar el semestre, intente mas tarde."
+                            this.textoAlertas = "Error al modificar el semestre, inténtelo más tarde."
                             this.alertaError = true;
                             this.dialogModificarSemestre = false;
                             this.añoActual= new Date().getFullYear();
@@ -660,12 +660,12 @@ export default {
                     this.dialogEliminarSemestre= false;
                     this.obtenerListaDeSemestres();
                     this.alertaExito = true;
-                    this.textoAlertas = "Se elimino el semestre con exito "
+                    this.textoAlertas = "Se ha eliminado correctamente el semestre."
                 }
                 }).catch((error)=>{
                     if (error.message == 'Network Error') {
                         // console.log(error)
-                        this.textoAlertas = "Error al eliminar el semestre, intente mas tarde."
+                        this.textoAlertas = "Error al eliminar el semestre, inténtelo más tarde."
                         this.alertaError = true;
                     }
                     else{
@@ -705,12 +705,12 @@ export default {
                     this.dialogReAbrirSemestre= false;
                     this.obtenerListaDeSemestres();
                     this.alertaExito = true;
-                    this.textoAlertas = "El semestre fue reabierto con exito "
+                    this.textoAlertas = "El semestre ha sido reabierto exitosamente."
                 }
                 }).catch((error)=>{
                     if (error.message == 'Network Error') {
                         // console.log(error)
-                        this.textoAlertas = "Error al eliminar el semestre, intente mas tarde."
+                        this.textoAlertas = "Error al eliminar el semestre, inténtelo más tarde."
                         this.alertaError = true;
                     }
                     else{

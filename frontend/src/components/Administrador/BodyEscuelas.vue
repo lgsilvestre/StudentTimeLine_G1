@@ -504,7 +504,7 @@
               //console.log(error);
               this.alertError = true;
               this.cargando = false;
-              this.textoError = 'Error al cargar los datos, intente más tarde'
+              this.textoError = 'Error al cargar los datos, inténtelo más tarde'
             } else {
               if (error.response.data.success == false) {
                 switch (error.response.data.code) {
@@ -553,7 +553,7 @@
               //console.log(error);
               this.alertError = true;
               this.cargando = false;
-              this.textoError = 'Error al cargar los datos, intente más tarde'
+              this.textoError = 'Error al cargar los datos, inténtelo más tarde'
             } else {
               if (error.response.data.success == false) {
                 switch (error.response.data.code) {
@@ -600,7 +600,7 @@
             if (error.message == 'Network Error') {
                 //console.log(error)
                 this.alertError = true;
-                this.textoError = "Error al modificar el usuario, intente mas tarde."
+                this.textoError = "Error al modificar el usuario, inténtelo más tarde."
             }
             else{
                 if (error.response.data.success == false) {
@@ -638,7 +638,7 @@
             this.obtenerEscuelas(); 
             this.resetCreacionEscuela();
             this.alertAcept = true;
-            this.textoAcept = 'La escuela se creó correctamente'
+            this.textoAcept = 'La escuela se creó correctamente.'
           }
         })
         .catch((error) => {
@@ -646,7 +646,7 @@
             //console.log(error);
             this.resetCreacionEscuela();
             this.alertError = true;
-            this.textoError = 'Error en la conexion, intente más tarde';
+            this.textoError = 'Error en la conexión, inténtelo más tarde';
           } else {
             if (error.response.data.success == false) {
               switch (error.response.data.code) {
@@ -687,7 +687,7 @@
             this.resetEditarEscuela();
             this.dialogModificar=false;
             this.alertAcept = true;
-            this.textoAcept = 'La escuela se modificó correctamente'
+            this.textoAcept = 'La escuela se modificó correctamente.'
           }
         })
         .catch((error) => {
@@ -695,7 +695,7 @@
             //console.log(error);
             this.resetEditarEscuela();
             this.alertError = true;
-            this.textoError = 'Error en la conexion, intente más tarde';
+            this.textoError = 'Error en la conexión, inténtelo más tarde.';
           } else {
             if (error.response.data.success == false) {
               switch (error.response.data.code) {
@@ -743,7 +743,7 @@
             this.obtenerEscuelasEliminadas();
             this.dialogEliminar=false;
             this.alertAcept = true;
-            this.textoAcept = 'La escuela se borró correctamente';
+            this.textoAcept = 'La escuela se borró correctamente.';
           }
         })
         .catch((error) => {
@@ -751,7 +751,7 @@
             //console.log(error);
             this.dialogEliminar=false;
             this.alertError = true;
-            this.textoError = 'Error al borrar escuela, intente más tarde';
+            this.textoError = 'Error al borrar escuela, inténtelo más tarde';
           } else {
             if (error.response.data.success == false) {
               switch (error.response.data.code) {
