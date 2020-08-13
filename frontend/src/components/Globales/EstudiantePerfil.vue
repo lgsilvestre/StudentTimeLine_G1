@@ -1050,7 +1050,7 @@ export default {
             ],
             regla_Email: [
                 value => !!value || 'Requerido',
-                v => /.+@utalca.cl/.test(v) || /.+@alumnos.utalca.cl/.test(v) || 'Correo no Válido', 
+                v => /.+@utalca\.cl/.test(v) || /.+@alumnos\.utalca\.cl/.test(v) || 'Correo no Válido', 
             ],
             regla_Contraseña:[
                 value => !!value || 'Requerido',
