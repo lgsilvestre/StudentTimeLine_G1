@@ -904,6 +904,10 @@ export default {
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;
                             this.resetModificacionUsuario();
+                        }else{
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true;
+                            this.resetModificacionUsuario();
                         }
                     }
                 }
