@@ -47,20 +47,20 @@ export default new Vuex.Store({
             state.infoSemestre = this.infoSemestre;
             nuevoSemestre
             if (state.admin) {
-                router.push({ path: '/administrador/cursos/' + this.infoSemestre.anio + '-' + this.infoSemestre.semestre });
+                router.push({ path: '/administrador/semestres/' + this.infoSemestre.anio + '-' + this.infoSemestre.semestre });
             } else if (state.profesor) {
                 router.push({ path: '/profesor/cursos/' + this.infoSemestre.anio + '-' + this.infoSemestre.semestre });
             } else {
-                router.push({ path: '/secretariaEscuela/cursos/' + this.infoSemestre.anio + '-' + this.infoSemestre.semestre });
+                router.push({ path: '/secretariaEscuela/semestres/' + this.infoSemestre.anio + '-' + this.infoSemestre.semestre });
             }
         },
         calcularRolVuelta(state) {
             if (state.admin) {
-                router.push({ path: '/administrador/cursos/' });
+                router.push({ path: '/administrador/semestres/' });
             } else if (state.profesor) {
                 router.push({ path: '/profesor/cursos/' });
             } else {
-                router.push({ path: '/secretariaEscuela/cursos/' });
+                router.push({ path: '/secretariaEscuela/semestres/' });
             }
         },
         login(state, lista, methods) { //funcion de login
@@ -88,7 +88,7 @@ export default new Vuex.Store({
                             //redireccionamiento hacia el usuario secretaria de escuela
                             state.secretariaEscuela = true;
                             state.cargaLogin = false;
-                            router.push({ path: '/secretariaEscuela' });
+                            router.push({ path: '/secretariaEscuela/semestres' });
                         } else {
                             if (state.usuario.usuario.rol == "profesor") {
                                 //redireccionamiento hacia el usuario profesor

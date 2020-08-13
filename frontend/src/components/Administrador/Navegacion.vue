@@ -54,7 +54,7 @@
 
         <v-tooltip left color="primary" :disabled="!drawers.miniVarianteAdm">
             <template v-slot:activator="{ on }">
-                <v-list-item  class="difuminado" active-class="activacion" to="/administrador/cursos" v-on="on">
+                <v-list-item  class="difuminado" active-class="activacion" to="/administrador/semestres" v-on="on">
                     <v-list-item-icon class="pl-1">
                         <v-icon color="white">fas fa-book</v-icon>
                     </v-list-item-icon>

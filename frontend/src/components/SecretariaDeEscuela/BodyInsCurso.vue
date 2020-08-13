@@ -1810,10 +1810,10 @@ export default {
             // console.log(item);
              var enrutamiento = this.semestre;
             if (this.$store.state.usuario.usuario.rol == "admin") {
-                this.$router.push({path:'/administrador/cursos/'+enrutamiento+'/id='+item.id});
+                this.$router.push({path:'/administrador/semestres/'+enrutamiento+'/id='+item.id});
             } else {
                 if (this.$store.state.usuario.usuario.rol == "secretaria de escuela") {
-                    this.$router.push({path:'/secretariaEscuela/cursos/'+enrutamiento+'/id='+item.id});
+                    this.$router.push({path:'/secretariaEscuela/semestres/'+enrutamiento+'/id='+item.id});
                 } else {
                     // if (this.$store.state.usuario.usuario.rol == "profesor") {
                     //     this.$router.push({path:'/profesor/'+estudiantes+'/id='+item.id});

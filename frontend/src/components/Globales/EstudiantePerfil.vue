@@ -1261,9 +1261,9 @@ export default {
             
             if (auxruta[0] == 1 || auxruta[0] == 2) {
                 if (this.$store.state.usuario.usuario.rol == "admin") {
-                this.$router.push({path:'/administrador/cursos/'+this.enrutamiento});
+                this.$router.push({path:'/administrador/semestres/'+this.enrutamiento});
                 } else {
-                    this.$router.push({path:'/secretariaEscuela/cursos/'+this.enrutamiento});
+                    this.$router.push({path:'/secretariaEscuela/semestres/'+this.enrutamiento});
                 }
             }
             else{
