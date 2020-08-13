@@ -1780,21 +1780,13 @@ export default {
                     }
                 }
             }
-            var auxcategoria=0;
-            for (let index = 1; index <= this.categorias.length; index++) {
-                const element = this.categorias[index];
-                if (this.estudianteModificarObservacion.categoria == element) {
-                    auxcategoria=index;
-                }
-                
-            }
             let put = {
                 "titulo": this.estudianteModificarObservacion.titulo,
                 "descripcion": this.estudianteModificarObservacion.descripcion,
                 "ayudante": null, 
                 "estudiante": this.estudianteModificarObservacion.estudiante,
                 "curso": null,
-                "categoria": auxcategoria,
+                "categoria": this.estudianteModificarObservacion.categoria,
                 "tipo": auxTipo,
             }
             console.log(put);
