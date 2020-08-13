@@ -543,7 +543,7 @@ export default {
             var año_Aux = new Date().getFullYear()
             if(this.añoActual <= año_Aux && this.añoActual>= 1981 && this.semestreActual>=1 && this.semestreActual <= 3){
                 //  console.log("ENTRE")
-                 let put = {
+                let put = {
                         "semestre": this.semestreActual,
                         "anio": this.añoActual
                     }
@@ -609,7 +609,7 @@ export default {
                                     this.semestreActual= 1;     
                                 }
                                 else{
-                                    his.textoAlertas = error.response.data.message;
+                                    this.textoAlertas = error.response.data.message;
                                     this.alertaError = true;  
                                     this.dialogModificarSemestre = false;
                                     this.añoActual= new Date().getFullYear();
