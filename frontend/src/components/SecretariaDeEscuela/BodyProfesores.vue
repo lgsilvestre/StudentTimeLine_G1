@@ -427,8 +427,6 @@ export default {
                 else{
                     if (error.response.data.success == false) {
                         if(error.response.data.code == 101){
-                            //console.log(error.response.data.code +' '+ error.response.data.message);
-                            //console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;                            
                         }
@@ -465,7 +463,6 @@ export default {
 
             }
             ).catch((error)=>{
-                //console.log(error)
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
                     this.cargando = false;
@@ -474,8 +471,6 @@ export default {
                 else{
                     if (error.response.data.success == false) {
                         if(error.response.data.code == 101){
-                            //console.log(error.response.data.code +' '+ error.response.data.message);
-                           //console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;                            
                         }
@@ -508,21 +503,16 @@ export default {
                 }
                 }).catch((error)=>{
                     if (error.message == 'Network Error') {
-                        // console.log(error)
                         this.alertaError = true;
                         this.textoAlertas = "Error al eliminar el usuario, inténtelo más tarde."
                     }
                     else{
                         if (error.response.data.success == false) {
                             if(error.response.data.code == 701){
-                                // console.log(error.response.data.code +' '+ error.response.data.message);
-                                // console.log(error.response.data);
                                 this.textoAlertas = error.response.data.message;
                                 this.alertaError = true;
                             }
                             if(error.response.data.code == 702){
-                                // console.log(error.response.data.code +' '+ error.response.data.message);
-                                // console.log(error.response.data);
                                 this.textoAlertas = error.response.data.message;
                                 this.alertaError = true;
                             }
@@ -559,8 +549,6 @@ export default {
             var url =this.$store.state.rutaDinamica+`api/v1/usuario/restore/${this.datosUsuario.id}`;
             axios.post(url,null,this.$store.state.config)
             .then((result)=>{
-                // console.log("USUARIO RESTAURADO")
-                // console.log(result)
                 this.obtenerProfesoresDeshabilitados();
                 this.dialogHabilitar = false;
                 this.alertaExito = true;
@@ -568,7 +556,6 @@ export default {
             
             }).catch((error)=>{
                 if (error.message == 'Network Error') {
-                    // console.log(error)
                     this.alertaError = true;
                     this.textoAlertas = "Error al eliminar el usuario, inténtelo más tarde."
                 }

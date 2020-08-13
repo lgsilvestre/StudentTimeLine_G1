@@ -2145,7 +2145,6 @@ export default {
         },
         DesvincularUnProfesorInsCurso(id){
             var url = this.$store.state.rutaDinamica+'api/v1/profesorConCurso/'+id;
-            console.log(url)
                 axios.delete(url,this.$store.state.config)
                 .then((result)=>{
                 if (result.statusText=='OK') {
