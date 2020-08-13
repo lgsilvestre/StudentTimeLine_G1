@@ -865,12 +865,10 @@ export default {
             }
             axios.put(url,put,this.$store.state.config)
             .then((result)=>{
-            if (result.statusText=='OK') {
                 this.alertaExito = true;
                 this.textoAlertas = "Se modificó el usuario con exito."
                 this.obtenerUsuarios(); 
                 this.resetModificacionUsuario();
-            }
             }).catch((error)=>{                
                 if (error.message == 'Network Error') {
                     console.log(error)
@@ -925,12 +923,10 @@ export default {
             var url = this.$store.state.rutaDinamica+'api/v1/usuario/'+this.datosUsuario.id;
                 axios.delete(url,this.$store.state.config)
                 .then((result)=>{
-                if (result.statusText=='OK') {
                     this.obtenerUsuarios();
                     this.resetEliminarUsuario(); 
                     this.alertaExito = true;
                     this.textoAlertas = "Se elimino el usuario con exito "
-                }
                 }).catch((error)=>{
                     if (error.message == 'Network Error') {
                         console.log(error)

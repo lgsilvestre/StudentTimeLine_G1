@@ -68,7 +68,7 @@
                                             v-if="botonesAgregarEstudiantes"
                                             color="primary"
                                             elevation="0"
-                                            :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                            small
                                             fab
                                             @click="dialogAgregarEstudiante = ! dialogAgregarEstudiante"
                                         > 
