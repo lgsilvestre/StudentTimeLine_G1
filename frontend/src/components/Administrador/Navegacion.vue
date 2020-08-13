@@ -173,15 +173,7 @@ export default {
     },
     methods: {
         ...mapMutations(['unLogin']),
-        CrearEscuela(){
-            console.log('crear Escuela')
-        },
-        cerrarSesion(){
-            console.log('cerrar sesion')
-        },
-        verPerfil(){
 
-        }
     },
 }
 </script>
