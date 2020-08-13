@@ -94,7 +94,7 @@ export default new Vuex.Store({
                                 //redireccionamiento hacia el usuario profesor
                                 state.profesor = true;
                                 state.cargaLogin = false;
-                                router.push({ path: '/profesor' });
+                                router.push({ path: '/profesor/cursos' });
                             }
                         }
                     }
