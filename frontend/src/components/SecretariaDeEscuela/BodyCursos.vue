@@ -469,6 +469,10 @@ export default {
                                 this.cargando = false;
                                 break;
                             default:
+                                mensaje= error.response.data.message;
+                                this.textoAlertas = mensaje;
+                                this.alertaError = true;  
+                                this.cargando = false;
                                 break;
                         }
                     }
@@ -501,13 +505,12 @@ export default {
                         this.alertaExito=true;
                         this.obtenerListaDeSemestres(); 
                     }
-                }).catch((error)=>{
-                    
+                }).catch((error)=>{ 
                     if (error.message == 'Network Error') {
                         console.log(error)
                         this.alertaError = true;
                         this.textoAlertas =this.errorServidor;
-                         this.alertaError = true;  
+                        this.alertaError = true;  
                     }
                     else{
                         if (error.response.data.success == false) {
@@ -516,8 +519,12 @@ export default {
                                 this.alertaError = true;      
                             }
                             if(error.response.data.code == 302){
-                                this.textoAlertas = this.ErrorSemestreDuplicado;
+                                this.textoAlertas = error.response.data.message;
                                 this.alertaError = true;      
+                            }
+                            else{
+                                this.textoAlertas = error.response.data.message;
+                                this.alertaError = true;
                             }
                         }
                     }                
@@ -601,7 +608,14 @@ export default {
                                     this.añoActual= new Date().getFullYear();
                                     this.semestreActual= 1;     
                                 }
-                                console.log(error.response.data.code +' '+ error.response.data.message);
+                                else{
+                                    his.textoAlertas = error.response.data.message;
+                                    this.alertaError = true;  
+                                    this.dialogModificarSemestre = false;
+                                    this.añoActual= new Date().getFullYear();
+                                    this.semestreActual= 1;    
+                                }
+                                //console.log(error.response.data.code +' '+ error.response.data.message);
                             }
                         }                
                     });
@@ -668,6 +682,11 @@ export default {
                                 this.alertaError = true;
                                 this.dialogEliminarSemestre= false;
                             }
+                            else{
+                                this.textoAlertas = error.response.data.message;
+                                this.alertaError = true;
+                                this.dialogEliminarSemestre= false;
+                            }
                         }
                     }
                 
@@ -677,7 +696,7 @@ export default {
          * Reabre un semestre que halla sido cerraado.
          */
         reabrirSemestre(){
-             var url = this.$store.state.rutaDinamica+'api/v1/semestre/restore/'+this.semestreActual_1.id;
+            var url = this.$store.state.rutaDinamica+'api/v1/semestre/restore/'+this.semestreActual_1.id;
                 axios.post(url,null,this.$store.state.config)
                 .then((result)=>{
                 if (result.data.success==true) {
@@ -697,16 +716,19 @@ export default {
                             if(error.response.data.code == 901){
                                 // console.log(error.response.data.code +' '+ error.response.data.message);
                                 // console.log(error.response.data);
-                                this.textoAlertas = "Error en la recuperacion del semestre, contacte al administrador";
+                                this.textoAlertas = error.response.data.message;
                                 this.alertaError = true;
                                  this.dialogReAbrirSemestre= false;
                             }
                             if(error.response.data.code == 902){
                                 // console.log(error.response.data.code +' '+ error.response.data.message);
                                 // console.log(error.response.data);
-                                this.textoAlertas =  "Error en la recuperacion del semestre, contacte al administrador";
+                                this.textoAlertas =  error.response.data.message;
                                 this.alertaError = true;
-                                 this.dialogReAbrirSemestre= false;
+                                this.dialogReAbrirSemestre= false;
+                            }
+                            else{
+
                             }
                         }
                     }

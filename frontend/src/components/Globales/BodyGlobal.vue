@@ -141,7 +141,7 @@
                 <v-icon color="white" class="mr-2">
                     fas fa-check-circle
                 </v-icon>
-                <strong>{{textoAcept}}</strong>
+                <p><strong>{{textoAcept}}</strong></p>
             </div>
             <v-btn color="white" elevation="0" x-small
             fab @click="alertAcept = ! alertAcept" > 
@@ -160,7 +160,7 @@
             
             <v-btn color="white" elevation="0" x-small
             fab @click="alertError = ! alertError" > 
-                <v-icon color="secondary">fas fa-times</v-icon>
+                <v-icon color="warning">fas fa-times</v-icon>
             </v-btn>
         </v-snackbar>
     </v-container> 
