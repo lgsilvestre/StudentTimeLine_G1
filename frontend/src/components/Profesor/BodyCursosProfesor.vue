@@ -87,7 +87,7 @@
                     :items="ayudantes"
                     hide-default-footer
                 >
-                    <template v-slot:item.opciones="{ item }">
+                    <template v-slot:[`item.opciones`]="{ item }">
                         <v-tooltip bottom color="primary">
                             <template v-slot:activator="{ on }">
                                 <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on" @click="perfilEstudiante(item)" >
@@ -185,7 +185,7 @@ export default {
                         idCurso: element.idInstanciaCurso,
                         // escuela: element.get_curso.get_curso
                     }; 
-                    console.log(index);
+                    //console.log(index);
                     this.listaInsCursosAux[index]=insCurso;                                                         
                 }
                 this.listaInsCursos = this.listaInsCursosAux;  
@@ -201,16 +201,20 @@ export default {
                 else{
                     if (error.response.data.success == false) {
                         if(error.response.data.code == 401){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
+                            //console.log(error.response.data.code +' '+ error.response.data.message);
+                            //console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;                            
                         }  
                         if(error.response.data.code == 402){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
-                            this.textoAlertas = "Error al obtener los cursos del profesor";
+                            //console.log(error.response.data.code +' '+ error.response.data.message);
+                            //console.log(error.response.data);
+                            this.textoAlertas = error.response.data.message;
                             this.alertaError = true;                            
+                        }
+                        else{
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true;   
                         }                      
                     }
                 }
@@ -224,7 +228,7 @@ export default {
             var url = this.$store.state.rutaDinamica+`api/v1/ayudanteCurso/`+id;
             axios.get(url,this.$store.state.config)
             .then((result)=>{      
-                console.log(result);
+                //console.log(result);
                 for (let index = 0; index < result.data.data.ayudantesCurso.length; index++) {
                     const element = result.data.data.ayudantesCurso[index]; 
                     let estudiante = {
@@ -246,10 +250,14 @@ export default {
                 else{
                     if (error.response.data.success == false) {
                         if(error.response.data.code == 101){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
+                            //console.log(error.response.data.code +' '+ error.response.data.message);
+                            //console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;                            
+                        }
+                        else{
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true;   
                         }                   
                     }
                 }
