@@ -84,12 +84,6 @@ export default {
     },
     methods: {
         ...mapMutations(['unLogin']),
-        cerrarSesion(){
-            console.log('cerrar sesion')
-        },
-        verPerfil(){
-            console.log('ver perfil')
-        },
     },
 }
 </script>
