@@ -645,14 +645,21 @@
                     }
                 })
                 .catch((error)=>{
-                    console.log(error);
+                    //console.log(error);
                     if (error.message == 'Network Error') {
-                        console.log(error);
+                        //console.log(error);
                         this.alertError = true;
                         this.cargando = false;
-                        console.log(err)
+                        //console.log(err)
                         this.textoError = 'Error al importar los datos, intente más tarde'
-                    }
+                    }else {
+                        if (error.response.data.success == false) {
+                            this.alertError = true;
+                            this.cargando = false;
+                            this.textoError = error.response.data.message;
+                        }
+                    } 
+
                 })
 
             }
@@ -686,22 +693,25 @@
             })
             .catch((error)=>{
                 if (error.message == 'Network Error') {
-                    console.log(error);
+                    //console.log(error);
                     this.alertError = true;
                     this.cargando = false;
-                    console.log(err)
+                    //console.log(err)
                     this.textoError = 'Error al cargar los datos, intente más tarde'
                 } else {
                     if (error.response.data.success == false) {
                         switch (error.response.data.code) {
                         case 301:
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
+                            //console.log(error.response.data.code +' '+ error.response.data.message);
+                            //console.log(error.response.data);
                             this.alertError = true;
                             this.cargando = false;
                             this.textoError = error.response.data.message;
                             break;
                         default:
+                            this.alertError = true;
+                            this.cargando = false;
+                            this.textoError = error.response.data.message;
                             break;
                         }
                     }
@@ -710,7 +720,7 @@
         },
         agregarEstudiantesUnico() {
             var valido=this.$refs.form_AgregarEstudiante.validate();
-            console.log("semestre valido :" + valido)
+            //console.log("semestre valido :" + valido)
             if(valido == true){
 
                 var url = this.$store.state.rutaDinamica+'api/v1/estudiante';
@@ -737,7 +747,7 @@
                 axios.post(url,post,this.$store.state.config)
                 .then((result)=>{
                     if (result.data.success == true)  {
-                        console.log('se cargo el estudiante');
+                        //console.log('se cargo el estudiante');
                         this.resetUnicoEstudiante();
                         this.alertAcept = true;
                         this.textoAcept = 'Se agregó el estudiante correctamente '
@@ -745,9 +755,9 @@
                     }
                 })
                 .catch((error)=>{
-                    console.log(error);
+                    //console.log(error);
                     if (error.message == 'Network Error') {
-                        console.log(error);
+                        //console.log(error);
                         this.alertError = true;
                         this.resetUnicoEstudiante();
                         this.textoError = 'Error al cargar los datos, intente más tarde'
@@ -755,12 +765,14 @@
                         if (error.response.data.success == false) {
                             switch (error.response.data.code) {
                             case 302:
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
+                                //console.log(error.response.data.code +' '+ error.response.data.message);
+                                //console.log(error.response.data);
                                 this.alertError = true;
                                 this.textoError = error.response.data.message;
                                 break;
                             default:
+                                this.alertError = true;
+                                this.textoError = error.response.data.message;
                                 break;
                             }
                         }
@@ -793,7 +805,7 @@
             })
             .catch((error) => {
                 if (error.message == 'Network Error') {
-                    console.log(error);
+                    //console.log(error);
                     this.alertError = true;
                     this.cargando = false;
                     this.textoError = 'Error al cargar los datos, intente más tarde'
@@ -801,13 +813,16 @@
                     if (error.response.data.success == false) {
                         switch (error.response.data.code) {
                         case 101:
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
+                            //console.log(error.response.data.code +' '+ error.response.data.message);
+                            //console.log(error.response.data);
                             this.alertError = true;
                             this.cargando = false;
                             this.textoError = error.response.data.message;
                             break;
                         default:
+                            this.alertError = true;
+                            this.cargando = false;
+                            this.textoError = error.response.data.message;
                             break;
                         }
                     }
@@ -843,13 +858,13 @@
             // console.log("EXPORTAR POR RANGO DE FECHAS"+this.rangoAnhosVariable )
             if(this.unAnhoVariable == false){
                 var escuela= this.escuelaExportar;
-                 console.log("Exportar por escuela" + escuela)
+                // console.log("Exportar por escuela" + escuela)
                 this.exportar(1,0,0,0,escuela);
                 
 
             }
             if(this.rangoAnhosVariable == false  ){
-                console.log("Exportar por ranfo de fechas")
+                //console.log("Exportar por ranfo de fechas")
                 this.exportar(2,this.fechaIni,this.fechaTer ,0,0);
 
             }
@@ -859,22 +874,17 @@
         exportar(tipo, fechaIni,fechaTer,idEstudiante,escuela){
             var fechaInicio=fechaIni;
             var fechaTermino =fechaTer;
-             let post = {
+            let post = {
                     "tipo": tipo,
                     "fechaInicio" : fechaInicio,
                     "fechaFin": fechaTermino ,
                     "id": idEstudiante,
                     "escuela": escuela
                 };
-                console.log(post)
+                //console.log(post)
             var url = this.$store.state.rutaDinamica+'api/v1/estudiante/exportar';
             axios.post(url,post,this.$store.state.config2)
             .then((result)=>{
-                console.log(result.data);
-                //var fileDownload = require('js-file-download');
-                //fileDownload(result.data, 'archivo.xlsx');
-                
-
                 const url = URL.createObjectURL(new Blob([result.data], {
                     type: 'application/vnd.ms-excel'
                 }))
@@ -890,15 +900,16 @@
                 
             })
             .catch((error) => {
-                console.log(error);
+                //console.log(error);
                 if (error.message == 'Network Error') {
                     console.log(error);
                     this.alertError = true;
                     this.textoError = 'Error, intente más tarde'
                 } else {
-                    console.log(error);
-                    this.alertError = true;
-                    this.textoError = 'Error, intente más tarde'
+                    if (error.response.data.success == false) {
+                        this.alertError = true;
+                        this.textoError = error.response.data.message;
+                    }
                 } 
             });
         },

@@ -454,7 +454,7 @@ export default {
             }
             ).catch((error)=>{
                 if (error.message == "Network Error") {
-                    console.log(error);
+                    //console.log(error);
                     this.textoAlertas =this.errorServidor;
                     this.alertaError = true;
                     this.cargando = false;
@@ -507,7 +507,7 @@ export default {
                     }
                 }).catch((error)=>{ 
                     if (error.message == 'Network Error') {
-                        console.log(error)
+                        //onsole.log(error)
                         this.alertaError = true;
                         this.textoAlertas =this.errorServidor;
                         this.alertaError = true;  
@@ -563,7 +563,7 @@ export default {
                     }).catch((error)=>{
                         
                         if (error.message == 'Network Error') {
-                            console.log(error)
+                            ///console.log(error)
                             this.textoAlertas = "Error al modificar el semestre, intente mas tarde."
                             this.alertaError = true;
                             this.dialogModificarSemestre = false;
@@ -573,8 +573,8 @@ export default {
                         else{
                             if (error.response.data.success == false) {
                                 if(error.response.data.code == 301){
-                                    console.log(error.response.data.code +' '+ error.response.data.message);
-                                    console.log(error.response.data);
+                                    //console.log(error.response.data.code +' '+ error.response.data.message);
+                                    //console.log(error.response.data);
                                     this.textoAlertas = error.response.data.message;
                                     this.alertaError = true;   
                                     this.dialogModificarSemestre = false;
@@ -582,8 +582,8 @@ export default {
                                     this.semestreActual= 1;   
                                 }
                                 if(error.response.data.code == 601){
-                                    console.log(error.response.data.code +' '+ error.response.data.message);
-                                    console.log(error.response.data);
+                                    //console.log(error.response.data.code +' '+ error.response.data.message);
+                                    //console.log(error.response.data);
                                     this.textoAlertas = error.response.data.message;
                                     this.alertaError = true;   
                                     this.dialogModificarSemestre = false;
@@ -591,8 +591,8 @@ export default {
                                     this.semestreActual= 1;   
                                 }
                                 if(error.response.data.code == 602){
-                                    console.log(error.response.data.code +' '+ error.response.data.message);
-                                    console.log(error.response.data);
+                                    //console.log(error.response.data.code +' '+ error.response.data.message);
+                                    //console.log(error.response.data);
                                     this.textoAlertas = error.response.data.message;
                                     this.alertaError = true;  
                                     this.dialogModificarSemestre = false;
@@ -600,8 +600,8 @@ export default {
                                     this.semestreActual= 1;    
                                 }
                                 if(error.response.data.code == 603){
-                                    console.log(error.response.data.code +' '+ error.response.data.message);
-                                    console.log(error.response.data);
+                                    //console.log(error.response.data.code +' '+ error.response.data.message);
+                                    //console.log(error.response.data);
                                     this.textoAlertas = "Error al registrar el semestre";
                                     this.alertaError = true; 
                                     this.dialogModificarSemestre = false;
@@ -627,21 +627,21 @@ export default {
          */
         acionesSobreSemestre(acciones,item){
             if(acciones =='Modificar Semestre'){
-                console.log("Modificar Semestre")
+                //console.log("Modificar Semestre")
                 
                 this.dialogModificarSemestre=true;
                 this.semestreActual_1=item;
                 this.añoActual=item.anio;
             }
             if(acciones=='Cerrar Semestre'){
-                console.log("Eliminar semestre")
+                //console.log("Eliminar semestre")
                 // this.semestreActual_1=item;
                 // this.dialogEliminarSemestre = true;
-                console.log(this.$store.state.usuario.usuario.rol)
+                //console.log(this.$store.state.usuario.usuario.rol)
                 
             }
             if(acciones=='Re-abrir semestre'){
-                console.log("Re-abrir semestre")
+               // console.log("Re-abrir semestre")
                 this.semestreActual_1=item;
                 this.dialogReAbrirSemestre = true;
             }
@@ -718,7 +718,7 @@ export default {
                                 // console.log(error.response.data);
                                 this.textoAlertas = error.response.data.message;
                                 this.alertaError = true;
-                                 this.dialogReAbrirSemestre= false;
+                                this.dialogReAbrirSemestre= false;
                             }
                             if(error.response.data.code == 902){
                                 // console.log(error.response.data.code +' '+ error.response.data.message);
@@ -728,7 +728,9 @@ export default {
                                 this.dialogReAbrirSemestre= false;
                             }
                             else{
-
+                                this.textoAlertas =  error.response.data.message;
+                                this.alertaError = true;
+                                this.dialogReAbrirSemestre= false;
                             }
                         }
                     }

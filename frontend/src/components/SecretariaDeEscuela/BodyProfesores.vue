@@ -136,7 +136,7 @@
                                                     :loading="cargando"
                                                     :items-per-page="10"
                                                 >            
-                                                    <template v-slot:item.opciones="{ item }">
+                                                    <template v-slot:[`item.opciones`]="{ item }">
                                                         <!-- boton para deshabilitar el profesor seleccionado -->
                                                         <v-tooltip bottom color="primary">
                                                             <template v-slot:activator="{ on }">
@@ -229,7 +229,7 @@
                     :search="buscar"
                     :items-per-page="10"
                 >            
-                    <template v-slot:item.opciones="{ item }">
+                    <template v-slot:[`item.opciones`]="{ item }">
                         <v-tooltip bottom color="primary">
                             <template v-slot:activator="{ on }">
                     <!-- boton para deshabilitar el profesor seleccionado -->
@@ -427,10 +427,14 @@ export default {
                 else{
                     if (error.response.data.success == false) {
                         if(error.response.data.code == 101){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
+                            //console.log(error.response.data.code +' '+ error.response.data.message);
+                            //console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;                            
+                        }
+                        else{
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true; 
                         }                        
                     }
                 }
@@ -461,7 +465,7 @@ export default {
 
             }
             ).catch((error)=>{
-                console.log(error)
+                //console.log(error)
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
                     this.cargando = false;
@@ -470,10 +474,14 @@ export default {
                 else{
                     if (error.response.data.success == false) {
                         if(error.response.data.code == 101){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
+                            //console.log(error.response.data.code +' '+ error.response.data.message);
+                           //console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;                            
+                        }
+                        else{
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true; 
                         }                        
                     }
                 }
@@ -553,14 +561,25 @@ export default {
             .then((result)=>{
                 // console.log("USUARIO RESTAURADO")
                 // console.log(result)
-            if (result.statusText == "OK") {                
                 this.obtenerProfesoresDeshabilitados();
                 this.dialogHabilitar = false;
                 this.alertaExito = true;
                 this.textoAlertas = "Es usuario esta habilitado nuevamente.";
-            }
+            
             }).catch((error)=>{
-                //falta el manejo de errores para implementar las alertas
+                if (error.message == 'Network Error') {
+                    // console.log(error)
+                    this.alertaError = true;
+                    this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
+                }
+                else{
+                    if (error.response.data.success == false) {
+                        
+                        this.textoAlertas = error.response.data.message;
+                        this.alertaError = true;
+                        
+                    }
+                }
             });
         },
 
@@ -603,6 +622,16 @@ export default {
                         this.alertaError = true;         
                         this.resetAviso();               
                         this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    }
+                    else{
+                        if (error.response.data.success == false) {
+
+                            this.dialogAviso = false;
+                            this.cargando = false;
+                            this.alertaError = true;         
+                            this.resetAviso();               
+                            this.textoAlertas = error.response.data.message;
+                        }
                     }
             })
         },
