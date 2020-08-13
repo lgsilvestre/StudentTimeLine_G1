@@ -39,7 +39,7 @@ export default new Vuex.Store({
         mensajeErrorLogin: '',
         perfilEstudiante: '',
         infoSemestre: null,
-        rutaDinamica: 'https://backend.proyectomapache.cl/',
+        rutaDinamica: 'http://127.0.0.1:8000/'
     },
     mutations: {
         calcularRol(state, nuevoSemestre) {
@@ -70,7 +70,7 @@ export default new Vuex.Store({
                 "email": lista.email,
                 "password": lista.pass,
             };
-            var url = state.rutaDinamica+'api/v1/auth/login';
+            var url = state.rutaDinamica + 'api/v1/auth/login';
             axios.post(url, post)
                 .then((result) => {
                     //console.log(result.data.data);
@@ -137,27 +137,27 @@ export default new Vuex.Store({
                 });
         },
         unLogin(state) {
-            var url = state.rutaDinamica+'api/v1/auth/logout';
+            var url = state.rutaDinamica + 'api/v1/auth/logout';
             axios.get(url, state.config)
                 .then((result) => {
                     console.log(result);
-                    
-                        state.status = '';
-                        state.usuario = null;
-                        state.RCstatus = null;
-                        state.tk = null;
-                        state.drawelAdmin = false;
-                        state.admin = false;
-                        state.profesor = false;
-                        state.secretariaEscuela = false;
-                        state.numProfesores = 70;
-                        state.numObservaciones = 69;
-                        state.numCarreras = 7;
-                        state.numEstudiantes = 1234;
-                        state.config.headers.Authorization = '';
-                        state.config2.headers.Authorization = '';
-                        router.push({ path: '/' });
-                    
+
+                    state.status = '';
+                    state.usuario = null;
+                    state.RCstatus = null;
+                    state.tk = null;
+                    state.drawelAdmin = false;
+                    state.admin = false;
+                    state.profesor = false;
+                    state.secretariaEscuela = false;
+                    state.numProfesores = 70;
+                    state.numObservaciones = 69;
+                    state.numCarreras = 7;
+                    state.numEstudiantes = 1234;
+                    state.config.headers.Authorization = '';
+                    state.config2.headers.Authorization = '';
+                    router.push({ path: '/' });
+
                 })
                 .catch((error) => {
                     if (error.message == 'Network Error') {
@@ -185,7 +185,7 @@ export default new Vuex.Store({
                 "email": nuevoUsuario.correo,
                 "password": nuevoUsuario.contrasena,
             }
-            var url =  state.rutaDinamica+'api/v1/usuario';
+            var url = state.rutaDinamica + 'api/v1/usuario';
             // console.log(state.config);
             console.log(url)
             console.log(post)
@@ -204,7 +204,7 @@ export default new Vuex.Store({
                 "email": datosUsuario.correo,
                 "password": datosUsuario.contrasena,
             }
-            var url =  state.rutaDinamica+'api/v1/usuario/' + state.usuario.data.user.id;
+            var url = state.rutaDinamica + 'api/v1/usuario/' + state.usuario.data.user.id;
             console.log(state.config);
             axios.put(url, put, state.config)
                 .then((result) => {
@@ -216,8 +216,7 @@ export default new Vuex.Store({
         // }
 
     },
-    methods: {
-    },
+    methods: {},
     actions: {},
     modules: {}
 })

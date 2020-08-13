@@ -78,7 +78,7 @@
                                         <v-col cols="12" class=" pt-1 pl-0 pr-0 pb-0  text-right" >
                                             <v-menu class="text-left " offset-y  :disabled="!usuarioValido">
                                                 <template   v-slot:activator="{ on, attrs }">
-                                                    <v-btn  fab  color="primary" x-small icon v-bind="attrs" v-on="on" >
+                                                    <v-btn  fab  color="primary" x-small icon v-bind="attrs" v-on="on" :disabled="!usuarioValido">
                                                         <v-icon>fas fa-ellipsis-v</v-icon>
                                                     </v-btn>
                                                 </template>
@@ -394,12 +394,13 @@ export default {
          * Obtenemos la lista de todos los semestres antes de montar la vista.
          */
         this.obtenerListaDeSemestres(); 
-        this.validarUsuario()       
+        this.validarUsuario();    
     },
     methods: {
         ...mapMutations(['calcularRol']),
         validarUsuario(){
             if(this.$store.state.usuario.usuario.rol== "secretaria de escuela"){
+                // console.log("Usuario de secrfetaria de escuela")
                 this.usuarioValido=false;
             }else{
                  this.usuarioValido=true;
@@ -613,17 +614,18 @@ export default {
          */
         acionesSobreSemestre(acciones,item){
             if(acciones =='Modificar Semestre'){
-                console.log("Modificar Semestre")
-                
+                console.log("Modificar Semestre")  
                 this.dialogModificarSemestre=true;
                 this.semestreActual_1=item;
                 this.añoActual=item.anio;
+                this.semestreActual = item.semestre;
+                
             }
             if(acciones=='Cerrar Semestre'){
                 console.log("Eliminar semestre")
-                // this.semestreActual_1=item;
-                // this.dialogEliminarSemestre = true;
-                console.log(this.$store.state.usuario.usuario.rol)
+                this.semestreActual_1=item;
+                this.dialogEliminarSemestre = true;
+                // console.log(this.$store.state.usuario.usuario.rol)
                 
             }
             if(acciones=='Re-abrir semestre'){
