@@ -1514,7 +1514,6 @@ export default {
             this.opcionesAlAsignarAyudante(this.ayudanteSeleccionado3,this.ayudanteSeleccionadoAux3,this.idAyudanteConCurso3,idInstancia,3)
             this.opcionesAlAsignarAyudante(this.ayudanteSeleccionado4,this.ayudanteSeleccionadoAux4,this.idAyudanteConCurso4,idInstancia,4)
             this.opcionesAlAsignarAyudante(this.ayudanteSeleccionado5,this.ayudanteSeleccionadoAux5,this.idAyudanteConCurso5,idInstancia,5)
-            this.obtenerInstanciasCursos();
             this.CerrarDialogAsignarAyudante();
             
         },
@@ -1592,6 +1591,7 @@ export default {
                     this.textoAlertas = "Se desvinculo el el profesor con exito "
                     this.obtenerInstanciasCursos();
                     this.dialogProfesoresInsCurso=false;
+                    this.obtenerInstanciasCursos();
                 }
                 }).catch((error)=>{
                     if (error.message == 'Network Error') {
@@ -1810,10 +1810,10 @@ export default {
             // console.log(item);
              var enrutamiento = this.semestre;
             if (this.$store.state.usuario.usuario.rol == "admin") {
-                this.$router.push({path:'/administrador/cursos/'+enrutamiento+'/id='+item.id});
+                this.$router.push({path:'/administrador/semestres/'+enrutamiento+'/id='+item.id});
             } else {
                 if (this.$store.state.usuario.usuario.rol == "secretaria de escuela") {
-                    this.$router.push({path:'/secretariaEscuela/cursos/'+enrutamiento+'/id='+item.id});
+                    this.$router.push({path:'/secretariaEscuela/semestres/'+enrutamiento+'/id='+item.id});
                 } else {
                     // if (this.$store.state.usuario.usuario.rol == "profesor") {
                     //     this.$router.push({path:'/profesor/'+estudiantes+'/id='+item.id});
@@ -1964,6 +1964,7 @@ export default {
             .then((result) => {
                 this.textoAlertas = "Se asignó el profesor correctamente"
                 this.alertaExito=true;
+                this.obtenerInstanciasCursos();
                 
             }).catch((error)=>{
                 if (error.message == 'Network Error') {
@@ -2089,6 +2090,7 @@ export default {
                     };
                     // console.log(post2)
                     this.agregarProfesorCurso(post2)
+                    
                 }
             }
             // if(this.profesorSeleccionadoAux == this.profesorSeleccionado ){
@@ -2102,20 +2104,10 @@ export default {
             };
             axios.put(url,put,this.$store.state.config)
             .then((result)=>{
-                var ins_curso=this.InstanciaModificar.id;
-                this.modificarProfesores(this.profesorSeleccionado,this.profesorSeleccionadoAux,this.profesorConCurso,ins_curso,1)
-                this.modificarProfesores(this.profesorSeleccionado2,this.profesorSeleccionadoAux2,this.profesorConCurso2,ins_curso,2)
-                this.modificarProfesores(this.profesorSeleccionado3,this.profesorSeleccionadoAux3,this.profesorConCurso3,ins_curso,3)
-                this.modificarProfesores(this.profesorSeleccionado4,this.profesorSeleccionadoAux4,this.profesorConCurso4,ins_curso,4)
-                this.modificarProfesores(this.profesorSeleccionado5,this.profesorSeleccionadoAux5,this.profesorConCurso5,ins_curso,5)
-
-                this.cerrarDialogModificarInstanciaCurso();
-                this.alertaExito = true;
-                this.textoAlertas = this.ModificacionExitosa;
-                this.obtenerInstanciasCursos(); 
-                this.resetModificarInstanciaCurso();
+                 this.alertaExito = true;
+            this.textoAlertas = "Se modifico la sección con exito";
                 
-           }).catch((error)=>{                
+           }).catch((error)=>{   
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
                     this.textoAlertas = "Error al modificar el curso, intente mas tarde."
@@ -2143,22 +2135,30 @@ export default {
                             this.cerrarDialogModificarInstanciaCurso();
                         }
                         if(error.response.data.code == 409){
-                            console.log("hola")
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;
                             this.obtenerInstanciasCursos(); 
                             this.cerrarDialogModificarInstanciaCurso();
                         }
                     }
-                    // else{
-                    //         this.textoAlertas = "Error en los datos ingresados";
-                    //         this.alertaError = true;
-                    //         this.obtenerInstanciasCursos(); 
-                    //         this.cerrarDialogModificarInstanciaCurso();
-                    //     }          
+         
                 }                  
             });
-        },
+            var ins_curso=this.InstanciaModificar.id;
+            this.modificarProfesores(this.profesorSeleccionado,this.profesorSeleccionadoAux,this.profesorConCurso,ins_curso,1)
+            this.modificarProfesores(this.profesorSeleccionado2,this.profesorSeleccionadoAux2,this.profesorConCurso2,ins_curso,2)
+            this.modificarProfesores(this.profesorSeleccionado3,this.profesorSeleccionadoAux3,this.profesorConCurso3,ins_curso,3)
+            this.modificarProfesores(this.profesorSeleccionado4,this.profesorSeleccionadoAux4,this.profesorConCurso4,ins_curso,4)
+            this.modificarProfesores(this.profesorSeleccionado5,this.profesorSeleccionadoAux5,this.profesorConCurso5,ins_curso,5)
+
+            this.cerrarDialogModificarInstanciaCurso();
+            // this.alertaExito = true;
+            // this.textoAlertas = this.ModificacionExitosa;
+            this.obtenerInstanciasCursos(); 
+            this.resetModificarInstanciaCurso();
+       
+       
+       },
 
         setEliminarInstanciaCurso(item){
             this.datosInsCurso.id = item.id;
