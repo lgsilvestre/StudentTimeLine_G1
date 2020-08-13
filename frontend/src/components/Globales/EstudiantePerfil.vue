@@ -966,35 +966,31 @@ export default {
             listaSituacionAcademica:[
                 {
                     id:1,
-                    nombre:"Regular",
+                    nombre:"REGULAR",
                 },
                 {
                     id:2,
-                    nombre:"Egresado",
+                    nombre:"EGRESADO",
                 },
                 {
                     id:3,
-                    nombre:"Eliminado",
+                    nombre:"ELIMINADO",
                 },
                 {
                     id:4,
-                    nombre:"Titulado",
+                    nombre:"TITULADO",
                 },
                 {
                     id:5,
-                    nombre:"Intercambio",
+                    nombre:"INTERCAMBIO",
                 },
                 {
                     id:6,
-                    nombre:"Postergación",
+                    nombre:"POSTEGACIÓN",
                 },
                 {
                     id:7,
-                    nombre:"Retiro",
-                },
-                {
-                    id:8,
-                    nombre:"Temporal",
+                    nombre:"RETIRO TEMPORAL",
                 },
             ],
             listaEscuelaAux:[],
@@ -1305,9 +1301,7 @@ export default {
                     "correo": this.estudianteEditar.correo,
                     "anho_ingreso": this.estudianteEditar.anho_ingreso,
                     "situacion_academica": this.estudianteEditar.situacion_academica,
-                    "porcentaje_avance":0,
-                    "creditos_aprobados":0,
-                    "escuela": this.estudianteEditar.escuela.id,
+                    "escuela": this.estudianteEditar.escuelaid,
                     "foto":this.imagenMiniatura,
                 };
                 axios.put(url,put,this.$store.state.config)
@@ -1378,6 +1372,7 @@ export default {
                     rut: '',
                     situacion_academica: '',
                     foto:'',
+                    idescuela:'',
                 };
                 this.estudiante={
                     anho_ingreso: '',
@@ -1748,8 +1743,6 @@ export default {
                     auxcurso= element;
                 }
             }
-
-            console.log("cursoooooooooooooooooooooooooo"+ auxcurso);
             this.estudianteModificarObservacion.estudiante = this.id;
             this.estudianteModificarObservacion.titulo = observacion.titulo;
             this.estudianteModificarObservacion.curso =  auxcurso;            
@@ -1963,7 +1956,7 @@ export default {
             
             // form_solicitarEstudianteValido
             var valido=this.$refs.solicitud.validate();
-            // console.log("semestre valido :" + valido)
+             console.log("semestre valido :" + valido)
             if(valido == true){
                 this.cargando = true;
                 let post = {

@@ -1475,13 +1475,6 @@ export default {
         },
 
         opcionesAlAsignarAyudante(ayudantePrincipal,ayudanteAux,idAyudanteConCurso,idInstaciaCurso,num){
-            //   console.log("==================="+num+"==================")
-            //     console.log(ayudantePrincipal)
-            //     console.log(ayudanteAux)
-            //     console.log(idInstaciaCurso)
-            //     console.log(idAyudanteConCurso)
-            //     console.log("===========================================")
-            //     console.log()
             if( ayudanteAux!= null && idAyudanteConCurso!= null && ayudantePrincipal!=null &&ayudanteAux!=ayudantePrincipal){
                 if(idAyudanteConCurso!=''){
                     // console.log("Cambiamos al profesor principal por uno nuevo.")
@@ -1509,6 +1502,7 @@ export default {
                     "curso":  idInstaciaCurso,
                 };
                 this.asignartAyudante(post);
+                
                 }
             }
         },
@@ -1527,11 +1521,9 @@ export default {
         asignartAyudante(post){
             var url = this.$store.state.rutaDinamica+'api/v1/ayudanteCurso'; 
             /* crear profesor con curso */
-            // console.log(post)
             if(post.estudiante!='' && post.curso!=''){
                 axios.post(url, post, this.$store.state.config)
             .then((result) => {
-                // console.log(result)
                 this.textoAlertas = "Se asignó el ayudante correctamente"
                 this.alertaExito=true;
                 this.obtenerInstanciasCursos();
@@ -1543,12 +1535,7 @@ export default {
                     this.textoAlertas = "Error al asignar el profesor intente mas tarde."
                     this.resetAsignarCurso();
                 }
-                // if(error.response.data.code == 301){
-                //     console.log(error.response.data.code +' '+ error.response.data.message);
-                //     console.log(error.response.data);
-                //     this.alertaError = true;      
-                //     this.textoAlertas = error.response.data.message;
-                // }    
+   
                 if(error.response.data.code == 302){
                     // console.log(error.response.data.code +' '+ error.response.data.message);
                     // console.log(error.response.data);
