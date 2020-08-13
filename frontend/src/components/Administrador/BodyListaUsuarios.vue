@@ -479,8 +479,8 @@ export default {
             //Reglas
             reglasNombre:[
                 v => !!v || 'Requerido',
-                v => /^[a-zA-Z ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',
-                v => /^[a-zA-Z ]+$/.test(v) || 'Nombre no Válido.'
+                v => /^[a-zA-ZÀ-ÿ\u00f1\u00d1 ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',
+                v => /^[a-zA-ZÀ-ÿ\u00f1\u00d1 ]+$/.test(v) || 'Nombre no Válido.'
             ],
             reglasEmail: [
                 v => !!v || 'Requerido',
