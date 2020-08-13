@@ -39,7 +39,7 @@ export default new Vuex.Store({
         mensajeErrorLogin: '',
         perfilEstudiante: '',
         infoSemestre: null,
-        rutaDinamica: 'https://backend.proyectomapache.cl/',
+        rutaDinamica: 'http://127.0.0.1:8000/',
     },
     mutations: {
         calcularRol(state, nuevoSemestre) {
@@ -140,7 +140,7 @@ export default new Vuex.Store({
             var url = state.rutaDinamica+'api/v1/auth/logout';
             axios.get(url, state.config)
                 .then((result) => {
-                    console.log(result);
+                    //console.log(result);
                     
                         state.status = '';
                         state.usuario = null;
@@ -161,59 +161,11 @@ export default new Vuex.Store({
                 })
                 .catch((error) => {
                     if (error.message == 'Network Error') {
-                        console.log(error);
+                        //console.log(error);
                         console.log('Error al comunicarse con el servidor, intente más tarde');
                     }
                 });
         },
-        registrarUsuario(state, nuevoUsuario) {
-            var aux;
-            if (nuevoUsuario.role == "Administrador") {
-                aux = "admin"
-            };
-            if (nuevoUsuario.role == "Secretaría de Escuela") {
-                aux = "secretaria de escuela"
-            };
-            if (nuevoUsuario.role == "Profesor") {
-                aux = "profesor"
-            };
-            let post = {
-                "foto": null,
-                "nombre": nuevoUsuario.nombre,
-                "escuela": nuevoUsuario.escuela,
-                "role": aux,
-                "email": nuevoUsuario.correo,
-                "password": nuevoUsuario.contrasena,
-            }
-            var url =  state.rutaDinamica+'api/v1/usuario';
-            // console.log(state.config);
-            console.log(url)
-            console.log(post)
-            axios.post(url, post, state.config)
-                .then((result) => {
-                    console.log(result.statusText);
-                });
-        },
-        updateDatosUsuarioPerfil(state, datosUsuario) {
-            console.log(state.tk);
-            let put = {
-                "nombre": datosUsuario.nombre,
-                "escuela": null,
-                "rol": null,
-                "foto": null,
-                "email": datosUsuario.correo,
-                "password": datosUsuario.contrasena,
-            }
-            var url =  state.rutaDinamica+'api/v1/usuario/' + state.usuario.data.user.id;
-            console.log(state.config);
-            axios.put(url, put, state.config)
-                .then((result) => {
-                    console.log(result.statusText);
-                });
-        },
-        // guardarPerfil() {
-        //     //this.state
-        // }
 
     },
     methods: {
