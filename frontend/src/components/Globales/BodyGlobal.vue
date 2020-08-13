@@ -269,7 +269,7 @@ export default {
                     //console.log(error);
                     state.verificacionLogin= true;
                     state.cargaLogin=false;
-                    state.mensajeErrorLogin= 'Error al comunicarse con el servidor, intente más tarde';
+                    state.mensajeErrorLogin= 'Error al comunicarse con el servidor, inténtelo más tarde';
                 } else {
                     if (error.response.data.success == false) {
                         switch (error.response.data.code) {
@@ -331,7 +331,7 @@ export default {
                     //console.log(error);
                     this.cargando = false;
                     this.alertError = true;
-                    var mensaje="La modificación del perfil fue realizada con exito";
+                    var mensaje="Se ha modificado correctamente el perfil.";
                     this.textoError=mensaje;
                     this.reset();
                 } else 

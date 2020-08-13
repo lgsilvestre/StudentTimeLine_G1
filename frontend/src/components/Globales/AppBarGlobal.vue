@@ -277,7 +277,7 @@ import axios from 'axios'
               ).catch((error)=>{
                   if (error.message == 'Network Error') {
                       this.alertaError = true;                        
-                      this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                      this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                   }
                   else{
                     if (error.response.data.success == false) {
@@ -329,7 +329,7 @@ import axios from 'axios'
                       this.cargando = false;
                       this.alertaError = true;         
                       this.resetContactar();               
-                      this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                      this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                   }else{
                     if (error.response.data.success == false) {
                         this.cargando = false;

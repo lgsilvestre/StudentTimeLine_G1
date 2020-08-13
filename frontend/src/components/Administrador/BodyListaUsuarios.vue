@@ -559,7 +559,7 @@ export default {
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
                     this.cargando = false;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -606,7 +606,7 @@ export default {
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
                     this.cargando = false;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -684,7 +684,7 @@ export default {
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
                     this.cargando = false;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -732,7 +732,7 @@ export default {
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
                     this.cargando = false;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -788,7 +788,7 @@ export default {
                 if (error.message == 'Network Error') {
                     //console.log(error)
                     this.alertaError = true;
-                    this.textoAlertas = "Error al modificar el usuario, intente mas tarde."
+                    this.textoAlertas = "Error al modificar el usuario, inténtelo más tarde."
                     this.resetRegistrarUsuario();
                 }
                 else{
@@ -901,14 +901,14 @@ export default {
             axios.put(url,put,this.$store.state.config)
             .then((result)=>{
                 this.alertaExito = true;
-                this.textoAlertas = "Se modificó el usuario con exito."
+                this.textoAlertas = "Se ha modificado correctamente el usuario."
                 this.obtenerUsuarios(); 
                 this.resetModificacionUsuario();
             }).catch((error)=>{                
                 if (error.message == 'Network Error') {
                     //console.log(error)
                     this.alertaError = true;
-                    this.textoAlertas = "Error al modificar el usuario, intente mas tarde."
+                    this.textoAlertas = "Error al modificar el usuario, inténtelo más tarde."
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -965,12 +965,12 @@ export default {
                     this.obtenerUsuarios();
                     this.resetEliminarUsuario(); 
                     this.alertaExito = true;
-                    this.textoAlertas = "Se elimino el usuario con exito "
+                    this.textoAlertas = "Se ha eliminado correctamente el usuario."
                 }).catch((error)=>{
                     if (error.message == 'Network Error') {
                         //console.log(error)
                         this.alertaError = true;
-                        this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
+                        this.textoAlertas = "Error al eliminar el usuario, inténtelo más tarde."
                     }
                     else{
                         if (error.response.data.success == false) {
@@ -1017,7 +1017,7 @@ export default {
                 this.dialogEliminar = true;
             }else{
                 this.alertaError = true;
-                this.textoAlertas = "No puede eliminar su propia cuenta"
+                this.textoAlertas = "No puede eliminar su propia cuenta."
             }
         },
     }
