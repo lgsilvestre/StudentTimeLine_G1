@@ -10,8 +10,6 @@
         <p>Correo: {{$atributo->correo}}  </p>
         <p>Año Ingreso: {{$atributo->anho_ingreso}}  </p>
         <p>Situación Académica: {{$atributo->situacion_academica}}  </p>
-        <p>Porcentaje Avance: {{$atributo->porcentaje_avance}}  </p>
-        <p>Creditos Aprobados: {{$atributo->creditos_aprobados}}  </p>
         <p>Escuela: {{$atributo->escuela}}  </p>
     @endforeach
   </div>

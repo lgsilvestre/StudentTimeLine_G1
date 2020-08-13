@@ -82,7 +82,7 @@ class Estudiante extends Model
         $idEstudiante = $request->id;
 
         $estudiante = collect(DB::table('estudiantes')
-                ->select('matricula','rut','nombre_completo','correo','anho_ingreso','situacion_academica','porcentaje_avance','creditos_aprobados','escuelas.nombre AS escuela')
+                ->select('matricula','rut','nombre_completo','correo','anho_ingreso','situacion_academica','escuelas.nombre AS escuela')
                 ->join('escuelas', 'escuelas.id','=', 'estudiantes.escuela')
                 ->where('estudiantes.id','=',$idEstudiante)
                 ->get());
@@ -110,7 +110,7 @@ class Estudiante extends Model
         }
         elseif($request->tipo == 3)
         {
-            $columnas = array("nombre_columna" => ['matricula', 'rut', 'nombre_completo', 'correo', 'anho_ingreso', 'situacion_academica','porcentaje_avance', 'creditos_aprobados', 'escuela']);
+            $columnas = array("nombre_columna" => ['matricula', 'rut', 'nombre_completo', 'correo', 'anho_ingreso', 'situacion_academica', 'escuela']);
             return $columnas;
         }
         /*
