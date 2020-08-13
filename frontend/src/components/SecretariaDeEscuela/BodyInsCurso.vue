@@ -897,7 +897,7 @@
         <v-snackbar v-model="alertaExito" :timeout="timeout" bottom
             color= "secondary" left class="pb-12"  >
             <v-icon class="mr-3"  color="white" >
-                fas fa-info-circle  
+                fas fa-check-circle  
             </v-icon>
         
             <strong> {{ textoAlertas }} </strong>
