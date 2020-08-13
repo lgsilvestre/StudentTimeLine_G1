@@ -171,6 +171,13 @@
                         this.alertaError = true;
                         this.cargando = false;
                         this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    }else{
+                        if (error.response.data.success == false) {
+                            this.alertaError = true;
+                            this.cargando = false;
+                            this.textoAlertas = error.response.data.message;
+                        }
+
                     }
                 })},
         },

@@ -132,7 +132,7 @@ export default {
         var url = this.$store.state.rutaDinamica+'api/v1/auth/restartPassword';
         axios.post(url,post)
         .then((result)=>{
-            console.log(result.data);
+            //console.log(result.data);
             if (result.data.success == true) {
                 this.RCstatus=false;
                 this.alertAcept= true;
@@ -144,7 +144,7 @@ export default {
         .catch((error)=>{
             this.$refs.RC.reset();
         if (error.message == 'Network Error') {
-            console.log(error);
+            //console.log(error);
             this.RCstatus=false;
             this.alertError= true;
             this.textoError= "Error usted no esta registrado o existe un problema en red, intente mas tarde";
@@ -153,18 +153,20 @@ export default {
             if (error.response.data.success == false) {
                 switch (error.response.data.code) {
                     case 1:
-                        console.log(error.response.data.code +' '+ error.response.data.message);
-                        console.log(error.response.data);
+                        //console.log(error.response.data.code +' '+ error.response.data.message);
+                        ///console.log(error.response.data);
                         this.alertError= true;
                         this.textoError= error.response.data.message;
                         break;
                     case 2:
-                        console.log(error.response.data.code +' '+ error.response.data.message);
-                        console.log(error.response.data);
+                        //console.log(error.response.data.code +' '+ error.response.data.message);
+                        //console.log(error.response.data);
                         this.alertError= true;
                         this.textoError= error.response.data.message;
                         break;
                     default:
+                        this.alertError= true;
+                        this.textoError= error.response.data.message;
                         break;
                 }
             }

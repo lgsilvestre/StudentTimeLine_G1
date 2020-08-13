@@ -245,7 +245,7 @@ class UsuarioController extends Controller{
         if(!array_key_exists ("password" , $entradas)){
             $entradas['password'] = null;
         }
-        if(!array_key_exists ("foto" , $entradas)){
+        if($entradas['foto']==null){
             // Nombre de la imagen
             $path = 'image.png';
             // Extensión de la imagen
@@ -256,6 +256,21 @@ class UsuarioController extends Controller{
             $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
             $entradas['foto'] = $base64;
         }
+
+        //En el servidor se trabaja de esta manera
+        // if($entradas['foto']==null){
+        //     // Nombre de la imagen
+            
+        //     $path = 'image.png';
+        //     // Extensi贸n de la imagen
+        //     $type = pathinfo($path, PATHINFO_EXTENSION);
+        //     // Cargando la imagen
+        //     $data = file_get_contents("/home/proyec44/Backend/storage/image/image.png");
+        //     // Decodificando la imagen en base64
+        //     $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+        //     $entradas['foto'] = $base64;
+        // }
+
         try{
             $usuario = new User();
             $usuario ->nombre=$entradas['nombre'];
@@ -789,5 +804,65 @@ class UsuarioController extends Controller{
         }
     }
 
+    /**
+     * 
+     */
+    public function recordatorio(Request $request){
+        $entradas = $request->only('descripcion', 'motivo');
+        $validator = Validator::make($entradas, [
+            'descripcion' => ['required', 'string'],
+            'motivo' => ['required', 'string']
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'code' => 301,
+                'message' => 'Error en datos ingresados',
+                'data' => ['error'=>$validator->errors()]
+            ], 422);
+        }
+        try{
+            $credenciales = JWTAuth::parseToken()->authenticate();
+            $usuarios = User::Where('rol', 'profesor')->Where('escuela', $credenciales->escuela)->get();
+            $details = array(
+                'opcion' => 4,
+                'motivo' => $entradas['motivo'],
+                'escuela' => $credenciales->getEscuela->nombre,
+                'profesor' => '',
+                'descripcion' => $entradas['descripcion'],
+            );
+            foreach($usuarios as $usuario){
+                $details['profesor']= $usuario->nombre;
+                \Mail::to($usuario['email'])->send(new SendMail($details));
+            }
+            if($credenciales->escuelaAux!=null){
+                $usuarios = User::Where('rol', 'profesor')->Where('escuela', $credenciales->escuelaAux)->get();
+                $details = array(
+                    'opcion' => 4,
+                    'motivo' => $entradas['motivo'],
+                    'escuela' => $credenciales->getEscuelaAux->nombre,
+                    'profesor' => '',
+                    'descripcion' => $entradas['descripcion'],
+                );
+                foreach($usuarios as $usuario){
+                    $details['profesor']= $usuario->nombre;
+                    \Mail::to($usuario['email'])->send(new SendMail($details));
+                }
+            }
+            return response()->json([
+                'success' => true,
+                'code' => 1,
+                'message' => 'Se a mandado el correo exitosamente',
+                'data' => null
+            ], 200);
+        }catch(\Exception $e){
+            return response()->json([
+                'success' => false,
+                'code' => 4,
+                'message' => 'Error',
+                'data' => $e
+            ], 502);
+        }
+    }
 
 }

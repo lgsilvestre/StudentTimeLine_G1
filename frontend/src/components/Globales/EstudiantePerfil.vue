@@ -1108,7 +1108,7 @@ export default {
                 })
                 .catch((error) => {
                     if (error.message == 'Network Error') {
-                        console.log(error);
+                        //console.log(error);
                         this.alertError = true;
                         this.cargando = false;
                         this.textoError = 'Error al cargar los datos, intente más tarde'
@@ -1116,13 +1116,16 @@ export default {
                         if (error.response.data.success == false) {
                             switch (error.response.data.code) {
                             case 101:
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
+                                //console.log(error.response.data.code +' '+ error.response.data.message);
+                                //console.log(error.response.data);
                                 this.alertError = true;
                                 this.cargando = false;
                                 this.textoError = error.response.data.message;
                                 break;
                             default:
+                                this.alertError = true;
+                                this.cargando = false;
+                                this.textoError = error.response.data.message;
                                 break;
                             }
                         }
@@ -1134,22 +1137,22 @@ export default {
                     id: estudiante.escuelaid,
                     nombre: estudiante.escuela,
                 };
-                console.log(escuela);
+                //console.log(escuela);
                 this.listaEscuelaAux[0]=escuela;
-                console.log(escuela);
+                //console.log(escuela);
                 this.listaEscuela = this.listaEscuelaAux;
             }
             
         },
         exportarEstudiante(){
-            console.log("exportar info del estudiante.") 
-            console.log( "Info :"+this.$store.state.perfilEstudiante)
+            //console.log("exportar info del estudiante.") 
+            //console.log( "Info :"+this.$store.state.perfilEstudiante)
             
             this.exportar(3,0,0,this.id);
             // this.exportar(3,'2020-07-19','2020-07-21',1,1);
         },
         exportar(tipo, fechaIni,fechaTer,idEstudiante,escuela){
-             let post = {
+            let post = {
                     "tipo": tipo,
                     "fechaInicio" : 0,
                     "fechaFin": 0 ,
@@ -1161,15 +1164,15 @@ export default {
             //console.log(post)
             axios.post(url,post,this.$store.state.config2)
             .then((result)=>{
-                 console.log(result);
+                //console.log(result);
                 //var fileDownload = require('js-file-download');
                 //fileDownload(result.data, 'archivo.xlsx');
                 
 
                 const url = URL.createObjectURL(new Blob([result.data], {
-                     type: 'application/x-pdf'
-                 }))
-                 const link = document.createElement('a');
+                    type: 'application/x-pdf'
+                }));
+                const link = document.createElement('a');
                 link.href = url;
                 link.setAttribute('download', 'Estudiante.pdf');
                 document.body.appendChild(link);
@@ -1181,15 +1184,16 @@ export default {
                 
             })
             .catch((error) => {
-                console.log(error);
+                //console.log(error);
                 if (error.message == 'Network Error') {
-                    console.log(error);
+                    //console.log(error);
                     this.alertError = true;
                     this.textoError = 'Error, intente más tarde'
                 } else {
-                    console.log(error);
-                    this.alertError = true;
-                    this.textoError = 'Error, intente más tarde'
+                    if (error.response.data.success == false) {
+                        this.alertError = true;
+                        this.textoError = error.response.data.message;
+                    }
                 } 
             });
         },
@@ -1212,8 +1216,16 @@ export default {
                 }
             })
             .catch((error) => {
-                this.alertError = true;
-                this.textoError = error.response.data.message;
+                if (error.message == 'Network Error') {
+                    //console.log(error);
+                    this.alertError = true;
+                    this.textoError = 'Error, intente más tarde'
+                } else {
+                    if (error.response.data.success == false) {
+                        this.alertError = true;
+                        this.textoError = error.response.data.message;
+                    }
+                } 
             });
         },
 
@@ -1236,9 +1248,18 @@ export default {
                 this.textoAcept = "Se agregó la categoria con exito";
             })
             .catch((error) => {
-                this.dialogCrearCategoria = false;
-                this.alertError = true;
-                this.textoError = error.response.data.message;
+                if (error.message == 'Network Error') {
+                    //console.log(error);
+                    this.alertError = true;
+                    this.textoError = 'Error, intente más tarde'
+                } else {
+                    if (error.response.data.success == false) {
+                        this.dialogCrearCategoria = false;
+                        this.alertError = true;
+                        this.textoError = error.response.data.message;
+                    }
+                } 
+                
             });
         },
 
@@ -1261,9 +1282,9 @@ export default {
             
             if (auxruta[0] == 1 || auxruta[0] == 2) {
                 if (this.$store.state.usuario.usuario.rol == "admin") {
-                this.$router.push({path:'/administrador/cursos/'+this.enrutamiento});
+                this.$router.push({path:'/administrador/semestres/'+this.enrutamiento});
                 } else {
-                    this.$router.push({path:'/secretariaEscuela/cursos/'+this.enrutamiento});
+                    this.$router.push({path:'/secretariaEscuela/semestres/'+this.enrutamiento});
                 }
             }
             else{
@@ -1307,7 +1328,7 @@ export default {
                 axios.put(url,put,this.$store.state.config)
                 .then((result)=>{
                     //if (result.data.success == true)  {
-                        console.log('se cargo el estudiante');
+                        //console.log('se cargo el estudiante');
                         this.alertAcept = true;
                         this.textoAcept = 'Se agregó el estudiante correctamente ';
                         this.dialogAEditarEstudiante = false;
@@ -1316,13 +1337,13 @@ export default {
                 })
                 .catch((error)=>{
                     if (error.message == 'Network Error') {
-                        console.log(error);
+                        //console.log(error);
                         this.alertError = true;
                         this.textoError = 'Error al cargar los datos, intente más tarde'
                     } else {
                         if (error.response.data.success == false) {
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
+                            //console.log(error.response.data.code +' '+ error.response.data.message);
+                            //console.log(error.response.data);
                             this.alertError = true;
                             this.textoError = error.response.data.message;
                             
@@ -1344,7 +1365,7 @@ export default {
             this.estudianteEditar.rut=this.estudiante.rut;
             for (let index = 0; index <  this.listaSituacionAcademica.length; index++) {
                 const element =  this.listaSituacionAcademica[index];
-                console.log(element);
+                //console.log(element);
                 if (this.estudiante.situacion_academica == element.nombre) {
                     this.estudianteEditar.situacion_academica= element.nombre ;
                 }
@@ -1402,7 +1423,7 @@ export default {
 
             axios.get(url,this.$store.state.config)
             .then((result)=>{
-                console.log(result.data.data);
+                //console.log(result.data.data);
                 if (opcion == 1 || opcion==2) {
                     this.estudianteAUX.anho_ingreso=result.data.data.estudiante.anho_ingreso;
                     this.estudianteAUX.correo=result.data.data.estudiante.correo;
@@ -1428,8 +1449,8 @@ export default {
                             ayudante: element.ayudante,
                             curso: element.nombreCurso,
                         };
-                        console.log("cursos");
-                        console.log(cursos);
+                        //console.log("cursos");
+                        //console.log(cursos);
                         this.cursosAyudanteAux[index]= cursos;
                     }
                     if (contador>0) {
@@ -1536,21 +1557,21 @@ export default {
                     }
                     this.cargando =false;
                     this.observaciones = this.auxObservaciones;
-                    console.log(this.observaciones);
+                    //console.log(this.observaciones);
                 }
                 //}
             })
             .catch((error) => {
-                console.log(error);
+                //console.log(error);
                 if (error.message == 'Network Error') {
-                console.log(error);
+                //console.log(error);
                 this.alertError = true;
                 this.cargando = false;
                 this.textoError = 'Error al cargar los datos, intente más tarde'
                 } else {
                 if (error.response.data.success == false) {
-                    console.log(error.response.data.code +' '+ error.response.data.message);
-                    console.log(error.response.data);
+                    //console.log(error.response.data.code +' '+ error.response.data.message);
+                    //console.log(error.response.data);
                     this.alertError = true;
                     this.cargando = false;
                     this.textoError = error.response.data.message;
@@ -1578,14 +1599,14 @@ export default {
                         plan:element.get_curso.get_curso.plan,
                         descripcion: element.curso + " Seccion "+element.seccion,
                     }; 
-                    console.log(insCurso);
+                    //console.log(insCurso);
                     this.listaCursosAux[index] = insCurso;                                                         
                 }
                 this.listaCursos = this.listaCursosAux;         
-                console.log(this.listaCursos);
+                //console.log(this.listaCursos);
             }
             ).catch((error)=>{
-                console.log("cago aqui?");
+                //console.log("cago aqui?");
                 if (error.message == 'Network Error') {
                     this.alertError = true;
                     this.cargando = false;
@@ -1594,17 +1615,21 @@ export default {
                 else{
                     if (error.response.data.success == false) {
                         if(error.response.data.code == 401){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
+                            //console.log(error.response.data.code +' '+ error.response.data.message);
+                            //console.log(error.response.data);
                             this.textoError = error.response.data.message;
                             this.alertError = true;                            
                         }  
                         if(error.response.data.code == 402){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
-                            this.textoError = "Error al obtener los cursos del profesor";
+                            //console.log(error.response.data.code +' '+ error.response.data.message);
+                            //console.log(error.response.data);
+                            this.textoError = error.response.data.message;
                             this.alertError = true;                            
-                        }                      
+                        } 
+                        else{
+                            this.textoError = error.response.data.message;
+                            this.alertError = true; 
+                        }                     
                     }
                 }
             });
@@ -1667,7 +1692,7 @@ export default {
                     "categoria": this.estudianteObservacion.categoria,
                     "tipo": auxTipo,
                 }
-                console.log(post);
+                //console.log(post);
                 axios.post(url, post, this.$store.state.config)
                 .then((result) => {
                     this.alertAcept = true;
@@ -1677,22 +1702,22 @@ export default {
                     this.$refs.form_añadirObservacion.reset();
                 }).catch((error)=>{
                     if (error.message == 'Network Error') {
-                        console.log(error)
+                        //console.log(error)
                         this.alertError = true;
                         this.textoError = "Error al crear una observacion, intente mas tarde."
                         this.resetRegistrarUsuario();
                     }
                     else{
                         if (error.response.data.success == false) {
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
+                            //console.log(error.response.data.code +' '+ error.response.data.message);
+                            //console.log(error.response.data);
                             this.textoError = error.response.data.message;
                             this.alertError= true;      
                             this.resetAgregarObservacion();
                             
                         }
                         else{
-                            console.log(error)
+                            //console.log(error)
                             this.alertError = true;
                             this.textoError = "Error, intente mas tarde."
                             this.resetAgregarObservacion();
@@ -1783,9 +1808,9 @@ export default {
                 "categoria": this.estudianteModificarObservacion.categoria,
                 "tipo": auxTipo,
             }
-            console.log(put);
+            //console.log(put);
             var url = this.$store.state.rutaDinamica+'api/v1/observacion/'+ this.estudianteModificarObservacion.id;
-            console.log(url);
+            //console.log(url);
             axios.put(url, put, this.$store.state.config)
             .then((result) => {
                 //console.log(result);
@@ -1796,22 +1821,22 @@ export default {
                 this.obtenerEstudiante(3);
             }).catch((error)=>{
                 if (error.message == 'Network Error') {
-                    console.log(error)
+                    //console.log(error)
                     this.alertError = true;
                     this.textoError = "Error al modificar la observacion, intente mas tarde."
                     this.resetModificarObservacion();
                 }
                 else{
                     if (error.response.data.success == false) {
-                        console.log(error.response.data.code +' '+ error.response.data.message);
-                        console.log(error.response.data);
+                        //console.log(error.response.data.code +' '+ error.response.data.message);
+                        //console.log(error.response.data);
                         this.textoError = error.response.data.message;
                         this.alertError= true;      
                         this.resetModificarObservacion();
                         
                     }
                     else{
-                        console.log(error)
+                        //console.log(error)
                         this.alertError = true;
                         this.textoError = "Error al modificar la observacion, intente mas tarde."
                         this.resetModificarObservacion();
@@ -1877,22 +1902,22 @@ export default {
                 this.obtenerEstudiante(3);
             }).catch((error)=>{
                 if (error.message == 'Network Error') {
-                    console.log(error)
+                    //console.log(error)
                     this.alertError = true;
                     this.textoError = "Error al eliminar la observacion, intente mas tarde."
                     this.resetEliminarObservacion();
                 }
                 else{
                     if (error.response.data.success == false) {
-                        console.log(error.response.data.code +' '+ error.response.data.message);
-                        console.log(error.response.data);
+                        //console.log(error.response.data.code +' '+ error.response.data.message);
+                        //console.log(error.response.data);
                         this.textoError = error.response.data.message;
                         this.alertError= true;      
                         this.resetEliminarObservacion();
                         
                     }
                     else{
-                        console.log(error)
+                        //console.log(error)
                         this.alertError = true;
                         this.textoError = "Error al eliminar la observacion, intente mas tarde."
                         this.resetEliminarObservacion();
@@ -1956,7 +1981,7 @@ export default {
             
             // form_solicitarEstudianteValido
             var valido=this.$refs.solicitud.validate();
-             console.log("semestre valido :" + valido)
+            // console.log("semestre valido :" + valido)
             if(valido == true){
                 this.cargando = true;
                 let post = {
@@ -1984,7 +2009,14 @@ export default {
                         this.alertError = true;
                         this.textoError = "Error al enviar la solicitud, intente mas tarde."
                         this.resetDialogSolicitud();                        
-                    }                            
+                    } 
+                    else{
+                        if (error.response.data.success == false) {
+                            this.textoError = error.response.data.message;
+                            this.alertError= true;      
+                            this.resetDialogSolicitud(); 
+                        }
+                    }                           
                 });
             }
         },

@@ -515,6 +515,9 @@
                       this.textoError = error.response.data.message;
                       break;
                   default:
+                      this.alertError = true;
+                      this.cargando = false;
+                      this.textoError = error.response.data.message;
                       break;
                 }
               }
@@ -561,6 +564,9 @@
                       this.textoError = error.response.data.message;
                       break;
                   default:
+                      this.alertError = true;
+                      this.cargando = false;
+                      this.textoError = error.response.data.message;
                       break;
                 }
               }
@@ -608,7 +614,11 @@
                         //console.log(error.response.data);
                         this.textoError = error.response.data.message;
                         this.alertError = true;
-                    }                    
+                    } 
+                    else{
+                      this.textoError = error.response.data.message;
+                      this.alertError = true;
+                    }                   
                 }
             }
         });
@@ -654,6 +664,9 @@
                     this.textoError = error.response.data.message;
                     break;
                 default:
+                    this.resetCreacionEscuela();
+                    this.alertError = true;
+                    this.textoError = error.response.data.message;
                     break;
               }
             }
@@ -710,6 +723,10 @@
                     this.textoError = error.response.data.message;
                     break;
                 default:
+                    this.resetEditarEscuela();
+                    this.dialogModificar=false;
+                    this.alertError = true;
+                    this.textoError = error.response.data.message;
                     break;
               }
             }
@@ -752,6 +769,9 @@
                     this.textoError = error.response.data.message;
                     break;
                 default:
+                    this.dialogEliminar = false;
+                    this.alertError = true;
+                    this.textoError = error.response.data.message;
                     break;
               }
             }
