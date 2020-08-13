@@ -3,7 +3,7 @@
  <head><meta charset="utf-8"><style amp4email-boilerplate>body{visibility:hidden}</style><script async src="https://cdn.ampproject.org/v0.js"></script><script async custom-element="amp-anim" src="https://cdn.ampproject.org/v0/amp-anim-0.1.js"></script> 
    
   <style amp-custom>
-@media only screen and (max-width:600px) {p, ul li, ol li, a { font-size:16px; line-height:150% } h1 { font-size:30px; text-align:center; line-height:120% } h2 { font-size:26px; text-align:center; line-height:120% } h3 { font-size:20px; text-align:center; line-height:120% } h1 a { font-size:30px } h2 a { font-size:26px } h3 a { font-size:20px } .es-menu td a { font-size:16px } .es-header-body p, .es-header-body ul li, .es-header-body ol li, .es-header-body a { font-size:16px } .es-footer-body p, .es-footer-body ul li, .es-footer-body ol li, .es-footer-body a { font-size:16px } .es-infoblock p, .es-infoblock ul li, .es-infoblock ol li, .es-infoblock a { font-size:12px } *[class="gmail-fix"] { display:none } .es-m-txt-c, .es-m-txt-c h1, .es-m-txt-c h2, .es-m-txt-c h3 { text-align:center } .es-m-txt-r, .es-m-txt-r h1, .es-m-txt-r h2, .es-m-txt-r h3 { text-align:right } .es-m-txt-l, .es-m-txt-l h1, .es-m-txt-l h2, .es-m-txt-l h3 { text-align:left } .es-m-txt-r amp-img { float:right } .es-m-txt-c amp-img { margin:0 auto } .es-m-txt-l amp-img { float:left } .es-button-border { display:block } a.es-button { font-size:20px; display:block; border-left-width:0px; border-right-width:0px } .es-btn-fw { border-width:10px 0px; text-align:center } .es-adaptive table, .es-btn-fw, .es-btn-fw-brdr, .es-left, .es-right { width:100% } .es-content table, .es-header table, .es-footer table, .es-content, .es-footer, .es-header { width:100%; max-width:600px } .es-adapt-td { display:block; width:100% } .adapt-img { width:100%; height:auto } td.es-m-p0 { padding:0px } td.es-m-p0r { padding-right:0px } td.es-m-p0l { padding-left:0px } td.es-m-p0t { padding-top:0px } td.es-m-p0b { padding-bottom:0 } td.es-m-p20b { padding-bottom:20px } .es-mobile-hidden, .es-hidden { display:none } tr.es-desk-hidden, td.es-desk-hidden, table.es-desk-hidden { display:table-row; width:auto; overflow:visible; float:none; max-height:inherit; line-height:inherit } .es-desk-menu-hidden { display:table-cell } table.es-table-not-adapt, .esd-block-html table { width:auto } table.es-social { display:inline-block } table.es-social td { display:inline-block } }
+@media only screen and (max-width:600px) {p, ul li, ol li, a { font-size:16px; line-height:150% } h1 { font-size:30px; text-align:center; line-height:120% } h2 { font-size:26px; text-align:center; line-height:120% } h3 { font-size:20px; text-align:center; line-height:120% } h1 a { font-size:30px } h2 a { font-size:26px } h3 a { font-size:20px } .es-menu td a { font-size:16px } .es-header-body p, .es-header-body ul li, .es-header-body ol li, .es-header-body a { font-size:16px } .es-footer-body p, .es-footer-body ul li, .es-footer-body ol li, .es-footer-body a { font-size:16px } .es-infoblock p, .es-infoblock ul li, .es-infoblock ol li, .es-infoblock a { font-size:12px } *[class="gmail-fix"] { display:none } .es-m-txt-c, .es-m-txt-c h1, .es-m-txt-c h2, .es-m-txt-c h3 { text-align:center } .es-m-txt-r, .es-m-txt-r h1, .es-m-txt-r h2, .es-m-txt-r h3 { text-align:right } .es-m-txt-l, .es-m-txt-l h1, .es-m-txt-l h2, .es-m-txt-l h3 { text-align:left } .es-m-txt-r amp-img { float:right } .es-m-txt-c amp-img { margin:0 auto } .es-m-txt-l amp-img { float:left } .es-button-border { display:block } a.es-button { font-size:20px; display:block; border-width:15px 25px 15px 25px } .es-btn-fw { border-width:10px 0px; text-align:center } .es-adaptive table, .es-btn-fw, .es-btn-fw-brdr, .es-left, .es-right { width:100% } .es-content table, .es-header table, .es-footer table, .es-content, .es-footer, .es-header { width:100%; max-width:600px } .es-adapt-td { display:block; width:100% } .adapt-img { width:100%; height:auto } td.es-m-p0 { padding:0px } td.es-m-p0r { padding-right:0px } td.es-m-p0l { padding-left:0px } td.es-m-p0t { padding-top:0px } td.es-m-p0b { padding-bottom:0 } td.es-m-p20b { padding-bottom:20px } .es-mobile-hidden, .es-hidden { display:none } tr.es-desk-hidden, td.es-desk-hidden, table.es-desk-hidden { display:table-row; width:auto; overflow:visible; float:none; max-height:inherit; line-height:inherit } .es-desk-menu-hidden { display:table-cell } table.es-table-not-adapt, .esd-block-html table { width:auto } table.es-social { display:inline-block } table.es-social td { display:inline-block } }
 a[x-apple-data-detectors] {
 	color:inherit;
 	text-decoration:none;
@@ -228,7 +228,7 @@ ul li, ol li {
 	height:100%;
 }
 .es-wrapper-color {
-	background-color:#F4F4F4;
+	background-color:#F7FFF7;
 }
 .es-content-body {
 	background-color:#FFFFFF;
@@ -302,10 +302,6 @@ a.es-button {
 	border-radius:2px;
 	width:auto;
 }
-.es-button img {
-	display:inline-block;
-	vertical-align:middle;
-}
 .es-p-default {
 	padding-top:20px;
 	padding-right:30px;
@@ -330,19 +326,44 @@ a.es-button {
      </tr> 
      <tr> 
       <td valign="top"> 
-       <table cellpadding="0" cellspacing="0" class="es-header" align="center"> 
+       <table class="es-header" cellspacing="0" cellpadding="0" align="center"> 
          <tr> 
-          <td style="background-color: #1a535c" bgcolor="#1a535c" align="center"> 
-           <table class="es-header-body" style="background-color: #1a535c" width="600" bgcolor="#1a535c" align="center" cellspacing="0" cellpadding="0"> 
+          <td style="background-color: #1a535c" bgcolor="#1A535C" align="center"> 
+           <table class="es-header-body" width="600" cellspacing="0" cellpadding="0" align="center"> 
              <tr> 
-              <td class="es-p10" align="left"> 
+              <td class="es-p20t es-p10b es-p10r es-p10l" style="background-color: #1a535c" bgcolor="#1a535c" align="left"> 
                <table width="100%" cellspacing="0" cellpadding="0"> 
                  <tr> 
                   <td width="580" valign="top" align="center"> 
                    <table width="100%" cellspacing="0" cellpadding="0" role="presentation"> 
                      <tr> 
                         <td align="center" style="font-size: 0px"><<img src="https://i.postimg.cc/y8X0SYTy/93921597262741196.png" alt style="display: block;" width="560" height="132"></img></td>                     </tr> 
-                    </tr> 
+                     </tr> 
+                   </table></td> 
+                 </tr> 
+               </table></td> 
+             </tr> 
+           </table></td> 
+         </tr> 
+       </table> 
+       <table class="es-content" cellspacing="0" cellpadding="0" align="center"> 
+         <tr> 
+          <td style="background-color: #1a535c" bgcolor="#1a535c" align="center"> 
+           <table class="es-content-body" style="background-color: transparent" width="600" cellspacing="0" cellpadding="0" align="center"> 
+             <tr> 
+              <td align="left"> 
+               <table width="100%" cellspacing="0" cellpadding="0"> 
+                 <tr> 
+                  <td width="600" valign="top" align="center"> 
+                   <table style="background-color: #ffffff;border-radius: 4px;border-collapse: separate" width="100%" cellspacing="0" cellpadding="0" bgcolor="#ffffff" role="presentation"> 
+                     <tr> 
+                      <td class="es-p5t es-p5b es-p20r es-p20l" style="font-size:0" bgcolor="#ffffff" align="center"> 
+                       <table width="100%" cellspacing="0" cellpadding="0" border="0" role="presentation"> 
+                         <tr> 
+                          <td style="border-bottom: 1px solid #ffffff;background: rgba(0, 0, 0, 0) none repeat scroll 0% 0%;height: 1px;width: 100%;margin: 0px"></td> 
+                         </tr> 
+                       </table></td> 
+                     </tr> 
                    </table></td> 
                  </tr> 
                </table></td> 
@@ -353,7 +374,7 @@ a.es-button {
        <table class="es-content" cellspacing="0" cellpadding="0" align="center"> 
          <tr> 
           <td align="center"> 
-           <table class="es-content-body" style="background-color: #ffffff" width="600" cellspacing="0" cellpadding="0" bgcolor="#ffffff" align="center"> 
+           <table class="es-content-body" style="background-color: #f7fff7" width="600" cellspacing="0" cellpadding="0" bgcolor="#F7FFF7" align="center"> 
              <tr> 
               <td align="left"> 
                <table width="100%" cellspacing="0" cellpadding="0"> 
@@ -361,7 +382,43 @@ a.es-button {
                   <td width="600" valign="top" align="center"> 
                    <table style="background-color: #ffffff" width="100%" cellspacing="0" cellpadding="0" bgcolor="#ffffff" role="presentation"> 
                      <tr> 
-                      <td class="es-m-txt-l es-p15t es-p15b es-p30r es-p30l" bgcolor="#ffffff"><p style="line-height: 150%;font-family: roboto, 'helvetica neue', helvetica, arial, sans-serif">Estimado/a&nbsp;<strong>{{$details['destinatario']}}</strong> , <strong>{{$details['autor']}} </strong>perteneciente a la escuela <strong>{{$details['escuela']}}</strong>&nbsp;desea comunicarle lo siguiente:</p><p style="line-height: 150%;font-family: roboto, 'helvetica neue', helvetica, arial, sans-serif;text-align: justify"><br><strong>ASUNTO: {{$details['motivo']}}</strong></p></td> 
+                      <td class="es-m-txt-l es-p20t es-p15b es-p30r es-p30l" bgcolor="#ffffff" align="left"><p style="font-family: roboto, 'helvetica neue', helvetica, arial, sans-serif">Estimado/a&nbsp;<strong>{{$details['profesor']}}</strong>,&nbsp;<strong>la {{$details['escuela']}}</strong>&nbsp;le envía este&nbsp;correo con el objetivo de comunicarle lo siguiente:<br></p></td> 
+                     </tr> 
+                   </table></td> 
+                 </tr> 
+               </table></td> 
+             </tr> 
+             <tr> 
+              <td class="es-p20b es-p30r es-p30l" style="background-color: #ffffff" bgcolor="#ffffff" align="left"> 
+               <table width="100%" cellspacing="0" cellpadding="0"> 
+                 <tr> 
+                  <td width="540" valign="top" align="center"> 
+                   <table width="100%" cellspacing="0" cellpadding="0" role="presentation"> 
+                     <tr> 
+                      <td align="left"></td> 
+                     </tr> 
+                   </table></td> 
+                 </tr> 
+               </table></td> 
+             </tr> 
+           </table></td> 
+         </tr> 
+       </table> 
+       <table class="es-content" cellspacing="0" cellpadding="0" align="center"> 
+         <tr> 
+          <td align="center"> 
+           <table class="es-content-body" style="background-color: #f7fff7" width="600" cellspacing="0" cellpadding="0" bgcolor="#F7FFF7" align="center"> 
+             <tr> 
+              <td align="left"> 
+               <table width="100%" cellspacing="0" cellpadding="0"> 
+                 <tr> 
+                  <td width="600" valign="top" align="center"> 
+                   <table style="border-radius: 4px;border-collapse: separate;background-color: #111111" width="100%" cellspacing="0" cellpadding="0" bgcolor="#111111" role="presentation"> 
+                     <tr> 
+                      <td bgcolor="#4ecdc4" align="left"><h2 style="color: #666666;text-align: center;font-family: roboto, 'helvetica neue', helvetica, arial, sans-serif"><b>-<span style="font-size:18px"> DETALLE&nbsp;📪 -</span></b></h2></td> 
+                     </tr> 
+                     <tr> 
+                      <td class="es-p20t es-p30r es-p30l es-m-txt-l" bgcolor="#ffffff" align="left"><span style="font-size:18px">{{$details['descripcion']}}</span></td> 
                      </tr> 
                    </table></td> 
                  </tr> 
@@ -381,7 +438,12 @@ a.es-button {
                   <td width="600" valign="top" align="center"> 
                    <table width="100%" cellspacing="0" cellpadding="0" role="presentation"> 
                      <tr> 
-                      <td align="left" bgcolor="#ffffff"><p><br></p></td> 
+                      <td class="es-p10t es-p20b es-p20r es-p20l" style="font-size:0" bgcolor="#ffffff" align="center"> 
+                       <table width="100%" cellspacing="0" cellpadding="0" border="0" role="presentation"> 
+                         <tr> 
+                          <td style="border-bottom: 0px solid #f4f4f4;background: rgba(0, 0, 0, 0) none repeat scroll 0% 0%;height: 1px;width: 100%;margin: 0px"></td> 
+                         </tr> 
+                       </table></td> 
                      </tr> 
                    </table></td> 
                  </tr> 
@@ -393,44 +455,15 @@ a.es-button {
        <table class="es-content" cellspacing="0" cellpadding="0" align="center"> 
          <tr> 
           <td align="center"> 
-           <table class="es-content-body" style="background-color: transparent" width="600" cellspacing="0" cellpadding="0" align="center"> 
+           <table class="es-content-body" style="background-color: #ffe0de" width="600" cellspacing="0" cellpadding="0" bgcolor="#ffe0de" align="center"> 
              <tr> 
-              <td class="es-p30r es-p30l" align="left" bgcolor="#ffffff" style="background-color: #ffffff"> 
-               <table cellpadding="0" cellspacing="0" width="100%"> 
+              <td align="left"> 
+               <table width="100%" cellspacing="0" cellpadding="0"> 
                  <tr> 
-                  <td width="540" align="center" valign="top"> 
-                   <table cellpadding="0" cellspacing="0" width="100%" role="presentation"> 
+                  <td width="600" valign="top" align="center"> 
+                   <table style="border-radius: 4px;border-collapse: separate" width="100%" cellspacing="0" cellpadding="0" role="presentation"> 
                      <tr> 
-                      <td class="es-m-txt-l es-p5t es-p30r es-p30l" bgcolor="#4ecdc4" align="left"><h2 style="color: #666666;font-size: 18px;text-align: center"><b>- DETALLE&nbsp;📪 -</b></h2></td> 
-                     </tr> 
-                     <tr> 
-                      <td align="left" bgcolor="#ffffff"><p style="font-size: 16px"><h3>{{$details['descripcion']}}</h3><br><br></p></td> 
-                     </tr> 
-                   </table></td> 
-                 </tr> 
-               </table></td> 
-             </tr> 
-             <tr> 
-              <td class="es-p30r es-p30l" align="left" bgcolor="#ffffff" style="background-color: #ffffff"> 
-               <table cellpadding="0" cellspacing="0" width="100%"> 
-                 <tr> 
-                  <td width="540" align="center" valign="top"> 
-                   <table cellpadding="0" cellspacing="0" width="100%" role="presentation"> 
-                     <tr> 
-                      <td align="left" bgcolor="#ffffff"><p><br></p></td> 
-                     </tr> 
-                   </table></td> 
-                 </tr> 
-               </table></td> 
-             </tr> 
-             <tr> 
-              <td class="es-p5t es-p10b es-p15r" align="left" bgcolor="#1A535C" style="background-color: #1a535c"> 
-               <table cellspacing="0" cellpadding="0" width="100%"> 
-                 <tr> 
-                  <td width="585" valign="top" align="center"> 
-                   <table width="100%" cellspacing="0" cellpadding="0" role="presentation"> 
-                     <tr> 
-                      <td align="right"><p style="font-family: roboto, 'helvetica neue', helvetica, arial, sans-serif;line-height: 20px;color: #f7fff7;font-size: 13px"><br>Sistema de Gestión de Ayudantes de la Universidad de Talca.<br>Camino a Los Niches Km, 1, Curicó, Maule.</p></td> 
+                      <td class="es-p30t es-p15b es-p15r es-p30l" bgcolor="#1a535c" align="right"><p style="color: #f7fff7;font-size: 13px;font-family: roboto, 'helvetica neue', helvetica, arial, sans-serif">Sistema de Gestión de Ayudantes de la Universidad de Talca.<br>Camino a Los Niches Km, 1, Curicó, Maule.</p></td> 
                      </tr> 
                    </table></td> 
                  </tr> 

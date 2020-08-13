@@ -14,9 +14,9 @@
                         <v-card-title class="white--text" style="padding:0;">
                             <v-row class="px-5">  
                             <v-col cols="12" class="pt-1" >
-                                <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" > Registros</strong>
+                                <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 130%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" > Registros</strong>
                             </v-col>
-                            <v-col  cols="7" sm="9" md="9" class="align-self-end" >
+                            <v-col  cols="12" sm="9" md="9" class="align-self-end" >
                                 <v-text-field
                                     v-model="buscar"
                                     append-icon="mdi-magnify"
@@ -30,23 +30,6 @@
                                     color="secondary"
                                     background-color="white"
                                 ></v-text-field>
-                            </v-col>
-                            <v-col  cols="5" sm="3" md="3" class="align-self-end" style="text-align:right;">
-                                <v-tooltip bottom color="primary">
-                                <template v-slot:activator="{ on }">
-                                    <v-btn
-                                    class="ml-2"
-                                    fab
-                                    :small="$vuetify.breakpoint.smAndDown ? true : false"
-                                    bottom
-                                    left
-                                    v-on="on"
-                                    >
-                                        <v-icon  color="secondary">fas fa-envelope</v-icon>
-                                    </v-btn>
-                                </template>
-                                <span><strong>Contactar</strong></span>
-                                </v-tooltip>
                             </v-col>
                             </v-row>
                             
@@ -135,10 +118,10 @@
             
             /* Variables Tabla */
             headers: [
-            { text: 'Titulo',align: 'start',value: 'titulo',sortable: true, width:250},
-            { text: 'Accion', value: 'accion',sortable: true, width:150 },
-            { text: 'Tipo', value: 'tipo',sortable: true, width:150 },
-            { text: 'Descripcion', value: 'descripcion',sortable: true, width:400 },
+            { text: 'Titulo',align: 'start',value: 'titulo',sortable: true},
+            { text: 'Accion', value: 'accion',sortable: true},
+            { text: 'Tipo', value: 'tipo',sortable: true },
+            { text: 'Descripcion', value: 'descripcion',sortable: true},
             { text: 'Usuario', value: 'usuario',sortable: true },            
             { text: 'Fecha', value: 'created_at',sortable: true },
             { text: '', value: 'data-table-expand'},            
@@ -161,7 +144,7 @@
             obtenerRegistros(){
                 this.cargando = true;
                 this.listaRegistrosAux= [];
-                var url="http://127.0.0.1:8000/api/v1/log";
+                var url=this.$store.state.rutaDinamica+"api/v1/log";
                 axios.get(url,this.$store.state.config)
                 .then((result)=>{
                     for (let index = 0; index < result.data.data.logs.length; index++) {

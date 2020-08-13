@@ -16,6 +16,17 @@
         </v-tooltip>
         <v-divider></v-divider>
         <v-list> 
+            <v-tooltip left color="primary" :disabled="!drawers.miniVarianteAdm">
+                <template v-slot:activator="{ on }">
+                    <v-list-item  v-on="on" to="/profesor/cursos"  class="difuminado" active-class="activacion">
+                        <v-list-item-icon class="pl-1">
+                            <v-icon color="white">fas fa-book</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title class="white--text letra"><strong>Cursos</strong></v-list-item-title>
+                    </v-list-item>
+                </template>
+                <span><strong>Cursos</strong></span>
+            </v-tooltip>
 
             <v-tooltip left color="primary" :disabled="!drawers.miniVarianteAdm">
                 <template v-slot:activator="{ on }">
@@ -39,30 +50,6 @@
                     </v-list-item>
                 </template>
                 <span><strong>Observaciones</strong></span>
-            </v-tooltip>
-            
-            <v-tooltip left color="primary" :disabled="!drawers.miniVarianteAdm">
-                <template v-slot:activator="{ on }">
-                    <v-list-item  v-on="on" to="/profesor/cursos"  class="difuminado" active-class="activacion">
-                        <v-list-item-icon class="pl-1">
-                            <v-icon color="white">fas fa-book</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title class="white--text letra"><strong>Cursos</strong></v-list-item-title>
-                    </v-list-item>
-                </template>
-                <span><strong>Cursos</strong></span>
-            </v-tooltip>
-        
-            <v-tooltip left color="primary" :disabled="!drawers.miniVarianteAdm">
-                <template v-slot:activator="{ on }">
-                    <v-list-item  v-on="on" class="difuminado" active-class="activacion">
-                        <v-list-item-icon>
-                            <v-icon color="white">fas fa-envelope</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title class="white--text letra"><strong>Contactar</strong></v-list-item-title>
-                    </v-list-item>
-                </template>
-                <span><strong>Contactar</strong></span>
             </v-tooltip>
                 
         </v-list>

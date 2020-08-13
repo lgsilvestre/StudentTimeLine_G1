@@ -38,6 +38,22 @@
                                         <v-btn
                                         fab
                                         bottom
+                                        class="mr-2"
+                                        left
+                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                        v-on="on"
+                                        @click="dialogAviso = true"
+                                        >
+                                            <v-icon class="mx-2" color="secondary">fas fa-bell</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <span><strong>Aviso Profesores</strong></span>
+                                </v-tooltip>
+                                <v-tooltip bottom color="primary">
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn
+                                        fab
+                                        bottom
                                         left
                                         :small="$vuetify.breakpoint.smAndDown ? true : false"
                                         v-on="on"
@@ -95,23 +111,6 @@
                                                     color="secondary"
                                                     background-color="white"
                                                     ></v-text-field>
-                                                </v-col>
-                                                <v-col  cols="5" sm="3" md="3" class="align-self-end" style="text-align:right;">
-                                                    <v-tooltip bottom color="primary">
-                                                    <template v-slot:activator="{ on }">
-                                                        <v-btn
-                                                        class="ml-2"
-                                                        fab
-                                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
-                                                        bottom
-                                                        left
-                                                        v-on="on"
-                                                        >
-                                                            <v-icon  color="secondary">fas fa-envelope</v-icon>
-                                                        </v-btn>
-                                                    </template>
-                                                    <span><strong>Contactar</strong></span>
-                                                    </v-tooltip>
                                                 </v-col>
                                             </v-row>
                                             </v-card-title>
@@ -251,6 +250,56 @@
             <v-col cols="12" md="1">
             </v-col>
         </v-row>
+
+        <v-dialog v-model="dialogAviso" persistent max-width="500px">
+            <v-card class="mx-auto" max-width="500" >
+                <v-card-title class="headline primary text--center" primary-title >
+                    <h5 class="white--text ">Enviar Aviso</h5>
+                </v-card-title>
+                <v-container class="px-5 mt-5">
+                    <v-form ref="aviso" v-model="formAviso" lazy-validation>
+                        <v-text-field
+                            v-model="datosAviso.motivo"
+                            label="Motivo"
+                            outlined
+                            :rules="[() => !!datosAviso.motivo ||'Requerido']"
+                            prepend-inner-icon="fas fa-question-circle"
+                        >
+                        </v-text-field>
+                        <v-textarea
+                            v-model="datosAviso.descripcion"
+                            outlined
+                            color="secondary"
+                            :rules="[() => !!datosAviso.descripcion ||'Requerido']"
+                            label="Descripcion"
+                        >
+                        </v-textarea>
+                        <div class="pb-1" style="text-align:right;">  
+                            <v-btn 
+                            :small="$vuetify.breakpoint.smAndDown ? true : false"
+                            rounded 
+                            color="warning" 
+                            @click="resetAviso()"
+                            >
+                                <h4 class="white--text">Cancelar</h4>
+                            </v-btn>
+                            <v-btn 
+                            :disabled="!formAviso"
+                            :loading="cargando"
+                            :small="$vuetify.breakpoint.smAndDown ? true : false"
+                            rounded 
+                            color="secondary" 
+                            class="ml-2" 
+                            @click="validarAviso()"
+                            >
+                                <h4 class="white--text">Enviar</h4>
+                            </v-btn>
+                        </div>
+                    </v-form>
+                </v-container>
+            </v-card>
+        </v-dialog>
+
         <!-- Alertas -->
         <v-snackbar
         v-model="alertaError"
@@ -338,6 +387,10 @@ export default {
             cargando: true,
             buscar2: '',
             buscar:'',
+
+            formAviso: true,
+            dialogAviso: false,
+            datosAviso: [{motivo:''},{descripcion:''}],
         }
     },
     created () {   
@@ -349,7 +402,7 @@ export default {
             this.cargando = true;
             this.listaProfesoresAux = [];
             var aux;
-            var url = 'http://127.0.0.1:8000/api/v1/usuario';
+            var url = this.$store.state.rutaDinamica+'api/v1/usuario';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 for (let index = 0; index < result.data.data.usuarios.length; index++) {
@@ -390,7 +443,7 @@ export default {
             this.cargando = true;
             this.listaProfesoresAux = [];
             var aux;
-            var url = 'http://127.0.0.1:8000/api/v1/usuario/disabled';
+            var url = this.$store.state.rutaDinamica+'api/v1/usuario/disabled';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 for (let index = 0; index < result.data.data.usuarios.length; index++) {
@@ -436,7 +489,7 @@ export default {
         },
 
         eliminarProfesor(){
-            var url = 'http://127.0.0.1:8000/api/v1/usuario/'+this.datosUsuario.id;
+            var url = this.$store.state.rutaDinamica+'api/v1/usuario/'+this.datosUsuario.id;
                 axios.delete(url,this.$store.state.config)
                 .then((result)=>{
                 if (result.data.success == true) {
@@ -447,21 +500,21 @@ export default {
                 }
                 }).catch((error)=>{
                     if (error.message == 'Network Error') {
-                        console.log(error)
+                        // console.log(error)
                         this.alertaError = true;
                         this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
                     }
                     else{
                         if (error.response.data.success == false) {
                             if(error.response.data.code == 701){
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
+                                // console.log(error.response.data.code +' '+ error.response.data.message);
+                                // console.log(error.response.data);
                                 this.textoAlertas = error.response.data.message;
                                 this.alertaError = true;
                             }
                             if(error.response.data.code == 702){
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
+                                // console.log(error.response.data.code +' '+ error.response.data.message);
+                                // console.log(error.response.data);
                                 this.textoAlertas = error.response.data.message;
                                 this.alertaError = true;
                             }
@@ -495,12 +548,12 @@ export default {
 
         /* Metodo que permite habilitar un profesor seleccionado */
         habilitarProfesor(){            
-            var url =`http://127.0.0.1:8000/api/v1/usuario/restore/${this.datosUsuario.id}`;
+            var url =this.$store.state.rutaDinamica+`api/v1/usuario/restore/${this.datosUsuario.id}`;
             axios.post(url,null,this.$store.state.config)
             .then((result)=>{
-                console.log("USUARIO RESTAURADO")
-                console.log(result)
-            if (result.data.data.usuario==true) {                
+                // console.log("USUARIO RESTAURADO")
+                // console.log(result)
+            if (result.statusText == "OK") {                
                 this.obtenerProfesoresDeshabilitados();
                 this.dialogHabilitar = false;
                 this.alertaExito = true;
@@ -509,7 +562,50 @@ export default {
             }).catch((error)=>{
                 //falta el manejo de errores para implementar las alertas
             });
-        }
+        },
+
+              //Funcion que valida los datos ingresados en el Dialog Contactar
+        validarAviso(){            
+            if(this.$refs.aviso.validate()){
+                this.enviarAviso();
+            }
+            else{
+                this.$refs.aviso.validate();
+            }
+        },
+        //Funcion que reinicia los valores usados en el dialog, ademas de las validaciones relacionadas a este.
+        resetAviso(){
+            this.$refs.aviso.reset();
+            this.datosAviso.motivo = '';
+            this.datosAviso.descripcion = '';            
+            this.dialogAviso = false;
+        },
+        //Funcion que se encarga de solicitar (a backend) el envio de los distintos correos electronicos
+        enviarAviso(){
+            this.cargando = true;
+            let post ={                
+                "motivo": this.datosAviso.motivo,
+                "descripcion": this.datosAviso.descripcion,
+            };                     
+            var url = this.$store.state.rutaDinamica+'api/v1/usuario/recordatorio';
+            axios.post(url, post, this.$store.state.config)
+            .then((result)=>{       
+                    this.cargando = false;
+                    this.dialogAviso = false;
+                    this.alertaExito = true;
+                    this.resetAviso();
+                    this.textoAlertas = "Se ha enviado el aviso con exito"
+                }
+                ).catch((error)=>{
+                    if (error.message == 'Network Error') {
+                        this.dialogAviso = false;
+                        this.cargando = false;
+                        this.alertaError = true;         
+                        this.resetAviso();               
+                        this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    }
+            })
+        },
     }
 }
 </script>

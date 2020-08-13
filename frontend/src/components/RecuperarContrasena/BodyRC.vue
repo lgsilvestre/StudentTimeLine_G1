@@ -19,20 +19,24 @@
                                         <h5 class="white--text ">Recuperar su contraseña </h5>
                                         </v-card-title>
                                         <v-container class="px-5">
+                                          <v-form ref="RC"  v-model="formRecuperar" lazy-validation>
                                             <v-text-field 
                                             class="pt-5 "
                                                 v-model="email"
                                                 label="Correo"
                                                 color="secondary"
                                                 outlined
+                                                :rules="reglasEmail"
                                                 prepend-inner-icon="mdi-email"
                                             ></v-text-field>
                                             <v-btn rounded block color="primary " class=""
                                             :loading="RCstatus" 
+                                            :disabled="!formRecuperar"
                                             @click="recuperarContrasena"
                                             >
                                             Recuperar contraseña
                                             </v-btn>  
+                                          </v-form>
                                         </v-container>
                                     </v-card>
                                     
@@ -109,6 +113,11 @@ export default {
         alertAcept: false,
         textoAcept: '',
         delay: 4000,
+        formRecuperar: true,
+
+        reglasEmail: [
+            v => /.+@utalca.cl/.test(v) || /.+@alumnos.utalca.cl/.test(v) || 'Correo no Válido', 
+        ],
       }
     },
     methods:{
@@ -119,7 +128,7 @@ export default {
             "email": this.email,
         };
         console.log(this.email);
-        var url = 'http://127.0.0.1:8000/api/v1/auth/sendRestartPassword';
+        var url = this.$store.state.rutaDinamica+'api/v1/auth/sendRestartPassword';
         axios.post(url,post)
         .then((result)=>{
           console.log(result.data);
@@ -129,8 +138,10 @@ export default {
             this.textoAcept= result.data.message;
             this.email = '';
           } 
+          this.$refs.RC.reset();
         })
         .catch((error)=>{
+          this.$refs.RC.reset();
           if (error.message == 'Network Error') {
               console.log(error);
               this.RCstatus = false;
