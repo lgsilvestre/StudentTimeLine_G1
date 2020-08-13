@@ -35,7 +35,8 @@
                                     <v-btn 
                                     :small="$vuetify.breakpoint.smAndDown ? true : false"
                                     class="mr-2" fab 
-                                    bottom left v-on="on" @click="abrirDialogAgregarSemestre " >
+                                    bottom left v-on="on" @click="abrirDialogAgregarSemestre " 
+                                    :disabled="!usuarioValido">
                                         <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
                                     </v-btn>
                                 </template>
@@ -75,7 +76,7 @@
                                         </v-col>
                                             
                                         <v-col cols="12" class=" pt-1 pl-0 pr-0 pb-0  text-right" >
-                                            <v-menu class="text-left " offset-y>
+                                            <v-menu class="text-left " offset-y  :disabled="!usuarioValido">
                                                 <template   v-slot:activator="{ on, attrs }">
                                                     <v-btn  fab  color="primary" x-small icon v-bind="attrs" v-on="on" >
                                                         <v-icon>fas fa-ellipsis-v</v-icon>
@@ -385,16 +386,25 @@ export default {
                 ErrorCreacionSemetre:"Error al crear El semestre.",
                 ErrorSemestreDuplicado:"Error el semestre ya se encuentra registrado.",
                 ErrorDatosIngresados:"Error en los datos Ingresados",
+                usuarioValido:true,
         }
     },
     beforeMount(){
         /**
          * Obtenemos la lista de todos los semestres antes de montar la vista.
          */
-        this.obtenerListaDeSemestres();        
+        this.obtenerListaDeSemestres(); 
+        this.validarUsuario()       
     },
     methods: {
         ...mapMutations(['calcularRol']),
+        validarUsuario(){
+            if(this.$store.state.usuario.usuario.rol== "secretaria de escuela"){
+                this.usuarioValido=false;
+            }else{
+                 this.usuarioValido=true;
+            }
+        },
         /**
          * Valida si la información ingresada por el usuario esta correcta.
          */
@@ -611,8 +621,10 @@ export default {
             }
             if(acciones=='Cerrar Semestre'){
                 console.log("Eliminar semestre")
-                this.semestreActual_1=item;
-                this.dialogEliminarSemestre = true;
+                // this.semestreActual_1=item;
+                // this.dialogEliminarSemestre = true;
+                console.log(this.$store.state.usuario.usuario.rol)
+                
             }
             if(acciones=='Re-abrir semestre'){
                 console.log("Re-abrir semestre")
