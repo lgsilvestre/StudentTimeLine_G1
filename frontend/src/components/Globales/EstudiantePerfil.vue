@@ -1207,6 +1207,7 @@ export default {
                     for (let index = 0; index < result.data.data.categorias.length; index++) {
                         const element = result.data.data.categorias[index];
                         let categoria = {
+                            id: element.id,
                             nombre: element.nombre,
                         };
                         this.categoriasAux[index]=categoria;
@@ -1634,18 +1635,18 @@ export default {
                         }
                     }
                 }
-                var auxcategoria=0;
-                if (this.profesor == true) {
-                    auxcategoria = auxcategoria+1;
-                }
-                else{
-                    for (let index = 0; index < this.categorias.length; index++) {
-                        const element = this.categorias[index];
-                        if (this.estudianteObservacion.categoria == element) {
-                            auxcategoria=index+1;
-                        }
-                    }
-                }
+                // var auxcategoria=0;
+                // if (this.profesor == true) {
+                //     auxcategoria = auxcategoria+1;
+                // }
+                // else{
+                //     for (let index = 0; index < this.categorias.length; index++) {
+                //         const element = this.categorias[index];
+                //         if (this.estudianteObservacion.categoria == element) {
+                //             auxcategoria=index+1;
+                //         }
+                //     }
+                // }
                 var auxcurso = 0;
                 var auxayudante = null;
                 if (this.profesor == true) {
@@ -1667,7 +1668,7 @@ export default {
                     "ayudante": auxayudante, 
                     "estudiante": this.id,
                     "curso": auxcurso,
-                    "categoria": auxcategoria,
+                    "categoria": this.estudianteObservacion.categoria,
                     "tipo": auxTipo,
                 }
                 console.log(post);
@@ -1735,8 +1736,8 @@ export default {
             var categoriaAux = 0
             for (let index = 0; index < this.categorias.length; index++) {
                 const element = this.categorias[index];
-                if (observacion.categoria == element) {
-                    this.estudianteModificarObservacion.categoria = element;
+                if (observacion.categoria == element.nombre) {
+                    this.estudianteModificarObservacion.categoria = element.id;
                 }
             }
             var auxcurso = null;
@@ -1750,7 +1751,7 @@ export default {
             console.log("cursoooooooooooooooooooooooooo"+ auxcurso);
             this.estudianteModificarObservacion.estudiante = this.id;
             this.estudianteModificarObservacion.titulo = observacion.titulo;
-            this.estudianteModificarObservacion.curso =  auxcurso;
+            this.estudianteModificarObservacion.curso =  auxcurso;            
             this.estudianteModificarObservacion.descripcion = observacion.descripcion;
             this.estudianteModificarObservacion.id = observacion.id;
         },
