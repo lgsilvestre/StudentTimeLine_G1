@@ -5,9 +5,8 @@
                 <v-col class="d-none d-sm-none d-md-flex" align-self="center" md="4" >
                     <v-btn class="ml-2" color="primary white--text" depressed   @click="urlUniversidad" >Universidad de Talca</v-btn>
                     <!-- Boton que muestra informacion sobre el equipo de desarrollo -->
-                    <NosotrosComponent/> 
-                </v-col>
-                
+                    <!-- <NosotrosComponent/>  -->
+                </v-col>                
                 <v-col class="text-center" sm="12" md="4" lg="4" align-self="center">
                     <strong> {{ nombrePag }} —  {{ new Date().getFullYear() }} </strong>         
                 </v-col>
@@ -28,17 +27,23 @@
                 </v-col>
             </v-row>
         </v-footer>
+
+
+
     </v-container>
 </template>
 
 <script>
 import NosotrosComponent from '@/components/Globales/NosotrosComponent.vue';
+import { mapState, mapMutations } from 'vuex'
+import axios from 'axios'
 export default {
     components:{
         NosotrosComponent
     },
     data() {
         return {
+            //Iconos Footer
             icoFacebook:'mdi-facebook',
             icoTwitter:'mdi-twitter',
             icoInstagram: 'mdi-instagram',
@@ -61,7 +66,7 @@ export default {
         },
         urlUniversidad(){
             window.open("https://www.utalca.cl/universidad/", '_blank');
-        }
+        },
     }
 }
 </script>

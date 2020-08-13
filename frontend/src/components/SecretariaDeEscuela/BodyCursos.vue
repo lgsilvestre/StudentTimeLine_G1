@@ -1,158 +1,230 @@
 <template>   
- <v-container>
-     <v-row>
-         <v-col cols="12" >
-             <v-card flat   >
-                 <v-img class="mx-auto white--text align-end justify-center"
-                        width="100%" height="150px"       
-                        src="@/assets/Globales/background-panel-08.jpg">
-                        <v-card-title class="white--text" style="font-size: 200%;text-shadow: #555 2px 2px 3px;">
-                            <strong > Semestres </strong>
-                            <v-spacer></v-spacer>
-                            <v-btn class="mr-2" fab large bottom left @click="dialogAñadirSemestre =true" >
-                                <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
-                             </v-btn>
-                        </v-card-title> 
-                </v-img>
-             </v-card>
-         </v-col>
-         <v-col cols="12">
-             <v-card class="mx-auto" >
-            <v-container>
-                <v-row >
-                    <v-col
-                    v-for="(semestre, index) in listaSemestres" :key="index"
-                    cols="12" sm="6" md="4" lg="3">
-                    <v-card dark style="background-color:#4ECDC4; border-style:solid; border-color:rgba(0,0,0,0.5); "
-                      >
-                            <div class="d-flex flex-no-wrap justify-space-between" @click="calcularRol(semestre)">
-                                <div>
-                                    <v-card-title class="black--text" > Año {{ semestre.anio }} </v-card-title>
-                                    <v-card-subtitle  class="black--text"> Semestre {{semestre.semestre}}</v-card-subtitle>
-                                </div>
-                                <v-menu class="text-left" offset-y>
-                                    <template v-slot:activator="{ on, attrs }">
-                                        <v-btn color="primary" icon v-bind="attrs" v-on="on" >
-                                        <v-icon>fas fa-ellipsis-v</v-icon>
-                                        </v-btn>
-                                    </template>
-                                    <v-list>
-                                        <v-list-item
-                                        v-for="(item, index) in accionesSemestre" :key="index"
-                                        @click="acionesSobreSemestre(item,semestre)"
-                                        >
-                                        <v-list-item-title>{{ item }}</v-list-item-title>
-                                        </v-list-item>
-                                    </v-list>
-                            </v-menu>
-                            </div>
-                           
-                            
-                            
-                    </v-card>
-                    </v-col>
-                </v-row>
-            </v-container>
-        </v-card>
+    <v-container>
+    <v-row>
+        <v-col cols="0" sm="1">
 
-         </v-col>
-     </v-row>
+        </v-col>
+        <v-col  cols="12" sm="10" >
+            <v-card flat   elevation="1">
+                <v-img class="mx-auto white--text align-end justify-center"
+                width="100%" height="180px"       
+                src="@/assets/Globales/fondo3.jpg">
+                <v-card-title class="white--text" style="padding:0;">
+                    <v-row class="px-5">
+                        <v-col cols="12" class="pt-1">
+                            <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" >Semestres</strong>
+                        </v-col>
+                        <v-col cols="7" sm="9" md="9" class="align-self-end" >
+                            <v-text-field
+                            v-model="search"
+                            append-icon="mdi-magnify"
+                            label="Buscar"
+                            hide-details
+                            outlined
+                            clearable
+                            dense
+                            solo
+                            rounded
+                            color="secondary"
+                            background-color="white"
+                            ></v-text-field>
+                        </v-col>
+                        <v-col  cols="5" sm="3" md="3" class="align-self-end" style="text-align:right;">
+                            <v-tooltip bottom color="primary">
+                                <template v-slot:activator="{ on }">
+                                    <v-btn 
+                                    :small="$vuetify.breakpoint.smAndDown ? true : false"
+                                    class="mr-2" fab 
+                                    bottom left v-on="on" @click="abrirDialogAgregarSemestre " 
+                                    :disabled="!usuarioValido">
+                                        <v-icon class="mx-2" color="warning">fas fa-plus</v-icon>
+                                    </v-btn>
+                                </template>
+                                <span><strong>Agregar Semestre</strong></span>
+                            </v-tooltip>
+                        </v-col>
+                    </v-row>
+                    
+                </v-card-title> 
+                </v-img>
+                <!-- <v-container> -->
+                    <v-data-iterator :items="listaSemestres" :search="search" class="px-2 py-2" :loading="cargando"  >
+                        <template v-slot:default="props">
+                            <v-row >
+                                <v-col v-for="item in props.items" :key="item.nomCurso" cols="12" sm="6" md="4" lg="3">
+                                <v-card class="mx-1"  dark color="#F7FFF7"  style=" border-style:solid; border-color:rgba(0,0,0,0.5);" > 
+                                <v-container class="pt-0 mt-0 pb-0 ">
+                                    <v-row >
+                                        <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0" >
+                                            <v-card-title style="padding:0;" >
+                                                <v-img class="mx-auto white--text align-end justify-center "
+                                                        width="100%" height="30px"       
+                                                        src="@/assets/Globales/background-panel-08.jpg"
+                                                        v-show="item.semestre == 1">
+                                                </v-img>
+                                                <v-img class="mx-auto white--text align-end justify-center "
+                                                        width="100%" height="30px"       
+                                                        src="@/assets/Globales/background-panel-09.jpg"
+                                                        v-show="item.semestre == 2">
+                                                </v-img>
+                                                <v-img class="mx-auto white--text align-end justify-center "
+                                                        width="100%" height="30px"       
+                                                        src="@/assets/Globales/background-panel-10.jpg"
+                                                        v-show="item.semestre == 3">
+                                                </v-img>
+                                            </v-card-title>
+                                        </v-col>
+                                            
+                                        <v-col cols="12" class=" pt-1 pl-0 pr-0 pb-0  text-right" >
+                                            <v-menu class="text-left " offset-y  :disabled="!usuarioValido">
+                                                <template   v-slot:activator="{ on, attrs }">
+                                                    <v-btn  fab  color="primary" x-small icon v-bind="attrs" v-on="on" >
+                                                        <v-icon>fas fa-ellipsis-v</v-icon>
+                                                    </v-btn>
+                                                </template>
+                                                <v-list v-if="item.deleted_at == null">
+                                                    <v-list-item  v-for="(accion, index) in accionesSemestre" :key="index"
+                                                    @click="acionesSobreSemestre(accion,item)" >
+                                                        <v-list-item-title>{{ accion }}</v-list-item-title>
+                                                    </v-list-item>
+                                                </v-list>
+                                                <v-list v-if="item.deleted_at != null">
+                                                    <v-list-item  v-for="(accion, index) in accionesSemestreEliminado" :key="index"
+                                                    @click="acionesSobreSemestre(accion,item)" >
+                                                        <v-list-item-title>{{ accion }}</v-list-item-title>
+                                                    </v-list-item>
+                                                </v-list>
+                                            </v-menu>
+                                        </v-col>
+                                        <v-col cols="6"  class=" pt-0 pl-1 pr-0 pb-1 "  >
+                                            <v-card-text class=" pt-0 pl-2 pr-0 pb-0 " v-if="item.deleted_at == null">
+                                                <div class="text--primary " >
+                                                    <!-- <p class="font-weight-black"   @click="calcularRol(semestre)"> {{ semestre.anio }} - {{semestre.semestre}}</p> -->
+                                                    <strong style=" font-size: 115%;">  <a   @click="calcularRol(item)">{{ item.anio }} - {{item.semestre}}</a> </strong>
+                                                </div>
+                                            </v-card-text>
+                                            <v-card-text class=" pt-0 pl-2 pr-0 pb-0 " v-if="item.deleted_at != null">
+                                                    <!-- <p class="font-weight-black"  > {{ semestre.anio }} # {{semestre.semestre}}</p> -->
+                                                    <strong style=" font-size: 115%;"> <a   @click="calcularRol(item)">{{ item.anio }} - {{item.semestre}}</a> </strong>
+                                            </v-card-text>
+                                        </v-col>
+                                        <v-col cols="6"  class=" pt-0 pl-0 pr-1 pb-0 " >
+                                            <div style="text-align:right;" v-if="item.deleted_at != null">
+                                            <v-chip
+                                            color="warning"
+                                            outlined
+                                            pill
+                                            x-small
+                                            >CERRADO
+                                            </v-chip>
+                                            </div>
+                                        </v-col>
+                                    </v-row>
+                                </v-container>
+                            </v-card>
+                            </v-col>
+                        </v-row>
+                </template>
+                    </v-data-iterator>
+                <!-- </v-container> -->
+            </v-card>
+        </v-col>
+        <v-col cols="0" sm="1">
+        </v-col>
+    </v-row>
         <!-- Dialogo para agregar un semestre -->
-     <v-dialog v-model="dialogAñadirSemestre" rtransition="scroll-y-reverse-transition"  persistent max-width="500px">
-         <v-card class="mx-auto" max-width="800" >
+    <v-dialog v-model="dialogAñadirSemestre" rtransition="scroll-y-reverse-transition"  persistent max-width="500px">
+        <v-card class="mx-auto" max-width="500" >
                 <v-card-title class="headline primary text--center" primary-title >
                     <h5 class="white--text ">Registrar Semestre</h5>
                 </v-card-title>
-                <v-card-text class="px-12 mt-5" >
-                    <v-form  ref="form" >
-                        <v-container>
-                            <v-row >
-                                <v-col cols="6" >
-                                    <strong>Año</strong>
-                                </v-col>
-                                <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
-                                    <v-text-field  v-model="añoActual" dense
-                                        outlined  color="secondary" :disabled="unAnhoVariable"
-                                        :rules="rules" type="number"
-                                        ></v-text-field>
-                                </v-col>
-                            </v-row>
-                            <v-row >
-                                <v-col cols="6" >
-                                    <strong>Semestre</strong>
-                                </v-col>
-                                <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
-                                    <v-select
-                                        v-model="semestreActual"
-                                        :items="listaSemestres_reg"
-                                        item-text="sem"
-                                        dense
-                                        outlined
-                                        color="secondary"
-                                        ></v-select>
-                                </v-col>
-                            </v-row>
+                <v-container class="px-5 mt-5" >
+                    <v-form  ref="form_nuevoSemestre" style="margin:0;padding:0;" v-model="formularioNuevoSemestreValido" lazy-validation>
+                        <v-row >
+                            <v-col cols="6" >
+                                <strong>Año</strong>
+                            </v-col>
+                            <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
+                                <v-text-field  v-model="añoActual" dense
+                                    outlined  color="secondary" 
+                                    :disabled="unAnhoVariable"
+                                    :rules="rules" type="number" required
+                                    ></v-text-field>
+                            </v-col>
+                            <v-col cols="6" >
+                                <strong>Semestre</strong>
+                            </v-col>
+                            <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
+                                <v-select
+                                    v-model="semestreActual"
+                                    :items="listaSemestres_reg"
+                                    item-text="sem"
+                                    dense
+                                    outlined
+                                    color="secondary"
+                                    ></v-select>
+                            </v-col>
                             
-                        </v-container>
-                                  
-                        <v-container  style="text-align:right;">
+                        </v-row>
+                        <div style="text-align:right;" class="pb-1">
                             <v-btn rounded color="warning" @click="dialogAñadirSemestre=false">
                                 <h4 class="white--text">Cancelar</h4>
                             </v-btn>
-                            <v-btn rounded color="secondary" class="ml-2 mr'5" @click="registrarSemestre()" >
+                            <v-btn rounded color="secondary" class="ml-2" @click="registrarSemestre()" 
+                            :disabled="!formularioNuevoSemestreValido">
                                 <h4 class="white--text">Registrar</h4>
                             </v-btn>
-                        </v-container>  
+                        </div>  
                     </v-form>
-                </v-card-text>
+                    
+                </v-container>
             </v-card>
     </v-dialog>
-    
+    <!-- dialog modificar para modificar un semestre -->
     <v-dialog v-model="dialogModificarSemestre" rtransition="scroll-y-reverse-transition"  persistent max-width="500px">
-         <v-card class="mx-auto" max-width="800" >
+        <v-card class="mx-auto" max-width="500" >
                 <v-card-title class="headline primary text--center" primary-title >
                     <h5 class="white--text ">Modificar Semestre</h5>
                 </v-card-title>
-                <v-card-text class="px-12 mt-10" >
-                    <v-form  ref="form" >
-                        <v-container>
-                            <v-row >
-                                <v-col cols="6" >
-                                    <strong>Año</strong>
-                                </v-col>
-                                <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
-                                    <v-text-field  v-model="añoActual" dense
-                                        outlined  color="secondary" :disabled="unAnhoVariable"
-                                        :rules="rules" type="number"
-                                        ></v-text-field>
-                                </v-col>
-                            </v-row>
-                            <v-row >
-                                <v-col cols="6" >
-                                    <strong>Semestre</strong>
-                                </v-col>
-                                <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
-                                    <v-select
-                                        v-model="semestreActual"
-                                        :items="listaSemestres_reg"
-                                        item-text="sem"
-                                        dense
-                                        outlined
-                                        color="secondary"
-                                        ></v-select>
-                                </v-col>
-                            </v-row>
-                        </v-container>
-                        <v-container  style="text-align:right;">
+                <v-container class="px-5 mt-5" >
+                    <v-form  ref="form_modificarSemestre" v-model="formularioModificarSemestreValido" lazy-validation> 
+                        <v-row >
+                            <v-col cols="6" >
+                                <strong>Año</strong>
+                            </v-col>
+                            <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
+                                <v-text-field  v-model="añoActual" dense
+                                outlined  color="secondary" 
+                                :disabled="unAnhoVariable"
+                                :rules="rules" type="number" required
+                                ></v-text-field>
+                            </v-col>
+                            <v-col cols="6" >
+                                <strong>Semestre</strong>
+                            </v-col>
+                            <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
+                                <v-select
+                                    v-model="semestreActual"
+                                    :items="listaSemestres_reg"
+                                    item-text="sem"
+                                    dense
+                                    outlined
+                                    color="secondary"
+                                    ></v-select>
+                            </v-col>
+                        </v-row>
+                        <div  style="text-align:right;" class="pb-1">
                             <v-btn rounded color="warning" @click="dialogModificarSemestre=false">
                                 <h4 class="white--text">Cancelar</h4>
                             </v-btn>
-                            <v-btn rounded color="secondary" class="ml-2 mr'5" @click="modificarSemestre()" >
+                            <v-btn rounded color="secondary" class="ml-2 " @click="modificarSemestre()" 
+                             :disabled="!formularioModificarSemestreValido">
                                 <h4 class="white--text">Registrar</h4>
                             </v-btn>
-                        </v-container>  
+                        </div>  
+                        
                     </v-form>
-                </v-card-text>
+                </v-container>
             </v-card>
     </v-dialog>
     <!-- dialogo para eliminar un semestre -->
@@ -164,7 +236,7 @@
                 >
                 <h5 class="white--text ">Cerrar Semestre</h5>
                 </v-card-title> 
-                <v-card-title class="text-justify" style="font-size: 100%;">Esta seguro que desea cerrar el siguiente semestre?</v-card-title>
+                <v-card-title class="text-justify" style="font-size: 100%;">Esta seguro que desea cerrar el semestre?</v-card-title>
                 <v-card-text>Año : {{ semestreActual_1.anio }}</v-card-text>
                 <v-card-text>Semetre : {{ semestreActual_1.semestre }}</v-card-text>
                 <div style="text-align:right;">
@@ -178,6 +250,28 @@
         </v-card>
     </v-dialog>
 
+    <!-- dialofo para re-abrir el semestre -->
+    <v-dialog v-model="dialogReAbrirSemestre" ref="form" persistent max-width="450px"> 
+        <v-card class="mx-auto" max-width="450"  >
+            <v-card-title
+                class="headline primary text--center"
+                primary-title
+                >
+                <h5 class="white--text ">Cerrar Semestre</h5>
+                </v-card-title> 
+                <v-card-title class="text-justify" style="font-size: 100%;">Esta seguro que desea reabrir el semestre?</v-card-title>
+                <v-card-text>Año : {{ semestreActual_1.anio }}</v-card-text>
+                <v-card-text>Semetre : {{ semestreActual_1.semestre }}</v-card-text>
+                <div style="text-align:right;">
+                    <v-btn rounded color="warning" class=" mb-4 "  @click="dialogReAbrirSemestre = false">
+                        <h4 class="white--text">Cancelar</h4>
+                    </v-btn>
+                    <v-btn rounded color="secondary"   class=" mb-4 ml-2 mr-5" @click="reabrirSemestre()">
+                        <h4 class="white--text">Aceptar</h4>
+                    </v-btn>
+                </div> 
+        </v-card>
+    </v-dialog>
      <!-- Alertas -->
 
     <!-- Alerta de Error -->
@@ -232,6 +326,7 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import axios from 'axios'
+
 export default {
     data() {
         return {
@@ -239,19 +334,41 @@ export default {
             dialogEliminarSemestre:false,
             dialogModificarSemestre:false,
             dialogAñadirSemestre:false,
+            dialogReAbrirSemestre:false,
             /**Variables para las alertas */
             alertaError: false,
             alertaExito: false,
             textoAlertas: '',
             timeout: 6000,
+
             /**Variables para trabjar con los semetres */
             date: new Date().toISOString().substr(0, 10),
-            listaSemestres:[{id:'',semestre:'',anio:''}],
+            listaSemestres:[],
             listaSemestresAux:[],
             unAnhoVariable: false,
             añoActual: new Date().getFullYear(),
             semestreActual: 1,
-            semestreActual_1:[{id:'',semestre:'',anio:''}],
+            semestreActual_1:[{id:'',semestre:'',anio:'',deleted_at:''}],
+
+            accionesSemestre: [ 'Modificar Semestre' , 'Cerrar Semestre'  ],
+            accionesSemestreEliminado:['Re-abrir semestre'],
+            listaSemestres_reg:[ {sem: 1},  {sem: 2}, {sem: 3}],
+
+            //busqueda
+            cargando: false,
+            search: '',
+            // sortBy:'anio',
+            headers: [
+                { text: 'id', value: 'id' },
+                { text: 'semestre', value: 'semestre' },
+                { text: 'Anio ', value: 'anio' },
+                { text: 'deleted_at curso', value: 'deleted_at' },
+            ],
+            itemsPerPageArray: [4, 8, 12],
+            itemsPerPage: 4,
+            //Validaciones y reglas para los formulario.
+            formularioNuevoSemestreValido:true,
+            formularioModificarSemestreValido:true,
             rules: [
                 value => !!value || 'Requerido',
                 value => value <= new Date().getFullYear()|| 'El año no debe ser mayor al actual',
@@ -263,57 +380,95 @@ export default {
                 value => value >= 1 || 'El semestre debe ser mayor a 1',
                 ],
 
-            accionesSemestre: [ 'Modificar Semestre' , 'Cerrar Semestre'  ],
-            listaSemestres_reg:[ {sem: 1},  {sem: 2}, {sem: 3}]
-        
+                //Texto
+                errorServidor:"Error al comunicarse con el servidor, intente más tarde",
+                exitoCreacionSemestre:"Se creó el semestre satisfactoriamente.",
+                ErrorCreacionSemetre:"Error al crear El semestre.",
+                ErrorSemestreDuplicado:"Error el semestre ya se encuentra registrado.",
+                ErrorDatosIngresados:"Error en los datos Ingresados",
+                usuarioValido:true,
         }
     },
     beforeMount(){
         /**
          * Obtenemos la lista de todos los semestres antes de montar la vista.
          */
-        this.obtenerListaDeSemestres();        
+        this.obtenerListaDeSemestres(); 
+        this.validarUsuario()       
     },
     methods: {
         ...mapMutations(['calcularRol']),
+        validarUsuario(){
+            if(this.$store.state.usuario.usuario.rol== "secretaria de escuela"){
+                this.usuarioValido=false;
+            }else{
+                 this.usuarioValido=true;
+            }
+        },
+        /**
+         * Valida si la información ingresada por el usuario esta correcta.
+         */
+        validate () {
+            this.$refs.form_nuevoSemestre.validate()
+        },
+        resetValidacionesCrearNuevoSemestre(){
+            this.añoActual= new Date().getFullYear();
+            this.semestreActual= 1;
+            this.reset();
+            this.resetValidation();
+        },
 
+        abrirDialogAgregarSemestre(){
+            this.añoActual=new Date().getFullYear();
+            this.dialogAñadirSemestre =true;
+            // this.resetValidacionesCrearNuevoSemestre();
+        },
+        
         /**
          * Obtiene la lista de todos los 
          *   semestres registrados en la base de datos
          */
         obtenerListaDeSemestres(){
-             this.listaSemestresAux = [];
+            this.cargando = true;
+            this.listaSemestresAux = [];
             var aux;
-            var url = 'http://127.0.0.1:8000/api/v1/semestre';
+            var url = this.$store.state.rutaDinamica+'api/v1/semestre';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
-                for (let index = 0; index < result.data.data.semestres.length; index++) {
-                    const element = result.data.data.semestres[index];
-                    let semestre = {
-                        id: element.id,
-                        semestre: element.semestre,
-                        anio: element.anio,
-                    }; 
-                    
-                    this.listaSemestresAux[index]=semestre;
+                if (result.data.success==true){
+                    for (let index = 0; index < result.data.data.semestres.length; index++) {
+                        const element = result.data.data.semestres[index];
+                        //console.log(element)
+                        let semestre = {
+                            id: element.id,
+                            semestre: element.semestre,
+                            anio: element.anio,
+                            deleted_at: element.deleted_at 
+                        }; 
+                        this.listaSemestresAux[index]=semestre;
+                    }
+                    this.cargando = false;
+                    this.listaSemestres = this.listaSemestresAux;
+                    this.listaSemestres.reverse();
                 }
-                this.listaSemestres = this.listaSemestresAux;
             }
             ).catch((error)=>{
-                if (error.message == 'Network Error') {
+                if (error.message == "Network Error") {
                     console.log(error);
+                    this.textoAlertas =this.errorServidor;
+                    this.alertaError = true;
+                    this.cargando = false;
                     // state.mensajeErrorLogin= 'Error al comunicarse con el servidor, intente más tarde';
                 } else {
                     if (error.response.data.success == false) {
                         switch (error.response.data.code) {
                             case 101:
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
                                 mensaje= error.response.data.message;
                                 this.textoAlertas = mensaje;
                                 this.alertaError = true;  
+                                this.cargando = false;
                                 break;
-                            
+                            default:
                                 break;
                         }
                     }
@@ -326,49 +481,50 @@ export default {
          * Registra la información de un semestre en la base de datos.
          */
         registrarSemestre(){
-            var año_Aux = new Date().getFullYear()
-            if(this.añoActual <= año_Aux && this.añoActual>= 1981 && this.semestreActual>=1 && this.semestreActual <= 3){
-                let post = {
-                    "semestre": this.semestreActual,
-                    "anio": this.añoActual,
-                }
-                var url = 'http://127.0.0.1:8000/api/v1/semestre ';
-            axios.post(url, post, this.$store.state.config)
-            .then((result) => {
-                 console.log(result);
-                this.dialogAñadirSemestre = false;
-                this.añoActual= new Date().getFullYear();
-                this.semestreActual= 1;
-                this.textoAlertas = "Se creó el semestre con exito."
-                this.alertaExito=true;
-                this.obtenerListaDeSemestres(); 
-            }).catch((error)=>{
-                
-                if (error.message == 'Network Error') {
-                    console.log(error)
-                    this.alertaError = true;
-                    this.textoAlertas = "Error al modificar el usuario, intente mas tarde."
-                     this.alertaError = true;  
-                }
-                else{
-                    if (error.response.data.success == false) {
-                        if(error.response.data.code == 301){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
-                            this.textoAlertas = error.response.data.message;
-                            this.alertaError = true;      
-                        }
-                        if(error.response.data.code == 302){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
-                            this.textoAlertas = "El semestre ya esta registrado";
-                            this.alertaError = true;      
-                        }
-                    }
-                }                
-            });
-            
+            var valido=this.$refs.form_nuevoSemestre.validate();
+            // console.log("semestre valido :" + valido)
+            if(valido == true){
 
+                var año_Aux = new Date().getFullYear()
+                if(this.añoActual <= año_Aux && this.añoActual>= 1981 && this.semestreActual>=1 && this.semestreActual <= 3){
+                    let post = {
+                        "semestre": this.semestreActual,
+                        "anio": this.añoActual,
+                    }
+                    var url = this.$store.state.rutaDinamica+'api/v1/semestre ';
+                axios.post(url, post, this.$store.state.config)
+                .then((result) => {
+                    if (result.data.success==true){
+                        this.dialogAñadirSemestre = false;
+                        
+                        this.textoAlertas = this.ErrorCreacionSemetre;
+                        this.alertaExito=true;
+                        this.obtenerListaDeSemestres(); 
+                    }
+                }).catch((error)=>{
+                    
+                    if (error.message == 'Network Error') {
+                        console.log(error)
+                        this.alertaError = true;
+                        this.textoAlertas =this.errorServidor;
+                         this.alertaError = true;  
+                    }
+                    else{
+                        if (error.response.data.success == false) {
+                            if(error.response.data.code == 301){
+                                this.textoAlertas = error.response.data.message;
+                                this.alertaError = true;      
+                            }
+                            if(error.response.data.code == 302){
+                                this.textoAlertas = this.ErrorSemestreDuplicado;
+                                this.alertaError = true;      
+                            }
+                        }
+                    }                
+                });
+                
+    
+                }
             }
 
 
@@ -379,22 +535,24 @@ export default {
         modificarSemestre(){
             var año_Aux = new Date().getFullYear()
             if(this.añoActual <= año_Aux && this.añoActual>= 1981 && this.semestreActual>=1 && this.semestreActual <= 3){
-                 console.log("ENTRE")
+                //  console.log("ENTRE")
                  let put = {
                         "semestre": this.semestreActual,
                         "anio": this.añoActual
                     }
                     // console.log(post)
-                    var url = `http://127.0.0.1:8000/api/v1/semestre/${this.semestreActual_1.id} `;
-                    console.log(put)
+                    var url = this.$store.state.rutaDinamica+`api/v1/semestre/${this.semestreActual_1.id} `;
                     axios.put(url, put, this.$store.state.config)
                     .then((result) => {
-                        this.dialogModificarSemestre = false;
-                        this.añoActual= new Date().getFullYear();
-                        this.semestreActual= 1;
-                        this.textoAlertas = "Se creó el semestre con exito."
-                        this.alertaExito=true;
-                        this.obtenerListaDeSemestres();
+                        if (result.data.success==true){
+                            this.dialogModificarSemestre = false;
+                            this.añoActual= new Date().getFullYear();
+                            this.semestreActual= 1;
+                            this.textoAlertas = "Se creó el semestre con exito."
+                            this.alertaExito=true;
+                            this.obtenerListaDeSemestres();
+
+                        }
                     }).catch((error)=>{
                         
                         if (error.message == 'Network Error') {
@@ -453,17 +611,25 @@ export default {
         /**
          * Procesa la lista de acciones que puede tener un semestre
          */
-        acionesSobreSemestre(item,semestre){
-            if(item =='Modificar Semestre'){
+        acionesSobreSemestre(acciones,item){
+            if(acciones =='Modificar Semestre'){
                 console.log("Modificar Semestre")
-                 this.dialogModificarSemestre=true;
-                this.semestreActual_1=semestre;
-                this.añoActual=semestre.anio;
+                
+                this.dialogModificarSemestre=true;
+                this.semestreActual_1=item;
+                this.añoActual=item.anio;
             }
-            if(item=='Cerrar Semestre'){
+            if(acciones=='Cerrar Semestre'){
                 console.log("Eliminar semestre")
-                this.semestreActual_1=semestre;
-                this.dialogEliminarSemestre = true;
+                // this.semestreActual_1=item;
+                // this.dialogEliminarSemestre = true;
+                console.log(this.$store.state.usuario.usuario.rol)
+                
+            }
+            if(acciones=='Re-abrir semestre'){
+                console.log("Re-abrir semestre")
+                this.semestreActual_1=item;
+                this.dialogReAbrirSemestre = true;
             }
             
         },
@@ -471,11 +637,10 @@ export default {
          * deshabilita un semetre del sistema
          */
         eliminarSemestre(){
-            var url = 'http://127.0.0.1:8000/api/v1/semestre/'+this.semestreActual_1.id;
+            var url = this.$store.state.rutaDinamica+'api/v1/semestre/'+this.semestreActual_1.id;
                 axios.delete(url,this.$store.state.config)
                 .then((result)=>{
-                    console.log(result)
-                if (result.statusText=='OK') {
+                if (result.data.success==true) {
                     this.dialogEliminarSemestre= false;
                     this.obtenerListaDeSemestres();
                     this.alertaExito = true;
@@ -483,25 +648,65 @@ export default {
                 }
                 }).catch((error)=>{
                     if (error.message == 'Network Error') {
-                        console.log(error)
+                        // console.log(error)
                         this.textoAlertas = "Error al eliminar el semestre, intente mas tarde."
                         this.alertaError = true;
                     }
                     else{
                         if (error.response.data.success == false) {
                             if(error.response.data.code == 701){
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
+                                // console.log(error.response.data.code +' '+ error.response.data.message);
+                                // console.log(error.response.data);
                                 this.textoAlertas = error.response.data.message;
                                 this.alertaError = true;
-                                 this.dialogEliminarSemestre= false;
+                                this.dialogEliminarSemestre= false;
                             }
                             if(error.response.data.code == 702){
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
+                                // console.log(error.response.data.code +' '+ error.response.data.message);
+                                // console.log(error.response.data);
                                 this.textoAlertas = error.response.data.message;
                                 this.alertaError = true;
-                                 this.dialogEliminarSemestre= false;
+                                this.dialogEliminarSemestre= false;
+                            }
+                        }
+                    }
+                
+            });
+        },
+        /**
+         * Reabre un semestre que halla sido cerraado.
+         */
+        reabrirSemestre(){
+             var url = this.$store.state.rutaDinamica+'api/v1/semestre/restore/'+this.semestreActual_1.id;
+                axios.post(url,null,this.$store.state.config)
+                .then((result)=>{
+                if (result.data.success==true) {
+                    this.dialogReAbrirSemestre= false;
+                    this.obtenerListaDeSemestres();
+                    this.alertaExito = true;
+                    this.textoAlertas = "El semestre fue reabierto con exito "
+                }
+                }).catch((error)=>{
+                    if (error.message == 'Network Error') {
+                        // console.log(error)
+                        this.textoAlertas = "Error al eliminar el semestre, intente mas tarde."
+                        this.alertaError = true;
+                    }
+                    else{
+                        if (error.response.data.success == false) {
+                            if(error.response.data.code == 901){
+                                // console.log(error.response.data.code +' '+ error.response.data.message);
+                                // console.log(error.response.data);
+                                this.textoAlertas = "Error en la recuperacion del semestre, contacte al administrador";
+                                this.alertaError = true;
+                                 this.dialogReAbrirSemestre= false;
+                            }
+                            if(error.response.data.code == 902){
+                                // console.log(error.response.data.code +' '+ error.response.data.message);
+                                // console.log(error.response.data);
+                                this.textoAlertas =  "Error en la recuperacion del semestre, contacte al administrador";
+                                this.alertaError = true;
+                                 this.dialogReAbrirSemestre= false;
                             }
                         }
                     }
@@ -511,6 +716,16 @@ export default {
 
     },
     
+    
 
 }
 </script>
+<style scoped>
+    a {       
+        text-decoration-line: none;
+}
+
+a:hover {
+  text-decoration: underline  ;
+}
+</style>

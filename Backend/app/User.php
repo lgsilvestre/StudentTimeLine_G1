@@ -55,8 +55,11 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    public function escuela_obtencion(){
-        return $this-> belongsTo('App\Escuela','escuela');
+    public function getEscuela(){
+        return $this->belongsTo('App\Escuela','escuela')->withTrashed();
+    }
 
+    public function getEscuelaAux(){
+        return $this->belongsTo('App\Escuela','escuelaAux')->withTrashed();
     }
 }

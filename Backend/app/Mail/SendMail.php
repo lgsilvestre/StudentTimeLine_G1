@@ -24,7 +24,21 @@ class SendMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Recuperación de contraseña')
-                    ->view('emails.sendmail');
+        if($this->details['opcion']==1){
+            return $this->subject('Recuperación de contraseña')
+                        ->view('emails.sendmail');
+        }
+        if($this->details['opcion']==2){
+            return $this->subject('Solicitud de ayudante')
+                    ->view('emails.sendMailSolicitud');
+        }
+        if($this->details['opcion']==3){
+            return $this->subject($this->details['motivo'])
+                        ->view('emails.sendmailContactar');
+        }
+        if($this->details['opcion']==4){
+            return $this->subject($this->details['motivo'])
+                        ->view('emails.sendMailRecordatorio');
+        }
     }
 }

@@ -20,8 +20,7 @@ class Escuela extends Model
     protected $table='escuelas';
     
     public function usuarios (){
-        return $this-> hasMany('App\User','escuela');
-
+        return $this-> hasMany('App\User','escuela')->withTrashed();
     }
 
 }

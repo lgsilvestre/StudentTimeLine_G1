@@ -11,4 +11,12 @@ class Ayudante_Con_Curso extends Model
     protected $fillable=[
         'curso','estudiante'
     ];
+
+    public function getInstanciacurso(){
+        return $this->belongsTo('App\InstanciaCurso','curso');
+    }
+
+    public function getEstudiante(){
+        return $this->belongsTo('App\Estudiante','estudiante');
+    }
 }

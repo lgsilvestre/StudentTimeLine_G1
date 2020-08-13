@@ -5,6 +5,9 @@ use Illuminate\Http\Request;
 use App\Escuela;
 use Validator;
 
+use App\Log;
+use Tymon\JWTAuth\Facades\JWTAuth;
+
 class EscuelaController extends Controller
 {
 
@@ -34,7 +37,15 @@ class EscuelaController extends Controller
                 'message' => "La operacion se a realizado con exito",
                 'data' => ['escuelas'=>$escuelas]
             ], 200);
-        } catch(\Illuminate\Database\QueryException $ex){ 
+        } catch(\Illuminate\Database\QueryException $ex){
+            Log::create([
+                'titulo' => "Error en la base de datos",
+                'accion' => "listar escuela",
+                'tipo' => "Error",
+                'descripcion' => "Al momento de listar las escuelas, hubo un problema en la base de datos",
+                'data' => $ex,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => false,
                 'code' => 101,
@@ -73,6 +84,14 @@ class EscuelaController extends Controller
             'nombre' => [' required', 'string'],
         ]);
         if ($validator->fails()) {
+            Log::create([
+                'titulo' => "Error en los datos ingresados",
+                'accion' => "Crear escuela",
+                'tipo' => "Error",
+                'descripcion' => "Los datos ingresados para realizar la creacion de una escuela fueron incorrectos",
+                'data' => $validator->errors(),
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => false,
                 'code' => 301,
@@ -90,7 +109,15 @@ class EscuelaController extends Controller
             $escuela = new Escuela();
             $escuela->cod_escuela = $entradas['cod_escuela'];
             $escuela->nombre = $entradas['nombre'];
-            $escuela = $escuela->save();
+            $escuela->save();
+            Log::create([
+                'titulo' => "Creacion de una escuela",
+                'accion' => "Crear escuela",
+                'tipo' => "Informativa",
+                'descripcion' => "Se creo una escuela en la base de datos",
+                'data' =>  $escuela,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => true,
                 'code' => 300,
@@ -98,6 +125,14 @@ class EscuelaController extends Controller
                 'data' => ['escuela'=>$escuela]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
+            Log::create([
+                'titulo' => "Error en la base de datos",
+                'accion' => "Crear escuela",
+                'tipo' => "Error",
+                'descripcion' => "Al momento de crear una escuela, hubo un problema en la base de datos ",
+                'data' =>  $ex,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => false,
                 'code' => 302,
@@ -153,6 +188,14 @@ class EscuelaController extends Controller
             'nombre' => ['string', 'nullable'],
         ]);
         if ($validator->fails()) {
+            Log::create([
+                'titulo' => "Error en los datos ingresados",
+                'accion' => "Modificar escuela",
+                'tipo' => "Error",
+                'descripcion' => "Los datos ingresados para realizar la modificacion de la escuela fueron incorrectos",
+                'data' => $validator->errors(),
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => false,
                 'code' => 601,
@@ -169,6 +212,14 @@ class EscuelaController extends Controller
         try{
             $escuela = Escuela::find($id);
             if ($escuela == null) {
+                Log::create([
+                    'titulo' => "Escuela no encontrado",
+                    'accion' => "Modificar escuela",
+                    'tipo' => "Error",
+                    'descripcion' => "La escuela con la id:'.$id.' que se intenta modificar no existe, cabe decir que esto no deberia pasar",
+                    'data' => $escuela,
+                    'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+                ]);
                 return response()->json([
                     'success' => false,
                     'code' => 602,
@@ -182,7 +233,15 @@ class EscuelaController extends Controller
             if($entradas['nombre']!=null){
                 $escuela->nombre = $entradas['nombre'];
             }
-            $escuela-> save();
+            $escuela->save();
+            Log::create([
+                'titulo' => "Modificacion de una escuela",
+                'accion' => "Modificar escuela",
+                'tipo' => "Informativa",
+                'descripcion' => "Un usuario modifico una escuela con exito",
+                'data' => $escuela,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => true,
                 'code' => 600,
@@ -190,6 +249,14 @@ class EscuelaController extends Controller
                 'data' => ['escuela'=>$escuela]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
+            Log::create([
+                'titulo' => "Error en la base de datos",
+                'accion' => "Modificar escuela",
+                'tipo' => "Error",
+                'descripcion' => "Al momento de modificar un escuela, hubo un problema en la base de datos ",
+                'data' =>  $ex,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => false,
                 'code' => 603,
@@ -209,6 +276,14 @@ class EscuelaController extends Controller
         try{
             $escuela = Escuela::find($id);
             if ($escuela == null) {
+                Log::create([
+                    'titulo' => "Error eliminar un escuela",
+                    'accion' => "Eliminar escuela",
+                    'tipo' => "Error",
+                    'descripcion' => "La escuela con la id:'.$id.' que se intenta eliminar no existe, cabe decir que esto no deberia pasar",
+                    'data' =>  $escuela,
+                    'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+                ]);
                 return response()->json([
                     'success' => false,
                     'code' => 701,
@@ -217,6 +292,14 @@ class EscuelaController extends Controller
                 ], 409 );
             }else{
                 $escuela->delete();
+                Log::create([
+                    'titulo' => "Eliminacion de una escuela",
+                    'accion' => "Eliminar escuela",
+                    'tipo' => "Informativa",
+                    'descripcion' => "Se elimino una escuela con exito",
+                    'data' => $escuela,
+                    'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+                ]);
                 return response()->json([
                     'success' => true,
                     'code' => 700,
@@ -225,6 +308,14 @@ class EscuelaController extends Controller
                 ], 200);
             }
         }catch(\Illuminate\Database\QueryException $ex){ 
+            Log::create([
+                'titulo' => "Error en la base de datos",
+                'accion' => "Eliminar escuela",
+                'tipo' => "Error",
+                'descripcion' => "Al momento de eliminar una escuela, hubo un problema en la base de datos",
+                'data' =>  $ex,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => false,
                 'code' => 702,
@@ -248,6 +339,14 @@ class EscuelaController extends Controller
                 'data' =>['escuela'=> $escuelas]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
+            Log::create([
+                'titulo' => "Error en la base de datos",
+                'accion' => "listar escualas eliminados",
+                'tipo' => "Error",
+                'descripcion' => "Al momento de listar las escualas eliminadas, hubo un problema en la base de datos",
+                'data' => $ex,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => false,
                 'code' => 801,
@@ -263,15 +362,32 @@ class EscuelaController extends Controller
      */
     public function restore($id){
         try{
-            $escuela=Escuela::onlyTrashed()->find($id)->restore();
-            if($escuela==false){
+            $escuela=Escuela::onlyTrashed()->where('id',$id)->first();
+            if($escuela==null){
+                Log::create([
+                    'titulo' => "Error al recuperar una escuela",
+                    'accion' => "Recuperar escuela",
+                    'tipo' => "Error",
+                    'descripcion' => "La escuela no el id:".$id." no existe o no se encuentra eliminada",
+                    'data' =>  $escuela,
+                    'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+                ]);
                 return response()->json([
                     'success' => false,
                     'code' => 901,
-                    'message' => "La escuela no se logro recuperar",
+                    'message' => "La escuela no el id:".$id." no existe o no se encuentra eliminada",
                     'data' => ['escuela'=>$escuela]
                 ], 409);
             }
+            Escuela::onlyTrashed()->where('id',$id)->restore();
+            Log::create([
+                'titulo' => "Recuperacion de una escuela",
+                'accion' => "Recuperar escuela",
+                'tipo' => "Informativa",
+                'descripcion' => "Se recupero una escuela con exito",
+                'data' =>  $escuela,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => true,
                 'code' => 900,
@@ -279,6 +395,14 @@ class EscuelaController extends Controller
                 'data' => ['escuela'=>$escuela]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
+            Log::create([
+                'titulo' => "Error en la base de datos",
+                'accion' => "Recuperar escuela",
+                'tipo' => "Error",
+                'descripcion' => "Al momento de recuperar una escuela, hubo un problema en la base de datos ",
+                'data' =>  $ex,
+                'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
+            ]);
             return response()->json([
                 'success' => false,
                 'code' => 902,
