@@ -554,7 +554,7 @@
         ],
         regla_Email: [
             value => !!value || 'Requerido',
-            v => /.+@utalca.cl/.test(v) || /.+@alumnos.utalca.cl/.test(v) || 'Correo no Válido', 
+            v => /.+@utalca\.cl/.test(v) || /.+@alumnos\.utalca\.cl/.test(v) || 'Correo no Válido', 
         ],
         regla_Contraseña:[
             value => !!value || 'Requerido',
@@ -745,6 +745,7 @@
                     }
                 })
                 .catch((error)=>{
+                    console.log(error);
                     if (error.message == 'Network Error') {
                         console.log(error);
                         this.alertError = true;
