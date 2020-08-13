@@ -537,7 +537,7 @@
                                 <h4 class="white--text">Cancelar</h4>
                             </v-btn>
                             <v-btn 
-                            :disable="!formSolicitud"
+                            :disabled="!formSolicitud"
                             :small="$vuetify.breakpoint.smAndDown ? true : false"
                             :loading= "cargando"
                             rounded color="secondary" class="ml-2" @click="enviarSolicitud()" >
@@ -1960,12 +1960,12 @@ export default {
         },
 
         enviarSolicitud(){
-            this.cargando = true;
+            
             // form_solicitarEstudianteValido
             var valido=this.$refs.solicitud.validate();
             // console.log("semestre valido :" + valido)
             if(valido == true){
-                
+                this.cargando = true;
                 let post = {
                     "estudiante": this.id,
                     "curso": this.datosSolicitud.curso,
