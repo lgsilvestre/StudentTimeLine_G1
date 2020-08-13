@@ -763,11 +763,14 @@ class UsuarioController extends Controller{
             $details = array(
                 'opcion' => 3,
                 'motivo' => $entradas['motivo'],
+                'destinatario' => '',
+                'autor' => $credenciales->nombre,
+                'escuela' => $credenciales->getEscuela->nombre,
                 'descripcion' => $entradas['descripcion'],
-                'usuario' => $credenciales['nombre']
             );
             foreach($entradas['destinatarios'] as $destinatario){
                 $usuario = User::Where('id', $destinatario)->first();
+                $details['destinatario']= $usuario->nombre;
                 \Mail::to($usuario['email'])->send(new SendMail($details));
             }
             return response()->json([
