@@ -47,8 +47,7 @@
                 </v-card-title> 
                 </v-img>
                 <!-- <v-container> -->
-                    <v-data-iterator :items="listaSemestres" :search="search" :sort-by="sortBy.toLowerCase()" class="px-2 py-2" :loading="cargando"
-                    >
+                    <v-data-iterator :items="listaSemestres" :search="search" class="px-2 py-2" :loading="cargando"  >
                         <template v-slot:default="props">
                             <v-row >
                                 <v-col v-for="item in props.items" :key="item.nomCurso" cols="12" sm="6" md="4" lg="3">
@@ -357,7 +356,7 @@ export default {
             //busqueda
             cargando: false,
             search: '',
-            sortBy:'anio',
+            // sortBy:'anio',
             headers: [
                 { text: 'id', value: 'id' },
                 { text: 'semestre', value: 'semestre' },
@@ -387,17 +386,6 @@ export default {
                 ErrorSemestreDuplicado:"Error el semestre ya se encuentra registrado.",
                 ErrorDatosIngresados:"Error en los datos Ingresados",
         }
-    },
-    _props: {
-    item: {
-        id: '',semestre: '',anio: '',deleted_at: ''
-    }
-    },
-    get props() {
-        return this._props;
-    },
-    set props(value) {
-        this._props=value;
     },
     beforeMount(){
         /**
@@ -451,6 +439,7 @@ export default {
                     }
                     this.cargando = false;
                     this.listaSemestres = this.listaSemestresAux;
+                    this.listaSemestres.reverse();
                 }
             }
             ).catch((error)=>{
