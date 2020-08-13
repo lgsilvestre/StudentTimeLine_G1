@@ -141,7 +141,7 @@
                 <v-icon color="white" class="mr-2">
                     fas fa-check-circle
                 </v-icon>
-                <p><strong>{{textoAcept}}</strong></p>
+                <strong>{{textoAcept}}</strong>
             </div>
             <v-btn color="white" elevation="0" x-small
             fab @click="alertAcept = ! alertAcept" > 
