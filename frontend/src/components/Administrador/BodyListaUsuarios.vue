@@ -484,7 +484,7 @@ export default {
             ],
             reglasEmail: [
                 v => !!v || 'Requerido',
-                v => /.+@utalca.cl/.test(v) || /.+@alumnos.utalca.cl/.test(v) || 'Correo no Válido', 
+                v => /.+@utalca\.cl/.test(v) || /.+@alumnos\.utalca\.cl/.test(v) || 'Correo no Válido', 
             ],
             reglasContraseña:[
                 v => !!v || 'Requerido',
