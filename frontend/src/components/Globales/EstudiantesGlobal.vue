@@ -155,7 +155,7 @@
                                                         label="Situacion academica" outlined
                                                         color="secondary"
                                                         prepend-inner-icon="fas fa-address-book"
-                                                        :rules="[v => !!v || 'La situación academica es requerida']"
+                                                        :rules="[v => !!v || 'La situación académica es requerida']"
                                                         ></v-select >
 
                                                         <v-select 
@@ -489,8 +489,8 @@
         dialogExportar: false,
         rules: [
         value => !!value || 'Requerido',
-        value => value <= new Date().getFullYear()|| 'El año no debe ser mayor al actual',
-        value => value >= 1981 || 'El año no debe ser menor a 1981',
+        value => value <= new Date().getFullYear()|| 'El año no puede ser mayor al actual',
+        value => value >= 1981 || 'El año no puede ser menor a 1981',
         ],
         //archivo
         file: null,
@@ -565,18 +565,18 @@
          form_AgregarEstudiantesMasivoValido:true,
          reglas_matricula:[
              value => !!value || 'Requerido',
-             value => /^[0-9]+$/.test(value) || 'Matricula solo debe incluir numeros',
-             value => /^[0-9]{10}$/.test(value) || 'La matricula debe compuesta de 10 numeros',             
+             value => /^[0-9]+$/.test(value) || 'Matrícula solo debe incluir números',
+             value => /^[0-9]{10}$/.test(value) || 'La matrícula debe estar compuesta de 10 números',             
          ],
          reglas_rut:[
             value => !!value || 'Requerido',
-            value => /^[0-9]+$/.test(value) || 'El rut debe estar compuesto solo por numeros',                
+            value => /^[0-9]+$/.test(value) || 'El rut debe estar compuesto solo por números',                
             value => /^[0-9]{7,8}$/.test(value) || 'El rut debe contener entre 7 y 8 dígitos',
          ],
          reglas_Nombre:[
                 value => !!value || 'Requerido',
-                v => /^[a-zA-Z ]+$/.test(v) || 'Nombre no Válido.',
-                v => /^[a-zA-Z ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',            
+                v => /^[a-zA-ZÀ-ÿ\u00f1\u00d1 ]+$/.test(v) || 'Nombre no Válido.',
+                v => /^[a-zA-ZÀ-ÿ\u00f1\u00d1 ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',            
         ],
         regla_Email: [
             value => !!value || 'Requerido',
@@ -588,7 +588,7 @@
         ],
         regla_anio:[
             value => !!value || 'Requerido',
-            value => /^[0-9]+$/.test(value) || 'El año debe estar compuesto solo por numeros',
+            value => /^[0-9]+$/.test(value) || 'El año debe estar compuesto solo por números',
             value => value <= new Date().getFullYear()|| 'El año no debe ser mayor al actual',
             value => value >= 1981 || 'El año no debe ser menor a 1981'
         ],
@@ -668,6 +668,8 @@
                     if (result.data.success == true) {
                         this.resetImportarEstudiantes();
                         this.obtenerEstudiantes();
+                        this.alertAcept = true;
+                        this.textoAcept = 'Se realizó la operación correctamente';
                     }
                 })
                 .catch((error)=>{
@@ -677,7 +679,7 @@
                         this.alertError = true;
                         this.cargando = false;
                         //console.log(err)
-                        this.textoError = 'Error al importar los datos, intente más tarde'
+                        this.textoError = 'Error al importar los datos, inténtelo más tarde.'
                     }else {
                         if (error.response.data.success == false) {
                             this.alertError = true;
@@ -723,7 +725,7 @@
                     this.alertError = true;
                     this.cargando = false;
                     //console.log(err)
-                    this.textoError = 'Error al cargar los datos, intente más tarde'
+                    this.textoError = 'Error al cargar los datos, inténtelo más tarde'
                 } else {
                     if (error.response.data.success == false) {
                         switch (error.response.data.code) {
@@ -776,7 +778,7 @@
                         //console.log('se cargo el estudiante');
                         this.resetUnicoEstudiante();
                         this.alertAcept = true;
-                        this.textoAcept = 'Se agregó el estudiante correctamente '
+                        this.textoAcept = 'Se ha agregado correctamente el estudiante.'
                         this.obtenerEstudiantes();
                     }
                 })
@@ -786,7 +788,7 @@
                         //console.log(error);
                         this.alertError = true;
                         this.resetUnicoEstudiante();
-                        this.textoError = 'Error al cargar los datos, intente más tarde'
+                        this.textoError = 'Error al cargar los datos, inténtelo más tarde'
                     } else {
                         if (error.response.data.success == false) {
                             switch (error.response.data.code) {
@@ -834,7 +836,7 @@
                     //console.log(error);
                     this.alertError = true;
                     this.cargando = false;
-                    this.textoError = 'Error al cargar los datos, intente más tarde'
+                    this.textoError = 'Error al cargar los datos, inténtelo más tarde'
                 } else {
                     if (error.response.data.success == false) {
                         switch (error.response.data.code) {
@@ -920,7 +922,7 @@
                 document.body.appendChild(link);
                 link.click();
                 this.alertAcept = true;
-                this.textoAcept = 'Se realizó la operación correctamente'
+                this.textoAcept = 'Se realizó la operación correctamente';
                 this.dialogExportar=false;
                 this.resetYCerrarExportar();
                 
@@ -930,7 +932,7 @@
                 if (error.message == 'Network Error') {
                     console.log(error);
                     this.alertError = true;
-                    this.textoError = 'Error, intente más tarde'
+                    this.textoError = 'Error, inténtelo más tarde'
                 } else {
                     if (error.response.data.success == false) {
                         this.alertError = true;

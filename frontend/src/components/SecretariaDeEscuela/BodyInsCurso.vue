@@ -1069,8 +1069,8 @@ export default {
                 value => !!value || 'Requerido'
                 ],
             //Texto
-            ModificacionExitosa:'Las Modificaciones se realizaron correctamente.',
-            ModificacionError:'Las Modificaciones No realizaron correctamente.',
+            ModificacionExitosa:'Las modificaciones se realizaron correctamente.',
+            ModificacionError:'Las modificaciones no se han realizado correctamente.',
             //
             semestreValido:true,
         }
@@ -1303,7 +1303,7 @@ export default {
             ).catch((error)=>{
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -1341,7 +1341,7 @@ export default {
             ).catch((error)=>{
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -1384,7 +1384,7 @@ export default {
             ).catch((error)=>{
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -1420,7 +1420,7 @@ export default {
             ).catch((error)=>{ 
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -1462,7 +1462,7 @@ export default {
                 this.cargando = false;
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -1506,7 +1506,7 @@ export default {
                 }).catch((error)=>{ 
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -1574,7 +1574,7 @@ export default {
                 if (error.message == 'Network Error') {
                     // console.log(error)  
                     this.alertaError = true;
-                    this.textoAlertas = "Error al asignar el profesor intente mas tarde."
+                    this.textoAlertas = "Error al asignar el profesor, inténtelo más tarde."
                     this.resetAsignarCurso();
                 }
                 else{
@@ -1638,7 +1638,7 @@ export default {
                 .then((result)=>{
                 
                     this.alertaExito = true;
-                    this.textoAlertas = "Se desvinculo el el profesor con exito "
+                    this.textoAlertas = "El profesor ha sido desvinculado correctamente."
                     this.obtenerInstanciasCursos();
                     this.dialogProfesoresInsCurso=false;
                     this.obtenerInstanciasCursos();
@@ -1646,7 +1646,7 @@ export default {
                 }).catch((error)=>{
                     if (error.message == 'Network Error') {
                         this.alertaError = true;
-                        this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
+                        this.textoAlertas = "Error al eliminar profesor, inténtelo más tarde."
                     }
                     else{
                         if (error.response.data.success == false) {
@@ -1698,7 +1698,7 @@ export default {
                     .then((result) => {
                         // console.log(result)
                         this.alertaExito = true;
-                        this.textoAlertas = "Se creó el curso con exito."
+                        this.textoAlertas = "El curso ha sido creado correctamente."
                         this.resetCrearCurso();
                         this.obtenerCursos(); 
                         this.KeyDialogCrearCurso ++; 
@@ -1707,7 +1707,7 @@ export default {
                         if (error.message == 'Network Error') {
                             // console.log(error)
                             this.alertaError = true;
-                            this.textoAlertas = "Error al crear el curso, intente mas tarde."
+                            this.textoAlertas = "Error al crear el curso, inténtelo más tarde."
                             this.resetCrearCurso();
                             this.KeyDialogCrearCurso ++;
                         }
@@ -1765,7 +1765,7 @@ export default {
             axios.put(url,put,this.$store.state.config)
             .then((result)=>{
                 this.alertaExito = true;
-                this.textoAlertas = "Se modificó el curso con exito."
+                this.textoAlertas = "El curso ha sido modificado correctamente."
                 this.obtenerCursos(); 
                 this.resetModificarCurso();
               
@@ -1774,7 +1774,7 @@ export default {
                 if (error.message == 'Network Error') {
                     // console.log(error)
                     this.alertaError = true;
-                    this.textoAlertas = "Error al modificar el curso, intente mas tarde."
+                    this.textoAlertas = "Error al modificar el curso, inténtelo más tarde."
                 }
                 else{
                     // console.log(error.response);
@@ -1833,13 +1833,13 @@ export default {
                 this.obtenerCursos();
                 this.resetEliminarCurso(); 
                 this.alertaExito = true;
-                this.textoAlertas = "Se elimino el curso con exito "
+                this.textoAlertas = "El curso ha sido eliminado correctamente."
             
             }).catch((error)=>{
                 if (error.message == 'Network Error') {
                     // console.log(error)
                     this.alertaError = true;
-                    this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
+                    this.textoAlertas = "Error al eliminar el usuario, inténtelo más tarde."
                 }
                 else{
                     // console.log(error.response);
@@ -1884,7 +1884,7 @@ export default {
             .then((result)=>{
             if (result.statusText=='OK') {
                 this.alertaExito = true;
-                this.textoAlertas = "Se desvinculo el ayudante con exito "
+                this.textoAlertas = "El ayudante ha sido desvinculado correctamente."
                 this.obtenerInstanciasCursos();
                 this.dialogAyudantesInsCurso=false;
             }
@@ -1892,7 +1892,7 @@ export default {
                 if (error.message == 'Network Error') {
                     // console.log(error)
                     this.alertaError = true;
-                    this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
+                    this.textoAlertas = "Error al eliminar el ayudante, inténtelo más tarde."
                 }
                 else{
                     // console.log(error.response);
@@ -2017,7 +2017,7 @@ export default {
                             // console.log( error.response.data);
                             if (error.message == 'Network Error') {
                                 this.alertaError = true;
-                                this.textoAlertas = "Error al asignar el curso, intente mas tarde."
+                                this.textoAlertas = "Error al asignar el curso, inténtelo más tarde."
                                 this.cerrarDialogAsignarCurso(); 
                             }
                             else{
@@ -2068,7 +2068,7 @@ export default {
             if(post2.curso!='' && post2.profesor!=''){
                 axios.post(url2, post2, this.$store.state.config)
             .then((result) => {
-                this.textoAlertas = "Se asignó el profesor correctamente"
+                this.textoAlertas = "El profesor ha sido asignado correctamente."
                 this.alertaExito=true;
                 this.obtenerInstanciasCursos();
                 
@@ -2076,7 +2076,7 @@ export default {
                 if (error.message == 'Network Error') {
                     console.log(error)  
                     this.alertaError = true;
-                    this.textoAlertas = "Error al asignar el profesor intente mas tarde."
+                    this.textoAlertas = "Error al asignar el profesor, inténtelo más tarde."
                     this.resetAsignarCurso();
                 }
                 else{
@@ -2144,7 +2144,7 @@ export default {
                 .then((result)=>{
                 if (result.statusText=='OK') {
                     this.alertaExito = true;
-                    this.textoAlertas = "Se desvinculo el el profesor con exito "
+                    this.textoAlertas = "Se ha desvinculado correctamente al profesor."
                     
                     this.obtenerInstanciasCursos();
                     this.dialogProfesoresInsCurso=false;
@@ -2152,7 +2152,7 @@ export default {
                 }).catch((error)=>{
                     if (error.message == 'Network Error') {
                         this.alertaError = true;
-                        this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
+                        this.textoAlertas = "Error al eliminar el profesor, inténtelo más tarde."
                     }
                     else{
                         if(error.response.data.success == false){
@@ -2227,12 +2227,12 @@ export default {
             axios.put(url,put,this.$store.state.config)
             .then((result)=>{
                  this.alertaExito = true;
-            this.textoAlertas = "Se modifico la sección con exito";
+            this.textoAlertas = "Se ha modificado correctamente la sección.";
                 
            }).catch((error)=>{   
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
-                    this.textoAlertas = "Error al modificar el curso, intente mas tarde."
+                    this.textoAlertas = "Error al modificar la sección, inténtelo más tarde."
                     this.obtenerInstanciasCursos(); 
                     this.cerrarDialogModificarInstanciaCurso();
                 }
@@ -2315,11 +2315,11 @@ export default {
                 this.obtenerInstanciasCursos();
                 this.cerrarDialogCerrarInstanciaCurso(); 
                 this.alertaExito = true;
-                this.textoAlertas = "Se elimino el curso con exito "
+                this.textoAlertas = "Se ha eliminado correctamente el curso."
             }).catch((error)=>{
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
-                    this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
+                    this.textoAlertas = "Error al eliminar el curso, inténtelo más tarde."
                     this.cerrarDialogCerrarInstanciaCurso(); 
                 }
                 else{
