@@ -276,12 +276,21 @@ export default {
                             case 501:
                                 console.log(error.response.data.code +' '+ error.response.data.message);
                                 console.log(error.response.data);
+                                this.alertError = true;
+                                var mensaje="La modificación del perfil fue realizada con exito";
+                                    this.textoError=mensaje;
                                 break;
                             case 502:
                                 console.log(error.response.data.code +' '+ error.response.data.message);
                                 console.log(error.response.data);
+                                this.alertError = true;
+                                var mensaje="La modificación del perfil fue realizada con exito";
+                                this.textoError=mensaje;
                                 break;
                             default:
+                                this.alertError = true;
+                                var mensaje="La modificación del perfil fue realizada con exito";
+                                this.textoError=mensaje;
                                 break;
                         }
                     }
@@ -333,8 +342,8 @@ export default {
                         console.log(error.response.data);
                         this.cargando = false;
                         this.alertError = true;
-                        var mensaje=result.data.message;
-                        this.textoError="Error en los datos ingresados";
+                        var mensaje=error.response.data.message;
+                        this.textoError=mensaje;
                         this.reset();
                         break;
                     case 602:
@@ -342,7 +351,7 @@ export default {
                         console.log(error.response.data);
                         this.cargando = false;
                         this.alertError = true;
-                        var mensaje=result.data.message;
+                        var mensaje=error.response.data.message;
                         this.textoError="El usuario no existe.";
                         this.reset();
                         break;
@@ -350,19 +359,25 @@ export default {
                         console.log(error.response.data.code +' '+ error.response.data.message);
                         console.log(error.response.data);
                         this.cargando = false;
-                        this.alertError = true;
-                        this.textoError="El usuario no tiene los permisos necesarios para realizar esta operacion.";
+                        var mensaje=error.response.data.message;
+                        this.textoError=mensaje;
+                        this.reset();
                         break;
                     case 604:
                         console.log(error.response.data.code +' '+ error.response.data.message);
                         console.log(error.response.data);
                         this.cargando = false;
                         this.alertError = true;
-                        var mensaje="Error en la base de datos";
+                        var mensaje=error.response.data.messagee;
                         this.textoError=mensaje;
                         this.reset()
                         break;
                     default:
+                        this.cargando = false;
+                        this.alertError = true;
+                        var mensaje=error.response.data.message;
+                        this.textoError=mensaje;
+                        this.reset()
                         break;
                     }
                 }
