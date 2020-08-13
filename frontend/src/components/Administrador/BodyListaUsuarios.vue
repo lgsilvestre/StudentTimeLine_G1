@@ -518,7 +518,8 @@ export default {
     },
     created () {   
         this.obtenerEscuelas();   
-        this.obtenerUsuarios();        
+        this.obtenerUsuarios();
+        this.datosUsuario.imagen = null;       
     },
     methods: {
         validarCrearUsuario(){
