@@ -71,8 +71,7 @@ class SemestreController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         $entradas = $request->only('anio', 'semestre');
         $validator = Validator::make($entradas, [
             'anio' => ['required', 'numeric'],
@@ -104,6 +103,17 @@ class SemestreController extends Controller
                 'data' => ['semestre'=>$semestre]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
+            if($ex->errorInfo[1]==1062){
+                if(strlen(strstr($ex->errorInfo[2],'semestres_semestre_anio_unique'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El Semestre que intenta crear ya existe en nuestra base de datos",
+                        'data' => ['error'=>$ex]
+                    ], 409 );
+                }
+            }
+
             return response()->json([
                 'success' => false,
                 'code' => 302,
@@ -197,6 +207,18 @@ class SemestreController extends Controller
                 'data' => ['semestre'=>$semestre]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
+
+            if($ex->errorInfo[1]==1062){
+                if(strlen(strstr($ex->errorInfo[2],'semestres_semestre_anio_unique'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El Semestre que intenta modificar ya existe en nuestra base de datos",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+                }
+            }
+
             return response()->json([
                 'success' => false,
                 'code' => 603,

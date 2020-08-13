@@ -114,6 +114,17 @@ class InstanciaCursoController extends Controller
                 'data' => ['insCurso'=>$insCurso]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
+            if($ex->errorInfo[1]==1062){
+                if(strlen(strstr($ex->errorInfo[2],'instancia_cursos_semestre_curso_seccion_unique'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 409,
+                        'message' => "Error: Ya existe una instancia del curso con la sección indicada\n ",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+                }
+            }
+        
             return response()->json([
                 'success' => false,
                 'code' => 302,
