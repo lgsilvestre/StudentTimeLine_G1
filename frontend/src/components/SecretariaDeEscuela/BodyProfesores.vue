@@ -96,23 +96,6 @@
                                                     background-color="white"
                                                     ></v-text-field>
                                                 </v-col>
-                                                <v-col  cols="5" sm="3" md="3" class="align-self-end" style="text-align:right;">
-                                                    <v-tooltip bottom color="primary">
-                                                    <template v-slot:activator="{ on }">
-                                                        <v-btn
-                                                        class="ml-2"
-                                                        fab
-                                                        :small="$vuetify.breakpoint.smAndDown ? true : false"
-                                                        bottom
-                                                        left
-                                                        v-on="on"
-                                                        >
-                                                            <v-icon  color="secondary">fas fa-envelope</v-icon>
-                                                        </v-btn>
-                                                    </template>
-                                                    <span><strong>Contactar</strong></span>
-                                                    </v-tooltip>
-                                                </v-col>
                                             </v-row>
                                             </v-card-title>
                                             </v-img> 
@@ -349,7 +332,7 @@ export default {
             this.cargando = true;
             this.listaProfesoresAux = [];
             var aux;
-            var url = 'http://127.0.0.1:8000/api/v1/usuario';
+            var url = this.$store.state.rutaDinamica+'api/v1/usuario';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 for (let index = 0; index < result.data.data.usuarios.length; index++) {
@@ -390,7 +373,7 @@ export default {
             this.cargando = true;
             this.listaProfesoresAux = [];
             var aux;
-            var url = 'http://127.0.0.1:8000/api/v1/usuario/disabled';
+            var url = this.$store.state.rutaDinamica+'api/v1/usuario/disabled';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 for (let index = 0; index < result.data.data.usuarios.length; index++) {
@@ -436,7 +419,7 @@ export default {
         },
 
         eliminarProfesor(){
-            var url = 'http://127.0.0.1:8000/api/v1/usuario/'+this.datosUsuario.id;
+            var url = this.$store.state.rutaDinamica+'api/v1/usuario/'+this.datosUsuario.id;
                 axios.delete(url,this.$store.state.config)
                 .then((result)=>{
                 if (result.data.success == true) {
@@ -447,21 +430,21 @@ export default {
                 }
                 }).catch((error)=>{
                     if (error.message == 'Network Error') {
-                        console.log(error)
+                        // console.log(error)
                         this.alertaError = true;
                         this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
                     }
                     else{
                         if (error.response.data.success == false) {
                             if(error.response.data.code == 701){
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
+                                // console.log(error.response.data.code +' '+ error.response.data.message);
+                                // console.log(error.response.data);
                                 this.textoAlertas = error.response.data.message;
                                 this.alertaError = true;
                             }
                             if(error.response.data.code == 702){
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
+                                // console.log(error.response.data.code +' '+ error.response.data.message);
+                                // console.log(error.response.data);
                                 this.textoAlertas = error.response.data.message;
                                 this.alertaError = true;
                             }
@@ -495,12 +478,12 @@ export default {
 
         /* Metodo que permite habilitar un profesor seleccionado */
         habilitarProfesor(){            
-            var url =`http://127.0.0.1:8000/api/v1/usuario/restore/${this.datosUsuario.id}`;
+            var url =this.$store.state.rutaDinamica+`api/v1/usuario/restore/${this.datosUsuario.id}`;
             axios.post(url,null,this.$store.state.config)
             .then((result)=>{
-                console.log("USUARIO RESTAURADO")
-                console.log(result)
-            if (result.data.data.usuario==true) {                
+                // console.log("USUARIO RESTAURADO")
+                // console.log(result)
+            if (result.statusText == "OK") {                
                 this.obtenerProfesoresDeshabilitados();
                 this.dialogHabilitar = false;
                 this.alertaExito = true;

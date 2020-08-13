@@ -341,8 +341,7 @@ a.es-button {
                   <td width="580" valign="top" align="center"> 
                    <table width="100%" cellspacing="0" cellpadding="0" role="presentation"> 
                      <tr> 
-                      <td align="center" style="font-size: 0px"><<img src="https://i.postimg.cc/t4FXDrtJ/65691596229216646.png" alt style="display: block;" width="560" height="132"></img></td>
-                     </tr> 
+                      <td align="center" style="font-size: 0px"><<img src="https://i.postimg.cc/t4FXDrtJ/65691596229216646.png" alt style="display: block;" width="560" height="132"></img></td>                     </tr> 
                    </table></td> 
                  </tr> 
                </table></td> 
@@ -361,27 +360,7 @@ a.es-button {
                   <td width="600" valign="top" align="center"> 
                    <table style="background-color: #ffffff" width="100%" cellspacing="0" cellpadding="0" bgcolor="#ffffff" role="presentation"> 
                      <tr> 
-                      <td class="es-m-txt-l es-p15t es-p15b es-p30r es-p30l" bgcolor="#ffffff"><p style="line-height: 150%;font-family: roboto, 'helvetica neue', helvetica, arial, sans-serif;text-align: justify">Estimada Secretaría de Escuela perteneciente a&nbsp;<strong>{{ $details['escuelaProfesor'] }}</strong>:<br><br><strong>{{ $details['nombreProfesor'] }}</strong> docente de la carrera <strong>INGENIERÍA CIVIL EN COMPUTACIÓN</strong>, tiene el agrado de dirigirse a usted, con la finalidad de solicitar al siguiente estudiante como <strong>AYUDANTE</strong>&nbsp;:&nbsp;</p></td> 
-                     </tr> 
-                   </table></td> 
-                 </tr> 
-               </table></td> 
-             </tr> 
-           </table></td> 
-         </tr> 
-       </table> 
-       <table class="es-content" cellspacing="0" cellpadding="0" align="center"> 
-         <tr> 
-          <td align="center"> 
-           <table class="es-content-body" width="600" cellspacing="0" cellpadding="0" bgcolor="#ffffff" align="center"> 
-             <tr> 
-              <td align="left"> 
-               <table width="100%" cellspacing="0" cellpadding="0"> 
-                 <tr> 
-                  <td width="600" valign="top" align="center"> 
-                   <table style="border-radius: 4px;border-collapse: separate;background-color: #111111" width="100%" cellspacing="0" cellpadding="0" bgcolor="#111111" role="presentation"> 
-                     <tr> 
-                      <td class="es-m-txt-l es-p5t es-p30r es-p30l" bgcolor="#ffe66d" align="left"><h2 style="color: #666666;font-size: 18px"><b>- INFORMACIÓN MÓDULO&nbsp;-</b></h2></td> 
+                      <td class="es-m-txt-l es-p15t es-p15b es-p30r es-p30l" bgcolor="#ffffff"><p style="line-height: 150%;font-family: roboto, 'helvetica neue', helvetica, arial, sans-serif;text-align: justify">Estimada Secretaría de Escuela perteneciente a&nbsp;<strong>{{ $details['escuelaEncargado'] }}</strong>:<br><br><strong>{{ $details['nombreProfesor'] }}</strong> docente de la carrera <strong>{{ $details['escuelaProfesor']}}</strong>, tiene el agrado de dirigirse a usted, con la finalidad de solicitar al siguiente estudiante como <strong>AYUDANTE</strong>&nbsp;:&nbsp;</p></td> 
                      </tr> 
                    </table></td> 
                  </tr> 
@@ -401,10 +380,7 @@ a.es-button {
                   <td width="600" valign="top" align="center"> 
                    <table width="100%" cellspacing="0" cellpadding="0" role="presentation"> 
                      <tr> 
-                      <td class="es-m-txt-l es-p5b es-p30r es-p30l" bgcolor="#ffe66d"><p style="color: #666666;text-align: justify;font-family: roboto, 'helvetica neue', helvetica, arial, sans-serif;font-size: 16px"><strong>Carrera: {{ $details['escuelaEstudiante'] }} <br>Módulo: {{ $details['curso'] }} </strong><br><strong>Sección: {{ $details['seccion'] }}<br>Nº horas mensuales: {{ $details['horas'] }}<br>Nº de meses: {{ $details['meses'] }}</strong></p></td> 
-                     </tr> 
-                     <tr> 
-                      <td align="left"><p><br></p></td> 
+                      <td align="left" bgcolor="#ffffff"><p><br></p></td> 
                      </tr> 
                    </table></td> 
                  </tr> 
@@ -418,29 +394,46 @@ a.es-button {
           <td align="center"> 
            <table class="es-content-body" style="background-color: transparent" width="600" cellspacing="0" cellpadding="0" align="center"> 
              <tr> 
-              <td class="es-p30r es-p30l" align="left" bgcolor="#4ecdc4" style="background-color: #4ecdc4"> 
+              <td class="es-p30r es-p30l" align="left" bgcolor="#ffffff" style="background-color: #ffffff"> 
                <table cellpadding="0" cellspacing="0" width="100%"> 
                  <tr> 
                   <td width="540" align="center" valign="top"> 
                    <table cellpadding="0" cellspacing="0" width="100%" role="presentation"> 
                      <tr> 
-                      <td align="left"><p><b>- INFORMACIÓN ESTUDIANTE-</b></p></td> 
+                      <td class="es-m-txt-l es-p5t es-p30r es-p30l" bgcolor="#ffe66d" align="left"><h2 style="color: #666666;font-size: 18px;text-align: center"><b>- INFORMACIÓN MÓDULO&nbsp;-</b></h2></td> 
                      </tr> 
                      <tr> 
-                      <td align="left"><p style="font-size: 16px"><strong>Nombre: {{ $details['estudiante'] }}</strong>&nbsp;<br><strong>Nota aprobación: {{ $details['nota'] }}&nbsp;</strong></p><p style="font-size: 16px"><strong>RUT: {{ $details['rut'] }}</strong></p><p style="font-size: 16px"><strong>Matrícula: {{ $details['matricula'] }}</strong>&nbsp;</p></td> 
+                      <td align="left" bgcolor="#ffffff"><p style="font-size: 16px"><strong>Carrera: {{ $details['escuelaEstudiante'] }}<br>Módulo: {{ $details['curso'] }} </strong><br><strong>Sección: {{ $details['seccion'] }}<br>Nº horas mensuales: {{ $details['horas'] }}<br>Nº de meses: {{ $details['meses'] }}</strong><br><br></p></td> 
                      </tr> 
                    </table></td> 
                  </tr> 
                </table></td> 
              </tr> 
              <tr> 
-              <td class="es-p30r es-p30l" align="left"> 
+              <td class="es-p30r es-p30l" align="left" bgcolor="#ffffff" style="background-color: #ffffff"> 
                <table cellpadding="0" cellspacing="0" width="100%"> 
                  <tr> 
                   <td width="540" align="center" valign="top"> 
                    <table cellpadding="0" cellspacing="0" width="100%" role="presentation"> 
                      <tr> 
-                      <td align="left"><p><br></p></td> 
+                       
+                      <td class="es-m-txt-l es-p5t es-p30r es-p30l" bgcolor="#4ecdc4" align="left"><h2 style="color: #666666;font-size: 18px;text-align: center"><b>- INFORMACIÓN ESTUDIANTE&nbsp;-</b></h2></td> 
+                     </tr> 
+                     <tr> 
+                      <td align="left" bgcolor="#ffffff"><p style="font-size: 16px"><strong>Nombre: {{ $details['estudiante'] }}:</strong>&nbsp;<br><strong>Nota aprobación: {{ $details['nota'] }}&nbsp;</strong></p><p style="font-size: 16px"><strong>RUT: {{ $details['rut'] }}</strong></p><p style="font-size: 16px"><strong>Matrícula: {{ $details['matricula'] }}</strong>&nbsp;</p></td> 
+                     </tr> 
+                   </table></td> 
+                 </tr> 
+               </table></td> 
+             </tr> 
+             <tr> 
+              <td class="es-p30r es-p30l" align="left" bgcolor="#ffffff" style="background-color: #ffffff"> 
+               <table cellpadding="0" cellspacing="0" width="100%"> 
+                 <tr> 
+                  <td width="540" align="center" valign="top"> 
+                   <table cellpadding="0" cellspacing="0" width="100%" role="presentation"> 
+                     <tr> 
+                      <td align="left" bgcolor="#ffffff"><p><br></p></td> 
                      </tr> 
                    </table></td> 
                  </tr> 

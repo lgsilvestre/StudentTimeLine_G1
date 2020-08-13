@@ -24,6 +24,18 @@
             
             <v-tooltip left color="primary" :disabled="!drawers.miniVarianteAdm">
                 <template v-slot:activator="{ on }">
+                    <v-list-item class="difuminado" active-class="activacion" to="/secretariaEscuela/semestres" v-on="on">
+                        <v-list-item-icon class="pl-1">
+                            <v-icon color="white">fas fa-book</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title class="white--text letra"><strong>Semestres</strong></v-list-item-title>                            
+                    </v-list-item>
+                </template>
+                <span><strong>Cursos</strong></span>
+            </v-tooltip>
+
+            <v-tooltip left color="primary" :disabled="!drawers.miniVarianteAdm">
+                <template v-slot:activator="{ on }">
                     <v-list-item class="difuminado" active-class="activacion" to="/secretariaEscuela/profesores" v-on="on">
                         <v-list-item-icon>
                             <v-icon color="white">fas fa-chalkboard-teacher</v-icon>
@@ -32,18 +44,6 @@
                     </v-list-item>
                 </template>
                 <span><strong>Profesores</strong></span>
-            </v-tooltip>
-
-            <v-tooltip left color="primary" :disabled="!drawers.miniVarianteAdm">
-                <template v-slot:activator="{ on }">
-                    <v-list-item class="difuminado" active-class="activacion" to="/secretariaEscuela/cursos" v-on="on">
-                        <v-list-item-icon class="pl-1">
-                            <v-icon color="white">fas fa-book</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title class="white--text letra"><strong>Cursos</strong></v-list-item-title>                            
-                    </v-list-item>
-                </template>
-                <span><strong>Cursos</strong></span>
             </v-tooltip>
 
             <v-tooltip left color="primary" :disabled="!drawers.miniVarianteAdm">
@@ -69,13 +69,6 @@
                 </template>
                 <span><strong>Observaciones</strong></span>
             </v-tooltip>
-
-            <v-list-item @click="contactar" class="difuminado" active-class="activacion">
-                <v-list-item-icon>
-                    <v-icon color="white">fas fa-envelope</v-icon>
-                </v-list-item-icon>
-                <v-list-item-title class="white--text letra" ><strong>Contactar</strong></v-list-item-title>                            
-            </v-list-item>
         </v-list>
         <template v-slot:append >
         <v-list-item class=" difuminado" style="background-color: #FF6B6B" @click="unLogin">

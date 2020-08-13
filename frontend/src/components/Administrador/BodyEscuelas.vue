@@ -131,13 +131,13 @@
                                       width="100%" height="180px"       
                                       src="@/assets/Globales/fondo3.jpg" >     
                                       <v-row>
-                                          <v-col cols="12" md="6">
+                                          <v-col cols="12" >
                                               <v-card-title class="white--text" style="text-shadow: #000000 3px 3px 4px;">     
                                                   <!-- Titulo -->
                                                   <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'"> Escuelas Eliminadas </strong>
                                               </v-card-title>
                                           </v-col>
-                                          <v-col cols="12" md="6" class="align-self-end d-none d-md-flex">
+                                          <v-col cols="12" md="6" class="align-self-end">
                                               <v-text-field
                                               v-model="buscar2"
                                               append-icon="mdi-magnify"
@@ -155,20 +155,7 @@
                                           </v-col>              
                                       </v-row> 
                                   </v-img>
-                                  <v-text-field
-                                  v-model="buscar2"
-                                  append-icon="mdi-magnify"
-                                  label="Buscar"
-                                  hide-details
-                                  outlined
-                                  rounded=""
-                                  clearable
-                                  dense
-                                  solo
-                                  class="px-5 py-2 -sm-flex d-md-none"
-                                  color="secondary"
-                                  background-color="white"
-                                  ></v-text-field>
+          
                                   <v-data-table  
                                       :headers="headers2" 
                                       :items="listaEscuelasEliminadas"
@@ -202,7 +189,7 @@
                   </v-card>
               </v-dialog>
 
-              <v-dialog  v-model="dialogRestaurarEscuela" ref="form" persistent max-width="450px">
+              <v-dialog  v-model="dialogRestaurarEscuela" ref="form" persistent max-width="500px">
                 <v-card class="mx-auto" max-width="500"  >
                     <v-card-title class="headline primary text--center" primary-title >
                         <h5 class="white--text ">Restaurar Usuario</h5>
@@ -210,7 +197,7 @@
                     <!-- <v-container fluid class=" text-left"> -->
                     <v-card-title class="text-justify" :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%;' :'font-size: 110%;'">Esta seguro que desea restaurar la siguiente Escuela?</v-card-title>
                     <v-card-text>Nombre : {{ this.escuelaEditar.nombre }}</v-card-text>
-                    <v-card-text>Codigo de Escuela : {{ this.escuelaEditar.cod_car }}</v-card-text>                    
+                    <v-card-text>Código de Escuela : {{ this.escuelaEditar.cod_car }}</v-card-text>                    
                     <!-- </v-container > -->
                     <div style="text-align:right;">
                         <v-btn 
@@ -289,7 +276,7 @@
                   </v-text-field>                                  
                   <v-text-field
                   v-model="escuelaEditar.cod"
-                  label="Codigo Carrera"
+                  label="Código Carrera"
                   :rules="reglasCodigoCarrera"                                      
                   outlined
                   prepend-inner-icon="fas fa-hashtag"
@@ -325,7 +312,7 @@
                 </v-card-title>
                 <v-card-title class="text-justify" :style="$vuetify.breakpoint.smAndDown ? 'font-size: 90%;' :'font-size: 110%;'">Esta seguro que desea eliminar la siguiente Escuela?</v-card-title>
                 <v-card-text class="pt-2">Nombre Escuela: {{ escuelaEliminar.nombre }}</v-card-text>
-                <v-card-text>Codigo Carrera: {{ escuelaEliminar.cod }}</v-card-text>   
+                <v-card-text>Código Carrera: {{ escuelaEliminar.cod }}</v-card-text>   
                 <div class="px-5  pb-4" style="text-align:right;">
                   <v-btn 
                   :small="$vuetify.breakpoint.smAndDown ? true : false"
@@ -424,17 +411,17 @@
         //{ text: 'ID',align: 'start',value: 'id',sortable: true},
         { text: '', value: '',sortable: false, width:10},
         { text: 'Nombre', value: 'nombre',sortable: true},
-        { text: 'Codigo carrera', value: 'cod_car',sortable: true , align:'center'},
+        { text: 'Codigo carrera', value: 'cod_car',sortable: true , align:'center' },
         { text: 'Opciones', value: 'actions', sortable: false, align:'end',class:'pr-12'},
         { text: '', value: '',sortable: false, width:10},
       ],
       headers2: [
         //{ text: 'ID',align: 'start',value: 'id',sortable: true},
-        { text: '', value: '',sortable: false, width:50},
-        { text: 'Nombre', value: 'nombre',sortable: true, width:350},
-        { text: 'Codigo carrera', value: 'cod_car',sortable: true , align:'center',width:350  },
+        { text: '', value: '',sortable: false, width:10},
+        { text: 'Nombre', value: 'nombre',sortable: true},
+        { text: 'Codigo carrera', value: 'cod_car',sortable: true , align:'center' },
         { text: 'Opciones', value: 'actions', sortable: false, align:'end',class:'pr-6'},
-        { text: '', value: '',sortable: false, width:50},
+        { text: '', value: '',sortable: false, width:10},
       ],
       desserts:[],
       dessertsAux:[],
@@ -450,7 +437,8 @@
       reglasCodigoCarrera: [
         value => !!value || 'Requerido',
         value => value  >= 0 || 'El valor debe ser mayor o igual a 0', 
-        value => (value || '').length <= 4 || 'Max. 40 caracteres',
+        value =>  /^[0-9]+$/.test(value) || 'Código de Carrera solo debe contener Números',
+        value =>  /^[0-9]{1,999999}$/.test(value) || 'Max. 999999 caracteres',
       ],
       
     }),
@@ -474,14 +462,14 @@
         }
       },
       ModificarEscuela(item){
-        console.log(item.id);
+        //console.log(item.id);
         this.escuelaEditar.id = item.id;
         this.escuelaEditar.nombre = item.nombre;
         this.escuelaEditar.cod = item.cod_car;
         this.dialogModificar = true;
       },
       EliminarEscuela(item){
-        console.log(item.id);
+        //console.log(item.id);
         this.escuelaEliminar.id = item.id;
         this.escuelaEliminar.nombre = item.nombre;
         this.escuelaEliminar.cod = item.cod_car;
@@ -490,7 +478,7 @@
       obtenerEscuelas(){
         this.cargando =true;
         this.dessertsAux = [];
-        var url = 'http://127.0.0.1:8000/api/v1/escuela';
+        var url = this.$store.state.rutaDinamica+'api/v1/escuela';
         axios.get(url,this.$store.state.config)
           .then((result)=>{
             // console.log(result);
@@ -511,7 +499,7 @@
           .catch((error) => {
             // console.log(error);
             if (error.message == 'Network Error') {
-              console.log(error);
+              //console.log(error);
               this.alertError = true;
               this.cargando = false;
               this.textoError = 'Error al cargar los datos, intente más tarde'
@@ -519,8 +507,8 @@
               if (error.response.data.success == false) {
                 switch (error.response.data.code) {
                   case 101:
-                      console.log(error.response.data.code +' '+ error.response.data.message);
-                      console.log(error.response.data);
+                      //console.log(error.response.data.code +' '+ error.response.data.message);
+                      //console.log(error.response.data);
                       this.alertError = true;
                       this.cargando = false;
                       this.textoError = error.response.data.message;
@@ -536,10 +524,10 @@
       obtenerEscuelasEliminadas(){
         this.cargando =true;
         this.listaEscuelasEliminadasAux = [];
-        var url = 'http://127.0.0.1:8000/api/v1/escuela/disabled';
+        var url = this.$store.state.rutaDinamica+'api/v1/escuela/disabled';
         axios.get(url,this.$store.state.config)
           .then((result)=>{
-            console.log(result);
+            //console.log(result);
             if (result.data.success == true) {
               for (let index = 0; index < result.data.data.escuela.length; index++) {
                 const element = result.data.data.escuela[index];
@@ -555,9 +543,9 @@
             }
           })
           .catch((error) => {
-            console.log(error);
+            //console.log(error);
             if (error.message == 'Network Error') {
-              console.log(error);
+              //console.log(error);
               this.alertError = true;
               this.cargando = false;
               this.textoError = 'Error al cargar los datos, intente más tarde'
@@ -565,8 +553,8 @@
               if (error.response.data.success == false) {
                 switch (error.response.data.code) {
                   case 801:
-                      console.log(error.response.data.code +' '+ error.response.data.message);
-                      console.log(error.response.data);
+                      //console.log(error.response.data.code +' '+ error.response.data.message);
+                      //console.log(error.response.data);
                       this.alertError = true;
                       this.cargando = false;
                       this.textoError = error.response.data.message;
@@ -587,8 +575,8 @@
 
       restaurarEscuelaEliminada(){
         
-        console.log("id: "+this.escuelaEditar.id);
-        var url =`http://127.0.0.1:8000/api/v1/escuela/restore/${this.escuelaEditar.id}`;
+        //console.log("id: "+this.escuelaEditar.id);
+        var url =this.$store.state.rutaDinamica+`api/v1/escuela/restore/${this.escuelaEditar.id}`;
         axios.post(url,null,this.$store.state.config)
         .then((result)=>{
         if (result.data.success == true) {
@@ -600,23 +588,23 @@
         }
         }).catch((error)=>{
           this.dialogRestaurarEscuela= false;
-            console.log(error);
+            //console.log(error);
             if (error.message == 'Network Error') {
-                console.log(error)
+                //console.log(error)
                 this.alertError = true;
                 this.textoError = "Error al modificar el usuario, intente mas tarde."
             }
             else{
                 if (error.response.data.success == false) {
                     if(error.response.data.code == 901){
-                        console.log(error.response.data.code +' '+ error.response.data.message);
-                        console.log(error.response.data);
+                        //console.log(error.response.data.code +' '+ error.response.data.message);
+                        //console.log(error.response.data);
                         this.textoError = error.response.data.message;
                         this.alertError = true;
                     }
                     if(error.response.data.code == 902){
-                        console.log(error.response.data.code +' '+ error.response.data.message);
-                        console.log(error.response.data);
+                        //console.log(error.response.data.code +' '+ error.response.data.message);
+                        //console.log(error.response.data);
                         this.textoError = error.response.data.message;
                         this.alertError = true;
                     }                    
@@ -627,7 +615,7 @@
 
       crearEscuela(){
         this.dessertsAux = [];
-        var url = 'http://127.0.0.1:8000/api/v1/escuela';
+        var url = this.$store.state.rutaDinamica+'api/v1/escuela';
         let post ={
           "nombre": this.escuela.nombre,
           "cod_escuela":this.escuela.cod,
@@ -643,7 +631,7 @@
         })
         .catch((error) => {
           if (error.message == 'Network Error') {
-            console.log(error);
+            //console.log(error);
             this.resetCreacionEscuela();
             this.alertError = true;
             this.textoError = 'Error en la conexion, intente más tarde';
@@ -651,15 +639,15 @@
             if (error.response.data.success == false) {
               switch (error.response.data.code) {
                 case 301:
-                    console.log(error.response.data.code +' '+ error.response.data.message);
-                    console.log(error.response.data);
+                    //console.log(error.response.data.code +' '+ error.response.data.message);
+                    //console.log(error.response.data);
                     this.resetCreacionEscuela();
                     this.alertError = true;
                     this.textoError = error.response.data.message;
                     break;
                 case 302:
-                    console.log(error.response.data.code +' '+ error.response.data.message);
-                    console.log(error.response.data);
+                    //console.log(error.response.data.code +' '+ error.response.data.message);
+                    //console.log(error.response.data);
                     this.resetCreacionEscuela();
                     this.alertError = true;
                     this.textoError = error.response.data.message;
@@ -672,7 +660,7 @@
         });
       },
       editarEscuela(item) {
-        var url = 'http://127.0.0.1:8000/api/v1/escuela/'+item.id;
+        var url = this.$store.state.rutaDinamica+'api/v1/escuela/'+item.id;
         let put ={
           "nombre": this.escuelaEditar.nombre,
           "cod_escuela":  this.escuelaEditar.cod,
@@ -689,7 +677,7 @@
         })
         .catch((error) => {
           if (error.message == 'Network Error') {
-            console.log(error);
+            //console.log(error);
             this.resetEditarEscuela();
             this.alertError = true;
             this.textoError = 'Error en la conexion, intente más tarde';
@@ -697,24 +685,24 @@
             if (error.response.data.success == false) {
               switch (error.response.data.code) {
                 case 1:
-                    console.log(error.response.data.code +' '+ error.response.data.message);
-                    console.log(error.response.data);
+                    //console.log(error.response.data.code +' '+ error.response.data.message);
+                    //console.log(error.response.data);
                     this.resetEditarEscuela();
                     this.dialogModificar=false;
                     this.alertError = true;
                     this.textoError = error.response.data.message;
                     break;
                 case 602:
-                    console.log(error.response.data.code +' '+ error.response.data.message);
-                    console.log(error.response.data);
+                    //console.log(error.response.data.code +' '+ error.response.data.message);
+                    //console.log(error.response.data);
                     this.resetEditarEscuela();
                     this.dialogModificar=false;
                     this.alertError = true;
                     this.textoError = error.response.data.message;
                     break;
                 case 604:
-                    console.log(error.response.data.code +' '+ error.response.data.message);
-                    console.log(error.response.data);
+                    //console.log(error.response.data.code +' '+ error.response.data.message);
+                    //console.log(error.response.data);
                     this.resetEditarEscuela();
                     this.dialogModificar=false;
                     this.alertError = true;
@@ -728,7 +716,7 @@
         });
       },
       borrarEscuela (item) {
-        var url = 'http://127.0.0.1:8000/api/v1/escuela/'+item.id;
+        var url = this.$store.state.rutaDinamica+'api/v1/escuela/'+item.id;
         axios.delete(url,this.$store.state.config)
         .then((result)=>{
           if (result.data.success == true) {
@@ -741,7 +729,7 @@
         })
         .catch((error) => {
           if (error.message == 'Network Error') {
-            console.log(error);
+            //console.log(error);
             this.dialogEliminar=false;
             this.alertError = true;
             this.textoError = 'Error al borrar escuela, intente más tarde';
@@ -749,15 +737,15 @@
             if (error.response.data.success == false) {
               switch (error.response.data.code) {
                 case 701:
-                    console.log(error.response.data.code +' '+ error.response.data.message);
-                    console.log(error.response.data);
+                    //console.log(error.response.data.code +' '+ error.response.data.message);
+                    //console.log(error.response.data);
                     this.dialogEliminar = false;
                     this.alertError = true;
                     this.textoError = error.response.data.message;
                     break;
                 case 702:
-                    console.log(error.response.data.code +' '+ error.response.data.message);
-                    console.log(error.response.data);
+                    //console.log(error.response.data.code +' '+ error.response.data.message);
+                    //console.log(error.response.data);
                     this.dialogEliminar = false;
                     this.alertError = true;
                     this.textoError = error.response.data.message;
