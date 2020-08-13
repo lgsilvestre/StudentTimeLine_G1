@@ -36,5 +36,9 @@ class SendMail extends Mailable
             return $this->subject($this->details['motivo'])
                         ->view('emails.sendmailContactar');
         }
+        if($this->details['opcion']==4){
+            return $this->subject($this->details['motivo'])
+                        ->view('emails.sendMailRecordatorio');
+        }
     }
 }
