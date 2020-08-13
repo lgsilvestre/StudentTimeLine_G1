@@ -584,12 +584,11 @@ export default {
              var url =this.$store.state.rutaDinamica+`api/v1/usuario/restore/${this.datosUsuario.id}`;
             axios.post(url,null,this.$store.state.config)
             .then((result)=>{
-            if (result.data.success == true) {
+            
                 this.obtenerListaUsuariosEliminados();
                 this.obtenerUsuarios(); 
                 this.alertaExito = true;
                 this.textoAlertas = result.data.message
-            }
             }).catch((error)=>{
                 console.log(error);
                 // if (error.message == 'Network Error') {
