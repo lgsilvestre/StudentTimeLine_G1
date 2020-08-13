@@ -85,6 +85,7 @@ Route::group(['middleware' => [], 'prefix' => 'v1'], function () {
     Route::post('/auth/sendRestartPassword', 'TokensController@sendRestartPassword');
     Route::get('/auth/respondWithToken', 'TokensController@respondWithToken');
     Route::post('/estudiante/exportar', 'ExportarExcelController@exportar');
+    Route::get('/datos', 'DatosInicialesController@datos');
 });
 
 #Route::get('/estudiante/exportar', 'ExportarExcelController@exportar');
