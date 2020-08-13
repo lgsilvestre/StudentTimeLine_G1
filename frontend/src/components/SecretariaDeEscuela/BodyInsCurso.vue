@@ -267,7 +267,7 @@
                                 label="Escuela"
                                 :items="listaEscuela"
                                 item-text="nomEscuela"
-                                item-value="id"
+                                item-value="idEscuela"
                                 :rules="[() => !!datosCurso.idEscuela ||'Requerido']"
                                 outlined
                                 prepend-inner-icon="mdi-school"
@@ -1631,11 +1631,12 @@ export default {
         
         crearCurso(){ 
             var valido=this.$refs.formCrearCurso.validate();
-            // console.log("semestre valido :" + valido)
+            console.log("llege aca : "+valido )
             if(valido == true){
                 var nombre=this.datosCurso.nombre; 
                 var plan = this.datosCurso.plan;
-                var escuela = this.datosCurso.escuela      
+                var escuela = this.datosCurso.idEscuela
+
                 if(nombre!='' && plan!='' && escuela!=''){
                     let post = {
                     "nombre": nombre,
@@ -1644,7 +1645,6 @@ export default {
                     "descripcion": 'sin descripcion',
                     }
                     var url = this.$store.state.rutaDinamica+'api/v1/curso';
-                    // console.log(post)
                     axios.post(url, post, this.$store.state.config)
                     .then((result) => {
                         // console.log(result)
@@ -1672,11 +1672,9 @@ export default {
         },
 
         resetCrearCurso(){
-            this.datosCurso.nombre ="";
-            this.datosCurso.plan ="";
-            this.datosCurso.escuela ="";
-            this.datosCurso.descripcion ="";
+            this.datosCurso.nombre ='';
             this.dialogCrearCurso = false;
+            this.$refs.formCrearCurso.reset()
             this.KeyDialogCrearCurso ++;
         },
 
@@ -1694,17 +1692,18 @@ export default {
             let put ={                
                 "nombre": this.datosCurso.nombre,
                 "plan": this.datosCurso.plan,
-                "escuela": this.datosCurso.escuela,
+                "escuela": this.datosCurso.idEscuela,
                 "descripcion": ''
             };
+            console.log(put)
             axios.put(url,put,this.$store.state.config)
             .then((result)=>{
-                if (result.statusText=='OK') {                
-                    this.alertaExito = true;
-                    this.textoAlertas = "Se modificó el curso con exito."
-                    this.obtenerCursos(); 
-                    this.resetModificarCurso();
-                }
+                this.alertaExito = true;
+                this.textoAlertas = "Se modificó el curso con exito."
+                this.obtenerCursos(); 
+                this.resetModificarCurso();
+              
+                
             }).catch((error)=>{                
                 if (error.message == 'Network Error') {
                     // console.log(error)
@@ -1756,12 +1755,11 @@ export default {
            var url = this.$store.state.rutaDinamica+'api/v1/curso/'+this.datosCurso.id;
             axios.delete(url,this.$store.state.config)
             .then((result)=>{
-            if (result.statusText=='OK') {
                 this.obtenerCursos();
                 this.resetEliminarCurso(); 
                 this.alertaExito = true;
                 this.textoAlertas = "Se elimino el curso con exito "
-            }
+            
             }).catch((error)=>{
                 if (error.message == 'Network Error') {
                     // console.log(error)
