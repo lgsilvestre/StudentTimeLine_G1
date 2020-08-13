@@ -1963,7 +1963,7 @@ export default {
             
             // form_solicitarEstudianteValido
             var valido=this.$refs.solicitud.validate();
-            // console.log("semestre valido :" + valido)
+             console.log("semestre valido :" + valido)
             if(valido == true){
                 this.cargando = true;
                 let post = {
