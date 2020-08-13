@@ -146,7 +146,7 @@ export default {
               //console.log(error);
               this.RCstatus = false;
               this.alertError= true;
-              this.textoError= "Error usted no esta registrado o existe un problema en red, intente mas tarde";
+              this.textoError= "Error usted no está registrado o existe un problema en red, inténtelo más tarde.";
           } else {
               this.RCstatus = false;
               if (error.response.data.success == false) {
