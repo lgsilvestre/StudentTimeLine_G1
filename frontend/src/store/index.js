@@ -39,7 +39,7 @@ export default new Vuex.Store({
         mensajeErrorLogin: '',
         perfilEstudiante: '',
         infoSemestre: null,
-        rutaDinamica: 'http://127.0.0.1:8000/',
+        rutaDinamica: 'https://backend.proyectomapache.cl/',
     },
     mutations: {
         calcularRol(state, nuevoSemestre) {
@@ -141,7 +141,7 @@ export default new Vuex.Store({
             axios.get(url, state.config)
                 .then((result) => {
                     console.log(result);
-                    if (result.statusText == 'OK') {
+                    
                         state.status = '';
                         state.usuario = null;
                         state.RCstatus = null;
@@ -157,7 +157,7 @@ export default new Vuex.Store({
                         state.config.headers.Authorization = '';
                         state.config2.headers.Authorization = '';
                         router.push({ path: '/' });
-                    }
+                    
                 })
                 .catch((error) => {
                     if (error.message == 'Network Error') {
