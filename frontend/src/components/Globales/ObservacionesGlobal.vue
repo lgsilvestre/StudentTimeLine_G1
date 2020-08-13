@@ -63,7 +63,7 @@
             </v-col>          
         </v-row>
         
-        <!--<v-snackbar
+        <v-snackbar
         v-model="alertError"
         :timeout=delay
         bottom
@@ -187,7 +187,7 @@
                 })
                 .catch((error) => {
                     if (error.message == 'Network Error') {
-                        console.log(error);
+                        //console.log(error);
                         this.alertError = true;
                         this.cargando = false;
                         this.textoError = 'Error al cargar los datos, intente más tarde'
@@ -195,13 +195,16 @@
                         if (error.response.data.success == false) {
                             switch (error.response.data.code) {
                             case 101:
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
+                                //console.log(error.response.data.code +' '+ error.response.data.message);
+                                //console.log(error.response.data);
                                 this.alertError = true;
                                 this.cargando = false;
                                 this.textoError = error.response.data.message;
                                 break;
                             default:
+                                this.alertError = true;
+                                this.cargando = false;
+                                this.textoError = error.response.data.message;
                                 break;
                             }
                         }
