@@ -183,6 +183,33 @@ class EstudianteController extends Controller
                 'data' => ['estudiante'=>$estudiante]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
+            if($ex->errorInfo[1]==1062){
+                if(strlen(strstr($ex->errorInfo[2],'estudiantes_matricula_unique'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: La Matricula ingresada ya existe en nuestros registros. Por favor ingrese otra Matricula",
+                        'data' => ['error'=>$ex]
+                    ], 409 );
+                }else if(strlen(strstr($ex->errorInfo[2],'estudiantes_rut_unique'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El Rut ingresado ya existe en nuestros registros. Por favor ingrese otro Rut",
+                        'data' => ['error'=>$ex]
+                    ], 409 );
+                }else if(strlen(strstr($ex->errorInfo[2],'estudiantes_correo_unique'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El Correo ingresado ya existe en nuestros registros. Por favor ingrese otro Correo",
+                        'data' => ['error'=>$ex]
+                    ], 409 );
+                }
+
+            }
+
+
             return response()->json([
                 'success' => false,
                 'code' => 302,
@@ -388,6 +415,32 @@ class EstudianteController extends Controller
                 'data' => ['estudiante'=>$estudiante]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
+            if($ex->errorInfo[1]==1062){
+                if(strlen(strstr($ex->errorInfo[2],'estudiantes_matricula_unique'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: La Matricula ingresada ya existe en nuestros registros. Por favor ingrese otra Matricula",
+                        'data' => ['error'=>$ex]
+                    ], 409 );
+                }else if(strlen(strstr($ex->errorInfo[2],'estudiantes_rut_unique'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El Rut ingresado ya existe en nuestros registros. Por favor ingrese otro Rut",
+                        'data' => ['error'=>$ex]
+                    ], 409 );
+                }else if(strlen(strstr($ex->errorInfo[2],'estudiantes_correo_unique'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El Correo ingresado ya existe en nuestros registros. Por favor ingrese otro Correo",
+                        'data' => ['error'=>$ex]
+                    ], 409 );
+                }
+
+            }
+
             return response()->json([
                 'success' => false,
                 'code' => 604,
