@@ -90,13 +90,13 @@
                                             </v-card-title>
                                         </v-col>
                                         <v-col cols="12" class=" pt-1 pl-0 pr-0 pb-0  text-right" >
-                                            <v-menu class="text-left " offset-y>
+                                            <v-menu class="text-left " offset-y :disabled="!semestreValido">
                                                 <template   v-slot:activator="{ on, attrs }">
-                                                    <v-btn icon fab color="primary" x-small v-bind="attrs" v-on="on" >
+                                                    <v-btn icon fab color="primary" x-small v-bind="attrs" v-on="on" :disabled="!semestreValido">
                                                         <v-icon>fas fa-ellipsis-v</v-icon>
                                                     </v-btn>
                                                 </template>
-                                                <v-list :disabled="!semestreValido">
+                                                <v-list >
                                                     <v-list-item  v-for="(acciones, index) in listaAccionesSobreInstaciaCurso" :key="index"
                                                     @click="acionesSobreInstanciaCurso(acciones,item)" >
                                                         <v-list-item-title>{{ acciones }}</v-list-item-title>
