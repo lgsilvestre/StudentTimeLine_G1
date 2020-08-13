@@ -479,8 +479,8 @@ export default {
             //Reglas
             reglasNombre:[
                 v => !!v || 'Requerido',
-                v => /^[a-zA-Z ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',
-                v => /^[a-zA-Z ]+$/.test(v) || 'Nombre no Válido.'
+                v => /^[a-zA-ZÀ-ÿ\u00f1\u00d1 ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',
+                v => /^[a-zA-ZÀ-ÿ\u00f1\u00d1 ]+$/.test(v) || 'Nombre no Válido.'
             ],
             reglasEmail: [
                 v => !!v || 'Requerido',
@@ -722,7 +722,9 @@ export default {
                         correo: element.email,   
                         escuela: element.escuela,
                     };                         
-                    
+                    if(element.escuelaAux != "no posee otra escuela"){
+                        usuario.escuelaAux = element.escuelaAux;
+                    }
                     this.listaUsuariosAux[index]=usuario;
                 }
                 this.cargando = false;
@@ -856,7 +858,10 @@ export default {
                 };
                 for(var numEscuela = 0; numEscuela < this.listaEscuela.length; numEscuela++){                        
                     if(item.escuela == this.listaEscuela[numEscuela].nombre){                                                   
-                        this.datosUsuario.escuela = this.listaEscuela[numEscuela].id;
+                        this.datosUsuario.escuela = this.listaEscuela[numEscuela].id;                        
+                    }
+                    if(item.escuelaAux == this.listaEscuela[numEscuela].nombre){                                                   
+                        this.datosUsuario.escuelaAux = this.listaEscuela[numEscuela].id;                        
                     }
                  };  
             }else{

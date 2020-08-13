@@ -70,7 +70,7 @@ export default new Vuex.Store({
                 "email": lista.email,
                 "password": lista.pass,
             };
-            var url = state.rutaDinamica+'api/v1/auth/login';
+            var url = state.rutaDinamica + 'api/v1/auth/login';
             axios.post(url, post)
                 .then((result) => {
                     //console.log(result.data.data);
@@ -137,27 +137,27 @@ export default new Vuex.Store({
                 });
         },
         unLogin(state) {
-            var url = state.rutaDinamica+'api/v1/auth/logout';
+            var url = state.rutaDinamica + 'api/v1/auth/logout';
             axios.get(url, state.config)
                 .then((result) => {
-                    //console.log(result);
-                    
-                        state.status = '';
-                        state.usuario = null;
-                        state.RCstatus = null;
-                        state.tk = null;
-                        state.drawelAdmin = false;
-                        state.admin = false;
-                        state.profesor = false;
-                        state.secretariaEscuela = false;
-                        state.numProfesores = 70;
-                        state.numObservaciones = 69;
-                        state.numCarreras = 7;
-                        state.numEstudiantes = 1234;
-                        state.config.headers.Authorization = '';
-                        state.config2.headers.Authorization = '';
-                        router.push({ path: '/' });
-                    
+                    console.log(result);
+
+                    state.status = '';
+                    state.usuario = null;
+                    state.RCstatus = null;
+                    state.tk = null;
+                    state.drawelAdmin = false;
+                    state.admin = false;
+                    state.profesor = false;
+                    state.secretariaEscuela = false;
+                    state.numProfesores = 70;
+                    state.numObservaciones = 69;
+                    state.numCarreras = 7;
+                    state.numEstudiantes = 1234;
+                    state.config.headers.Authorization = '';
+                    state.config2.headers.Authorization = '';
+                    router.push({ path: '/' });
+
                 })
                 .catch((error) => {
                     if (error.message == 'Network Error') {
@@ -166,10 +166,57 @@ export default new Vuex.Store({
                     }
                 });
         },
+        registrarUsuario(state, nuevoUsuario) {
+            var aux;
+            if (nuevoUsuario.role == "Administrador") {
+                aux = "admin"
+            };
+            if (nuevoUsuario.role == "Secretaría de Escuela") {
+                aux = "secretaria de escuela"
+            };
+            if (nuevoUsuario.role == "Profesor") {
+                aux = "profesor"
+            };
+            let post = {
+                "foto": null,
+                "nombre": nuevoUsuario.nombre,
+                "escuela": nuevoUsuario.escuela,
+                "role": aux,
+                "email": nuevoUsuario.correo,
+                "password": nuevoUsuario.contrasena,
+            }
+            var url = state.rutaDinamica + 'api/v1/usuario';
+            // console.log(state.config);
+            console.log(url)
+            console.log(post)
+            axios.post(url, post, state.config)
+                .then((result) => {
+                    console.log(result.statusText);
+                });
+        },
+        updateDatosUsuarioPerfil(state, datosUsuario) {
+            console.log(state.tk);
+            let put = {
+                "nombre": datosUsuario.nombre,
+                "escuela": null,
+                "rol": null,
+                "foto": null,
+                "email": datosUsuario.correo,
+                "password": datosUsuario.contrasena,
+            }
+            var url = state.rutaDinamica + 'api/v1/usuario/' + state.usuario.data.user.id;
+            console.log(state.config);
+            axios.put(url, put, state.config)
+                .then((result) => {
+                    console.log(result.statusText);
+                });
+        },
+        // guardarPerfil() {
+        //     //this.state
+        // }
 
     },
-    methods: {
-    },
+    methods: {},
     actions: {},
     modules: {}
 })
