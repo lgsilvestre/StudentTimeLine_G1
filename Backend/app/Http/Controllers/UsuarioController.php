@@ -601,9 +601,15 @@ class UsuarioController extends Controller{
                         'code' => 302,
                         'message' => "Error: El correo ingresado ya existe en el sistema. \nPor favor ingrese otro",
                         'data' => ['error'=>$ex]
-                    ], 409  );
+                    ], 409 );
                 }
             }
+            return response()->json([
+                'success' => false,
+                'code' => 302,
+                'message' => "Error: No cuenta con los permisos necesarios para realizar esta operacion",
+                'data' => ['error'=>$ex]
+            ], 409);
 
         }
     }
