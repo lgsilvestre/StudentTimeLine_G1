@@ -1234,6 +1234,7 @@ export default {
             axios.post(url,post,this.$store.state.config)
             .then((result)=>{
                 this.obtenerCategorias();
+                this.$refs.form_añadirObservacion.resetValidation();
                 this.dialogCrearCategoria = false;
                 this.alertAcept = true;
                 this.textoAcept = "Se agregó la categoria con exito";
