@@ -484,7 +484,7 @@ export default {
             ],
             reglasEmail: [
                 v => !!v || 'Requerido',
-                v => /.+@utalca.cl/.test(v) || /.+@alumnos.utalca.cl/.test(v) || 'Correo no Válido', 
+                v => /.+@utalca\.cl/.test(v) || /.+@alumnos\.utalca\.cl/.test(v) || 'Correo no Válido', 
             ],
             reglasContraseña:[
                 v => !!v || 'Requerido',
@@ -518,7 +518,8 @@ export default {
     },
     created () {   
         this.obtenerEscuelas();   
-        this.obtenerUsuarios();        
+        this.obtenerUsuarios();
+        this.datosUsuario.imagen = null;       
     },
     methods: {
         validarCrearUsuario(){
@@ -584,12 +585,11 @@ export default {
              var url =this.$store.state.rutaDinamica+`api/v1/usuario/restore/${this.datosUsuario.id}`;
             axios.post(url,null,this.$store.state.config)
             .then((result)=>{
-            if (result.data.success == true) {
+            
                 this.obtenerListaUsuariosEliminados();
                 this.obtenerUsuarios(); 
                 this.alertaExito = true;
                 this.textoAlertas = result.data.message
-            }
             }).catch((error)=>{
                 console.log(error);
                 // if (error.message == 'Network Error') {
@@ -865,12 +865,10 @@ export default {
             }
             axios.put(url,put,this.$store.state.config)
             .then((result)=>{
-            if (result.statusText=='OK') {
                 this.alertaExito = true;
                 this.textoAlertas = "Se modificó el usuario con exito."
                 this.obtenerUsuarios(); 
                 this.resetModificacionUsuario();
-            }
             }).catch((error)=>{                
                 if (error.message == 'Network Error') {
                     console.log(error)
@@ -925,12 +923,10 @@ export default {
             var url = this.$store.state.rutaDinamica+'api/v1/usuario/'+this.datosUsuario.id;
                 axios.delete(url,this.$store.state.config)
                 .then((result)=>{
-                if (result.statusText=='OK') {
                     this.obtenerUsuarios();
                     this.resetEliminarUsuario(); 
                     this.alertaExito = true;
                     this.textoAlertas = "Se elimino el usuario con exito "
-                }
                 }).catch((error)=>{
                     if (error.message == 'Network Error') {
                         console.log(error)
