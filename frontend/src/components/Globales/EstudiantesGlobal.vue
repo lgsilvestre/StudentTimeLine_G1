@@ -668,6 +668,8 @@
                     if (result.data.success == true) {
                         this.resetImportarEstudiantes();
                         this.obtenerEstudiantes();
+                        this.alertAcept = true;
+                        this.textoAcept = 'Se realizó la operación correctamente';
                     }
                 })
                 .catch((error)=>{
@@ -920,7 +922,7 @@
                 document.body.appendChild(link);
                 link.click();
                 this.alertAcept = true;
-                this.textoAcept = 'Se realizó la operación correctamente'
+                this.textoAcept = 'Se realizó la operación correctamente';
                 this.dialogExportar=false;
                 this.resetYCerrarExportar();
                 
