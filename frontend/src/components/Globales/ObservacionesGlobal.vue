@@ -110,7 +110,7 @@
         > 
             <v-icon color="secondary">fas fa-times</v-icon>
         </v-btn>
-        </v-snackbar>!-->
+        </v-snackbar>
     </v-container>
 
 </template>
