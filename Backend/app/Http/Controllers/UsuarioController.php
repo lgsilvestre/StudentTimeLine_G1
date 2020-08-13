@@ -827,5 +827,65 @@ class UsuarioController extends Controller{
         }
     }
 
+    /**
+     * 
+     */
+    public function recordatorio(Request $request){
+        $entradas = $request->only('descripcion', 'motivo');
+        $validator = Validator::make($entradas, [
+            'descripcion' => ['required', 'string'],
+            'motivo' => ['required', 'string']
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'code' => 301,
+                'message' => 'Error en datos ingresados',
+                'data' => ['error'=>$validator->errors()]
+            ], 422);
+        }
+        try{
+            $credenciales = JWTAuth::parseToken()->authenticate();
+            $usuarios = User::Where('rol', 'profesor')->Where('escuela', $credenciales->escuela)->get();
+            $details = array(
+                'opcion' => 4,
+                'motivo' => $entradas['motivo'],
+                'escuela' => $credenciales->getEscuela->nombre,
+                'profesor' => '',
+                'descripcion' => $entradas['descripcion'],
+            );
+            foreach($usuarios as $usuario){
+                $details['profesor']= $usuario->nombre;
+                \Mail::to($usuario['email'])->send(new SendMail($details));
+            }
+            if($credenciales->escuelaAux!=null){
+                $usuarios = User::Where('rol', 'profesor')->Where('escuela', $credenciales->escuelaAux)->get();
+                $details = array(
+                    'opcion' => 4,
+                    'motivo' => $entradas['motivo'],
+                    'escuela' => $credenciales->getEscuelaAux->nombre,
+                    'profesor' => '',
+                    'descripcion' => $entradas['descripcion'],
+                );
+                foreach($usuarios as $usuario){
+                    $details['profesor']= $usuario->nombre;
+                    \Mail::to($usuario['email'])->send(new SendMail($details));
+                }
+            }
+            return response()->json([
+                'success' => true,
+                'code' => 1,
+                'message' => 'Se a mandado el correo exitosamente',
+                'data' => null
+            ], 200);
+        }catch(\Exception $e){
+            return response()->json([
+                'success' => false,
+                'code' => 4,
+                'message' => 'Error',
+                'data' => $e
+            ], 502);
+        }
+    }
 
 }
