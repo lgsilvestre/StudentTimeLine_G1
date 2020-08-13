@@ -76,7 +76,7 @@ const routes = [
       },
       {
         //Enrutamiento de la vista del administrador
-        path: 'cursos/:enrutamiento/id=:id',
+        path: 'semestres/:enrutamiento/id=:id',
         name: 'estudiantesPerfilAdministrador2',
         component: () =>import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/EstudiantePerfil.vue'),
         meta: {
@@ -103,7 +103,7 @@ const routes = [
       },
             {
                 //Enrutamiento de la vista cursosAdministrador
-                path: 'cursos',
+                path: 'semestres',
                 name: 'cursosAdministrador',
                 component: () =>
                     import ( /* webpackChunkName: "" */ '@/components/SecretariaDeEscuela/BodyCursos.vue'),
@@ -113,7 +113,7 @@ const routes = [
             },
             {
                 //Enrutamiento de la vista cursosAdministrador
-                path: 'cursos/:id',
+                path: 'semestres/:id',
                 name: 'insCursosAdministrador',
                 component: () =>
                     import ( /* webpackChunkName: "" */ '@/components/SecretariaDeEscuela/BodyInsCurso.vue'),
@@ -178,7 +178,7 @@ const routes = [
             },
             {
                 //Enrutamiento de la vista del administrador
-                path: 'cursos/:enrutamiento/id=:id',
+                path: 'semestres/:enrutamiento/id=:id',
                 name: 'estudiantesPerfilSecretariaEscuela2',
                 component: () =>
                     import ( /* webpackChunkName: "Administrador" */ '@/components/Globales/EstudiantePerfil.vue'),
@@ -198,7 +198,7 @@ const routes = [
             },
             {
                 //Enrutamiento de la vista cursosAdministrador
-                path: 'cursos',
+                path: 'semestres',
                 name: 'cursosSecretariaEscuela',
                 component: () =>
                     import ( /* webpackChunkName: "" */ '@/components/SecretariaDeEscuela/BodyCursos.vue'),
@@ -208,7 +208,7 @@ const routes = [
             },
             {
                 //Enrutamiento de la vista cursosAdministrador
-                path: 'cursos/:id',
+                path: 'semestres/:id',
                 name: 'insCursosSecretariaEscuela',
                 component: () =>
                     import ( /* webpackChunkName: "" */ '@/components/SecretariaDeEscuela/BodyInsCurso.vue'),
@@ -333,7 +333,6 @@ router.beforeEach((to, from, next) => {
                 next();
             }
         } else {
-            console.log('holaaa3');
             next();
         }
     };

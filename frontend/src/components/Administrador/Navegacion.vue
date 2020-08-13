@@ -10,7 +10,7 @@
                     ></v-img>
                 </v-list-item-avatar>
                 <v-list-item-title class="white--text letra pl-2" ><strong>Perfil</strong></v-list-item-title>
-            </v-list-item>            
+            </v-list-item>    
         </template>
         <span><strong>Perfil</strong></span>
     </v-tooltip>
@@ -54,7 +54,7 @@
 
         <v-tooltip left color="primary" :disabled="!drawers.miniVarianteAdm">
             <template v-slot:activator="{ on }">
-                <v-list-item  class="difuminado" active-class="activacion" to="/administrador/cursos" v-on="on">
+                <v-list-item  class="difuminado" active-class="activacion" to="/administrador/semestres" v-on="on">
                     <v-list-item-icon class="pl-1">
                         <v-icon color="white">fas fa-book</v-icon>
                     </v-list-item-icon>
@@ -87,10 +87,15 @@
             </template>
             <span><strong>Observaciones</strong></span>
         </v-tooltip>
-        
+        <v-list-item v-if="$vuetify.breakpoint.smAndDown ? true:false" class=" difuminado align-self-end" style="background-color: #FF6B6B" @click="unLogin">
+            <v-list-item-icon >
+                <v-icon color="white" style="font-size: 125%">fas fa-power-off</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title class="white--text letra" ><strong>Cerrar sesion</strong></v-list-item-title>
+        </v-list-item>
     </v-list>
-    <template v-slot:append >
-        <v-list-item class=" difuminado" style="background-color: #FF6B6B" @click="unLogin">
+    <template v-slot:append>
+        <v-list-item v-if="$vuetify.breakpoint.smAndDown ? false:true" class=" difuminado align-self-end" style="background-color: #FF6B6B" @click="unLogin">
             <v-list-item-icon >
                 <v-icon color="white" style="font-size: 125%">fas fa-power-off</v-icon>
             </v-list-item-icon>
@@ -147,7 +152,16 @@ export default {
             {title:'Contactar administrador', icon:'fas fa-envelope'},
             {title:'contactar secretaria de escuela', icon:'fas fa-envelope'},
         ],
-        
+        admins: [
+        ['Management', 'people_outline'],
+        ['Settings', 'settings'],
+      ],
+      cruds: [
+        ['Create', 'add'],
+        ['Read', 'insert_drive_file'],
+        ['Update', 'update'],
+        ['Delete', 'delete'],
+      ],
         }
     },
     computed: {

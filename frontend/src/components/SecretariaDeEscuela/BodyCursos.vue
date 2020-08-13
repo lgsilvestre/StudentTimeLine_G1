@@ -47,8 +47,7 @@
                 </v-card-title> 
                 </v-img>
                 <!-- <v-container> -->
-                    <v-data-iterator :items="listaSemestres" :search="search" :sort-by="sortBy.toLowerCase()" class="px-2 py-2" :loading="cargando"
-                    >
+                    <v-data-iterator :items="listaSemestres" :search="search" class="px-2 py-2" :loading="cargando"  >
                         <template v-slot:default="props">
                             <v-row >
                                 <v-col v-for="item in props.items" :key="item.nomCurso" cols="12" sm="6" md="4" lg="3">
@@ -357,7 +356,7 @@ export default {
             //busqueda
             cargando: false,
             search: '',
-            sortBy:'anio',
+            // sortBy:'anio',
             headers: [
                 { text: 'id', value: 'id' },
                 { text: 'semestre', value: 'semestre' },
@@ -387,17 +386,6 @@ export default {
                 ErrorSemestreDuplicado:"Error el semestre ya se encuentra registrado.",
                 ErrorDatosIngresados:"Error en los datos Ingresados",
         }
-    },
-    _props: {
-    item: {
-        id: '',semestre: '',anio: '',deleted_at: ''
-    }
-    },
-    get props() {
-        return this._props;
-    },
-    set props(value) {
-        this._props=value;
     },
     beforeMount(){
         /**
@@ -434,7 +422,7 @@ export default {
             this.cargando = true;
             this.listaSemestresAux = [];
             var aux;
-            var url = 'http://127.0.0.1:8000/api/v1/semestre';
+            var url = this.$store.state.rutaDinamica+'api/v1/semestre';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 if (result.data.success==true){
@@ -451,6 +439,7 @@ export default {
                     }
                     this.cargando = false;
                     this.listaSemestres = this.listaSemestresAux;
+                    this.listaSemestres.reverse();
                 }
             }
             ).catch((error)=>{
@@ -492,7 +481,7 @@ export default {
                         "semestre": this.semestreActual,
                         "anio": this.añoActual,
                     }
-                    var url = 'http://127.0.0.1:8000/api/v1/semestre ';
+                    var url = this.$store.state.rutaDinamica+'api/v1/semestre ';
                 axios.post(url, post, this.$store.state.config)
                 .then((result) => {
                     if (result.data.success==true){
@@ -536,13 +525,13 @@ export default {
         modificarSemestre(){
             var año_Aux = new Date().getFullYear()
             if(this.añoActual <= año_Aux && this.añoActual>= 1981 && this.semestreActual>=1 && this.semestreActual <= 3){
-                 console.log("ENTRE")
+                //  console.log("ENTRE")
                  let put = {
                         "semestre": this.semestreActual,
                         "anio": this.añoActual
                     }
                     // console.log(post)
-                    var url = `http://127.0.0.1:8000/api/v1/semestre/${this.semestreActual_1.id} `;
+                    var url = this.$store.state.rutaDinamica+`api/v1/semestre/${this.semestreActual_1.id} `;
                     axios.put(url, put, this.$store.state.config)
                     .then((result) => {
                         if (result.data.success==true){
@@ -636,7 +625,7 @@ export default {
          * deshabilita un semetre del sistema
          */
         eliminarSemestre(){
-            var url = 'http://127.0.0.1:8000/api/v1/semestre/'+this.semestreActual_1.id;
+            var url = this.$store.state.rutaDinamica+'api/v1/semestre/'+this.semestreActual_1.id;
                 axios.delete(url,this.$store.state.config)
                 .then((result)=>{
                 if (result.data.success==true) {
@@ -647,25 +636,25 @@ export default {
                 }
                 }).catch((error)=>{
                     if (error.message == 'Network Error') {
-                        console.log(error)
+                        // console.log(error)
                         this.textoAlertas = "Error al eliminar el semestre, intente mas tarde."
                         this.alertaError = true;
                     }
                     else{
                         if (error.response.data.success == false) {
                             if(error.response.data.code == 701){
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
+                                // console.log(error.response.data.code +' '+ error.response.data.message);
+                                // console.log(error.response.data);
                                 this.textoAlertas = error.response.data.message;
                                 this.alertaError = true;
-                                 this.dialogEliminarSemestre= false;
+                                this.dialogEliminarSemestre= false;
                             }
                             if(error.response.data.code == 702){
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
+                                // console.log(error.response.data.code +' '+ error.response.data.message);
+                                // console.log(error.response.data);
                                 this.textoAlertas = error.response.data.message;
                                 this.alertaError = true;
-                                 this.dialogEliminarSemestre= false;
+                                this.dialogEliminarSemestre= false;
                             }
                         }
                     }
@@ -676,7 +665,7 @@ export default {
          * Reabre un semestre que halla sido cerraado.
          */
         reabrirSemestre(){
-             var url = 'http://127.0.0.1:8000/api/v1/semestre/restore/'+this.semestreActual_1.id;
+             var url = this.$store.state.rutaDinamica+'api/v1/semestre/restore/'+this.semestreActual_1.id;
                 axios.post(url,null,this.$store.state.config)
                 .then((result)=>{
                 if (result.data.success==true) {
@@ -687,22 +676,22 @@ export default {
                 }
                 }).catch((error)=>{
                     if (error.message == 'Network Error') {
-                        console.log(error)
+                        // console.log(error)
                         this.textoAlertas = "Error al eliminar el semestre, intente mas tarde."
                         this.alertaError = true;
                     }
                     else{
                         if (error.response.data.success == false) {
                             if(error.response.data.code == 901){
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
+                                // console.log(error.response.data.code +' '+ error.response.data.message);
+                                // console.log(error.response.data);
                                 this.textoAlertas = "Error en la recuperacion del semestre, contacte al administrador";
                                 this.alertaError = true;
                                  this.dialogReAbrirSemestre= false;
                             }
                             if(error.response.data.code == 902){
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
+                                // console.log(error.response.data.code +' '+ error.response.data.message);
+                                // console.log(error.response.data);
                                 this.textoAlertas =  "Error en la recuperacion del semestre, contacte al administrador";
                                 this.alertaError = true;
                                  this.dialogReAbrirSemestre= false;

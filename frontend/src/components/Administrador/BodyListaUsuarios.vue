@@ -168,9 +168,9 @@
                                                             <v-card-title class="white--text" style="padding:0;">
                                                             <v-row class="px-5">
                                                                 <v-col cols="12"  >
-                                                                    <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" > Usuarios Eliminados</strong>
+                                                                    <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 130%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" > Usuarios Eliminados</strong>
                                                                 </v-col>
-                                                                <v-col  cols="7" sm="9" md="9" class="align-self-end" >
+                                                                <v-col  cols="12" sm="9" md="9" class="align-self-end" >
                                                                     <v-text-field
                                                                     v-model="buscar2"
                                                                     append-icon="mdi-magnify"
@@ -188,20 +188,6 @@
                                                             </v-row> 
                                                             </v-card-title>
                                                         </v-img>
-                                                        <v-text-field
-                                                        v-model="buscar2"
-                                                        append-icon="mdi-magnify"
-                                                        label="Buscar"
-                                                        hide-details
-                                                        outlined
-                                                        rounded=""
-                                                        clearable
-                                                        dense
-                                                        solo
-                                                        class="px-5 py-2 -sm-flex d-md-none"
-                                                        color="secondary"
-                                                        background-color="white"
-                                                        ></v-text-field>
                                                         <v-data-table  
                                                             :headers="columnas" 
                                                             :items="listaUsuariosEliminados"
@@ -210,11 +196,12 @@
                                                             :items-per-page="10" 
                                                             class="elevation-1 "
                                                             >            
-                                                            <template v-slot:item.opciones="{ item }">
+                                                            <template v-slot:[`item.opciones`]="{ item }">
                                                             <!-- boton para modificar usuario seleccionado -->
                                                             <v-tooltip bottom color="primary">
                                                                 <template v-slot:activator="{ on }">
-                                                                <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on" @click="restaurarUsuarioEliminado(item)">
+                                                                <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on" @click="restaurarUsuarioEliminado(item)"
+                                                                >
                                                                     <v-icon color="secondary"  >
                                                                         fas fa-trash-restore-alt
                                                                     </v-icon>
@@ -379,7 +366,7 @@
                     <!-- propiedades tablas -->
                     <v-data-table  :headers="columnas" :items="listaUsuarios"
                         :search="buscar" :loading="cargando" :items-per-page="10"  >            
-                        <template v-slot:item.opciones="{ item }" >
+                        <template v-slot:[`item.opciones`]="{ item }" >
                             <!-- boton para modificar usuario seleccionado -->
                             <v-tooltip bottom color="primary">
                                 <template v-slot:activator="{ on }">
@@ -497,7 +484,7 @@ export default {
             ],
             reglasEmail: [
                 v => !!v || 'Requerido',
-                v => /.+@utalca.cl/.test(v) || /.+@alumnos.utalca.cl/.test(v) || 'Correo no Válido', 
+                v => /.+@utalca\.cl/.test(v) || /.+@alumnos\.utalca\.cl/.test(v) || 'Correo no Válido', 
             ],
             reglasContraseña:[
                 v => !!v || 'Requerido',
@@ -531,7 +518,8 @@ export default {
     },
     created () {   
         this.obtenerEscuelas();   
-        this.obtenerUsuarios();        
+        this.obtenerUsuarios();
+        this.datosUsuario.imagen = null;       
     },
     methods: {
         validarCrearUsuario(){
@@ -549,7 +537,7 @@ export default {
             this.dialogListaUsuariosEliminado = true;
             this.listaUsuariosAux = [];
             var aux;
-            var url = 'http://127.0.0.1:8000/api/v1/usuario/disabled';
+            var url = this.$store.state.rutaDinamica+'api/v1/usuario/disabled';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 for (let index = 0; index < result.data.data.usuarios.length; index++) {
@@ -594,15 +582,14 @@ export default {
         },
         restaurarUsuario(){
             this.dialogRestaurarUsuarioEliminado= false;
-             var url =`http://127.0.0.1:8000/api/v1/usuario/restore/${this.datosUsuario.id}`;
+             var url =this.$store.state.rutaDinamica+`api/v1/usuario/restore/${this.datosUsuario.id}`;
             axios.post(url,null,this.$store.state.config)
             .then((result)=>{
-            if (result.data.success == true) {
+            
                 this.obtenerListaUsuariosEliminados();
                 this.obtenerUsuarios(); 
                 this.alertaExito = true;
                 this.textoAlertas = result.data.message
-            }
             }).catch((error)=>{
                 console.log(error);
                 // if (error.message == 'Network Error') {
@@ -657,7 +644,7 @@ export default {
 
         obtenerEscuelas(){
             this.listaEscuelaAux = [];
-            var url = 'http://127.0.0.1:8000/api/v1/escuela';
+            var url = this.$store.state.rutaDinamica+'api/v1/escuela';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 for (let index = 0; index < result.data.data.escuelas.length; index++) {
@@ -696,7 +683,7 @@ export default {
             this.cargando = true;
             this.listaUsuariosAux = [];
             var aux;
-            var url = 'http://127.0.0.1:8000/api/v1/usuario';
+            var url = this.$store.state.rutaDinamica+'api/v1/usuario';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 for (let index = 0; index < result.data.data.usuarios.length; index++) {
@@ -759,7 +746,7 @@ export default {
             "email": this.datosUsuario.correo,
             "password": this.datosUsuario.contrasena,
             }
-            var url = 'http://127.0.0.1:8000/api/v1/usuario';
+            var url = this.$store.state.rutaDinamica+'api/v1/usuario';
             console.log(post);
             axios.post(url, post, this.$store.state.config)
             .then((result) => {
@@ -814,26 +801,33 @@ export default {
        * para solucionar este problema, se deferan definir nuevamente los roles.
        */
         MostrarPanelModificar(item){
-            this.modUsuarioActivo = true;            
-            this.datosUsuario.id= item.id;
-            this.datosUsuario.nombre= item.nombre;            
-            this.datosUsuario.imagen= item.imagen;
-            this.datosUsuario.correo= item.correo;
-            this.datosUsuario.contrasena= item.contrasena;            
-            if (item.role == "admin") {
-                this.datosUsuario.role= this.roles[0];
-            };
-            if (item.role  == "secretaria de escuela") {
-                this.datosUsuario.role= this.roles[1];
-            };
-            if (item.role  == "profesor") {
-                this.datosUsuario.role= this.roles[2];
-            };
-            for(var numEscuela = 0; numEscuela < this.listaEscuela.length; numEscuela++){                        
-                if(item.escuela == this.listaEscuela[numEscuela].nombre){                                                   
-                    this.datosUsuario.escuela = this.listaEscuela[numEscuela].id;
-                }
-            };  
+            var idUsuario= this.$store.state.usuario.usuario.id
+            if(idUsuario != item.id){
+
+                this.modUsuarioActivo = true;            
+                this.datosUsuario.id= item.id;
+                this.datosUsuario.nombre= item.nombre;            
+                this.datosUsuario.imagen= item.imagen;
+                this.datosUsuario.correo= item.correo;
+                this.datosUsuario.contrasena= item.contrasena;            
+                if (item.role == "admin") {
+                    this.datosUsuario.role= this.roles[0];
+                };
+                if (item.role  == "secretaria de escuela") {
+                    this.datosUsuario.role= this.roles[1];
+                };
+                if (item.role  == "profesor") {
+                    this.datosUsuario.role= this.roles[2];
+                };
+                for(var numEscuela = 0; numEscuela < this.listaEscuela.length; numEscuela++){                        
+                    if(item.escuela == this.listaEscuela[numEscuela].nombre){                                                   
+                        this.datosUsuario.escuela = this.listaEscuela[numEscuela].id;
+                    }
+                 };  
+            }else{
+                this.alertaError = true;
+                this.textoAlertas = "Para modificar su cuenta diríjase a perfil."
+            }
             
         },
 
@@ -860,7 +854,7 @@ export default {
             if ( this.datosUsuario.role == "Profesor") {
                 aux = "profesor"
             };
-            var url =`http://127.0.0.1:8000/api/v1/usuario/${this.datosUsuario.id}`;
+            var url =this.$store.state.rutaDinamica+`api/v1/usuario/${this.datosUsuario.id}`;
             let put ={
                 "nombre": this.datosUsuario.nombre,
                 "escuela": this.datosUsuario.escuela,
@@ -871,12 +865,10 @@ export default {
             }
             axios.put(url,put,this.$store.state.config)
             .then((result)=>{
-            if (result.statusText=='OK') {
                 this.alertaExito = true;
                 this.textoAlertas = "Se modificó el usuario con exito."
                 this.obtenerUsuarios(); 
                 this.resetModificacionUsuario();
-            }
             }).catch((error)=>{                
                 if (error.message == 'Network Error') {
                     console.log(error)
@@ -928,15 +920,13 @@ export default {
         },
 
         eliminarUsuario(){
-            var url = 'http://127.0.0.1:8000/api/v1/usuario/'+this.datosUsuario.id;
+            var url = this.$store.state.rutaDinamica+'api/v1/usuario/'+this.datosUsuario.id;
                 axios.delete(url,this.$store.state.config)
                 .then((result)=>{
-                if (result.statusText=='OK') {
                     this.obtenerUsuarios();
                     this.resetEliminarUsuario(); 
                     this.alertaExito = true;
                     this.textoAlertas = "Se elimino el usuario con exito "
-                }
                 }).catch((error)=>{
                     if (error.message == 'Network Error') {
                         console.log(error)
@@ -964,22 +954,28 @@ export default {
             
         },
         EliminarUsuario(item){
-            this.datosUsuario.id= item.id;
-            this.datosUsuario.nombre= item.nombre;
-            this.datosUsuario.escuela= item.escuela;
-            this.datosUsuario.imagen= item.imagen;
-            this.datosUsuario.correo= item.correo;
-            this.datosUsuario.contrasena= item.contrasena;
-            if (item.role == "admin") {
-                this.datosUsuario.role= this.roles[0];
-            };
-            if (item.role  == "secretaria de escuela") {
-                this.datosUsuario.role= this.roles[1];
-            };
-            if (item.role  == "profesor") {
-                this.datosUsuario.role= this.roles[1];
-            };
-            this.dialogEliminar = true;
+             var idUsuario= this.$store.state.usuario.usuario.id
+            if(idUsuario != item.id){
+                this.datosUsuario.id= item.id;
+                this.datosUsuario.nombre= item.nombre;
+                this.datosUsuario.escuela= item.escuela;
+                this.datosUsuario.imagen= item.imagen;
+                this.datosUsuario.correo= item.correo;
+                this.datosUsuario.contrasena= item.contrasena;
+                if (item.role == "admin") {
+                    this.datosUsuario.role= this.roles[0];
+                };
+                if (item.role  == "secretaria de escuela") {
+                    this.datosUsuario.role= this.roles[1];
+                };
+                if (item.role  == "profesor") {
+                    this.datosUsuario.role= this.roles[1];
+                };
+                this.dialogEliminar = true;
+            }else{
+                this.alertaError = true;
+                this.textoAlertas = "No puede eliminar su propia cuenta"
+            }
         },
     }
 }

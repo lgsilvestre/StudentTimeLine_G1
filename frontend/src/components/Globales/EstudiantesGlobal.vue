@@ -51,11 +51,12 @@
                                         class="headline primary text--center"
                                         primary-title
                                         >
-                                        <h5 class="white--text ">Agregar estudiantes</h5>
+                                        <h5 class="white--text " :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 70%;' : 'font-size: 90%;'">Agregar estudiantes</h5>
                                         <v-spacer></v-spacer>
                                         <v-btn
                                             v-if="botonesAgregarEstudiantes==false"
                                             color="primary"
+                                            :small="$vuetify.breakpoint.smAndDown ? true : false"
                                             elevation="0"
                                             rounded
                                             dense
@@ -103,7 +104,7 @@
                                                 </v-row>
                                                 </v-container>
                                             <v-container class="px-5 mt-5" color="primary" v-if="containerAgregarEstudianteUnico">
-                                                   <v-form ref="form_AgregarEstudiante" style="margin:0;padding:0;" v-model="form_AgregarEstudianteValido" lazy-validation>
+                                                    <v-form ref="form_AgregarEstudiante" style="margin:0;padding:0;" v-model="form_AgregarEstudianteValido" lazy-validation>
                                                         <v-text-field  
                                                         v-model="estudianteImportar.matricula"
                                                         label="Matricula" outlined
@@ -117,6 +118,7 @@
                                                         label="Rut" outlined
                                                         color="secondary"
                                                         prepend-inner-icon="fas fa-address-card"
+                                                        hint="Ingrese rut sin puntos, guion o dígito verificador"
                                                         :rules="reglas_rut"
                                                         ></v-text-field>
 
@@ -192,7 +194,7 @@
                                                             </v-btn>
                                                         </div>
                                                 
-                                                   </v-form>
+                                                </v-form>
                                             </v-container>
                                             <v-container v-if="containerAgregarEstudianteImportar" class="px-5 mt-5">
                                                 <v-form ref="form_agregarEstudiantesMasiva" style="margin:0;padding:0;" v-model="form_AgregarEstudiantesMasivoValido" lazy-validation > 
@@ -207,7 +209,7 @@
                                                         prepend-icon=""   
                                                         prepend-inner-icon="fas fa-file-excel"
                                                         :rules="[v => !!v || 'El archivo es requerido']" >
-                                                     </v-file-input>
+                                                    </v-file-input>
 
                                                     <div style="text-align:right;" class="mb-1">
                                                         <v-btn rounded color="warning" 
@@ -269,6 +271,7 @@
                                                 <v-col cols="5" class="mt-5">
                                                     <h4 class="mb-8">Por Escuela :</h4>
                                                     <h4 class="pt-5" >Por rango de fecha:</h4>
+                                                    <h5 class="pt-0">Alumnos con obs.*</h5>
                                                 </v-col>
                                                 <v-col cols="6">
                                                     <v-row class="mt-1 pt-1 mb-0 pb-0">
@@ -313,7 +316,6 @@
                                                                 ></v-date-picker>
 
                                                             </v-menu>
-                                                           
                                                         </v-col>
                                                         <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">  
                                                             <v-menu ref="menu2" v-model="menu2" :close-on-content-click="false"
@@ -380,7 +382,7 @@
                 :loading="cargando"
                 style="font-size: 140%;"
                 class="elevation-1 " >
-                    <template v-slot:actions="{ item }">
+                    <template v-slot:[`item.actions`]="{ item }">
                         <v-tooltip bottom color="primary">
                             <template v-slot:activator="{ on }">
                                 <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on" @click="perfilEstudiante(item)">
@@ -538,11 +540,12 @@
          reglas_matricula:[
              value => !!value || 'Requerido',
              value => /^[0-9]+$/.test(value) || 'Matricula solo debe incluir numeros',
-             value => value.length == 10 || 'La matricula debe compuesta de 10 numeros',             
+             value => /^[0-9]{10}$/.test(value) || 'La matricula debe compuesta de 10 numeros',             
          ],
          reglas_rut:[
-             value => !!value || 'Requerido',
-             value =>/^\d{1,2}\.\d{3}\.\d{3}[\-][0-9kK]{1}/.test(value) && value.length <= 12 || 'El Rut debe ser por ejemplo: 1.111.111-1',
+            value => !!value || 'Requerido',
+            value => /^[0-9]+$/.test(value) || 'El rut debe estar compuesto solo por numeros',                
+            value => /^[0-9]{7,8}$/.test(value) || 'El rut debe contener entre 7 y 8 dígitos',
          ],
          reglas_Nombre:[
                 value => !!value || 'Requerido',
@@ -551,7 +554,7 @@
         ],
         regla_Email: [
             value => !!value || 'Requerido',
-            v => /.+@utalca.cl/.test(v) || /.+@alumnos.utalca.cl/.test(v) || 'Correo no Válido', 
+            v => /.+@utalca\.cl/.test(v) || /.+@alumnos\.utalca\.cl/.test(v) || 'Correo no Válido', 
         ],
         regla_Contraseña:[
             value => !!value || 'Requerido',
@@ -632,7 +635,7 @@
             {
                 let formData = new FormData();
                 formData.append('file',this.file);
-                var url = 'http://127.0.0.1:8000/api/v1/estudiante/importar';
+                var url = this.$store.state.rutaDinamica+'api/v1/estudiante/importar';
                 axios.post(url,formData,this.$store.state.config)
                 .then((result)=>{
                     //console.log(result);
@@ -657,7 +660,7 @@
         obtenerEstudiantes(){
             this.cargando = true;
             this.listaEstudiantes = [];
-            var url = 'http://127.0.0.1:8000/api/v1/estudiante';
+            var url = this.$store.state.rutaDinamica+'api/v1/estudiante';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                //console.log(result.data);
@@ -710,7 +713,7 @@
             console.log("semestre valido :" + valido)
             if(valido == true){
 
-                var url = 'http://127.0.0.1:8000/api/v1/estudiante';
+                var url = this.$store.state.rutaDinamica+'api/v1/estudiante';
                 var escuelaAux = 1;
                 for (let index = 0; index < this.listaEscuela.length; index++) {
                     const element = this.listaEscuela[index];
@@ -742,6 +745,7 @@
                     }
                 })
                 .catch((error)=>{
+                    console.log(error);
                     if (error.message == 'Network Error') {
                         console.log(error);
                         this.alertError = true;
@@ -771,7 +775,7 @@
         },
         obtenerEscuelas(){
             this.listaEscuelaAux = [];
-            var url = 'http://127.0.0.1:8000/api/v1/escuela';
+            var url = this.$store.state.rutaDinamica+'api/v1/escuela';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 if (result.data.success == true) {
@@ -863,7 +867,7 @@
                     "escuela": escuela
                 };
                 console.log(post)
-            var url = 'http://127.0.0.1:8000/api/v1/estudiante/exportar';
+            var url = this.$store.state.rutaDinamica+'api/v1/estudiante/exportar';
             axios.post(url,post,this.$store.state.config2)
             .then((result)=>{
                 console.log(result.data);
@@ -901,6 +905,9 @@
         resetImportarEstudiantes(){
             this.file = null;
             this.dialogAgregarEstudiante= false;
+            this.botonesAgregarEstudiantes= true;
+            this.containerAgregarEstudianteImportar= false;
+            this.$refs.form_agregarEstudiantesMasiva.reset();
         },
         resetUnicoEstudiante(){
             this.estudianteImportar.matricula='';
@@ -911,7 +918,8 @@
             this.estudianteImportar.situacion_academica="";
             this.estudianteImportar.escuela="";
             this.estudianteImportar.foto=null;
-            this.dialogAgregarEstudiante= false;
+            this.dialogAgregarEstudiante= false;       
+            this.$refs.form_AgregarEstudiante.reset();
         },
         perfilEstudiante(item){
             var estudiantes = "estudiantes";

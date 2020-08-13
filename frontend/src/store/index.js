@@ -39,6 +39,7 @@ export default new Vuex.Store({
         mensajeErrorLogin: '',
         perfilEstudiante: '',
         infoSemestre: null,
+        rutaDinamica: 'https://backend.proyectomapache.cl/',
     },
     mutations: {
         calcularRol(state, nuevoSemestre) {
@@ -46,20 +47,20 @@ export default new Vuex.Store({
             state.infoSemestre = this.infoSemestre;
             nuevoSemestre
             if (state.admin) {
-                router.push({ path: '/administrador/cursos/' + this.infoSemestre.anio + '-' + this.infoSemestre.semestre });
+                router.push({ path: '/administrador/semestres/' + this.infoSemestre.anio + '-' + this.infoSemestre.semestre });
             } else if (state.profesor) {
                 router.push({ path: '/profesor/cursos/' + this.infoSemestre.anio + '-' + this.infoSemestre.semestre });
             } else {
-                router.push({ path: '/secretariaEscuela/cursos/' + this.infoSemestre.anio + '-' + this.infoSemestre.semestre });
+                router.push({ path: '/secretariaEscuela/semestres/' + this.infoSemestre.anio + '-' + this.infoSemestre.semestre });
             }
         },
         calcularRolVuelta(state) {
             if (state.admin) {
-                router.push({ path: '/administrador/cursos/' });
+                router.push({ path: '/administrador/semestres/' });
             } else if (state.profesor) {
                 router.push({ path: '/profesor/cursos/' });
             } else {
-                router.push({ path: '/secretariaEscuela/cursos/' });
+                router.push({ path: '/secretariaEscuela/semestres/' });
             }
         },
         login(state, lista, methods) { //funcion de login
@@ -69,10 +70,10 @@ export default new Vuex.Store({
                 "email": lista.email,
                 "password": lista.pass,
             };
-            var url = 'http://127.0.0.1:8000/api/v1/auth/login';
+            var url = state.rutaDinamica+'api/v1/auth/login';
             axios.post(url, post)
                 .then((result) => {
-                    console.log(result.data.data);
+                    //console.log(result.data.data);
                     state.usuario = result.data.data;
                     state.tk = 'Bearer ' + state.usuario.token;
                     state.config.headers.Authorization = state.tk;
@@ -87,20 +88,20 @@ export default new Vuex.Store({
                             //redireccionamiento hacia el usuario secretaria de escuela
                             state.secretariaEscuela = true;
                             state.cargaLogin = false;
-                            router.push({ path: '/secretariaEscuela' });
+                            router.push({ path: '/secretariaEscuela/semestres' });
                         } else {
                             if (state.usuario.usuario.rol == "profesor") {
                                 //redireccionamiento hacia el usuario profesor
                                 state.profesor = true;
                                 state.cargaLogin = false;
-                                router.push({ path: '/profesor' });
+                                router.push({ path: '/profesor/cursos' });
                             }
                         }
                     }
                 })
                 .catch((error) => {
                     if (error.message == 'Network Error') {
-                        console.log(error);
+                        //console.log(error);
                         state.verificacionLogin = true;
                         state.cargaLogin = false;
                         state.mensajeErrorLogin = 'Error al comunicarse con el servidor, intente más tarde';
@@ -108,22 +109,22 @@ export default new Vuex.Store({
                         if (error.response.data.success == false) {
                             switch (error.response.data.code) {
                                 case 2:
-                                    console.log(error.response.data.code + ' ' + error.response.data.message);
-                                    console.log(error.response.data);
+                                    //console.log(error.response.data.code + ' ' + error.response.data.message);
+                                    //console.log(error.response.data);
                                     state.verificacionLogin = true;
                                     state.cargaLogin = false;
                                     state.mensajeErrorLogin = error.response.data.message;
                                     break;
                                 case 3:
-                                    console.log(error.response.data.code + ' ' + error.response.data.message);
-                                    console.log(error.response.data);
+                                    //console.log(error.response.data.code + ' ' + error.response.data.message);
+                                    //console.log(error.response.data);
                                     state.verificacionLogin = true;
                                     state.cargaLogin = false;
                                     state.mensajeErrorLogin = error.response.data.message;
                                     break;
                                 case 4:
-                                    console.log(error.response.data.code + ' ' + error.response.data.message);
-                                    console.log(error.response.data);
+                                    //console.log(error.response.data.code + ' ' + error.response.data.message);
+                                    //console.log(error.response.data);
                                     state.verificacionLogin = true;
                                     state.cargaLogin = false;
                                     state.mensajeErrorLogin = error.response.data.message;
@@ -136,11 +137,11 @@ export default new Vuex.Store({
                 });
         },
         unLogin(state) {
-            var url = 'http://127.0.0.1:8000/api/v1/auth/logout';
+            var url = state.rutaDinamica+'api/v1/auth/logout';
             axios.get(url, state.config)
                 .then((result) => {
                     console.log(result);
-                    if (result.statusText == 'OK') {
+                    
                         state.status = '';
                         state.usuario = null;
                         state.RCstatus = null;
@@ -156,7 +157,7 @@ export default new Vuex.Store({
                         state.config.headers.Authorization = '';
                         state.config2.headers.Authorization = '';
                         router.push({ path: '/' });
-                    }
+                    
                 })
                 .catch((error) => {
                     if (error.message == 'Network Error') {
@@ -184,7 +185,7 @@ export default new Vuex.Store({
                 "email": nuevoUsuario.correo,
                 "password": nuevoUsuario.contrasena,
             }
-            var url = 'http://127.0.0.1:8000/api/v1/usuario';
+            var url =  state.rutaDinamica+'api/v1/usuario';
             // console.log(state.config);
             console.log(url)
             console.log(post)
@@ -203,7 +204,7 @@ export default new Vuex.Store({
                 "email": datosUsuario.correo,
                 "password": datosUsuario.contrasena,
             }
-            var url = 'http://127.0.0.1:8000/api/v1/usuario/' + state.usuario.data.user.id;
+            var url =  state.rutaDinamica+'api/v1/usuario/' + state.usuario.data.user.id;
             console.log(state.config);
             axios.put(url, put, state.config)
                 .then((result) => {
@@ -216,9 +217,6 @@ export default new Vuex.Store({
 
     },
     methods: {
-        hola() {
-            console.log('hola po olvidona');
-        }
     },
     actions: {},
     modules: {}

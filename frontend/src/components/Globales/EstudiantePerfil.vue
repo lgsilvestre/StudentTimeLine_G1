@@ -219,7 +219,7 @@
                                     :color="observacion.color"
                                 >
                                     <v-card-title class="headline  text--center"   primary-title >
-                                        <div class="v-markdown" id="hola" href="#hola">
+                                        <div class="v-markdown" >
                                             <h5 class="white--text " >{{observacion.titulo}}</h5>
                                         </div>
                                         
@@ -243,7 +243,7 @@
                                         </v-row>
                                         <v-row style="margin: 0; padding: 0;">
                                             <v-col cols="4" lg="3"  xl="2" style="margin: 0; padding: 0;">
-                                                <h5 >Categoria</h5>
+                                                <h5 >Categoría</h5>
                                             </v-col>
 
                                             <v-col cols="8" lg="9"  xl="10" style="margin: 0; padding: 0;">
@@ -272,7 +272,7 @@
                                             </v-col>
                                         </v-row>
                                     
-                                        <h5 class="mt-4"> Descripcion</h5 >  
+                                        <h5 class="mt-4"> Descripción</h5 >  
                                     <div  class="DIV  mb-2" style=" height:150px; overflow: auto; font-size: 90%"> 
                                         {{observacion.descripcion}}  
                                     </div>
@@ -306,8 +306,6 @@
                                         
                                     </div>
                                     </v-container>
-                                   
-                                    
                                 </v-card>
                                 </v-timeline-item>
                             </v-timeline>
@@ -330,7 +328,7 @@
                         label="Titulo" 
                         outlined
                         color="secondary"
-                        prepend-inner-icon="fas fa-check-circle"
+                        prepend-inner-icon="fas fa-heading"
                         ></v-text-field>
 
                         <v-select   
@@ -339,7 +337,7 @@
                         item-text="nombre"
                         label="Tipo" outlined
                         color="secondary"
-                        prepend-inner-icon="fas fa-check-circle"
+                        prepend-inner-icon="fas fa-exclamation-circle"
                         ></v-select >
 
                         <v-select 
@@ -347,11 +345,11 @@
                         :items="categorias"
                         item-text="nombre"
                         item-value="id"
-                        label="Categoria"
+                        label="Categoría"
                         color="secondary"
                         outlined
                         :disabled="profesor == true"
-                        prepend-inner-icon="fas fa-check-circle"
+                        prepend-inner-icon="fas fa-list-ol"
                         ></v-select>
 
                         <v-select 
@@ -363,7 +361,7 @@
                         label="Cursos"
                         color="secondary"
                         outlined
-                        prepend-inner-icon="fas fa-check-circle"
+                        prepend-inner-icon="fas fa-book"
                         ></v-select>
 
 
@@ -433,7 +431,7 @@
             </v-row>
             <v-row style="margin: 0; padding: 0;">
                 <v-col cols="4" lg="3"  xl="2" style="margin: 0; padding: 0;">
-                    <h5 >Categoria</h5>
+                    <h5 >Categoría</h5>
                 </v-col>
 
                 <v-col cols="8" lg="9"  xl="10" style="margin: 0; padding: 0;">
@@ -461,7 +459,7 @@
                     <h5 >:  ninguno</h5>
                 </v-col>
             </v-row>
-            <h5 class="mt-4"> Descripcion</h5 >
+            <h5 class="mt-4"> Descripción</h5 >
             <div  class="DIV  mb-2" style=" height:150px; overflow: auto; font-size: 90%"> 
                 {{estudianteEliminarObservacion.descripcion}}  
             </div>
@@ -489,67 +487,71 @@
                     <h5 class="white--text ">Crear Solicitud de Ayudante</h5>
                 </v-card-title>
                 <v-container class="px-5 mt-5">
-                    <v-text-field
-                        v-model="estudiante.nombre_completo"
-                        label="Nombre Estudiante"             
-                        :disabled="true"           
-                        outlined
-                        prepend-inner-icon="mdi-account"
-                    ></v-text-field>
-                    <v-select
-                        v-model="datosSolicitud.curso"
-                        label="Curso"
-                        :items="listaCursos"
-                        item-text="descripcion"
-                        item-value="id"
-                        :rules="[() => !!datosSolicitud.curso ||'Requerido']"
-                        outlined
-                        prepend-inner-icon="mdi-school"
-                    >                                
-                    </v-select>                    
-                    <v-text-field
-                        v-model="datosSolicitud.nota"
-                        prepend-inner-icon="far fa-star"    
-                        :rules="reglasNumeros"                    
-                        label="Nota Aprobación del Módulo"
-                        outlined                       
-                    >
-                    </v-text-field>
-                    <v-text-field
-                        v-model="datosSolicitud.meses"
-                        prepend-inner-icon="far fa-clock"
-                        :rules="reglasNumeros"                    
-                        label="N° Meses de Trabajo"
-                        outlined                           
-                    >
-                    </v-text-field> 
-                    <v-text-field
-                        v-model="datosSolicitud.horas"
-                        prepend-inner-icon="far fa-clock"
-                        :rules="reglasNumeros"                    
-                        label="N° Horas Mensuales"
-                        outlined                           
-                    >
-                    </v-text-field>                  
-                    <div class="pb-1" style="text-align:right;">  
-                        <v-btn 
-                        :small="$vuetify.breakpoint.smAndDown ? true : false"
-                        rounded color="warning" @click="resetDialogSolicitud()">
-                            <h4 class="white--text">Cancelar</h4>
-                        </v-btn>
-                        <v-btn 
-                        :small="$vuetify.breakpoint.smAndDown ? true : false"
-                        rounded color="secondary" class="ml-2" @click="enviarSolicitud()" >
-                            <h4 class="white--text">Registrar</h4>
-                        </v-btn>
-                    </div>  
+                    <v-form ref="solicitud" v-model="formSolicitud" lazy-validation>
+                        <v-text-field
+                            v-model="estudiante.nombre_completo"
+                            label="Nombre Estudiante"             
+                            :disabled="true"           
+                            outlined
+                            prepend-inner-icon="mdi-account"
+                        ></v-text-field>
+                        <v-select
+                            v-model="datosSolicitud.curso"
+                            label="Curso"
+                            :items="listaCursos"
+                            item-text="descripcion"
+                            item-value="id"
+                            :rules="[() => !!datosSolicitud.curso ||'Requerido']"
+                            outlined
+                            prepend-inner-icon="mdi-school"
+                        >                                
+                        </v-select>                    
+                        <v-text-field
+                            v-model="datosSolicitud.nota"
+                            prepend-inner-icon="far fa-star"    
+                            :rules="reglasNota"                    
+                            label="Nota Aprobación del Módulo"
+                            outlined                       
+                        >
+                        </v-text-field>
+                        <v-text-field
+                            v-model="datosSolicitud.meses"
+                            prepend-inner-icon="far fa-clock"
+                            :rules="reglasNumeros"                    
+                            label="N° Meses de Trabajo"
+                            outlined                           
+                        >
+                        </v-text-field> 
+                        <v-text-field
+                            v-model="datosSolicitud.horas"
+                            prepend-inner-icon="far fa-clock"
+                            :rules="reglasNumeros"                    
+                            label="N° Horas Mensuales"
+                            outlined                           
+                        >
+                        </v-text-field>                  
+                        <div class="pb-1" style="text-align:right;">  
+                            <v-btn 
+                            :small="$vuetify.breakpoint.smAndDown ? true : false"
+                            rounded color="warning" @click="resetDialogSolicitud()">
+                                <h4 class="white--text">Cancelar</h4>
+                            </v-btn>
+                            <v-btn 
+                            :disabled="!formSolicitud"
+                            :small="$vuetify.breakpoint.smAndDown ? true : false"
+                            :loading= "cargando"
+                            rounded color="secondary" class="ml-2" @click="enviarSolicitud()" >
+                                <h4 class="white--text">Registrar</h4>
+                            </v-btn>
+                        </div>  
+                    </v-form>
                 </v-container>
             </v-card>
         </v-dialog>
         <v-dialog v-model="dialogAgregarObservacion" persistent max-width="500px" >
             <v-card class="mx-auto" max-width="500" >
                 <v-card-title class="headline primary text--center" primary-title >
-                    <h5 class="white--text ">Agregar observacion</h5>
+                    <h5 class="white--text ">Agregar observación</h5>
                 </v-card-title>
                     <v-container class="px-5 mt-5">
                         <v-form ref="form_añadirObservacion" style="margin:0;padding:0;" v-model="form_añadirObservacionValido" lazy-validation>
@@ -558,7 +560,7 @@
                             label="Titulo" 
                             outlined
                             color="secondary"
-                            prepend-inner-icon="fas fa-check-circle"
+                            prepend-inner-icon="fas fa-heading"
                             :rules="[v => !!v || 'El titulo es requerido']"
                             ></v-text-field>
 
@@ -568,28 +570,28 @@
                             item-text="nombre"
                             label="Tipo" outlined
                             color="secondary"
-                            prepend-inner-icon="fas fa-check-circle"
+                            prepend-inner-icon="fas fa-exclamation-circle"
                             :rules="[v => !!v || 'El tipo de observacion es requerido']"
                             ></v-select >
-                            <v-row no-gutters>
-                                <v-col cols="12" md="11">
+                            <v-row no-gutters  >
+                                <v-col cols="11">
                                     <v-select   
                                     v-model="estudianteObservacion.categoria"
                                     :items="categorias"
                                     item-text="nombre"
                                     item-value="id"
-                                    label="Categoria"
+                                    label="Categoría"
                                     color="secondary"
                                     outlined
                                     :disabled="profesor == true"
-                                    prepend-inner-icon="fas fa-check-circle"
-                                    :rules="[v => !!v || 'La categoria es requerida']"
+                                    prepend-inner-icon="fas fa-list-ol"
+                                    :rules="[v => !!v || 'La categoría es requerida']"
                                     ></v-select>
                                 </v-col>
-                                <v-col cols="12" md="1" >
+                                <v-col cols="1">
                                     <v-tooltip bottom color="primary">
                                         <template v-slot:activator="{ on }">
-                                            <v-btn :disabled="profesor == true" color="primary" class="mt-2 ml-2" icon v-on="on" @click="dialogCrearCategoria = true">
+                                            <v-btn :disabled="profesor == true" color="primary" class=" mt-2 ml-2" icon v-on="on" @click="dialogCrearCategoria = true">
                                                 <v-icon  
                                                 color="primary"
                                                 >
@@ -597,7 +599,7 @@
                                                 </v-icon>
                                             </v-btn>
                                         </template>
-                                        <span><strong>Agregar Categoria</strong></span>
+                                        <span><strong>Agregar Categoría</strong></span>
                                     </v-tooltip>
                                 </v-col>
                             </v-row>
@@ -610,14 +612,14 @@
                             label="Cursos"
                             color="secondary"
                             outlined
-                            prepend-inner-icon="fas fa-check-circle"
+                            prepend-inner-icon="fas fa-book"
                             :rules="[v => !!v || 'El curso es requerido']"
                             ></v-select>
                             <v-textarea
                             v-model="estudianteObservacion.descripcion"
                             outlined
                             color="secondary"
-                            label="Descripcion"
+                            label="Descripción"
                             :rules="[v => !!v || 'La descripcion es requerida.']"
                             ></v-textarea>
                             <div class="pb-1" style="text-align:right;">  
@@ -628,6 +630,7 @@
                                     <h4 class="white--text">Cancelar</h4>
                                 </v-btn>
                                 <v-btn 
+                                :disabled="!form_añadirObservacionValido"
                                 :small="$vuetify.breakpoint.smAndDown ? true : false"
                                 rounded color="secondary" class="ml-2"
                                 :loading="cargando"  
@@ -687,6 +690,7 @@
                             v-model="estudianteEditar.rut"
                             label="Rut" outlined
                             color="secondary"
+                            hint="Ingrese rut sin puntos, guion o dígito verificador"
                             prepend-inner-icon="fas fa-address-card"
                             :rules="reglas_rut"
                             ></v-text-field>
@@ -741,7 +745,7 @@
                             prepend-icon=""   
                             prepend-inner-icon="mdi-camera"
                             @change="convertirImagen"
-                            v-model="estudianteEditar.foto">
+                            v-model="fotoEstudianteAux">
                             </v-file-input>
                             <div style="text-align:right;" class="mb-1">
                                 <v-btn rounded color="warning" 
@@ -799,7 +803,7 @@
 
         <!-- Alertas -->
         <!-- alerta de exito de la modificacion -->
-        <v-snackbar v-model="alertAcept" :timeout=delay
+        <v-snackbar v-model="alertAcept" :timeout=delay 
         bottom color="secondary" left class="mb-1 pb-12 pr-0 mr-0" >
             <div>
                 <v-icon color="white" class="mr-2">
@@ -875,10 +879,8 @@ export default {
                         }
                     },
                 },
-                colors: ['#4ECDC4', '#FF6B6B', '#FFE66D', '#2196F3'],
+                colors: ['#4ECDC4', '#FF6B6B', '#1A535C', '#2196F3'],
                 labels: ["Positiva", "Negativa", "Informativa", "Otro"],
-                
-                
             },
             estudiante:{
                 anho_ingreso: '',
@@ -893,6 +895,7 @@ export default {
                 situacion_academica: '',
                 escuelaid:'',
             },
+            fotoEstudianteAux: null,
             estudianteEditar:{
                 anho_ingreso: '',
                 correo: '',
@@ -963,35 +966,31 @@ export default {
             listaSituacionAcademica:[
                 {
                     id:1,
-                    nombre:"Regular",
+                    nombre:"REGULAR",
                 },
                 {
                     id:2,
-                    nombre:"Egresado",
+                    nombre:"EGRESADO",
                 },
                 {
                     id:3,
-                    nombre:"Eliminado",
+                    nombre:"ELIMINADO",
                 },
                 {
                     id:4,
-                    nombre:"Titulado",
+                    nombre:"TITULADO",
                 },
                 {
                     id:5,
-                    nombre:"Intercambio",
+                    nombre:"INTERCAMBIO",
                 },
                 {
                     id:6,
-                    nombre:"Postergación",
+                    nombre:"POSTEGACIÓN",
                 },
                 {
                     id:7,
-                    nombre:"Retiro",
-                },
-                {
-                    id:8,
-                    nombre:"Temporal",
+                    nombre:"RETIRO TEMPORAL",
                 },
             ],
             listaEscuelaAux:[],
@@ -1001,11 +1000,17 @@ export default {
                 v => !!v || 'Requerido',                
                 v => /^[0-9]+$/.test(v) || 'Solo numeros',
             ],
-            datosSolicitud: { estudiante:'', curso:'', nota:'', horas:'',meses:''},
-            
+            reglasNota: [
+                v => !!v || 'Requerido',                
+                v => /^[0-9]+$/.test(v) || 'Solo numeros',
+                v => v >= 50 && v <= 70 || 'Nota superior a 50 y menor a 70 (incluyendolos)',
+            ],
+            datosSolicitud: { curso:'', nota:'', horas:'',meses:''},
+            formSolicitud: true,
             tipos:['Positiva','Negativa','Informativa','Otro'],
             nuevaCategoria: '',
-            categorias:['Ayudantía','Práctica','Copia','Otro','En Observación - 1 por Tercera','En Observación - 1 por Segunda','Se Retira','Eliminado por Rendimiento','Titulado','Eliminado Art. 31 E','Eliminado Art. 31 B'],
+            categorias:[],
+            categoriasAux: [],
             id : null,
             enrutamiento: null,
             dialogExportar:false,
@@ -1018,24 +1023,30 @@ export default {
             // variables y reglas para validar el formulario
             form_EditarEstudianteValido:true,
             form_añadirObservacionValido:true,
+            form_solicitarEstudianteValido:true,
             formCategoria: true,
              reglas_matricula:[
              value => !!value || 'Requerido',
              value => /^[0-9]+$/.test(value) || 'Matricula solo debe incluir numeros',
-             value => value.length == 10 || 'La matricula debe compuesta de 10 numeros',
+             value => /^[0-9]{10}$/.test(value) || 'La matricula debe compuesta de 10 numeros',
             ],
             reglas_rut:[
                 value => !!value || 'Requerido',
-                value =>/^\d{1,2}\.\d{3}\.\d{3}[\-][0-9kK]{1}/.test(value) && value.length <= 12 || 'El Rut debe ser por ejemplo: 1.111.111-1',
+                value => /^[0-9]+$/.test(value) || 'El rut debe estar compuesto solo por numeros',                
+                value => /^[0-9]{7,8}$/.test(value) || 'El rut debe contener entre 7 y 8 dígitos',
             ],
             reglas_Nombre:[
                     value => !!value || 'Requerido',
+                    v => /^[a-zA-Z ]+$/.test(v) || 'Nombre no Válido.',
                     v => /^[a-zA-Z ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',
-                    v => /^[a-zA-Z ]+$/.test(v) || 'Nombre no Válido.'
+            ],
+            reglas_Descripcion:[
+                    value => !!value || 'Requerido',
+                    v => /^\s.{1,500}$/.test(v) || 'Largo del Nombre no Válido',
             ],
             regla_Email: [
                 value => !!value || 'Requerido',
-                v => /.+@utalca.cl/.test(v) || /.+@alumnos.utalca.cl/.test(v) || 'Correo no Válido', 
+                v => /.+@utalca\.cl/.test(v) || /.+@alumnos\.utalca\.cl/.test(v) || 'Correo no Válido', 
             ],
             regla_Contraseña:[
                 value => !!value || 'Requerido',
@@ -1072,13 +1083,14 @@ export default {
         this.enrutamiento = this.$route.params.enrutamiento;
         this.obtenerEstudiante(1);
         this.obtenerCursosUsuario();
+        this.obtenerCategorias();
     },
 
     methods:{
         obtenerEscuelas(estudiante){
             if (this.admin == true) {
                 this.listaEscuelaAux = [];
-                var url = 'http://127.0.0.1:8000/api/v1/escuela';
+                var url = this.$store.state.rutaDinamica+'api/v1/escuela';
                 axios.get(url,this.$store.state.config)
                 .then((result)=>{
                     if (result.data.success == true) {
@@ -1145,7 +1157,7 @@ export default {
                     "escuela": 0
                 };
                 // console.log(post)
-            var url = 'http://127.0.0.1:8000/api/v1/estudiante/exportarPDF';
+            var url = this.$store.state.rutaDinamica+'api/v1/estudiante/exportarPDF';
             //console.log(post)
             axios.post(url,post,this.$store.state.config2)
             .then((result)=>{
@@ -1183,7 +1195,26 @@ export default {
         },
 
         obtenerCategorias(){
-
+            this.categoriasAux = [];
+            var url = this.$store.state.rutaDinamica+'api/v1/categoria';
+            axios.get(url,this.$store.state.config)
+            .then((result)=>{
+                if (result.data.success == true) {
+                    for (let index = 0; index < result.data.data.categorias.length; index++) {
+                        const element = result.data.data.categorias[index];
+                        let categoria = {
+                            id: element.id,
+                            nombre: element.nombre,
+                        };
+                        this.categoriasAux[index]=categoria;
+                    }
+                    this.categorias = this.categoriasAux;
+                }
+            })
+            .catch((error) => {
+                this.alertError = true;
+                this.textoError = error.response.data.message;
+            });
         },
 
         resetCrearCategoria(){
@@ -1192,7 +1223,23 @@ export default {
         },
 
         agregarCategoria(){
-            console.log("agrego categoria");
+            var url = this.$store.state.rutaDinamica+'api/v1/categoria';
+            let post ={
+                "nombre": this.nuevaCategoria,
+            };
+            axios.post(url,post,this.$store.state.config)
+            .then((result)=>{
+                this.obtenerCategorias();
+                this.$refs.form_añadirObservacion.resetValidation();
+                this.dialogCrearCategoria = false;
+                this.alertAcept = true;
+                this.textoAcept = "Se agregó la categoria con exito";
+            })
+            .catch((error) => {
+                this.dialogCrearCategoria = false;
+                this.alertError = true;
+                this.textoError = error.response.data.message;
+            });
         },
 
         /**
@@ -1214,9 +1261,9 @@ export default {
             
             if (auxruta[0] == 1 || auxruta[0] == 2) {
                 if (this.$store.state.usuario.usuario.rol == "admin") {
-                this.$router.push({path:'/administrador/cursos/'+this.enrutamiento});
+                this.$router.push({path:'/administrador/semestres/'+this.enrutamiento});
                 } else {
-                    this.$router.push({path:'/secretariaEscuela/cursos/'+this.enrutamiento});
+                    this.$router.push({path:'/secretariaEscuela/semestres/'+this.enrutamiento});
                 }
             }
             else{
@@ -1235,16 +1282,15 @@ export default {
             
         },
 
-
         resetEditarEstudiante(){
             this.dialogAEditarEstudiante = false;
             this.$refs.form_EditarEstudiante.resetValidation();
         },
 
         modificarEstudiante() {
-             var valido=this.$refs.form_EditarEstudiante.validate();
+            var valido=this.$refs.form_EditarEstudiante.validate();
             if(valido == true){
-                var url = 'http://127.0.0.1:8000/api/v1/estudiante/'+this.id;
+                var url = this.$store.state.rutaDinamica+'api/v1/estudiante/'+this.id;
                 if (this.imagenMiniatura == null) {
                     this.imagenMiniatura = null;
                 }
@@ -1255,9 +1301,7 @@ export default {
                     "correo": this.estudianteEditar.correo,
                     "anho_ingreso": this.estudianteEditar.anho_ingreso,
                     "situacion_academica": this.estudianteEditar.situacion_academica,
-                    "porcentaje_avance":0,
-                    "creditos_aprobados":0,
-                    "escuela": this.estudianteEditar.escuela.id,
+                    "escuela": this.estudianteEditar.escuelaid,
                     "foto":this.imagenMiniatura,
                 };
                 axios.put(url,put,this.$store.state.config)
@@ -1266,6 +1310,7 @@ export default {
                         console.log('se cargo el estudiante');
                         this.alertAcept = true;
                         this.textoAcept = 'Se agregó el estudiante correctamente ';
+                        this.dialogAEditarEstudiante = false;
                         this.obtenerEstudiante(1);
                     //}
                 })
@@ -1327,6 +1372,7 @@ export default {
                     rut: '',
                     situacion_academica: '',
                     foto:'',
+                    idescuela:'',
                 };
                 this.estudiante={
                     anho_ingreso: '',
@@ -1352,7 +1398,7 @@ export default {
             }
             
             
-            var url = 'http://127.0.0.1:8000/api/v1/estudiante/'+ this.id+'/edit';
+            var url = this.$store.state.rutaDinamica+'api/v1/estudiante/'+ this.id+'/edit';
 
             axios.get(url,this.$store.state.config)
             .then((result)=>{
@@ -1422,7 +1468,7 @@ export default {
                                 this.seriesaux[1] = this.seriesaux[1]+1;
                             } else {
                                 if (element.tipo == "Informativa") {
-                                    auxcolor="accent";
+                                    auxcolor="primary";
                                     auxicono="fas fa-info";
                                     this.seriesaux[2] = this.seriesaux[2]+1;
                                 } else {
@@ -1452,7 +1498,7 @@ export default {
                                     speed: 350
                                 }
                             },
-                            colors: ['#4ECDC4', '#FF6B6B', '#FFE66D', '#2196F3'],
+                            colors: ['#4ECDC4', '#FF6B6B', '#1A535C', '#2196F3'],
                             labels: ["Positiva", "Negativa", "Informativa", "Otro"],
                         };
                         //var chart = new ApexCharts(el, chartOptions);
@@ -1517,7 +1563,7 @@ export default {
         obtenerCursosUsuario(){
             this.listaCursosAux = [];
             // var url =`http://127.0.0.1:8000/api/v1/instanciacurso/${this.$store.state.usuario.usuario.id}`;
-            var url = `http://127.0.0.1:8000/api/v1/profesorConCurso/${this.$store.state.usuario.usuario.id}`;
+            var url = this.$store.state.rutaDinamica+`api/v1/profesorConCurso/${this.$store.state.usuario.usuario.id}`;
             
             axios.get(url,this.$store.state.config)
             .then((result)=>{   
@@ -1569,7 +1615,7 @@ export default {
             if(valido == true){
 
                 this.dessertsAux = [];
-                var url = 'http://127.0.0.1:8000/api/v1/observacion';
+                var url = this.$store.state.rutaDinamica+'api/v1/observacion';
                 var auxTipo=0;
                 if (this.estudianteObservacion.tipo == "Positiva") {
                     auxTipo=1;
@@ -1585,18 +1631,18 @@ export default {
                         }
                     }
                 }
-                var auxcategoria=0;
-                if (this.profesor == true) {
-                    auxcategoria = auxcategoria+1;
-                }
-                else{
-                    for (let index = 0; index < this.categorias.length; index++) {
-                        const element = this.categorias[index];
-                        if (this.estudianteObservacion.categoria == element) {
-                            auxcategoria=index+1;
-                        }
-                    }
-                }
+                // var auxcategoria=0;
+                // if (this.profesor == true) {
+                //     auxcategoria = auxcategoria+1;
+                // }
+                // else{
+                //     for (let index = 0; index < this.categorias.length; index++) {
+                //         const element = this.categorias[index];
+                //         if (this.estudianteObservacion.categoria == element) {
+                //             auxcategoria=index+1;
+                //         }
+                //     }
+                // }
                 var auxcurso = 0;
                 var auxayudante = null;
                 if (this.profesor == true) {
@@ -1618,7 +1664,7 @@ export default {
                     "ayudante": auxayudante, 
                     "estudiante": this.id,
                     "curso": auxcurso,
-                    "categoria": auxcategoria,
+                    "categoria": this.estudianteObservacion.categoria,
                     "tipo": auxTipo,
                 }
                 console.log(post);
@@ -1686,8 +1732,8 @@ export default {
             var categoriaAux = 0
             for (let index = 0; index < this.categorias.length; index++) {
                 const element = this.categorias[index];
-                if (observacion.categoria == element) {
-                    this.estudianteModificarObservacion.categoria = element;
+                if (observacion.categoria == element.nombre) {
+                    this.estudianteModificarObservacion.categoria = element.id;
                 }
             }
             var auxcurso = null;
@@ -1697,11 +1743,9 @@ export default {
                     auxcurso= element;
                 }
             }
-
-            console.log("cursoooooooooooooooooooooooooo"+ auxcurso);
             this.estudianteModificarObservacion.estudiante = this.id;
             this.estudianteModificarObservacion.titulo = observacion.titulo;
-            this.estudianteModificarObservacion.curso =  auxcurso;
+            this.estudianteModificarObservacion.curso =  auxcurso;            
             this.estudianteModificarObservacion.descripcion = observacion.descripcion;
             this.estudianteModificarObservacion.id = observacion.id;
         },
@@ -1730,25 +1774,17 @@ export default {
                     }
                 }
             }
-            var auxcategoria=0;
-            for (let index = 1; index <= this.categorias.length; index++) {
-                const element = this.categorias[index];
-                if (this.estudianteModificarObservacion.categoria == element) {
-                    auxcategoria=index;
-                }
-                
-            }
             let put = {
                 "titulo": this.estudianteModificarObservacion.titulo,
                 "descripcion": this.estudianteModificarObservacion.descripcion,
                 "ayudante": null, 
                 "estudiante": this.estudianteModificarObservacion.estudiante,
                 "curso": null,
-                "categoria": auxcategoria,
+                "categoria": this.estudianteModificarObservacion.categoria,
                 "tipo": auxTipo,
             }
             console.log(put);
-            var url = 'http://127.0.0.1:8000/api/v1/observacion/'+ this.estudianteModificarObservacion.id;
+            var url = this.$store.state.rutaDinamica+'api/v1/observacion/'+ this.estudianteModificarObservacion.id;
             console.log(url);
             axios.put(url, put, this.$store.state.config)
             .then((result) => {
@@ -1830,7 +1866,7 @@ export default {
             }
         },
         EliminarObservacion(){
-            var url = 'http://127.0.0.1:8000/api/v1/observacion/'+this.estudianteEliminarObservacion.id;
+            var url = this.$store.state.rutaDinamica+'api/v1/observacion/'+this.estudianteEliminarObservacion.id;
             axios.delete(url, this.$store.state.config)
             .then((result) => {
                 //console.log(result);
@@ -1876,7 +1912,7 @@ export default {
             }
             this.estudianteObservacion.curso= '';
             this.estudianteObservacion.tipo= '';
-            this.$refs.form_añadirObservacion.reset()
+            this.$refs.form_añadirObservacion.resetValidation();
         },
 
         resetModificarObservacion(){
@@ -1908,39 +1944,49 @@ export default {
         },
 
         resetDialogSolicitud(){
-            this.dialogSolicitud = false;
-            this.datosSolicitud.estudiante = '';
+            this.dialogSolicitud = false;        
             this.datosSolicitud.curso = '';
             this.datosSolicitud.nota = '';
             this.datosSolicitud.meses = '';
             this.datosSolicitud.horas = '';
+            this.$refs.solicitud.resetValidation();
         },
 
         enviarSolicitud(){
-            let post = {
-                "estudiante": this.id,
-                "curso": this.datosSolicitud.curso,
-                "nota": this.datosSolicitud.nota,
-                "horas": this.datosSolicitud.horas,
-                "meses": this.datosSolicitud.meses,
-            }
-            var url = `http://127.0.0.1:8000/api/v1/solicitudDeAyudante/enviar`;
-
-            axios.post(url, post, this.$store.state.config)
-            .then((result) => {
-                console.log(result);
-                console.log(result.data);
-                this.alertAcept = true;
-                this.textoAcept = "Se envió la solicitud con exito"
-                this.resetDialogSolicitud();
-            }).catch((error)=>{
-                if (error.message == 'Network Error') {
-                    console.log(error)
-                    this.alertError = true;
-                    this.textoError = "Error al enviar la solicitud, intente mas tarde."
+            
+            // form_solicitarEstudianteValido
+            var valido=this.$refs.solicitud.validate();
+             console.log("semestre valido :" + valido)
+            if(valido == true){
+                this.cargando = true;
+                let post = {
+                    "estudiante": this.id,
+                    "curso": this.datosSolicitud.curso,
+                    "nota": this.datosSolicitud.nota,
+                    "horas": this.datosSolicitud.horas,
+                    "meses": this.datosSolicitud.meses,
+                }
+                var url = this.$store.state.rutaDinamica+`api/v1/solicitudDeAyudante/enviar`;
+    
+                axios.post(url, post, this.$store.state.config)
+                .then((result) => {
+                    this.cargando = false;
+                    // console.log(result);
+                    // console.log(result.data);
+                    this.alertAcept = true;
+                    this.textoAcept = "Se envió la solicitud con exito"
                     this.resetDialogSolicitud();
-                }                            
-            });
+                    
+                }).catch((error)=>{
+                    this.cargando = false;
+                    if (error.message == 'Network Error') {
+                        // console.log(error)
+                        this.alertError = true;
+                        this.textoError = "Error al enviar la solicitud, intente mas tarde."
+                        this.resetDialogSolicitud();                        
+                    }                            
+                });
+            }
         },
     }
 }

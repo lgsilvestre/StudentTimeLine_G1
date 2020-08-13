@@ -74,10 +74,10 @@
                 </v-card-title> 
             </v-img>
 
-            <v-data-iterator :items="listaInsCursos" :search="search" :sort-by="sortBy.toLowerCase()" class="px-2 py-2" :loading="cargando">
+            <v-data-iterator :items="listaInsCursos" :search="search" :sort-by="sortBy.toLowerCase()" class="px-2 py-2" :loading="cargando" ref="tablaCursos">
                 <template v-slot:default="props">
                     <v-row>
-                        <v-col v-for="item in props.items" :key="item.nomCurso" cols="12"  sm="6" md="4" lg="4">
+                        <v-col v-for="item in props.items" :key="item.id" cols="12"  sm="6" md="4" lg="4">
                             <v-card  class="mx-1" style="background-color:#F7FFF7; border-style:solid; border-color:rgba(0,0,0,0.5);" >
                                 <v-container class="pt-0 mt-0 pb-0 ">
                                     <v-row >
@@ -107,33 +107,27 @@
                                         <v-col cols="12" class=" pt-0 pl-1 pr-0 pb-0" >
                                             <v-card-text class="pt-0 pl-2 pr-0 pb-0 ">
                                                 <p class=" mt-0 mb-1   font-weight-black  text-truncate" style=" font-size: 115%;"   >Nombre: {{ item.nomCurso }}</p>
-                                                <p class="mt-0 mb-0  text-truncate font-weight-black  "  style=" font-size: 115%;" > Sección: {{ item.seccion}} </p>
+                                                <p class="mt-0 mb-1  text-truncate font-weight-black  "  style=" font-size: 115%;" > Sección: {{ item.seccion}} </p>
                                             </v-card-text>
                                         </v-col>
 
-                                        <v-col cols="5" class=" pt-0 pl-1 pr-0 pb-0" >
-                                            <v-card-text class="pt-0 pl-2 pr-0 pr-0 pb-0 ">
-                                                <p class=" mt-0 mb-1   font-weight-black  text-truncate" style=" font-size: 115%;"   >Profesor/es: </p>
-                                            </v-card-text>
-                                        </v-col>
-                                        <v-col cols="7"  class="pt-0 pl-0 pr-0 pb-0  mb-1" >
-                                            <div style="text-align:left;">
-                                            <v-btn class="pt-0  pb-0 "  outlined x-small  @click="mostrarProfesoresDeCurso(item)">
-                                                    Ver
-                                            </v-btn>
-                                            </div>
-                                        </v-col>
-                                        <v-col cols="5" class=" pt-0 pl-1 pr-0 pb-0" >
-                                            <v-card-text class="pt-0 pl-2 pr-0 pb-0 ">
-                                                <p class=" mt-0 mb-1   font-weight-black  text-truncate" style=" font-size: 115%;"   >ayudante/s: </p>
-                                            </v-card-text>
-                                        </v-col>
-                                        <v-col cols="7"  class=" pt-0 pl-0  pb-0 " >
-                                            <div style="text-align:left;">
-                                            <v-btn  outlined x-small  @click="mostrarAyudantesDeCurso(item)">
+                                        <v-col cols="12" class=" pt-1 pl-1 pr-0 pb-0" >
+                                            <v-card-text class="pt-0 pl-2 pr-0 pr-0 pb-0 font-weight-black text-truncate" style=" font-size: 100%;">
+                                                Profesor/es: 
+                                                <v-btn class="pt-0  pb-0 "  outlined x-small  @click="mostrarProfesoresDeCurso(item)">
                                                     Ver
                                                 </v-btn>
-                                            </div>
+                                            </v-card-text>
+                                        </v-col>
+                                    
+                                        <v-col cols="12" class=" pt-1 pl-1 pr-0 pb-2" >
+                                            <v-card-text class="pt-0 pl-2 pr-0 pr-0 pb-0 font-weight-black text-truncate" style=" font-size: 100%;">
+                                                Ayudante/s :
+                                                <v-btn  outlined x-small  @click="mostrarAyudantesDeCurso(item)">
+                                                    Ver
+                                                </v-btn>
+                                            </v-card-text>
+                                            
                                         </v-col>
                                         
                                     </v-row>
@@ -214,8 +208,8 @@
                                 </v-card-title>
                             </v-img>
                             <v-data-table  :headers="colCursos" :items="listaCursos"
-                                :search="buscarCursos" :loading="cargando" :items-per-page="10"  class="ml-5">            
-                                <template v-slot:item.opciones="{ item }">
+                                :search="buscarCursos" :loading="cargando" :items-per-page="10" >            
+                                <template v-slot:[`item.opciones`]="{ item }">
                                 <!-- boton para modificar usuario seleccionado -->
                                     <v-tooltip bottom color="primary">
                                         <template v-slot:activator="{ on }">
@@ -269,12 +263,12 @@
                                 prepend-inner-icon="mdi-account"
                             ></v-text-field>
                             <v-select
-                                v-model="datosCurso.escuela"
+                                v-model="datosCurso.idEscuela"
                                 label="Escuela"
                                 :items="listaEscuela"
-                                item-text="nombre"
-                                item-value="id"
-                                :rules="[() => !!datosCurso.escuela ||'Requerido']"
+                                item-text="nomEscuela"
+                                item-value="idEscuela"
+                                :rules="[() => !!datosCurso.idEscuela ||'Requerido']"
                                 outlined
                                 prepend-inner-icon="mdi-school"
                             ></v-select>   
@@ -309,14 +303,14 @@
                             :rules="[() => !!datosCurso.plan ||'Requerido']"
                             prepend-inner-icon="mdi-account"
                         ></v-text-field>
-                        <v-select  v-model="datosCurso.escuela"
+                        <v-select  v-model="datosCurso.nomEscuela"
                             :items="listaEscuela"
-                            item-text="nombre"
+                            item-text="nomEscuela"
                             item-value="id"
                             label="Escuela"
                             outlined
                             :small-chips="$vuetify.breakpoint.smAndDown ? true : false"
-                            :rules="[() => !!datosCurso.escuela ||'Requerido']"
+                            :rules="[() => !!datosCurso.nomEscuela ||'Requerido']"
                             prepend-inner-icon="mdi-school"
                         ></v-select>
                         <div style="text-align:right;" class="mb-1 " >
@@ -380,7 +374,7 @@
                             <strong><h3>Sección</h3></strong>
                         </v-col>
                         <v-col cols="6" >
-                           <v-list-item-title> {{ InstanciaModificar.nomCurso }} </v-list-item-title>
+                            <v-list-item-title> {{ InstanciaModificar.nomCurso }} </v-list-item-title>
                         </v-col>
                         <v-col cols="6" class="mt-0 pt-0 mb-0 pb-0">
                             <v-select  v-model="InstanciaModificar.seccion"
@@ -395,12 +389,12 @@
                             ></v-select>
                         </v-col>
                     </v-row>
-                     <v-divider></v-divider>
+                    <v-divider></v-divider>
                         <strong ><h3 class="pt-5">Eliga el profesor: </h3></strong>
                         <v-form ref="forModificarInsCurso" style="margin:0;padding:0;" v-model="form_modificarInsCurso" lazy-validation>
-                             <v-select
+                            <v-select
                                     class="pt-3"
-                                     v-if=" contadorProfesores>=1"
+                                    v-if=" contadorProfesores>=1"
                                     v-model="profesorSeleccionado"
                                     label="Profesor"
                                     :items="listaProfesores"
@@ -457,7 +451,7 @@
                                     clearable >  </v-select>   
                                                         
             
-                         <div style="text-align:left;"   >
+                        <div style="text-align:left;"   >
                             <v-btn 
                             x-small
                             fab color="primary" 
@@ -566,7 +560,6 @@
                                 </v-card-title>
                                 </v-img>  
                                 <v-data-table
-                                class="ml-4 mr-0 "
                                     v-model="seleccionados"
                                     :headers="colCursos2"
                                     :items="listaCursos"
@@ -588,21 +581,23 @@
         </v-dialog>
 
         <!-- Dialog para asignar cursos a un semestre -->
-        <v-dialog v-model="dialogAsignarCurso" max-width="500">
+        <v-dialog v-model="dialogAsignarCurso" persistent max-width="500">
             <v-card class="mx-auto" max-width="500" >
                 <v-card-title primary-title class="headline primary text--center">
                     <h5 class="white--text">Asignar Cursos</h5>
                 </v-card-title>
                 <v-container class="px-5">
+                    <v-row>
+                        <v-col cols="6" >
+                            <strong><h3>Curso</h3></strong>
+                        </v-col>
+                        <v-col cols="6">
+                            <strong><h3>Sección</h3></strong>
+                        </v-col>
+                    </v-row>
                         <v-form  ref="formAsignarCurso" style="margin:0;padding:0;" v-model="form_AsignarCurso" lazy-validation>
                     <v-row v-for="(item, index) in seleccionados" :key="index">
 
-                            <v-col cols="6" v-if="index==0">
-                                <strong><h3>Curso</h3></strong>
-                            </v-col>
-                            <v-col cols="6" v-if="index==0">
-                                <strong><h3>Sección</h3></strong>
-                            </v-col>
                             <v-col cols="6" >
                                 <v-list-item-title> {{item.nombre}}</v-list-item-title>
                             </v-col>
@@ -856,7 +851,7 @@
                     :items="AyudanteDeInstanciaCurso.listaAyudantes"
                     
                     hide-default-footer  >
-                    <template v-slot:item.opciones="{ item }">
+                    <template v-slot:[`item.opciones`]="{ item }">
                             <v-tooltip bottom color="primary">
                             <template v-slot:activator="{ on }">
                                 <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on" @click="EnrutarAsiPerfilDeUsuario(item)" >
@@ -941,7 +936,6 @@ export default {
             datosCurso: [{id:''},{nombre:''},{plan:''},{escuela:''},{descripcion:''}],
             datosInsCurso: [{id:''},{semestre:''},{curso:''},{nomCurso:''}],
             listaDeSeccionesDisponibles:['A','B','C','D','E','F','G','H'],
-
             cargando: false,
             seleccionados: [],
             profesorSeleccionado: null,
@@ -949,36 +943,33 @@ export default {
             profesorSeleccionado3: null,
             profesorSeleccionado4: null,
             profesorSeleccionado5: null,
-
             profesorSeleccionadoAux: null,
             profesorSeleccionadoAux2: null,
             profesorSeleccionadoAux3: null,
             profesorSeleccionadoAux4: null,
             profesorSeleccionadoAux5: null,
-
             profesorConCurso: null,
             profesorConCurso2: null,
             profesorConCurso3: null,
             profesorConCurs4: null,
             profesorConCurso5: null,
-      
             colInsCursos:[
                 {text:'ID', value:'id'},
                 // {text:'Semestre', value:'semestre'},
                 {text:'Curso', value:'nomCurso'},   
-                {text:'Opciones', value:'opciones'},                
+                {text:'Opciones', value:'opciones', sortable:false},                
             ],
             colCursos:[
                 // {text:'ID', value:'id'},
-                {text:'Nombre', value:'nombre',align: 'start',width:300},
+                {text:'Nombre', value:'nombre',align: 'start'},
                 {text:'Plan', value:'plan',align:'center'},   
                 {text:'Escuela', value:'nomEscuela',align:'center'},
                 // {text:'Descripcion', value:'descripcion'},
-                {text:'Opciones', value:'opciones',align: 'end',},
+                {text:'Opciones', value:'opciones',align: 'center', sortable:false},
             ],
             colCursos2:[
-                {text:'Nombre', value:'nombre',align: 'start',width:250},
-                {text:'Plan', value:'plan',align: 'center',width:300},   
+                {text:'Nombre', value:'nombre',align: 'start'},
+                {text:'Plan', value:'plan'},   
                 {text:'Escuela', value:'nomEscuela',align: 'center'},
                 // {text:'Descripcion', value:'descripcion',align: 'start'},
             ],
@@ -1050,14 +1041,13 @@ export default {
             headersAyudante:[
                 { text: 'Matricula', value: 'matricula',align: 'center'},
                 { text: 'Nombre Completo', value: 'nombre_completo'},
-                {text:'Opciones', value:'opciones',align: 'center'},
+                {text:'Ir', value:'opciones',align: 'center',sortable:false},
             ],
             headersProfesor:[
-               
-                { text: 'Nombre Completo', value: 'nombre',align: 'start' }
- 
+                { text: 'Nombre Completo', value: 'nombre',align: 'start' },
+                { text: 'Correo', value: 'email' }
                 // {with:10},           
-                 ],
+                ],
             numeroDeProfesoresModificar:0,
             numeroDeAyudantesModificar:0,
             contadorProfesores:1,
@@ -1234,27 +1224,27 @@ export default {
             // }
             
            
-             if(this.contadorCursos ==1 &&  this.profesorSeleccionado!=''){
+             if(this.contadorCursos ==1 &&  this.profesorSeleccionado!=null){
                 this.contadorCursos++;
                 // console.log("Numero de profesores ++"+  this.profesorSeleccionado)
                 // console.log("Valor del contador de cursos : "+ this.contadorCursos)
             }
             //se asigno el segundo profesor y quiere añadir otro
-            if(this.contadorCursos == 2 && this.profesorSeleccionado2!=''){
+            if(this.contadorCursos == 2 && this.profesorSeleccionado2!=null){
                 this.contadorCursos++;
                 // console.log("==============================")
                 // console.log("Numero de profesores ++"+  this.profesorSeleccionado2)
                 // console.log("Valor del contador de cursos : "+ this.contadorCursos)
             }
             //se asigno el tercer profesor y quiere añadir otro
-            if(this.contadorCursos == 3 && this.profesorSeleccionado3!=''){
+            if(this.contadorCursos == 3 && this.profesorSeleccionado3!=null){
                 this.contadorCursos++;
                 //  console.log("==============================")
                 // console.log("Numero de profesores ++"+  this.profesorSeleccionado3)
                 // console.log("Valor del contador de cursos : "+ this.contadorCursos)
             }
             //se asigno el cuarto profesor y quiere añadir otro
-            if(this.contadorCursos == 4 && this.profesorSeleccionado4!=''){
+            if(this.contadorCursos == 4 && this.profesorSeleccionado4!=null){
                 this.contadorCursos++;
                 //  console.log("==============================")
                 // console.log("Numero de profesores ++"+  this.profesorSeleccionado4)
@@ -1295,7 +1285,7 @@ export default {
         obtenerProfesores(){
             this.listaProfesoresAux = [];
             var aux;
-            var url = 'http://127.0.0.1:8000/api/v1/usuario/indexProfesor';
+            var url = this.$store.state.rutaDinamica+'api/v1/usuario/indexProfesor';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 for (let index = 0; index < result.data.data.usuarios.length; index++) {
@@ -1318,8 +1308,8 @@ export default {
                 else{
                     if (error.response.data.success == false) {
                         if(error.response.data.code == 101){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
+                            // console.log(error.response.data.code +' '+ error.response.data.message);
+                            // console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;                            
                         }                        
@@ -1330,14 +1320,14 @@ export default {
 
         obtenerEscuelas(){
             this.listaEscuelaAux = [];
-            var url = 'http://127.0.0.1:8000/api/v1/escuela';
+            var url = this.$store.state.rutaDinamica+'api/v1/escuela';
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 for (let index = 0; index < result.data.data.escuelas.length; index++) {
                 const element = result.data.data.escuelas[index];
                 let escuela = {
-                    id: element.id,
-                    nombre: element.nombre,
+                    idEscuela: element.id,
+                    nomEscuela: element.nombre,
                 };
                 // console.log(escuela);
                 this.listaEscuelaAux[index]=escuela;
@@ -1352,8 +1342,8 @@ export default {
                 else{
                     if (error.response.data.success == false) {
                         if(error.response.data.code == 101){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
+                            // console.log(error.response.data.code +' '+ error.response.data.message);
+                            // console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;                            
                         }                        
@@ -1365,7 +1355,7 @@ export default {
         //Metodo para obtener los datos del semestre al cual ingresamos.
         obtenerDatosSemestre(){
             var aux;
-            var url = `http://127.0.0.1:8000/api/v1/semestre/${this.$route.params.id}`;
+            var url = this.$store.state.rutaDinamica+`api/v1/semestre/${this.$route.params.id}`;
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 // console.log("obtener semestres")        
@@ -1381,10 +1371,10 @@ export default {
                     this.listaSemestresAux[index]=semestre;
                 }
                 this.listaSemestres = this.listaSemestresAux;
-                console.log(this.listaSemestres)
+                // console.log(this.listaSemestres)
             }
             ).catch((error)=>{
-                console.log(error.response)
+                // console.log(error.response)
             });
         },
 
@@ -1392,24 +1382,26 @@ export default {
         obtenerCursos(){
             this.listaCursosAux = [];
             var aux;
-            var url = `http://127.0.0.1:8000/api/v1/curso`;
+            var url = this.$store.state.rutaDinamica+`api/v1/curso`;
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 for( let index=0; index < result.data.data.cursos.length; index++){
                     const element = result.data.data.cursos[index];
+                    // console.log(element.get_escuela.id)
                     let curso = {
                         id: element.id,
                         nombre: element.nombre,
                         plan: element.plan,
                         descripcion: element.descripcion,
                         nomEscuela: element.escuela,
+                        idEscuela :element.get_escuela.id
                     };
                     this.listaCursosAux[index]=curso;
                 }
                 this.listaCursos = this.listaCursosAux;                    
             }
             ).catch((error)=>{ 
-                console.log(error.response)
+                // console.log(error.response)
             });
         },
 
@@ -1418,8 +1410,9 @@ export default {
         obtenerInstanciasCursos(){
             this.cargando=true;
             this.listaInsCursosAux = [];
+            this.listaInsCursos=[];
             var aux;            
-            var url = `http://127.0.0.1:8000/api/v1/instanciaCurso/${this.$store.infoSemestre.id}`;
+            var url = this.$store.state.rutaDinamica+`api/v1/instanciaCurso/${this.$store.infoSemestre.id}`;
             axios.get(url,this.$store.state.config)
             .then((result)=>{   
                 // console.log(result)
@@ -1437,13 +1430,11 @@ export default {
                     this.listaInsCursosAux[index]=insCurso;                                                         
                 }
                 this.listaInsCursos = this.listaInsCursosAux; 
-                // console.log('INSTANCIAS DE CURSOS')
-                //  console.log(this.listaInsCursos);
                 this.cargando = false;              
             }
             ).catch((error)=>{
                 this.cargando = false;
-                console.log(error.response)
+                // console.log(error.response)
             });
         },
         mostrarAyudantesDeCurso(item){
@@ -1462,7 +1453,7 @@ export default {
              this.listaProspectosAyudante = [];
              this.listaProspectosAyudanteAux = [];
             var aux;
-            var url = `http://127.0.0.1:8000/api/v1/estudiante/estudiantesAyudantes `;
+            var url = this.$store.state.rutaDinamica+`api/v1/estudiante/estudiantesAyudantes `;
             axios.get(url,this.$store.state.config)
             .then((result)=>{
                 
@@ -1479,18 +1470,11 @@ export default {
               
             }
             ).catch((error)=>{ 
-                console.log(error.response)
+                // console.log(error.response)
             });
         },
 
         opcionesAlAsignarAyudante(ayudantePrincipal,ayudanteAux,idAyudanteConCurso,idInstaciaCurso,num){
-            //   console.log("==================="+num+"==================")
-            //     console.log(ayudantePrincipal)
-            //     console.log(ayudanteAux)
-            //     console.log(idInstaciaCurso)
-            //     console.log(idAyudanteConCurso)
-            //     console.log("===========================================")
-            //     console.log()
             if( ayudanteAux!= null && idAyudanteConCurso!= null && ayudantePrincipal!=null &&ayudanteAux!=ayudantePrincipal){
                 if(idAyudanteConCurso!=''){
                     // console.log("Cambiamos al profesor principal por uno nuevo.")
@@ -1518,6 +1502,7 @@ export default {
                     "curso":  idInstaciaCurso,
                 };
                 this.asignartAyudante(post);
+                
                 }
             }
         },
@@ -1531,37 +1516,28 @@ export default {
             this.opcionesAlAsignarAyudante(this.ayudanteSeleccionado5,this.ayudanteSeleccionadoAux5,this.idAyudanteConCurso5,idInstancia,5)
             this.CerrarDialogAsignarAyudante();
             
-
-
         },
         asignartAyudante(post){
-            var url ='http://127.0.0.1:8000/api/v1/ayudanteCurso'; 
+            var url = this.$store.state.rutaDinamica+'api/v1/ayudanteCurso'; 
             /* crear profesor con curso */
-            console.log(post)
             if(post.estudiante!='' && post.curso!=''){
                 axios.post(url, post, this.$store.state.config)
             .then((result) => {
-                // console.log(result)
                 this.textoAlertas = "Se asignó el ayudante correctamente"
                 this.alertaExito=true;
                 this.obtenerInstanciasCursos();
                 
             }).catch((error)=>{
                 if (error.message == 'Network Error') {
-                    console.log(error)  
+                    // console.log(error)  
                     this.alertaError = true;
                     this.textoAlertas = "Error al asignar el profesor intente mas tarde."
                     this.resetAsignarCurso();
                 }
-                // if(error.response.data.code == 301){
-                //     console.log(error.response.data.code +' '+ error.response.data.message);
-                //     console.log(error.response.data);
-                //     this.alertaError = true;      
-                //     this.textoAlertas = error.response.data.message;
-                // }    
+   
                 if(error.response.data.code == 302){
-                    console.log(error.response.data.code +' '+ error.response.data.message);
-                    console.log(error.response.data);
+                    // console.log(error.response.data.code +' '+ error.response.data.message);
+                    // console.log(error.response.data);
                     this.alertaError = true;      
                     this.textoAlertas = error.response.data.message;
                 }                    
@@ -1601,14 +1577,13 @@ export default {
         mostrarProfesoresDeCurso(item){
             this.dialogProfesoresInsCurso = true;
             this.profesoresDeInstanciaCurso=item
-            // console.log(item);
         },  
         /**
          * Desvincula un profesor de una instancia de curso
          */
         desvincularProfesorInstanciaCurso(item, listaDeProfesores){
             if(listaDeProfesores.length>1){
-                var url = 'http://127.0.0.1:8000/api/v1/profesorConCurso/'+item.idProfesorConCurso;
+                var url = this.$store.state.rutaDinamica+ 'api/v1/profesorConCurso/'+item.idProfesorConCurso;
                 axios.delete(url,this.$store.state.config)
                 .then((result)=>{
                 if (result.statusText=='OK') {
@@ -1616,6 +1591,7 @@ export default {
                     this.textoAlertas = "Se desvinculo el el profesor con exito "
                     this.obtenerInstanciasCursos();
                     this.dialogProfesoresInsCurso=false;
+                    this.obtenerInstanciasCursos();
                 }
                 }).catch((error)=>{
                     if (error.message == 'Network Error') {
@@ -1642,11 +1618,12 @@ export default {
         
         crearCurso(){ 
             var valido=this.$refs.formCrearCurso.validate();
-            // console.log("semestre valido :" + valido)
+            console.log("llege aca : "+valido )
             if(valido == true){
                 var nombre=this.datosCurso.nombre; 
                 var plan = this.datosCurso.plan;
-                var escuela = this.datosCurso.escuela      
+                var escuela = this.datosCurso.idEscuela
+
                 if(nombre!='' && plan!='' && escuela!=''){
                     let post = {
                     "nombre": nombre,
@@ -1654,20 +1631,19 @@ export default {
                     "escuela": escuela,
                     "descripcion": 'sin descripcion',
                     }
-                    var url = 'http://127.0.0.1:8000/api/v1/curso';
-                    console.log(post)
+                    var url = this.$store.state.rutaDinamica+'api/v1/curso';
                     axios.post(url, post, this.$store.state.config)
                     .then((result) => {
-                        console.log(result)
+                        // console.log(result)
                         this.alertaExito = true;
                         this.textoAlertas = "Se creó el curso con exito."
                         this.resetCrearCurso();
                         this.obtenerCursos(); 
                         this.KeyDialogCrearCurso ++; 
                     }).catch((error)=>{
-                        console.log(error);
+                        // console.log(error);
                         if (error.message == 'Network Error') {
-                            console.log(error)
+                            // console.log(error)
                             this.alertaError = true;
                             this.textoAlertas = "Error al crear el curso, intente mas tarde."
                             this.resetCrearCurso();
@@ -1675,31 +1651,23 @@ export default {
                         };                        
                     });
                 }else{
-                    console.log("ERROR EN LOS DATOS INGRESADOS")
+                    // console.log("ERROR EN LOS DATOS INGRESADOS")
                     this.alertaError = true;
                     this.textoAlertas = "Es necesario rellenar todos los campos."
-    
                 }
             }
-
         },
 
         resetCrearCurso(){
-            this.datosCurso.nombre ="";
-            this.datosCurso.plan ="";
-            this.datosCurso.escuela ="";
-            this.datosCurso.descripcion ="";
+            this.datosCurso.nombre ='';
             this.dialogCrearCurso = false;
+            this.$refs.formCrearCurso.reset()
             this.KeyDialogCrearCurso ++;
         },
 
         setModificarCurso(item){
-            // this.datosCurso.id= item.id;
-            // this.datosCurso.nombre = item.nombre;
-            // this.datosCurso.plan = item.plan;
-            // this.datosCurso.escuela = item.escuela;
-            // this.datosCurso.descripcion = item.descripcion;
-            this.datosCurso=item;
+
+             this.datosCurso=item;
             this.dialogModificarCurso = true;
         },
         resetModificarCurso(){
@@ -1707,31 +1675,30 @@ export default {
             this.dialogModificarCurso = false;
         },
         modificarCurso(){
-            console.log("inicio mod curso");
-
-            var url =`http://127.0.0.1:8000/api/v1/curso/${this.datosCurso.id}`;
+            var url = this.$store.state.rutaDinamica+`api/v1/curso/${this.datosCurso.id}`;
             let put ={                
                 "nombre": this.datosCurso.nombre,
                 "plan": this.datosCurso.plan,
-                "escuela": this.datosCurso.escuela,
+                "escuela": this.datosCurso.idEscuela,
                 "descripcion": ''
             };
+            console.log(put)
             axios.put(url,put,this.$store.state.config)
             .then((result)=>{
-                if (result.statusText=='OK') {                
-                    this.alertaExito = true;
-                    this.textoAlertas = "Se modificó el curso con exito."
-                    this.obtenerCursos(); 
-                    this.resetModificarCurso();
-                }
+                this.alertaExito = true;
+                this.textoAlertas = "Se modificó el curso con exito."
+                this.obtenerCursos(); 
+                this.resetModificarCurso();
+              
+                
             }).catch((error)=>{                
                 if (error.message == 'Network Error') {
-                    console.log(error)
+                    // console.log(error)
                     this.alertaError = true;
                     this.textoAlertas = "Error al modificar el curso, intente mas tarde."
                 }
                 else{
-                    console.log(error.response);
+                    // console.log(error.response);
                     // if(error.response.data.success == false){
                     //     if(error.response.data.code == 601){
                     //         console.log(error.response.data.code +' '+ error.response.data.message);
@@ -1760,13 +1727,8 @@ export default {
         },
         
         setEliminarCurso(item){
-            console.log("seteando curso")
-            this.datosCurso.id= item.id;
-            this.datosCurso.nombre = item.nombre;
-            this.datosCurso.plan = item.plan;
-            this.datosCurso.escuela = item.escuela;
-            this.datosCurso.descripcion = item.descripcion;
-            this.dialogEliminarCurso = true;
+             this.datosCurso= item
+             this.dialogEliminarCurso = true;
         },
         resetEliminarCurso(){
             this.datosCurso.id= '';
@@ -1777,18 +1739,17 @@ export default {
             this.dialogEliminarCurso = false;
         },
         eliminarCurso(){
-            var url = 'http://127.0.0.1:8000/api/v1/curso/'+this.datosCurso.id;
+           var url = this.$store.state.rutaDinamica+'api/v1/curso/'+this.datosCurso.id;
             axios.delete(url,this.$store.state.config)
             .then((result)=>{
-            if (result.statusText=='OK') {
                 this.obtenerCursos();
                 this.resetEliminarCurso(); 
                 this.alertaExito = true;
                 this.textoAlertas = "Se elimino el curso con exito "
-            }
+            
             }).catch((error)=>{
                 if (error.message == 'Network Error') {
-                    console.log(error)
+                    // console.log(error)
                     this.alertaError = true;
                     this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
                 }
@@ -1805,11 +1766,11 @@ export default {
         asignarCursos(){
             if(this.seleccionados.length != 0){
                 //profesores seleccionados.
-                this.profesorSeleccionado = '';
-                this.profesorSeleccionado2='';
-                this.profesorSeleccionado3='';
-                this.profesorSeleccionado4='';
-                this.profesorSeleccionado5='';
+                this.profesorSeleccionado = null;
+                this.profesorSeleccionado2=null;
+                this.profesorSeleccionado3=null;
+                this.profesorSeleccionado4=null;
+                this.profesorSeleccionado5=null;
                 this.dialogAsignarCurso = true; 
                 //this.resetSeccion();
                 //this.resetProfesores();    
@@ -1823,7 +1784,7 @@ export default {
          * Desvincula un ayudante de una instancia curso.
          */
         desvincularAyudanteInstanciaCurso(idAyudanteConCurso){
-            var url = 'http://127.0.0.1:8000/api/v1/ayudanteCurso/'+idAyudanteConCurso;
+            var url = this.$store.state.rutaDinamica+'api/v1/ayudanteCurso/'+idAyudanteConCurso;
             axios.delete(url,this.$store.state.config)
             .then((result)=>{
             if (result.statusText=='OK') {
@@ -1834,7 +1795,7 @@ export default {
             }
             }).catch((error)=>{
                 if (error.message == 'Network Error') {
-                    console.log(error)
+                    // console.log(error)
                     this.alertaError = true;
                     this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
                 }
@@ -1849,10 +1810,10 @@ export default {
             // console.log(item);
              var enrutamiento = this.semestre;
             if (this.$store.state.usuario.usuario.rol == "admin") {
-                this.$router.push({path:'/administrador/cursos/'+enrutamiento+'/id='+item.id});
+                this.$router.push({path:'/administrador/semestres/'+enrutamiento+'/id='+item.id});
             } else {
                 if (this.$store.state.usuario.usuario.rol == "secretaria de escuela") {
-                    this.$router.push({path:'/secretariaEscuela/cursos/'+enrutamiento+'/id='+item.id});
+                    this.$router.push({path:'/secretariaEscuela/semestres/'+enrutamiento+'/id='+item.id});
                 } else {
                     // if (this.$store.state.usuario.usuario.rol == "profesor") {
                     //     this.$router.push({path:'/profesor/'+estudiantes+'/id='+item.id});
@@ -1880,11 +1841,11 @@ export default {
          * La asignacion de cursos a una instancia de curso.
          */
         resetAsignarCurso(){
-            this.profesorSeleccionado = '';
-            this.profesorSeleccionado2='';
-            this.profesorSeleccionado3='';
-            this.profesorSeleccionado4='';
-            this.profesorSeleccionado5='';
+            this.profesorSeleccionado = null;
+            this.profesorSeleccionado2=null;
+            this.profesorSeleccionado3=null;
+            this.profesorSeleccionado4=null;
+            this.profesorSeleccionado5=null;
             this.seleccionados = [];
 
         },
@@ -1896,8 +1857,14 @@ export default {
             /**variables para el correcto funcionamiento de la consulta. */
             let ins_curso=0;
             let profe_Selec="";
+            var profesor1=this.profesorSeleccionado;
+            var profesor2=this.profesorSeleccionado2;
+            var profesor3=this.profesorSeleccionado3;
+            var profesor4=this.profesorSeleccionado4;
+            var profesor5=this.profesorSeleccionado5;
+
             this.dialogAsignarCurso = true
-            if( this.profesorSeleccionado!='' ){
+            if( this.seleccionados!=null ){
                 for(let i = 0; i < this.seleccionados.length ; i++){
                     /* datos instancia curso */
                     let post = {
@@ -1905,63 +1872,52 @@ export default {
                         "curso": this.seleccionados[i].id,
                         "seccion":  this.seleccionados[i].seccion,
                     }
-                    var url = 'http://127.0.0.1:8000/api/v1/instanciaCurso';   
+                    var url = this.$store.state.rutaDinamica+'api/v1/instanciaCurso';   
                     axios.post(url, post, this.$store.state.config)
                     .then((result) => {
                         ins_curso= result.data.data.insCurso.id;
                             if(ins_curso != 0){
-                            if(this.profesorSeleccionado != ''){
+                            if(profesor1 != null){
                                 let post2 = {
-                                    "profesor" :  this.profesorSeleccionado,
+                                    "profesor" : profesor1,
                                     "curso":  ins_curso,
                                     };
                                 this.agregarProfesorCurso(post2)
                             }
-                            if(this.profesorSeleccionado2 != ''){
+                            if(profesor2 != null){
                                 let post2 = {
-                                    "profesor" :  this.profesorSeleccionado2,
+                                    "profesor" :  profesor2,
                                     "curso":  ins_curso,
                                     };
                                 this.agregarProfesorCurso(post2)
                                 }
-                            if(this.profesorSeleccionado3 != ''){
+                            if(profesor3 != null){
                                 let post2 = {
-                                    "profesor" :  this.profesorSeleccionado3,
+                                    "profesor" :  profesor3,
                                     "curso":  ins_curso,
                                     };
                                 
                                 this.agregarProfesorCurso(post2)
                             }
-                            if(this.profesorSeleccionado4 != ''){
+                            if(profesor4 != null){
                                 let post2 = {
-                                    "profesor" :  this.profesorSeleccionado4,
+                                    "profesor" :  profesor4,
                                     "curso":  ins_curso,
                                     };
                                 this.agregarProfesorCurso(post2)
                             }
-                            if(this.profesorSeleccionado5 != ''){
+                            if(profesor5 != null){
                                 let post2 = {
-                                    "profesor" :  this.profesorSeleccionado5,
+                                    "profesor" :  profesor5,
                                     "curso":  ins_curso,
                                     };
                                 
                                 this.agregarProfesorCurso(post2)
                             }
-                            // Reseteamos las variables.
-                            this.cerrarDialogAsignarCurso();
-                            // obtenemos la lista de instancias de cursos con sus modificaciones
-                            this.obtenerInstanciasCursos();   
-                        }
-                        else{
-                            // console.log('NO FUNCIONO')
-                            this.alertaError = true;
-                            this.textoAlertas = "Error al asignar profesores al curso."
-                            this.cerrarDialogAsignarCurso();                            
-                            this.obtenerInstanciasCursos();
                         }
     
                         }).catch((error)=>{
-                            console.log( error.response.data);
+                            // console.log( error.response.data);
                             if (error.message == 'Network Error') {
                                 this.alertaError = true;
                                 this.textoAlertas = "Error al asignar el curso, intente mas tarde."
@@ -1979,7 +1935,11 @@ export default {
                             }   
                         });                                                            
                     } 
+                    // Reseteamos las variables.
+                    this.cerrarDialogAsignarCurso();
+                    // obtenemos la lista de instancias de cursos con sus modificaciones
             }
+            
         },
         /**
          * Abre el dialog para la la creación de una una instancia de curso.
@@ -1997,13 +1957,14 @@ export default {
          * creada
          */
         agregarProfesorCurso(post2){
-            var url2 = 'http://127.0.0.1:8000/api/v1/profesorConCurso'; 
+            var url2 = this.$store.state.rutaDinamica+'api/v1/profesorConCurso'; 
             /* crear profesor con curso */
             if(post2.curso!='' && post2.profesor!=''){
                 axios.post(url2, post2, this.$store.state.config)
             .then((result) => {
                 this.textoAlertas = "Se asignó el profesor correctamente"
                 this.alertaExito=true;
+                this.obtenerInstanciasCursos();
                 
             }).catch((error)=>{
                 if (error.message == 'Network Error') {
@@ -2013,19 +1974,18 @@ export default {
                     this.resetAsignarCurso();
                 }
                 if(error.response.data.code == 301){
-                    console.log(error.response.data.code +' '+ error.response.data.message);
-                    console.log(error.response.data);
+
                     this.alertaError = true;      
                     this.textoAlertas = error.response.data.message;
                 }    
                 if(error.response.data.code == 302){
-                    console.log(error.response.data.code +' '+ error.response.data.message);
-                    console.log(error.response.data);
                     this.alertaError = true;      
                     this.textoAlertas = error.response.data.message;
                 }                    
             });
             }
+            // console.log("OBTENIENDO LAS NUEVAS INSTANCIAS")
+            this.obtenerInstanciasCursos(); 
         },
         /**
          * Cierra el dialog de modificar instancia curso.
@@ -2064,7 +2024,7 @@ export default {
             // this.obtenerInstanciasCursos();
         },
         DesvincularUnProfesorInsCurso(id){
-            var url = 'http://127.0.0.1:8000/api/v1/profesorConCurso/'+id;
+            var url = this.$store.state.rutaDinamica+'api/v1/profesorConCurso/'+id;
              console.log(url)
                 axios.delete(url,this.$store.state.config)
                 .then((result)=>{
@@ -2130,6 +2090,7 @@ export default {
                     };
                     // console.log(post2)
                     this.agregarProfesorCurso(post2)
+                    
                 }
             }
             // if(this.profesorSeleccionadoAux == this.profesorSeleccionado ){
@@ -2137,54 +2098,67 @@ export default {
             // }
         },
         modificarInstanciaCurso(){
-            var url =`http://127.0.0.1:8000/api/v1/instanciaCurso/${this.InstanciaModificar.id}`;
+            var url =this.$store.state.rutaDinamica+`api/v1/instanciaCurso/${this.InstanciaModificar.id}`;
             let put ={                
                 "seccion": this.InstanciaModificar.seccion,
             };
             axios.put(url,put,this.$store.state.config)
             .then((result)=>{
-                var ins_curso=this.InstanciaModificar.id;
-                this.modificarProfesores(this.profesorSeleccionado,this.profesorSeleccionadoAux,this.profesorConCurso,ins_curso,1)
-                this.modificarProfesores(this.profesorSeleccionado2,this.profesorSeleccionadoAux2,this.profesorConCurso2,ins_curso,2)
-                this.modificarProfesores(this.profesorSeleccionado3,this.profesorSeleccionadoAux3,this.profesorConCurso3,ins_curso,3)
-                this.modificarProfesores(this.profesorSeleccionado4,this.profesorSeleccionadoAux4,this.profesorConCurso4,ins_curso,4)
-                this.modificarProfesores(this.profesorSeleccionado5,this.profesorSeleccionadoAux5,this.profesorConCurso5,ins_curso,5)
-
-                this.cerrarDialogModificarInstanciaCurso();
-                this.alertaExito = true;
-                this.textoAlertas = this.ModificacionExitosa;
-                this.obtenerInstanciasCursos(); 
-                this.resetModificarInstanciaCurso();
+                 this.alertaExito = true;
+            this.textoAlertas = "Se modifico la sección con exito";
                 
-           }).catch((error)=>{                
+           }).catch((error)=>{   
                 if (error.message == 'Network Error') {
-                    console.log(error);
-                    this.resetModificarInstanciaCurso();
                     this.alertaError = true;
                     this.textoAlertas = "Error al modificar el curso, intente mas tarde."
+                    this.obtenerInstanciasCursos(); 
+                    this.cerrarDialogModificarInstanciaCurso();
                 }
                 else{
-                    console.log(error.response);
                     if(error.response.data.success == false){
                         if(error.response.data.code == 301){
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;
-                            this.resetModificarInstanciaCurso();
+                            this.obtenerInstanciasCursos(); 
+                            this.cerrarDialogModificarInstanciaCurso();
                         }
                         if(error.response.data.code == 602){
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;
-                            this.resetModificarInstanciaCurso();
+                            this.obtenerInstanciasCursos(); 
+                            this.cerrarDialogModificarInstanciaCurso();
                         }
                         if(error.response.data.code == 603){
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;
-                            this.resetModificarInstanciaCurso();
+                           this.obtenerInstanciasCursos(); 
+                            this.cerrarDialogModificarInstanciaCurso();
                         }
-                    }           
+                        if(error.response.data.code == 409){
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true;
+                            this.obtenerInstanciasCursos(); 
+                            this.cerrarDialogModificarInstanciaCurso();
+                        }
+                    }
+         
                 }                  
             });
-        },
+            var ins_curso=this.InstanciaModificar.id;
+            this.modificarProfesores(this.profesorSeleccionado,this.profesorSeleccionadoAux,this.profesorConCurso,ins_curso,1)
+            this.modificarProfesores(this.profesorSeleccionado2,this.profesorSeleccionadoAux2,this.profesorConCurso2,ins_curso,2)
+            this.modificarProfesores(this.profesorSeleccionado3,this.profesorSeleccionadoAux3,this.profesorConCurso3,ins_curso,3)
+            this.modificarProfesores(this.profesorSeleccionado4,this.profesorSeleccionadoAux4,this.profesorConCurso4,ins_curso,4)
+            this.modificarProfesores(this.profesorSeleccionado5,this.profesorSeleccionadoAux5,this.profesorConCurso5,ins_curso,5)
+
+            this.cerrarDialogModificarInstanciaCurso();
+            // this.alertaExito = true;
+            // this.textoAlertas = this.ModificacionExitosa;
+            this.obtenerInstanciasCursos(); 
+            this.resetModificarInstanciaCurso();
+       
+       
+       },
 
         setEliminarInstanciaCurso(item){
             this.datosInsCurso.id = item.id;
@@ -2207,7 +2181,7 @@ export default {
          * Deshabilita una instancia de curso en la base de datos.
          */
         eliminarInstanciaCurso(){
-            var url = 'http://127.0.0.1:8000/api/v1/instanciaCurso/'+this.datosInsCurso.id;
+            var url = this.$store.state.rutaDinamica+'api/v1/instanciaCurso/'+this.datosInsCurso.id;
             axios.delete(url,this.$store.state.config)
             .then((result)=>{
                 this.obtenerInstanciasCursos();

@@ -245,7 +245,7 @@ class UsuarioController extends Controller{
         if(!array_key_exists ("password" , $entradas)){
             $entradas['password'] = null;
         }
-        if(!array_key_exists ("foto" , $entradas)){
+        if($entradas['foto']==null){
             // Nombre de la imagen
             $path = 'image.png';
             // Extensión de la imagen
@@ -256,6 +256,21 @@ class UsuarioController extends Controller{
             $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
             $entradas['foto'] = $base64;
         }
+
+        //En el servidor se trabaja de esta manera
+        // if($entradas['foto']==null){
+        //     // Nombre de la imagen
+            
+        //     $path = 'image.png';
+        //     // Extensi贸n de la imagen
+        //     $type = pathinfo($path, PATHINFO_EXTENSION);
+        //     // Cargando la imagen
+        //     $data = file_get_contents("/home/proyec44/Backend/storage/image/image.png");
+        //     // Decodificando la imagen en base64
+        //     $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+        //     $entradas['foto'] = $base64;
+        // }
+
         try{
             $usuario = new User();
             $usuario ->nombre=$entradas['nombre'];
@@ -786,11 +801,14 @@ class UsuarioController extends Controller{
             $details = array(
                 'opcion' => 3,
                 'motivo' => $entradas['motivo'],
+                'destinatario' => '',
+                'autor' => $credenciales->nombre,
+                'escuela' => $credenciales->getEscuela->nombre,
                 'descripcion' => $entradas['descripcion'],
-                'usuario' => $credenciales['nombre']
             );
             foreach($entradas['destinatarios'] as $destinatario){
                 $usuario = User::Where('id', $destinatario)->first();
+                $details['destinatario']= $usuario->nombre;
                 \Mail::to($usuario['email'])->send(new SendMail($details));
             }
             return response()->json([
