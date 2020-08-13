@@ -513,8 +513,34 @@
         textoAcept: '',
         delay: 4000,
         listaSituacionAcademica:[
-            'Regular ','Egresado ', 'Eliminado ', 'Titulado',
-            'Intercambio','Postergación','Retiro','Temporal'
+            {
+                id:1,
+                nombre:"REGULAR",
+            },
+            {
+                id:2,
+                nombre:"EGRESADO",
+            },
+            {
+                id:3,
+                nombre:"ELIMINADO",
+            },
+            {
+                id:4,
+                nombre:"TITULADO",
+            },
+            {
+                id:5,
+                nombre:"INTERCAMBIO",
+            },
+            {
+                id:6,
+                nombre:"POSTEGACIÓN",
+            },
+            {
+                id:7,
+                nombre:"RETIRO TEMPORAL",
+            },
         ],
         escuelaExportar:'',
         // todosLosAnhosVariable: true,
