@@ -249,26 +249,26 @@
                     <v-container class="px-5 mt-5" >
                         <v-form  ref="formCrearCurso"  style="margin:0;padding:0;" v-model="formularioCrearCursoValido" lazy-validation>
                             <v-text-field
-                                v-model="datosCurso.nombre"
+                                v-model="datosCursoAux.nombre"
                                 label="Nombre del Curso"
-                                :rules="[() => !!datosCurso.nombre ||'Requerido']"
+                                :rules="[() => !!datosCursoAux.nombre ||'Requerido']"
                                 outlined
                                 prepend-inner-icon="mdi-account"
                             ></v-text-field>
                             <v-text-field
-                                v-model="datosCurso.plan"
+                                v-model="datosCursoAux.plan"
                                 label="Plan al que Pertenece el Curso"
-                                :rules="[() => !!datosCurso.plan ||'Requerido']"
+                                :rules="[() => !!datosCursoAux.plan ||'Requerido']"
                                 outlined
                                 prepend-inner-icon="mdi-account"
                             ></v-text-field>
                             <v-select
-                                v-model="datosCurso.idEscuela"
+                                v-model="datosCursoAux.escuela"
                                 label="Escuela"
                                 :items="listaEscuela"
                                 item-text="nomEscuela"
                                 item-value="idEscuela"
-                                :rules="[() => !!datosCurso.idEscuela ||'Requerido']"
+                                :rules="[() => !!datosCursoAux.escuela ||'Requerido']"
                                 outlined
                                 prepend-inner-icon="mdi-school"
                             ></v-select>   
@@ -293,24 +293,24 @@
                         <h5 class="white--text ">Modificar Curso</h5>
                     </v-card-title>
                     <v-container class="px-5 mt-5">
-                        <v-text-field v-model="datosCurso.nombre" label="Nombre del Curso" outlined
+                        <v-text-field v-model="datosCursoAux.nombre" label="Nombre del Curso" outlined
                             color="secondary"
-                            :rules="[() => !!datosCurso.nombre ||'Requerido']"
+                            :rules="[() => !!datosCursoAux.nombre ||'Requerido']"
                             prepend-inner-icon="mdi-account"
                         ></v-text-field>
-                        <v-text-field v-model="datosCurso.plan" label="Plan" outlined
+                        <v-text-field v-model="datosCursoAux.plan" label="Plan" outlined
                             color="secondary"
-                            :rules="[() => !!datosCurso.plan ||'Requerido']"
+                            :rules="[() => !!datosCursoAux.plan ||'Requerido']"
                             prepend-inner-icon="mdi-account"
                         ></v-text-field>
-                        <v-select  v-model="datosCurso.nomEscuela"
+                        <v-select  v-model="datosCursoAux.escuela"
                             :items="listaEscuela"
                             item-text="nomEscuela"
-                            item-value="id"
+                            item-value="idEscuela"
                             label="Escuela"
                             outlined
                             :small-chips="$vuetify.breakpoint.smAndDown ? true : false"
-                            :rules="[() => !!datosCurso.nomEscuela ||'Requerido']"
+                            :rules="[() => !!datosCursoAux.escuela ||'Requerido']"
                             prepend-inner-icon="mdi-school"
                         ></v-select>
                         <div style="text-align:right;" class="mb-1 " >
@@ -340,10 +340,9 @@
                         </v-card-title> 
                         <!-- <v-container fluid class=" text-left"> -->
                         <v-card-title class="text-justify" style="font-size: 100%;">Esta seguro que desea eliminar el siguiente Curso?</v-card-title>
-                        <v-card-text>Nombre : {{ this.datosCurso.nombre }}</v-card-text>
-                        <v-card-text>Plan : {{ this.datosCurso.plan }}</v-card-text>
-                        <v-card-text>Escuela : {{ this.datosCurso.escuela }}</v-card-text>
-                        <v-card-text>Descripcion : {{ this.datosCurso.descripcion }}</v-card-text>
+                        <v-card-text>Nombre : {{ this.datosCursoAux.nombre }}</v-card-text>
+                        <v-card-text>Plan : {{ this.datosCursoAux.plan }}</v-card-text>
+                        <v-card-text>Escuela : {{ this.datosCursoAux.nomEscuela }}</v-card-text>                        
                         <!-- </v-container > -->
                         <div style="text-align:right;">
                             <v-btn rounded color="warning" class=" mb-4 "  @click="dialogEliminarCurso = false">
@@ -934,6 +933,7 @@ export default {
             timeout: 6000,
             /* --------------- */
             datosCurso: [{id:''},{nombre:''},{plan:''},{escuela:''},{descripcion:''}],
+            datosCursoAux: [{id:''},{nombre:''},{plan:''},{escuela:''},{nomEscuela:''},{descripcion:''}],
             datosInsCurso: [{id:''},{semestre:''},{curso:''},{nomCurso:''}],
             listaDeSeccionesDisponibles:['A','B','C','D','E','F','G','H'],
             cargando: false,
@@ -1679,10 +1679,13 @@ export default {
             var valido=this.$refs.formCrearCurso.validate();
             console.log("llege aca : "+valido )
             if(valido == true){
-                var nombre=this.datosCurso.nombre; 
-                var plan = this.datosCurso.plan;
-                var escuela = this.datosCurso.idEscuela
+                var nombre=this.datosCursoAux.nombre; 
+                var plan = this.datosCursoAux.plan;
+                var escuela = this.datosCursoAux.escuela;
 
+                console.log(nombre);
+                console.log(plan);
+                console.log(escuela);
                 if(nombre!='' && plan!='' && escuela!=''){
                     let post = {
                     "nombre": nombre,
@@ -1726,27 +1729,36 @@ export default {
         },
 
         resetCrearCurso(){
-            this.datosCurso.nombre ='';
+            this.datosCursoAux.nombre ='';
+            this.datosCursoAux.plan ='';
+            this.datosCursoAux.escuela ='';
             this.dialogCrearCurso = false;
-            this.$refs.formCrearCurso.reset()
+            this.$refs.formCrearCurso.reset();
             this.KeyDialogCrearCurso ++;
         },
 
-        setModificarCurso(item){
-
-             this.datosCurso=item;
+        setModificarCurso(item){          
+            this.datosCursoAux.id = item.id;
+            this.datosCursoAux.nombre = item.nombre;
+            this.datosCursoAux.plan = item.plan;
+            this.datosCursoAux.escuela = item.idEscuela;
+            this.datosCursoAux.nomEscuela = item.nomEscuela;            
             this.dialogModificarCurso = true;
         },
         resetModificarCurso(){
-            this.datosCurso= '';
+            this.datosCursoAux.id = '';
+            this.datosCursoAux.nombre = '';
+            this.datosCursoAux.plan = '';
+            this.datosCursoAux.escuela = '';
+            this.datosCursoAux.nomEscuela = ''; 
             this.dialogModificarCurso = false;
         },
         modificarCurso(){
-            var url = this.$store.state.rutaDinamica+`api/v1/curso/${this.datosCurso.id}`;
+            var url = this.$store.state.rutaDinamica+`api/v1/curso/${this.datosCursoAux.id}`;
             let put ={                
-                "nombre": this.datosCurso.nombre,
-                "plan": this.datosCurso.plan,
-                "escuela": this.datosCurso.idEscuela,
+                "nombre": this.datosCursoAux.nombre,
+                "plan": this.datosCursoAux.plan,
+                "escuela": this.datosCursoAux.escuela,
                 "descripcion": ''
             };
             console.log(put)
@@ -1799,19 +1811,23 @@ export default {
         },
         
         setEliminarCurso(item){
-            this.datosCurso= item
+            this.datosCursoAux.id = item.id;
+            this.datosCursoAux.nombre = item.nombre;
+            this.datosCursoAux.plan = item.plan;
+            this.datosCursoAux.escuela = item.idEscuela;
+            this.datosCursoAux.nomEscuela = item.nomEscuela; 
             this.dialogEliminarCurso = true;
         },
         resetEliminarCurso(){
-            this.datosCurso.id= '';
-            this.datosCurso.nombre = '';
-            this.datosCurso.plan = '';
-            this.datosCurso.escuela = '';
-            this.datosCurso.descripcion = '';
+            this.datosCursoAux.id= '';
+            this.datosCursoAux.nombre = '';
+            this.datosCursoAux.plan = '';
+            this.datosCursoAux.escuela = '';
+            this.datosCursoAux.nomEscuela = '';            
             this.dialogEliminarCurso = false;
         },
         eliminarCurso(){
-            var url = this.$store.state.rutaDinamica+'api/v1/curso/'+this.datosCurso.id;
+            var url = this.$store.state.rutaDinamica+'api/v1/curso/'+this.datosCursoAux.id;
             axios.delete(url,this.$store.state.config)
             .then((result)=>{
                 this.obtenerCursos();
