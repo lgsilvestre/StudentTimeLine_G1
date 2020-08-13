@@ -281,7 +281,7 @@
         <v-icon color="white"   
             class="mr-3"                      
         >
-        fas fa-exclamation-triangle 
+        fas fa-exclamation-triangle
         </v-icon>
     
         <strong> {{textoAlertas }}</strong>
@@ -302,7 +302,7 @@
     <v-snackbar v-model="alertaExito" :timeout="timeout" bottom
         color= "secondary" left class="pb-12"  >
         <v-icon class="mr-3"  color="white" >
-            fas fa-info-circle  
+            fas fa-check-circle  
         </v-icon>
     
         <strong> {{ textoAlertas }} </strong>
@@ -501,7 +501,7 @@ export default {
                     if (result.data.success==true){
                         this.dialogAñadirSemestre = false;
                         
-                        this.textoAlertas = this.ErrorCreacionSemetre;
+                        this.textoAlertas = "Semestre registrado exitosamente";
                         this.alertaExito=true;
                         this.obtenerListaDeSemestres(); 
                     }
