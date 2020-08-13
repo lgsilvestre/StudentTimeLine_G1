@@ -509,7 +509,7 @@
                         <v-text-field
                             v-model="datosSolicitud.nota"
                             prepend-inner-icon="far fa-star"    
-                            :rules="reglasNumeros"                    
+                            :rules="reglasNota"                    
                             label="Nota Aprobación del Módulo"
                             outlined                       
                         >
@@ -539,6 +539,7 @@
                             <v-btn 
                             :disable="!formSolicitud"
                             :small="$vuetify.breakpoint.smAndDown ? true : false"
+                            :loading= "cargando"
                             rounded color="secondary" class="ml-2" @click="enviarSolicitud()" >
                                 <h4 class="white--text">Registrar</h4>
                             </v-btn>
@@ -1002,6 +1003,11 @@ export default {
             reglasNumeros: [
                 v => !!v || 'Requerido',                
                 v => /^[0-9]+$/.test(v) || 'Solo numeros',
+            ],
+            reglasNota: [
+                v => !!v || 'Requerido',                
+                v => /^[0-9]+$/.test(v) || 'Solo numeros',
+                v => v >= 50 && v <= 70 || 'Nota superior a 50 y menor a 70 (incluyendolos)',
             ],
             datosSolicitud: { curso:'', nota:'', horas:'',meses:''},
             formSolicitud: true,
@@ -1960,8 +1966,9 @@ export default {
         },
 
         enviarSolicitud(){
+            this.cargando = true;
             // form_solicitarEstudianteValido
-            var valido=this.$refs.form_solicitudEstudiante.validate();
+            var valido=this.$refs.solicitud.validate();
             // console.log("semestre valido :" + valido)
             if(valido == true){
                 
@@ -1976,17 +1983,20 @@ export default {
     
                 axios.post(url, post, this.$store.state.config)
                 .then((result) => {
-                    console.log(result);
-                    console.log(result.data);
+                    this.cargando = false;
+                    // console.log(result);
+                    // console.log(result.data);
                     this.alertAcept = true;
                     this.textoAcept = "Se envió la solicitud con exito"
                     this.resetDialogSolicitud();
+                    
                 }).catch((error)=>{
+                    this.cargando = false;
                     if (error.message == 'Network Error') {
-                        console.log(error)
+                        // console.log(error)
                         this.alertError = true;
                         this.textoError = "Error al enviar la solicitud, intente mas tarde."
-                        this.resetDialogSolicitud();
+                        this.resetDialogSolicitud();                        
                     }                            
                 });
             }
