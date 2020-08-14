@@ -159,7 +159,7 @@
             
             <v-btn color="white" elevation="0" x-small
             fab @click="alertError = ! alertError" > 
-                <v-icon color="secondary">fas fa-times</v-icon>
+                <v-icon color="warning">fas fa-times</v-icon>
             </v-btn>
         </v-snackbar>
     </v-container> 
@@ -198,8 +198,8 @@ export default {
             imagenMiniatura:null,
             correo:'',
             reglasNombre:[
-                v => /^[a-zA-Z ]+$/.test(v) || 'Nombre no Válido.',
-                v => /^[a-zA-Z ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',
+                v => /^[a-zA-ZÀ-ÿ\u00f1\u00d1 ]+$/.test(v) || 'Nombre no Válido.',
+                v => /^[a-zA-ZÀ-ÿ\u00f1\u00d1 ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',
             ],
             reglasEmail: [
                 v => /.+@utalca.cl/.test(v) || /.+@alumnos.utalca.cl/.test(v) || 'Correo no Válido', 
@@ -248,7 +248,7 @@ export default {
                 this.$store.state.usuario.usuario =result.data.data.usuario;
             if (result.data.success == true) {
                 this.datosUsuarioAux=result.data.data.usuario;
-                console.log();
+                //console.log();
                 if (this.datosUsuarioAux == "admin") {
                     this.datosUsuarioAux.role= this.roles[0];
                 };
@@ -265,22 +265,31 @@ export default {
             }
             }).catch((err)=>{
                 if (error.message == 'Network Error') {
-                    console.log(error);
+                    //console.log(error);
                     state.verificacionLogin= true;
                     state.cargaLogin=false;
-                    state.mensajeErrorLogin= 'Error al comunicarse con el servidor, intente más tarde';
+                    state.mensajeErrorLogin= 'Error al comunicarse con el servidor, inténtelo más tarde';
                 } else {
                     if (error.response.data.success == false) {
                         switch (error.response.data.code) {
                             case 501:
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
+                                //console.log(error.response.data.code +' '+ error.response.data.message);
+                                //console.log(error.response.data);
+                                this.alertError = true;
+                                var mensaje=error.response.data.message;
+                                this.textoError=mensaje;
                                 break;
                             case 502:
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
+                                //console.log(error.response.data.code +' '+ error.response.data.message);
+                                //console.log(error.response.data);
+                                this.alertError = true;
+                                var mensaje=error.response.data.message;
+                                this.textoError=mensaje;
                                 break;
                             default:
+                                this.alertError = true;
+                                var mensaje=error.response.data.message;
+                                this.textoError=mensaje;
                                 break;
                         }
                     }
@@ -314,54 +323,60 @@ export default {
                     this.reset();
                 }
             }).catch((error)=>{
-                console.log(error);
-                console.log(error.response.data);
+                //console.log(error);
+                //console.log(error.response.data);
                 this.resetModificacionUsuario();
                 if (error.message == 'Network Error') {
-                    console.log(error);
+                    //console.log(error);
                     this.cargando = false;
                     this.alertError = true;
-                    var mensaje="La modificación del perfil fue realizada con exito";
+                    var mensaje="Se ha modificado correctamente el perfil.";
                     this.textoError=mensaje;
                     this.reset();
                 } else 
                 if (error.response.data.success == false) {
                     switch (error.response.data.code) {
                     case 601:
-                        console.log(error.response.data.code +' '+ error.response.data.message);
-                        console.log(error.response.data);
+                        //console.log(error.response.data.code +' '+ error.response.data.message);
+                        //console.log(error.response.data);
                         this.cargando = false;
                         this.alertError = true;
-                        var mensaje=result.data.message;
-                        this.textoError="Error en los datos ingresados";
+                        var mensaje=error.response.data.message;
+                        this.textoError=mensaje;
                         this.reset();
                         break;
                     case 602:
-                        console.log(error.response.data.code +' '+ error.response.data.message);
-                        console.log(error.response.data);
+                        //console.log(error.response.data.code +' '+ error.response.data.message);
+                        //console.log(error.response.data);
                         this.cargando = false;
                         this.alertError = true;
-                        var mensaje=result.data.message;
+                        var mensaje=error.response.data.message;
                         this.textoError="El usuario no existe.";
                         this.reset();
                         break;
                     case 603:
-                        console.log(error.response.data.code +' '+ error.response.data.message);
-                        console.log(error.response.data);
+                        //console.log(error.response.data.code +' '+ error.response.data.message);
+                        //console.log(error.response.data);
                         this.cargando = false;
-                        this.alertError = true;
-                        this.textoError="El usuario no tiene los permisos necesarios para realizar esta operacion.";
+                        var mensaje=error.response.data.message;
+                        this.textoError=mensaje;
+                        this.reset();
                         break;
                     case 604:
-                        console.log(error.response.data.code +' '+ error.response.data.message);
-                        console.log(error.response.data);
+                        //console.log(error.response.data.code +' '+ error.response.data.message);
+                        //console.log(error.response.data);
                         this.cargando = false;
                         this.alertError = true;
-                        var mensaje="Error en la base de datos";
+                        var mensaje=error.response.data.messagee;
                         this.textoError=mensaje;
                         this.reset()
                         break;
                     default:
+                        this.cargando = false;
+                        this.alertError = true;
+                        var mensaje=error.response.data.message;
+                        this.textoError=mensaje;
+                        this.reset()
                         break;
                     }
                 }

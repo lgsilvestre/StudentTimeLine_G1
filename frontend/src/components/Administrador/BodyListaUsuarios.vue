@@ -278,7 +278,8 @@
                                                 :rules="[() => !!datosUsuario.escuela ||'Requerido']"
                                                 prepend-inner-icon="mdi-school"
                                             ></v-select> 
-                                            <v-select  v-model="datosUsuario.escuelaAux"
+                                            <v-select  v-show="datosUsuario.role!='Profesor' && datosUsuario.role!=''"
+                                                v-model="datosUsuario.escuelaAux"
                                                 :items="listaEscuela"
                                                 item-text="nombre"
                                                 item-value="id"
@@ -479,8 +480,8 @@ export default {
             //Reglas
             reglasNombre:[
                 v => !!v || 'Requerido',
-                v => /^[a-zA-Z ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',
-                v => /^[a-zA-Z ]+$/.test(v) || 'Nombre no Válido.'
+                v => /^[a-zA-ZÀ-ÿ\u00f1\u00d1 ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',
+                v => /^[a-zA-ZÀ-ÿ\u00f1\u00d1 ]+$/.test(v) || 'Nombre no Válido.'
             ],
             reglasEmail: [
                 v => !!v || 'Requerido',
@@ -556,7 +557,18 @@ export default {
                 this.listaUsuariosEliminados = this.listaUsuariosAux;
             }
             ).catch((error)=>{
-                console.log(error)
+                if (error.message == 'Network Error') {
+                    this.alertaError = true;
+                    this.cargando = false;
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
+                }
+                else{
+                    if (error.response.data.success == false) {
+                        this.textoAlertas = error.response.data.message;
+                        this.alertaError = true;                            
+                    }                        
+                }
+                
             });
 
         },
@@ -591,7 +603,18 @@ export default {
                 this.alertaExito = true;
                 this.textoAlertas = result.data.message
             }).catch((error)=>{
-                console.log(error);
+                //console.log(error);
+                if (error.message == 'Network Error') {
+                    this.alertaError = true;
+                    this.cargando = false;
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
+                }
+                else{
+                    if (error.response.data.success == false) {
+                        this.textoAlertas = error.response.data.message;
+                        this.alertaError = true;                            
+                    }                        
+                }
                 // if (error.message == 'Network Error') {
                 //     console.log(error)
                 //     this.alertaError = true;
@@ -662,16 +685,20 @@ export default {
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
                     this.cargando = false;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
                         if(error.response.data.code == 101){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
+                            //console.log(error.response.data.code +' '+ error.response.data.message);
+                            //console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;                            
-                        }                        
+                        } 
+                        else{
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true; 
+                        }                       
                     }
                 }
             });
@@ -696,7 +723,9 @@ export default {
                         correo: element.email,   
                         escuela: element.escuela,
                     };                         
-                    
+                    if(element.escuelaAux != "no posee otra escuela"){
+                        usuario.escuelaAux = element.escuelaAux;
+                    }
                     this.listaUsuariosAux[index]=usuario;
                 }
                 this.cargando = false;
@@ -706,15 +735,19 @@ export default {
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
                     this.cargando = false;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
                         if(error.response.data.code == 101){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
+                            //console.log(error.response.data.code +' '+ error.response.data.message);
+                            //console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;                            
+                        }
+                        else{
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true; 
                         }                        
                     }
                 }
@@ -747,7 +780,7 @@ export default {
             "password": this.datosUsuario.contrasena,
             }
             var url = this.$store.state.rutaDinamica+'api/v1/usuario';
-            console.log(post);
+            //console.log(post);
             axios.post(url, post, this.$store.state.config)
             .then((result) => {
                 this.alertaExito = true;
@@ -756,23 +789,28 @@ export default {
                 this.obtenerUsuarios(); 
             }).catch((error)=>{
                 if (error.message == 'Network Error') {
-                    console.log(error)
+                    //console.log(error)
                     this.alertaError = true;
-                    this.textoAlertas = "Error al modificar el usuario, intente mas tarde."
+                    this.textoAlertas = "Error al modificar el usuario, inténtelo más tarde."
                     this.resetRegistrarUsuario();
                 }
                 else{
                     if (error.response.data.success == false) {
                         if(error.response.data.code == 301){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
+                            //console.log(error.response.data.code +' '+ error.response.data.message);
+                            //console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;      
                             this.resetRegistrarUsuario();
                         }
                         if(error.response.data.code == 302){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
+                            //console.log(error.response.data.code +' '+ error.response.data.message);
+                            //console.log(error.response.data);
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true;  
+                            this.resetRegistrarUsuario();   
+                        }
+                        else{
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;  
                             this.resetRegistrarUsuario();   
@@ -821,7 +859,10 @@ export default {
                 };
                 for(var numEscuela = 0; numEscuela < this.listaEscuela.length; numEscuela++){                        
                     if(item.escuela == this.listaEscuela[numEscuela].nombre){                                                   
-                        this.datosUsuario.escuela = this.listaEscuela[numEscuela].id;
+                        this.datosUsuario.escuela = this.listaEscuela[numEscuela].id;                        
+                    }
+                    if(item.escuelaAux == this.listaEscuela[numEscuela].nombre){                                                   
+                        this.datosUsuario.escuelaAux = this.listaEscuela[numEscuela].id;                        
                     }
                  };  
             }else{
@@ -866,41 +907,45 @@ export default {
             axios.put(url,put,this.$store.state.config)
             .then((result)=>{
                 this.alertaExito = true;
-                this.textoAlertas = "Se modificó el usuario con exito."
+                this.textoAlertas = "Se ha modificado correctamente el usuario."
                 this.obtenerUsuarios(); 
                 this.resetModificacionUsuario();
             }).catch((error)=>{                
                 if (error.message == 'Network Error') {
-                    console.log(error)
+                    //console.log(error)
                     this.alertaError = true;
-                    this.textoAlertas = "Error al modificar el usuario, intente mas tarde."
+                    this.textoAlertas = "Error al modificar el usuario, inténtelo más tarde."
                 }
                 else{
                     if (error.response.data.success == false) {
                         if(error.response.data.code == 601){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
+                            //console.log(error.response.data.code +' '+ error.response.data.message);
+                            //console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;
                             this.resetModificacionUsuario();
                         }
                         if(error.response.data.code == 602){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
+                            //console.log(error.response.data.code +' '+ error.response.data.message);
+                            //console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;
                             this.resetModificacionUsuario();
                         }
                         if(error.response.data.code == 603){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
+                            //console.log(error.response.data.code +' '+ error.response.data.message);
+                            //console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;
                             this.resetModificacionUsuario();
                         }
                         if(error.response.data.code == 604){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
+                            //console.log(error.response.data.code +' '+ error.response.data.message);
+                            //console.log(error.response.data);
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true;
+                            this.resetModificacionUsuario();
+                        }else{
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;
                             this.resetModificacionUsuario();
@@ -926,24 +971,28 @@ export default {
                     this.obtenerUsuarios();
                     this.resetEliminarUsuario(); 
                     this.alertaExito = true;
-                    this.textoAlertas = "Se elimino el usuario con exito "
+                    this.textoAlertas = "Se ha eliminado correctamente el usuario."
                 }).catch((error)=>{
                     if (error.message == 'Network Error') {
-                        console.log(error)
+                        //console.log(error)
                         this.alertaError = true;
-                        this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
+                        this.textoAlertas = "Error al eliminar el usuario, inténtelo más tarde."
                     }
                     else{
                         if (error.response.data.success == false) {
                             if(error.response.data.code == 701){
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
+                                //console.log(error.response.data.code +' '+ error.response.data.message);
+                                //console.log(error.response.data);
                                 this.textoAlertas = error.response.data.message;
                                 this.alertaError = true;
                             }
                             if(error.response.data.code == 702){
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
+                                //console.log(error.response.data.code +' '+ error.response.data.message);
+                                //console.log(error.response.data);
+                                this.textoAlertas = error.response.data.message;
+                                this.alertaError = true;
+                            }
+                            else{
                                 this.textoAlertas = error.response.data.message;
                                 this.alertaError = true;
                             }
@@ -954,7 +1003,7 @@ export default {
             
         },
         EliminarUsuario(item){
-             var idUsuario= this.$store.state.usuario.usuario.id
+            var idUsuario= this.$store.state.usuario.usuario.id
             if(idUsuario != item.id){
                 this.datosUsuario.id= item.id;
                 this.datosUsuario.nombre= item.nombre;
@@ -974,7 +1023,7 @@ export default {
                 this.dialogEliminar = true;
             }else{
                 this.alertaError = true;
-                this.textoAlertas = "No puede eliminar su propia cuenta"
+                this.textoAlertas = "No puede eliminar su propia cuenta."
             }
         },
     }

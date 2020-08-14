@@ -59,7 +59,7 @@
                                                 <v-col cols="12" class=" pt-1 pl-1 pr-0 pb-2" >
                                                     <v-card-text class="pt-0 pl-2 pr-0 pr-0 pb-0 font-weight-black text-truncate" style=" font-size: 100%;">
                                                         Ayudante/s: 
-                                                        <v-btn class="pt-0  pb-0 "  outlined x-small  @click="dialogAyudantes = true">
+                                                        <v-btn class="pt-0  pb-0 "  outlined x-small  @click="setAyudantes(item)">
                                                             Ver
                                                         </v-btn>
                                                     </v-card-text>
@@ -87,7 +87,7 @@
                     :items="ayudantes"
                     hide-default-footer
                 >
-                    <template v-slot:item.opciones="{ item }">
+                    <template v-slot:[`item.opciones`]="{ item }">
                         <v-tooltip bottom color="primary">
                             <template v-slot:activator="{ on }">
                                 <v-btn color="white" fab small depressed class="mr-2 py-2" v-on="on" @click="perfilEstudiante(item)" >
@@ -140,7 +140,7 @@ export default {
     data() {
         return {
             listaInsCursosAux:[],
-            listaInsCursos:[{id:''},{anio:''},{semestre:''},{seccion:''},{nomCurso:''},{plan:''},{escuela:''}],
+            listaInsCursos:[{id:''},{anio:''},{semestre:''},{seccion:''},{nomCurso:''},{plan:''},{escuela:''},{ayudantes:[]}],
             cargando: true,
             search: '',
             sortBy:'nomCurso',
@@ -185,7 +185,7 @@ export default {
                         idCurso: element.idInstanciaCurso,
                         // escuela: element.get_curso.get_curso
                     }; 
-                    console.log(index);
+                    //console.log(index);
                     this.listaInsCursosAux[index]=insCurso;                                                         
                 }
                 this.listaInsCursos = this.listaInsCursosAux;  
@@ -201,41 +201,54 @@ export default {
                 else{
                     if (error.response.data.success == false) {
                         if(error.response.data.code == 401){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
+                            //console.log(error.response.data.code +' '+ error.response.data.message);
+                            //console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;                            
                         }  
                         if(error.response.data.code == 402){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
-                            this.textoAlertas = "Error al obtener los cursos del profesor";
+                            //console.log(error.response.data.code +' '+ error.response.data.message);
+                            //console.log(error.response.data);
+                            this.textoAlertas = error.response.data.message;
                             this.alertaError = true;                            
+                        }
+                        else{
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true;   
                         }                      
                     }
                 }
             });
         },
 
-        obtenerListaAyudantes(id){
-            this.ayudantes = [];
-            this.ayudantesAux = [];
+        obtenerListaAyudantes(id,pos){                                    
             var aux;    
             var url = this.$store.state.rutaDinamica+`api/v1/ayudanteCurso/`+id;
             axios.get(url,this.$store.state.config)
             .then((result)=>{      
-                console.log(result);
+                //console.log(result);                
                 for (let index = 0; index < result.data.data.ayudantesCurso.length; index++) {
+                    
                     const element = result.data.data.ayudantesCurso[index]; 
                     let estudiante = {
                         id: element.get_estudiante.id,
                         nombre: element.estudiante,
                         matricula: element.get_estudiante.matricula,
-                    }; 
-                    this.ayudantesAux[index]=estudiante;                                                         
+                    };                     
+                    this.ayudantesAux[index]=estudiante;   
+                    
                 }
-                this.ayudantes = this.ayudantesAux;  
-                this.cargando = false;
+                if(result.data.data.ayudantesCurso.length == 0)                                         {
+                    this.listaInsCursos[pos].ayudantes = [];
+                }
+                else{
+                    this.ayudantes = this.ayudantesAux;                   
+                    this.listaInsCursos[pos].ayudantes = this.ayudantes;
+                    this.ayudantes = [];
+                    this.ayudantesAux= [];
+                    this.cargando = false;                    
+                }
+                
             }
             ).catch((error)=>{
                 if (error.message == 'Network Error') {
@@ -246,19 +259,28 @@ export default {
                 else{
                     if (error.response.data.success == false) {
                         if(error.response.data.code == 101){
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
+                            //console.log(error.response.data.code +' '+ error.response.data.message);
+                            //console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;                            
+                        }
+                        else{
+                            this.textoAlertas = error.response.data.message;
+                            this.alertaError = true;   
                         }                   
                     }
                 }
             });
         },
+
+        setAyudantes(item){                        
+            this.ayudantes = item.ayudantes;
+            this.dialogAyudantes = true;
+        },
         
         setDialogAyudantes(){        
             for (let index = 0; index < this.listaInsCursos.length; index++){
-                this.obtenerListaAyudantes(this.listaInsCursos[index].idCurso);
+                this.obtenerListaAyudantes(this.listaInsCursos[index].idCurso,index);
             }
         },
 

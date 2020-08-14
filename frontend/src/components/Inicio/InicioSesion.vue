@@ -52,6 +52,7 @@
                                     <v-text-field v-model="lista.pass"
                                         :prepend-inner-icon="mostrar ? 'mdi-eye' : 'mdi-eye-off'"
                                         :type="mostrar ? 'text' : 'password'"
+                                        @keyup.enter="login(lista)"
                                         label="Contraseña"
                                         color="secondary"
                                         outlined

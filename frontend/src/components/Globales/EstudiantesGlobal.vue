@@ -155,7 +155,7 @@
                                                         label="Situacion academica" outlined
                                                         color="secondary"
                                                         prepend-inner-icon="fas fa-address-book"
-                                                        :rules="[v => !!v || 'La situación academica es requerida']"
+                                                        :rules="[v => !!v || 'La situación académica es requerida']"
                                                         ></v-select >
 
                                                         <v-select 
@@ -489,8 +489,8 @@
         dialogExportar: false,
         rules: [
         value => !!value || 'Requerido',
-        value => value <= new Date().getFullYear()|| 'El año no debe ser mayor al actual',
-        value => value >= 1981 || 'El año no debe ser menor a 1981',
+        value => value <= new Date().getFullYear()|| 'El año no puede ser mayor al actual',
+        value => value >= 1981 || 'El año no puede ser menor a 1981',
         ],
         //archivo
         file: null,
@@ -513,8 +513,34 @@
         textoAcept: '',
         delay: 4000,
         listaSituacionAcademica:[
-            'Regular ','Egresado ', 'Eliminado ', 'Titulado',
-            'Intercambio','Postergación','Retiro','Temporal'
+            {
+                id:1,
+                nombre:"REGULAR",
+            },
+            {
+                id:2,
+                nombre:"EGRESADO",
+            },
+            {
+                id:3,
+                nombre:"ELIMINADO",
+            },
+            {
+                id:4,
+                nombre:"TITULADO",
+            },
+            {
+                id:5,
+                nombre:"INTERCAMBIO",
+            },
+            {
+                id:6,
+                nombre:"POSTEGACIÓN",
+            },
+            {
+                id:7,
+                nombre:"RETIRO TEMPORAL",
+            },
         ],
         escuelaExportar:'',
         // todosLosAnhosVariable: true,
@@ -539,18 +565,18 @@
          form_AgregarEstudiantesMasivoValido:true,
          reglas_matricula:[
              value => !!value || 'Requerido',
-             value => /^[0-9]+$/.test(value) || 'Matricula solo debe incluir numeros',
-             value => /^[0-9]{10}$/.test(value) || 'La matricula debe compuesta de 10 numeros',             
+             value => /^[0-9]+$/.test(value) || 'Matrícula solo debe incluir números',
+             value => /^[0-9]{10}$/.test(value) || 'La matrícula debe estar compuesta de 10 números',             
          ],
          reglas_rut:[
             value => !!value || 'Requerido',
-            value => /^[0-9]+$/.test(value) || 'El rut debe estar compuesto solo por numeros',                
+            value => /^[0-9]+$/.test(value) || 'El rut debe estar compuesto solo por números',                
             value => /^[0-9]{7,8}$/.test(value) || 'El rut debe contener entre 7 y 8 dígitos',
          ],
          reglas_Nombre:[
                 value => !!value || 'Requerido',
-                v => /^[a-zA-Z ]+$/.test(v) || 'Nombre no Válido.',
-                v => /^[a-zA-Z ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',            
+                v => /^[a-zA-ZÀ-ÿ\u00f1\u00d1 ]+$/.test(v) || 'Nombre no Válido.',
+                v => /^[a-zA-ZÀ-ÿ\u00f1\u00d1 ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',            
         ],
         regla_Email: [
             value => !!value || 'Requerido',
@@ -562,7 +588,7 @@
         ],
         regla_anio:[
             value => !!value || 'Requerido',
-            value => /^[0-9]+$/.test(value) || 'El año debe estar compuesto solo por numeros',
+            value => /^[0-9]+$/.test(value) || 'El año debe estar compuesto solo por números',
             value => value <= new Date().getFullYear()|| 'El año no debe ser mayor al actual',
             value => value >= 1981 || 'El año no debe ser menor a 1981'
         ],
@@ -642,17 +668,26 @@
                     if (result.data.success == true) {
                         this.resetImportarEstudiantes();
                         this.obtenerEstudiantes();
+                        this.alertAcept = true;
+                        this.textoAcept = 'Se realizó la operación correctamente';
                     }
                 })
                 .catch((error)=>{
-                    console.log(error);
+                    //console.log(error);
                     if (error.message == 'Network Error') {
-                        console.log(error);
+                        //console.log(error);
                         this.alertError = true;
                         this.cargando = false;
-                        console.log(err)
-                        this.textoError = 'Error al importar los datos, intente más tarde'
-                    }
+                        //console.log(err)
+                        this.textoError = 'Error al importar los datos, inténtelo más tarde.'
+                    }else {
+                        if (error.response.data.success == false) {
+                            this.alertError = true;
+                            this.cargando = false;
+                            this.textoError = error.response.data.message;
+                        }
+                    } 
+
                 })
 
             }
@@ -686,22 +721,25 @@
             })
             .catch((error)=>{
                 if (error.message == 'Network Error') {
-                    console.log(error);
+                    //console.log(error);
                     this.alertError = true;
                     this.cargando = false;
-                    console.log(err)
-                    this.textoError = 'Error al cargar los datos, intente más tarde'
+                    //console.log(err)
+                    this.textoError = 'Error al cargar los datos, inténtelo más tarde'
                 } else {
                     if (error.response.data.success == false) {
                         switch (error.response.data.code) {
                         case 301:
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
+                            //console.log(error.response.data.code +' '+ error.response.data.message);
+                            //console.log(error.response.data);
                             this.alertError = true;
                             this.cargando = false;
                             this.textoError = error.response.data.message;
                             break;
                         default:
+                            this.alertError = true;
+                            this.cargando = false;
+                            this.textoError = error.response.data.message;
                             break;
                         }
                     }
@@ -710,7 +748,7 @@
         },
         agregarEstudiantesUnico() {
             var valido=this.$refs.form_AgregarEstudiante.validate();
-            console.log("semestre valido :" + valido)
+            //console.log("semestre valido :" + valido)
             if(valido == true){
 
                 var url = this.$store.state.rutaDinamica+'api/v1/estudiante';
@@ -737,30 +775,32 @@
                 axios.post(url,post,this.$store.state.config)
                 .then((result)=>{
                     if (result.data.success == true)  {
-                        console.log('se cargo el estudiante');
+                        //console.log('se cargo el estudiante');
                         this.resetUnicoEstudiante();
                         this.alertAcept = true;
-                        this.textoAcept = 'Se agregó el estudiante correctamente '
+                        this.textoAcept = 'Se ha agregado correctamente el estudiante.'
                         this.obtenerEstudiantes();
                     }
                 })
                 .catch((error)=>{
-                    console.log(error);
+                    //console.log(error);
                     if (error.message == 'Network Error') {
-                        console.log(error);
+                        //console.log(error);
                         this.alertError = true;
                         this.resetUnicoEstudiante();
-                        this.textoError = 'Error al cargar los datos, intente más tarde'
+                        this.textoError = 'Error al cargar los datos, inténtelo más tarde'
                     } else {
                         if (error.response.data.success == false) {
                             switch (error.response.data.code) {
                             case 302:
-                                console.log(error.response.data.code +' '+ error.response.data.message);
-                                console.log(error.response.data);
+                                //console.log(error.response.data.code +' '+ error.response.data.message);
+                                //console.log(error.response.data);
                                 this.alertError = true;
                                 this.textoError = error.response.data.message;
                                 break;
                             default:
+                                this.alertError = true;
+                                this.textoError = error.response.data.message;
                                 break;
                             }
                         }
@@ -793,21 +833,24 @@
             })
             .catch((error) => {
                 if (error.message == 'Network Error') {
-                    console.log(error);
+                    //console.log(error);
                     this.alertError = true;
                     this.cargando = false;
-                    this.textoError = 'Error al cargar los datos, intente más tarde'
+                    this.textoError = 'Error al cargar los datos, inténtelo más tarde'
                 } else {
                     if (error.response.data.success == false) {
                         switch (error.response.data.code) {
                         case 101:
-                            console.log(error.response.data.code +' '+ error.response.data.message);
-                            console.log(error.response.data);
+                            //console.log(error.response.data.code +' '+ error.response.data.message);
+                            //console.log(error.response.data);
                             this.alertError = true;
                             this.cargando = false;
                             this.textoError = error.response.data.message;
                             break;
                         default:
+                            this.alertError = true;
+                            this.cargando = false;
+                            this.textoError = error.response.data.message;
                             break;
                         }
                     }
@@ -843,13 +886,13 @@
             // console.log("EXPORTAR POR RANGO DE FECHAS"+this.rangoAnhosVariable )
             if(this.unAnhoVariable == false){
                 var escuela= this.escuelaExportar;
-                 console.log("Exportar por escuela" + escuela)
+                // console.log("Exportar por escuela" + escuela)
                 this.exportar(1,0,0,0,escuela);
                 
 
             }
             if(this.rangoAnhosVariable == false  ){
-                console.log("Exportar por ranfo de fechas")
+                //console.log("Exportar por ranfo de fechas")
                 this.exportar(2,this.fechaIni,this.fechaTer ,0,0);
 
             }
@@ -859,22 +902,17 @@
         exportar(tipo, fechaIni,fechaTer,idEstudiante,escuela){
             var fechaInicio=fechaIni;
             var fechaTermino =fechaTer;
-             let post = {
+            let post = {
                     "tipo": tipo,
                     "fechaInicio" : fechaInicio,
                     "fechaFin": fechaTermino ,
                     "id": idEstudiante,
                     "escuela": escuela
                 };
-                console.log(post)
+                //console.log(post)
             var url = this.$store.state.rutaDinamica+'api/v1/estudiante/exportar';
             axios.post(url,post,this.$store.state.config2)
             .then((result)=>{
-                console.log(result.data);
-                //var fileDownload = require('js-file-download');
-                //fileDownload(result.data, 'archivo.xlsx');
-                
-
                 const url = URL.createObjectURL(new Blob([result.data], {
                     type: 'application/vnd.ms-excel'
                 }))
@@ -884,21 +922,22 @@
                 document.body.appendChild(link);
                 link.click();
                 this.alertAcept = true;
-                this.textoAcept = 'Se realizó la operación correctamente'
+                this.textoAcept = 'Se realizó la operación correctamente';
                 this.dialogExportar=false;
                 this.resetYCerrarExportar();
                 
             })
             .catch((error) => {
-                console.log(error);
+                //console.log(error);
                 if (error.message == 'Network Error') {
                     console.log(error);
                     this.alertError = true;
-                    this.textoError = 'Error, intente más tarde'
+                    this.textoError = 'Error, inténtelo más tarde'
                 } else {
-                    console.log(error);
-                    this.alertError = true;
-                    this.textoError = 'Error, intente más tarde'
+                    if (error.response.data.success == false) {
+                        this.alertError = true;
+                        this.textoError = error.response.data.message;
+                    }
                 } 
             });
         },

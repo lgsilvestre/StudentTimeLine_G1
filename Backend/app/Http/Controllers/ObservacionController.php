@@ -138,7 +138,32 @@ class ObservacionController extends Controller
                 'message' => "La operación se ha realizado con éxito.",
                 'data' => ['observacion'=>$observacion]
             ], 200);
-        }catch(\Illuminate\Database\QueryException $ex){ 
+        }catch(\Illuminate\Database\QueryException $ex){     
+            if($ex->errorInfo[1]==1452){
+                if(strlen(strstr($ex->errorInfo[2],'FOREIGN KEY (`ayudante`)'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El estudiante no es ayudante de este curso ",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+                }else if(strlen(strstr($ex->errorInfo[2],'FOREIGN KEY (`estudiante`)'))>0){
+                        return response()->json([
+                            'success' => false,
+                            'code' => 302,
+                            'message' => "Error: El estudiante solicitado no existe ",
+                            'data' => ['error'=>$ex]
+                        ], 409  );
+                }else if(strlen(strstr($ex->errorInfo[2],'FOREIGN KEY (`curso`)'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El curso solicitado no existe ",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+                }
+            }
+        
             return response()->json([
                 'success' => false,
                 'code' => 102,
@@ -268,6 +293,30 @@ class ObservacionController extends Controller
                 'data' => ['observacion'=>$observacion]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
+            if($ex->errorInfo[1]==1452){
+                if(strlen(strstr($ex->errorInfo[2],'FOREIGN KEY (`ayudante`)'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El estudiante solicitado no existe ",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+                }else if(strlen(strstr($ex->errorInfo[2],'FOREIGN KEY (`estudiante`)'))>0){
+                        return response()->json([
+                            'success' => false,
+                            'code' => 302,
+                            'message' => "Error: El estudiante solicitado no existe ",
+                            'data' => ['error'=>$ex]
+                        ], 409  );
+                }else if(strlen(strstr($ex->errorInfo[2],'FOREIGN KEY (`curso`)'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El curso solicitado no existe ",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+                }
+            }
             return response()->json([
                 'success' => false,
                 'code' => 603,

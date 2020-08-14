@@ -114,6 +114,35 @@ class InstanciaCursoController extends Controller
                 'data' => ['insCurso'=>$insCurso]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
+            if($ex->errorInfo[1]==1452){
+                if(strlen(strstr($ex->errorInfo[2],'FOREIGN KEY (`semestre`)'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: EL semestre no existe en nuestros registros ",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+ 
+                }else if(strlen(strstr($ex->errorInfo[2],'instancia_cursos_semestre_curso_seccion_unique'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 409,
+                        'message' => "Error: Ya existe una instancia del curso con la sección indicada\n ",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+                }
+            }
+            else if($ex->errorInfo[1]==1062){
+                if(strlen(strstr($ex->errorInfo[2],'instancia_cursos_semestre_curso_seccion_unique'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 409,
+                        'message' => "Error: Ya existe una instancia del curso con la sección indicada\n ",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+                }
+            }
+        
             return response()->json([
                 'success' => false,
                 'code' => 302,
@@ -212,7 +241,7 @@ class InstanciaCursoController extends Controller
                 return response()->json([
                     'success' => false,
                     'code' => 602,
-                    'message' => 'La instancia de escuela con el id '.$id.' no existe',
+                    'message' => 'Error: La instancia del curso no existe',
                     'data' => null
                 ], 409);
             }
@@ -227,7 +256,25 @@ class InstanciaCursoController extends Controller
                 'data' => ['insCurso'=>$insCurso]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
-            if($ex->errorInfo[1]==1062){
+
+            if($ex->errorInfo[1]==1452){
+                if(strlen(strstr($ex->errorInfo[2],'FOREIGN KEY (`semestre`)'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: EL semestre no existe en nuestros registros ",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+                }else if(strlen(strstr($ex->errorInfo[2],'FOREIGN KEY (`curso`)'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: EL curso no existe en nuestros registros ",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+ 
+                }
+            } else if($ex->errorInfo[1]==1062){
                 if(strlen(strstr($ex->errorInfo[2],'instancia_cursos_semestre_curso_seccion_unique'))>0){
                     return response()->json([
                         'success' => false,
