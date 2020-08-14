@@ -2195,6 +2195,7 @@ export default {
                 if(idProfesorConCurso!=''){
                     // console.log("Cambiamos al profesor principal por uno nuevo.")
                     this.DesvincularUnProfesorInsCurso(idProfesorConCurso);
+                    // this.obtenerInstanciasCursos();
                 }
                 if(profesorPrincipal!='' && insCurso!=''){
                     let post2 = {
@@ -2203,6 +2204,7 @@ export default {
                     };
                     // console.log(post2)
                     this.agregarProfesorCurso(post2)
+                    this.obtenerInstanciasCursos();
                 }
             }
             // Eliminar profesor de una instancia de curso
@@ -2211,6 +2213,7 @@ export default {
                     //  console.log("Eliminar profesor pricipal")
                     // console.log(profesorPrincipal)
                     this.DesvincularUnProfesorInsCurso( idProfesorConCurso);
+                    this.obtenerInstanciasCursos();
                 }
             }
             // Agregar profesor a instancia de curso
@@ -2223,6 +2226,7 @@ export default {
                     };
                     // console.log(post2)
                     this.agregarProfesorCurso(post2)
+                    this.obtenerInstanciasCursos();
                     
                 }
             }
@@ -2356,9 +2360,9 @@ export default {
          */
         acionesSobreInstanciaCurso(item,curso){
             if(item =='Modificar curso'){
-                 this.InstanciaModificar.id = curso.id;
-                 this.InstanciaModificar.listaAyudantes = curso.listaAyudantes;
-                 this.InstanciaModificar.listaProfesores = curso.listaProfesores;
+                this.InstanciaModificar.id = curso.id;
+                this.InstanciaModificar.listaAyudantes = curso.listaAyudantes;
+                this.InstanciaModificar.listaProfesores = curso.listaProfesores;
                 this.InstanciaModificar.nomCurso = curso.nomCurso;
                 this.InstanciaModificar.semestre = curso.semestre;
                 this.InstanciaModificar.seccion = curso.seccion;
@@ -2401,8 +2405,6 @@ export default {
             if(item=='Eliminar curso'){
                 this.datosInsCurso= curso;
                 this.dialogEliminarInsCurso=true
-                // console.log("INFO SEMESTRE")
-                // console.log(this.$store.state.infoSemestre.deleted_at)
             }
             if(item=='Modificar ayudante'){
                 this.datosInsCurso= curso;
