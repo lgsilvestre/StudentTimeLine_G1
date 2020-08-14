@@ -1079,11 +1079,12 @@ export default {
     },
 
     beforeMount(){
+        this.obtenerCategorias();
         this.id =  this.$route.params.id;
         this.enrutamiento = this.$route.params.enrutamiento;
         this.obtenerEstudiante(1);
         this.obtenerCursosUsuario();
-        this.obtenerCategorias();
+        
     },
 
     methods:{
@@ -1468,7 +1469,7 @@ export default {
                         //this.validacionObservacionesFalse = false;
                         //this.validacionObservaciones=false;
                     }
-                    this.estudianteObservacion.categoria = 'Ayudantía';
+                    this.estudianteObservacion.categoria = this.categorias[0];
                 }
                 if (opcion == 1 || opcion == 3) {
                     var contador = 0;
