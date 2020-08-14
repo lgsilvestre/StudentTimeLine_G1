@@ -938,6 +938,7 @@ export default {
             listaDeSeccionesDisponibles:['A','B','C','D','E','F','G','H'],
             cargando: false,
             seleccionados: [],
+            seccionIns:'',
             profesorSeleccionado: null,
             profesorSeleccionado2: null,
             profesorSeleccionado3: null,
@@ -1051,7 +1052,7 @@ export default {
             numeroDeProfesoresModificar:0,
             numeroDeAyudantesModificar:0,
             contadorProfesores:1,
-            InstanciaModificar:'',
+            InstanciaModificar: [{id:''},{listaAyudantes:[]},{listaProfesores:[]},{nomCurso:''}, {seccion:''}, {semestre:''} ],
             
             //varaibles para añadir instancias de cursos a un semestre
             numeroDeCursosModificar:0,
@@ -2115,7 +2116,13 @@ export default {
          * una instancia de curso a sus valores originales.
          */
         resetModificarInstanciaCurso(){
-            this.InstanciaModificar= '';
+            this.InstanciaModificar.id = '';
+            this.seccionIns='';
+            this.InstanciaModificar.listaAyudantes = [];
+            this.InstanciaModificar.listaProfesores = [];
+            this.InstanciaModificar.nomCurso = '';
+            this.InstanciaModificar.semestre ='';
+            this.InstanciaModificar.seccion = '';
             this.profesorSeleccionado = null;
             this.profesorSeleccionado2=null;
             this.profesorSeleccionado3=null;
@@ -2224,58 +2231,61 @@ export default {
             // }
         },
         modificarInstanciaCurso(){
-            var url =this.$store.state.rutaDinamica+`api/v1/instanciaCurso/${this.InstanciaModificar.id}`;
-            let put ={                
-                "seccion": this.InstanciaModificar.seccion,
-            };
-            axios.put(url,put,this.$store.state.config)
-            .then((result)=>{
-                 this.alertaExito = true;
-            this.textoAlertas = "Se ha modificado correctamente la sección.";
-                
-           }).catch((error)=>{   
-                if (error.message == 'Network Error') {
-                    this.alertaError = true;
-                    this.textoAlertas = "Error al modificar la sección, inténtelo más tarde."
-                    this.obtenerInstanciasCursos(); 
-                    this.cerrarDialogModificarInstanciaCurso();
-                }
-                else{
-                    if(error.response.data.success == false){
-                        if(error.response.data.code == 301){
-                            this.textoAlertas = error.response.data.message;
-                            this.alertaError = true;
-                            this.obtenerInstanciasCursos(); 
-                            this.cerrarDialogModificarInstanciaCurso();
-                        }
-                        if(error.response.data.code == 602){
-                            this.textoAlertas = error.response.data.message;
-                            this.alertaError = true;
-                            this.obtenerInstanciasCursos(); 
-                            this.cerrarDialogModificarInstanciaCurso();
-                        }
-                        if(error.response.data.code == 603){
-                            this.textoAlertas = error.response.data.message;
-                            this.alertaError = true;
-                           this.obtenerInstanciasCursos(); 
-                            this.cerrarDialogModificarInstanciaCurso();
-                        }
-                        if(error.response.data.code == 409){
-                            this.textoAlertas = error.response.data.message;
-                            this.alertaError = true;
-                            this.obtenerInstanciasCursos(); 
-                            this.cerrarDialogModificarInstanciaCurso();
-                        }
-                        else{
-                            this.textoAlertas = error.response.data.message;
-                            this.alertaError = true;
-                            this.obtenerInstanciasCursos(); 
-                            this.cerrarDialogModificarInstanciaCurso();
-                        }
+            if( this.seccionIns!= '' &&  this.seccionIns!= this.InstanciaModificar){
+
+                var url =this.$store.state.rutaDinamica+`api/v1/instanciaCurso/${this.InstanciaModificar.id}`;
+                let put ={                
+                    "seccion": this.InstanciaModificar.seccion,
+                };
+                axios.put(url,put,this.$store.state.config)
+                .then((result)=>{
+                     this.alertaExito = true;
+                this.textoAlertas = "Se ha modificado correctamente la sección.";
+                    
+               }).catch((error)=>{   
+                    if (error.message == 'Network Error') {
+                        this.alertaError = true;
+                        this.textoAlertas = "Error al modificar la sección, inténtelo más tarde."
+                        this.obtenerInstanciasCursos(); 
+                        this.cerrarDialogModificarInstanciaCurso();
                     }
-         
-                }                  
-            });
+                    else{
+                        if(error.response.data.success == false){
+                            if(error.response.data.code == 301){
+                                this.textoAlertas = error.response.data.message;
+                                this.alertaError = true;
+                                this.obtenerInstanciasCursos(); 
+                                this.cerrarDialogModificarInstanciaCurso();
+                            }
+                            if(error.response.data.code == 602){
+                                this.textoAlertas = error.response.data.message;
+                                this.alertaError = true;
+                                this.obtenerInstanciasCursos(); 
+                                this.cerrarDialogModificarInstanciaCurso();
+                            }
+                            if(error.response.data.code == 603){
+                                this.textoAlertas = error.response.data.message;
+                                this.alertaError = true;
+                               this.obtenerInstanciasCursos(); 
+                                this.cerrarDialogModificarInstanciaCurso();
+                            }
+                            if(error.response.data.code == 409){
+                                this.textoAlertas = error.response.data.message;
+                                this.alertaError = true;
+                                this.obtenerInstanciasCursos(); 
+                                this.cerrarDialogModificarInstanciaCurso();
+                            }
+                            else{
+                                this.textoAlertas = error.response.data.message;
+                                this.alertaError = true;
+                                this.obtenerInstanciasCursos(); 
+                                this.cerrarDialogModificarInstanciaCurso();
+                            }
+                        }
+             
+                    }                  
+                });
+            }
             var ins_curso=this.InstanciaModificar.id;
             this.modificarProfesores(this.profesorSeleccionado,this.profesorSeleccionadoAux,this.profesorConCurso,ins_curso,1)
             this.modificarProfesores(this.profesorSeleccionado2,this.profesorSeleccionadoAux2,this.profesorConCurso2,ins_curso,2)
@@ -2346,7 +2356,13 @@ export default {
          */
         acionesSobreInstanciaCurso(item,curso){
             if(item =='Modificar curso'){
-                this.InstanciaModificar = curso;
+                 this.InstanciaModificar.id = curso.id;
+                 this.InstanciaModificar.listaAyudantes = curso.listaAyudantes;
+                 this.InstanciaModificar.listaProfesores = curso.listaProfesores;
+                this.InstanciaModificar.nomCurso = curso.nomCurso;
+                this.InstanciaModificar.semestre = curso.semestre;
+                this.InstanciaModificar.seccion = curso.seccion;
+                this.seccionIns= curso.seccion;
                 var numeroMaxProfesores=5;
                 numeroMaxProfesores= numeroMaxProfesores - curso.listaProfesores.length
                 this.numeroDeProfesoresModificar=numeroMaxProfesores;
