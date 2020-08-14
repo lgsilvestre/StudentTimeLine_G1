@@ -59,7 +59,7 @@
                                                 <v-col cols="12" class=" pt-1 pl-1 pr-0 pb-2" >
                                                     <v-card-text class="pt-0 pl-2 pr-0 pr-0 pb-0 font-weight-black text-truncate" style=" font-size: 100%;">
                                                         Ayudante/s: 
-                                                        <v-btn class="pt-0  pb-0 "  outlined x-small  @click="dialogAyudantes = true">
+                                                        <v-btn class="pt-0  pb-0 "  outlined x-small  @click="setAyudantes(item)">
                                                             Ver
                                                         </v-btn>
                                                     </v-card-text>
@@ -140,7 +140,7 @@ export default {
     data() {
         return {
             listaInsCursosAux:[],
-            listaInsCursos:[{id:''},{anio:''},{semestre:''},{seccion:''},{nomCurso:''},{plan:''},{escuela:''}],
+            listaInsCursos:[{id:''},{anio:''},{semestre:''},{seccion:''},{nomCurso:''},{plan:''},{escuela:''},{ayudantes:[]}],
             cargando: true,
             search: '',
             sortBy:'nomCurso',
@@ -152,7 +152,7 @@ export default {
             textoAlertas: '',
             alertaError: false,
             columnasAyudante:[
-                { text: 'Matrícula', value: 'matricula',align: 'center'},
+                { text: 'Matricula', value: 'matricula',align: 'center'},
                 { text: 'Nombre Completo', value: 'nombre'},
                 {text:'Ir', value:'opciones',align: 'center', sortable: false,},
             ],
@@ -196,7 +196,7 @@ export default {
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
                     this.cargando = false;
-                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
+                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -221,31 +221,40 @@ export default {
             });
         },
 
-        obtenerListaAyudantes(id){
-            this.ayudantes = [];
-            this.ayudantesAux = [];
+        obtenerListaAyudantes(id,pos){                                    
             var aux;    
             var url = this.$store.state.rutaDinamica+`api/v1/ayudanteCurso/`+id;
             axios.get(url,this.$store.state.config)
             .then((result)=>{      
-                //console.log(result);
+                //console.log(result);                
                 for (let index = 0; index < result.data.data.ayudantesCurso.length; index++) {
+                    
                     const element = result.data.data.ayudantesCurso[index]; 
                     let estudiante = {
                         id: element.get_estudiante.id,
                         nombre: element.estudiante,
                         matricula: element.get_estudiante.matricula,
-                    }; 
-                    this.ayudantesAux[index]=estudiante;                                                         
+                    };                     
+                    this.ayudantesAux[index]=estudiante;   
+                    
                 }
-                this.ayudantes = this.ayudantesAux;  
-                this.cargando = false;
+                if(result.data.data.ayudantesCurso.length == 0)                                         {
+                    this.listaInsCursos[pos].ayudantes = [];
+                }
+                else{
+                    this.ayudantes = this.ayudantesAux;                   
+                    this.listaInsCursos[pos].ayudantes = this.ayudantes;
+                    this.ayudantes = [];
+                    this.ayudantesAux= [];
+                    this.cargando = false;                    
+                }
+                
             }
             ).catch((error)=>{
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
                     this.cargando = false;
-                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
+                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -263,10 +272,15 @@ export default {
                 }
             });
         },
+
+        setAyudantes(item){                        
+            this.ayudantes = item.ayudantes;
+            this.dialogAyudantes = true;
+        },
         
         setDialogAyudantes(){        
             for (let index = 0; index < this.listaInsCursos.length; index++){
-                this.obtenerListaAyudantes(this.listaInsCursos[index].idCurso);
+                this.obtenerListaAyudantes(this.listaInsCursos[index].idCurso,index);
             }
         },
 

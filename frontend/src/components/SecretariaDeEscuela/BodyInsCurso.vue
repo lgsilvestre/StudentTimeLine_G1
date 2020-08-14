@@ -745,7 +745,6 @@
                                 :items="listaProspectosAyudante"
                                 item-text="nombre"
                                 item-value="id"
-                                :rules="[() => !!ayudanteSeleccionado ||'Requerido']"
                                 outlined
                                 prepend-inner-icon="mdi-school"
                                 solo
@@ -897,7 +896,7 @@
         <v-snackbar v-model="alertaExito" :timeout="timeout" bottom
             color= "secondary" left class="pb-12"  >
             <v-icon class="mr-3"  color="white" >
-                fas fa-info-circle  
+                fas fa-check-circle  
             </v-icon>
         
             <strong> {{ textoAlertas }} </strong>
@@ -938,6 +937,7 @@ export default {
             listaDeSeccionesDisponibles:['A','B','C','D','E','F','G','H'],
             cargando: false,
             seleccionados: [],
+            seccionIns:'',
             profesorSeleccionado: null,
             profesorSeleccionado2: null,
             profesorSeleccionado3: null,
@@ -1051,7 +1051,7 @@ export default {
             numeroDeProfesoresModificar:0,
             numeroDeAyudantesModificar:0,
             contadorProfesores:1,
-            InstanciaModificar:'',
+            InstanciaModificar: [{id:''},{listaAyudantes:[]},{listaProfesores:[]},{nomCurso:''}, {seccion:''}, {semestre:''} ],
             
             //varaibles para añadir instancias de cursos a un semestre
             numeroDeCursosModificar:0,
@@ -1137,7 +1137,6 @@ export default {
             
         },
         restarProfesor(){
-
             if(this.contadorProfesores== 2 ){
                 this.contadorProfesores--;
                 this.profesorSeleccionado2=null;
@@ -2064,6 +2063,7 @@ export default {
          */
         agregarProfesorCurso(post2){
             var url2 = this.$store.state.rutaDinamica+'api/v1/profesorConCurso'; 
+            console.log(post2)
             /* crear profesor con curso */
             if(post2.curso!='' && post2.profesor!=''){
                 axios.post(url2, post2, this.$store.state.config)
@@ -2078,6 +2078,7 @@ export default {
                     this.alertaError = true;
                     this.textoAlertas = "Error al asignar el profesor, inténtelo más tarde."
                     this.resetAsignarCurso();
+
                 }
                 else{
                     if(error.response.data.success == false){
@@ -2099,7 +2100,7 @@ export default {
             });
             }
             // console.log("OBTENIENDO LAS NUEVAS INSTANCIAS")
-            this.obtenerInstanciasCursos(); 
+            
         },
         /**
          * Cierra el dialog de modificar instancia curso.
@@ -2114,7 +2115,13 @@ export default {
          * una instancia de curso a sus valores originales.
          */
         resetModificarInstanciaCurso(){
-            this.InstanciaModificar= '';
+            this.InstanciaModificar.id = '';
+            this.seccionIns='';
+            this.InstanciaModificar.listaAyudantes = [];
+            this.InstanciaModificar.listaProfesores = [];
+            this.InstanciaModificar.nomCurso = '';
+            this.InstanciaModificar.semestre ='';
+            this.InstanciaModificar.seccion = '';
             this.profesorSeleccionado = null;
             this.profesorSeleccionado2=null;
             this.profesorSeleccionado3=null;
@@ -2131,6 +2138,11 @@ export default {
             this.profesorConCurso3=null;
             this.profesorConCurso4=null;
             this.profesorConCurso5=null;
+            this.profesorSeleccionadoAux=null;
+            this.profesorSeleccionadoAux2=null;
+            this.profesorSeleccionadoAux3=null;
+            this.profesorSeleccionadoAux4=null;
+            this.profesorSeleccionadoAux5=null;
             this.contadorProfesores=1;
             this.numeroDeProfesoresModificar=0;
 
@@ -2139,13 +2151,11 @@ export default {
         },
         DesvincularUnProfesorInsCurso(id){
             var url = this.$store.state.rutaDinamica+'api/v1/profesorConCurso/'+id;
-            console.log(url)
                 axios.delete(url,this.$store.state.config)
                 .then((result)=>{
                 if (result.statusText=='OK') {
                     this.alertaExito = true;
                     this.textoAlertas = "Se ha desvinculado correctamente al profesor."
-                    
                     this.obtenerInstanciasCursos();
                     this.dialogProfesoresInsCurso=false;
                 }
@@ -2173,17 +2183,18 @@ export default {
                 });
         },
         modificarProfesores(profesorPrincipal, ProfesorAux,idProfesorConCurso,insCurso,num){
-            // console.log("==================="+num+"==================")
+            // console.log("====######=========="+num+"==================")
             // console.log(profesorPrincipal)
             // console.log(ProfesorAux)
             // console.log(insCurso)
             // console.log(idProfesorConCurso)
-            // console.log("===========================================")
+            // console.log("=======######===============================")
             // console.log()
             if( ProfesorAux!= null && idProfesorConCurso!= null && profesorPrincipal!=null &&ProfesorAux!=profesorPrincipal){
                 if(idProfesorConCurso!=''){
                     // console.log("Cambiamos al profesor principal por uno nuevo.")
                     this.DesvincularUnProfesorInsCurso(idProfesorConCurso);
+                    // this.obtenerInstanciasCursos();
                 }
                 if(profesorPrincipal!='' && insCurso!=''){
                     let post2 = {
@@ -2192,26 +2203,29 @@ export default {
                     };
                     // console.log(post2)
                     this.agregarProfesorCurso(post2)
+                    this.obtenerInstanciasCursos();
                 }
             }
             // Eliminar profesor de una instancia de curso
             if(ProfesorAux!= null && idProfesorConCurso!=null && profesorPrincipal==null ){
                 if(idProfesorConCurso!=''){
-                    // console.log("Eliminar profesor pricipal")
+                    //  console.log("Eliminar profesor pricipal")
                     // console.log(profesorPrincipal)
                     this.DesvincularUnProfesorInsCurso( idProfesorConCurso);
+                    this.obtenerInstanciasCursos();
                 }
             }
             // Agregar profesor a instancia de curso
             if(ProfesorAux==null && idProfesorConCurso==null && profesorPrincipal!=null ){
                 if(profesorPrincipal!=''){
-                    // console.log("añadimos un nuevo profesor")
+                    //  console.log("añadimos un nuevo profesor")
                     let post2 = {
                     "profesor" :  profesorPrincipal,
                     "curso":  insCurso,
                     };
                     // console.log(post2)
                     this.agregarProfesorCurso(post2)
+                    this.obtenerInstanciasCursos();
                     
                 }
             }
@@ -2220,58 +2234,61 @@ export default {
             // }
         },
         modificarInstanciaCurso(){
-            var url =this.$store.state.rutaDinamica+`api/v1/instanciaCurso/${this.InstanciaModificar.id}`;
-            let put ={                
-                "seccion": this.InstanciaModificar.seccion,
-            };
-            axios.put(url,put,this.$store.state.config)
-            .then((result)=>{
-                 this.alertaExito = true;
-            this.textoAlertas = "Se ha modificado correctamente la sección.";
-                
-           }).catch((error)=>{   
-                if (error.message == 'Network Error') {
-                    this.alertaError = true;
-                    this.textoAlertas = "Error al modificar la sección, inténtelo más tarde."
-                    this.obtenerInstanciasCursos(); 
-                    this.cerrarDialogModificarInstanciaCurso();
-                }
-                else{
-                    if(error.response.data.success == false){
-                        if(error.response.data.code == 301){
-                            this.textoAlertas = error.response.data.message;
-                            this.alertaError = true;
-                            this.obtenerInstanciasCursos(); 
-                            this.cerrarDialogModificarInstanciaCurso();
-                        }
-                        if(error.response.data.code == 602){
-                            this.textoAlertas = error.response.data.message;
-                            this.alertaError = true;
-                            this.obtenerInstanciasCursos(); 
-                            this.cerrarDialogModificarInstanciaCurso();
-                        }
-                        if(error.response.data.code == 603){
-                            this.textoAlertas = error.response.data.message;
-                            this.alertaError = true;
-                           this.obtenerInstanciasCursos(); 
-                            this.cerrarDialogModificarInstanciaCurso();
-                        }
-                        if(error.response.data.code == 409){
-                            this.textoAlertas = error.response.data.message;
-                            this.alertaError = true;
-                            this.obtenerInstanciasCursos(); 
-                            this.cerrarDialogModificarInstanciaCurso();
-                        }
-                        else{
-                            this.textoAlertas = error.response.data.message;
-                            this.alertaError = true;
-                            this.obtenerInstanciasCursos(); 
-                            this.cerrarDialogModificarInstanciaCurso();
-                        }
+            if( this.seccionIns!= '' &&  this.seccionIns!= this.InstanciaModificar){
+
+                var url =this.$store.state.rutaDinamica+`api/v1/instanciaCurso/${this.InstanciaModificar.id}`;
+                let put ={                
+                    "seccion": this.InstanciaModificar.seccion,
+                };
+                axios.put(url,put,this.$store.state.config)
+                .then((result)=>{
+                     this.alertaExito = true;
+                this.textoAlertas = "Se ha modificado correctamente la sección.";
+                    
+               }).catch((error)=>{   
+                    if (error.message == 'Network Error') {
+                        this.alertaError = true;
+                        this.textoAlertas = "Error al modificar la sección, inténtelo más tarde."
+                        this.obtenerInstanciasCursos(); 
+                        this.cerrarDialogModificarInstanciaCurso();
                     }
-         
-                }                  
-            });
+                    else{
+                        if(error.response.data.success == false){
+                            if(error.response.data.code == 301){
+                                this.textoAlertas = error.response.data.message;
+                                this.alertaError = true;
+                                this.obtenerInstanciasCursos(); 
+                                this.cerrarDialogModificarInstanciaCurso();
+                            }
+                            if(error.response.data.code == 602){
+                                this.textoAlertas = error.response.data.message;
+                                this.alertaError = true;
+                                this.obtenerInstanciasCursos(); 
+                                this.cerrarDialogModificarInstanciaCurso();
+                            }
+                            if(error.response.data.code == 603){
+                                this.textoAlertas = error.response.data.message;
+                                this.alertaError = true;
+                               this.obtenerInstanciasCursos(); 
+                                this.cerrarDialogModificarInstanciaCurso();
+                            }
+                            if(error.response.data.code == 409){
+                                this.textoAlertas = error.response.data.message;
+                                this.alertaError = true;
+                                this.obtenerInstanciasCursos(); 
+                                this.cerrarDialogModificarInstanciaCurso();
+                            }
+                            else{
+                                this.textoAlertas = error.response.data.message;
+                                this.alertaError = true;
+                                this.obtenerInstanciasCursos(); 
+                                this.cerrarDialogModificarInstanciaCurso();
+                            }
+                        }
+             
+                    }                  
+                });
+            }
             var ins_curso=this.InstanciaModificar.id;
             this.modificarProfesores(this.profesorSeleccionado,this.profesorSeleccionadoAux,this.profesorConCurso,ins_curso,1)
             this.modificarProfesores(this.profesorSeleccionado2,this.profesorSeleccionadoAux2,this.profesorConCurso2,ins_curso,2)
@@ -2342,7 +2359,13 @@ export default {
          */
         acionesSobreInstanciaCurso(item,curso){
             if(item =='Modificar curso'){
-                this.InstanciaModificar = curso;
+                this.InstanciaModificar.id = curso.id;
+                this.InstanciaModificar.listaAyudantes = curso.listaAyudantes;
+                this.InstanciaModificar.listaProfesores = curso.listaProfesores;
+                this.InstanciaModificar.nomCurso = curso.nomCurso;
+                this.InstanciaModificar.semestre = curso.semestre;
+                this.InstanciaModificar.seccion = curso.seccion;
+                this.seccionIns= curso.seccion;
                 var numeroMaxProfesores=5;
                 numeroMaxProfesores= numeroMaxProfesores - curso.listaProfesores.length
                 this.numeroDeProfesoresModificar=numeroMaxProfesores;
@@ -2381,8 +2404,6 @@ export default {
             if(item=='Eliminar curso'){
                 this.datosInsCurso= curso;
                 this.dialogEliminarInsCurso=true
-                // console.log("INFO SEMESTRE")
-                // console.log(this.$store.state.infoSemestre.deleted_at)
             }
             if(item=='Modificar ayudante'){
                 this.datosInsCurso= curso;

@@ -434,6 +434,7 @@
       reglasNombreEscuela: [
         value => !!value || 'Requerido',
         value => (value || '').length <= 40 || 'Max. 40 caracteres',
+        v => /^[a-zA-ZÀ-ÿ\u00f1\u00d1 ]+$/.test(v) || 'Nombre no Válido.'
       ],
       reglasCodigoCarrera: [
         value => !!value || 'Requerido',

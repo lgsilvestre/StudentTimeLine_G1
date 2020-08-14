@@ -145,6 +145,16 @@ class CursoController extends Controller
                 'data' =>  $ex,
                 'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
             ]);
+            if($ex->errorInfo[1]==1062){
+                if(strlen(strstr($ex->errorInfo[2],'cursos_nombre_plan_unique'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El curso ".$request->nombre." ya existe en el plan ".$request->plan,
+                        'data' => ['error'=>$ex]
+                    ], 409 );
+                }
+            }
             return response()->json([
                 'success' => false,
                 'code' => 302,
@@ -282,6 +292,16 @@ class CursoController extends Controller
                 'data' =>  $ex,
                 'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
             ]);
+            if($ex->errorInfo[1]==1062){
+                if(strlen(strstr($ex->errorInfo[2],'cursos_nombre_plan_unique'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El curso ".$request->nombre." ya existe en el plan ".$request->plan,
+                        'data' => ['error'=>$ex]
+                    ], 409 );
+                }
+            }
             return response()->json([
                 'success' => false,
                 'code' => 603,

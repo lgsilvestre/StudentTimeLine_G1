@@ -575,8 +575,8 @@
          ],
          reglas_Nombre:[
                 value => !!value || 'Requerido',
-                v => /^[a-zA-Z ]+$/.test(v) || 'Nombre no Válido.',
-                v => /^[a-zA-Z ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',            
+                v => /^[a-zA-ZÀ-ÿ\u00f1\u00d1 ]+$/.test(v) || 'Nombre no Válido.',
+                v => /^[a-zA-ZÀ-ÿ\u00f1\u00d1 ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',            
         ],
         regla_Email: [
             value => !!value || 'Requerido',
@@ -668,6 +668,8 @@
                     if (result.data.success == true) {
                         this.resetImportarEstudiantes();
                         this.obtenerEstudiantes();
+                        this.alertAcept = true;
+                        this.textoAcept = 'Se realizó la operación correctamente';
                     }
                 })
                 .catch((error)=>{
@@ -920,7 +922,7 @@
                 document.body.appendChild(link);
                 link.click();
                 this.alertAcept = true;
-                this.textoAcept = 'Se realizó la operación correctamente.'
+                this.textoAcept = 'Se realizó la operación correctamente';
                 this.dialogExportar=false;
                 this.resetYCerrarExportar();
                 
