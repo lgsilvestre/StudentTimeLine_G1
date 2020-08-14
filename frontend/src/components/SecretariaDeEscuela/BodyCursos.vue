@@ -5,10 +5,10 @@
 
         </v-col>
         <v-col  cols="12" sm="10" >
-            <v-card flat   elevation="1">
-                <v-img class="mx-auto white--text align-end justify-center"
+            <v-card flat   elevation="10">
+                <v-img class="mx-auto white--text align-end justify-center accent"
                 width="100%" height="180px"       
-                src="@/assets/Globales/fondo3.jpg">
+                >
                 <v-card-title class="white--text" style="padding:0;">
                     <v-row class="px-5">
                         <v-col cols="12" class="pt-1">
@@ -52,24 +52,24 @@
                         <template v-slot:default="props">
                             <v-row >
                                 <v-col v-for="item in props.items" :key="item.nomCurso" cols="12" sm="6" md="4" lg="3">
-                                <v-card class="mx-1"  dark color="#F7FFF7"  style=" border-style:solid; border-color:rgba(0,0,0,0.5);" > 
+                                <v-card class="mx-1"  dark color="#FfFFFf"  style=" border-style:solid; border-color:rgba(0,0,0,0.5);" > 
                                 <v-container class="pt-0 mt-0 pb-0 ">
                                     <v-row >
                                         <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0" >
                                             <v-card-title style="padding:0;" >
-                                                <v-img class="mx-auto white--text align-end justify-center "
+                                                <v-img class="mx-auto white--text align-end justify-center primary"
                                                         width="100%" height="30px"       
-                                                        src="@/assets/Globales/background-panel-08.jpg"
+                                                        
                                                         v-show="item.semestre == 1">
                                                 </v-img>
-                                                <v-img class="mx-auto white--text align-end justify-center "
+                                                <v-img class="mx-auto white--text align-end justify-center secondary"
                                                         width="100%" height="30px"       
-                                                        src="@/assets/Globales/background-panel-09.jpg"
+                                                        
                                                         v-show="item.semestre == 2">
                                                 </v-img>
-                                                <v-img class="mx-auto white--text align-end justify-center "
+                                                <v-img class="mx-auto white--text align-end justify-center accent"
                                                         width="100%" height="30px"       
-                                                        src="@/assets/Globales/background-panel-10.jpg"
+                                                        
                                                         v-show="item.semestre == 3">
                                                 </v-img>
                                             </v-card-title>

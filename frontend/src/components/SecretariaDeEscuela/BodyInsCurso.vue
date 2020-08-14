@@ -15,9 +15,9 @@
             volver
         </v-btn>
         <!-- aca ira la lista de las instancias de curso -->
-        <v-card class="justify-center mt-2" >
-            <v-img class="mx-auto white--text align-end justify-center"
-                width="100%" height="180px"  src="@/assets/Globales/fondo3.jpg" >
+        <v-card class="justify-center mt-2" elevation="10">
+            <v-img class="mx-auto white--text align-end justify-center accent"
+                width="100%" height="180px"   >
                 <v-card-title class="white--text" style="padding:0;">
                     <v-row class="px-5">
                         <v-col cols="12" class="pt-1">
@@ -78,14 +78,14 @@
                 <template v-slot:default="props">
                     <v-row>
                         <v-col v-for="item in props.items" :key="item.id" cols="12"  sm="6" md="4" lg="4">
-                            <v-card  class="mx-1" style="background-color:#F7FFF7; border-style:solid; border-color:rgba(0,0,0,0.5);" >
+                            <v-card  class="mx-1" style="background-color:#FFFFFF; border-style:solid; border-color:rgba(0,0,0,0.5);" >
                                 <v-container class="pt-0 mt-0 pb-0 ">
                                     <v-row >
                                         <v-col cols="12"  class=" pt-0 pl-0 pr-0 pb-0">
                                             <v-card-title style="padding:0;"  >
-                                                <v-img class="mx-auto white--text align-end justify-center "
+                                                <v-img class="mx-auto white--text align-end justify-center secondary"
                                                         width="100%" height="30px"       
-                                                        src="@/assets/Globales/background-panel-08.jpg" >
+                                                        >
                                                 </v-img>
                                             </v-card-title>
                                         </v-col>
@@ -151,7 +151,7 @@
     <!------------------>
         <!-- Dialog para mostrar la lista de los Cursos Existentes -->
         <v-dialog v-model="dialogListaCursos" fullscreen hide-overlay transition="dialog-bottom-transition">
-            <v-card class="mx-auto my-10 " max-width="100%" style="display: block; background-color:#F7FFF7;">
+            <v-card class="mx-auto my-10 " max-width="100%" style="display: block; background-color:#FfFFFf;" >
                 <v-toolbar dark color="primary">
                     <v-spacer></v-spacer>
                     <v-btn 
@@ -161,14 +161,14 @@
                     </v-btn>
                     
                 </v-toolbar>
-                <v-container style="background-color: #F7FFF7;">
+                <v-container style="background-color: #FFFFFF;">
                     <v-row>
                         <v-col cols="12" md="1"></v-col>
                         <v-col cols="12" md="10">
-                            <v-card elevation="1 " >
-                            <v-img class="mx-auto white--text align-end justify-center"
+                            <v-card elevation="10" >
+                            <v-img class="mx-auto white--text align-end justify-center accent"
                                 width="100%" height="180px"       
-                                src="@/assets/Globales/fondo3.jpg" >                    
+                                >                    
                                 <v-card-title class="white--text" style="padding:0;">     
                                     <v-row class="px-5">
                                         <v-col cols="12"  >
@@ -330,8 +330,8 @@
             </v-dialog>
 
             <!-- Dialog para Eliminar un Curso -->
-            <v-dialog v-model="dialogEliminarCurso" ref="form" persistent max-width="450px">
-                <v-card class="mx-auto" max-width="450"  >
+            <v-dialog v-model="dialogEliminarCurso" ref="form" persistent max-width="500px">
+                <v-card class="mx-auto" max-width="500"  >
                     <v-card-title
                         class="headline primary text--center"
                         primary-title
@@ -511,7 +511,7 @@
 
         <!-- Dialog para mostrar la lista de los Cursos Existentes -->
         <v-dialog v-model="dialogAgregarCursoSemestre" fullscreen hide-overlay transition="dialog-bottom-transition">
-            <v-card class="mx-auto my-10 " max-width="100%" style="display: block; background-color:#F7FFF7;">
+            <v-card class="mx-auto my-10 " max-width="100%" style="display: block; background-color:#FFFFFF;">
                 <v-toolbar dark color="primary">
                 <v-spacer></v-spacer>
                 <v-btn  
@@ -520,15 +520,15 @@
                     <v-icon class="ml-1">mdi-close</v-icon>
                 </v-btn>
                 </v-toolbar>
-                <v-container style="background-color: #F7FFF7;">
+                <v-container style="background-color: #FFFFFF;">
                     <v-row>
                         <v-col cols="12" md="1">
                         </v-col>
                         <v-col cols="12" md="10">
-                            <v-card class="mx-auto" >
-                                <v-img class="mx-auto white--text align-end justify-center"
+                            <v-card class="mx-auto" elevation="10" >
+                                <v-img class="mx-auto white--text align-end justify-center accent"
                                     width="100%" height="180px"       
-                                    src="@/assets/Globales/fondo3.jpg"    >
+                                    >
                                 <v-card-title class="white--text" style="padding:0;">
                                     <v-row class="px-5">  
                                         <v-col cols="12" class="pt-1">

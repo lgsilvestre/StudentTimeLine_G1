@@ -19,11 +19,11 @@
         </v-btn>!-->
         <v-row >
             <v-col  cols="12" md="5" xl="4">
-                <v-card elevation="1" > 
+                <v-card elevation="10" > 
                     <v-img
-                        class="mx-auto white--text align-end justify-center"
+                        class="mx-auto white--text align-end justify-center accent"
                         width="100%"
-                        src="@/assets/Globales/fondo.jpg"
+                        
                     >
                     <v-card-title
                     class="headline  text--center"
@@ -1490,7 +1490,7 @@ export default {
                                 this.seriesaux[1] = this.seriesaux[1]+1;
                             } else {
                                 if (element.tipo == "Informativa") {
-                                    auxcolor="primary";
+                                    auxcolor="accent";
                                     auxicono="fas fa-info";
                                     this.seriesaux[2] = this.seriesaux[2]+1;
                                 } else {
@@ -1520,7 +1520,7 @@ export default {
                                     speed: 350
                                 }
                             },
-                            colors: ['#4ECDC4', '#FF6B6B', '#1A535C', '#2196F3'],
+                            colors: ['#034078', '#E63946', '#1282a2', '#2196F3'],
                             labels: ["Positiva", "Negativa", "Informativa", "Otro"],
                         };
                         //var chart = new ApexCharts(el, chartOptions);

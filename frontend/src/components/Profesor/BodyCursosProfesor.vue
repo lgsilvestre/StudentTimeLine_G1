@@ -3,9 +3,9 @@
         <v-row>
             <v-col cols="12" md="1"></v-col>
             <v-col cols="12" md="10">
-                <v-card>
-                    <v-img class="mx-auto white--text align-end justify-center" width="100%" height="180px"       
-                    src="@/assets/Globales/fondo3.jpg">
+                <v-card elevation="10">
+                    <v-img class="mx-auto white--text align-end justify-center accent" width="100%" height="180px"       
+                    >
                         <v-card-title class="white--text" style="padding:0;">
                             <!-- <strong class=" font-weight-black"> Cursos Inscritos </strong>
                             <v-spacer></v-spacer> -->
@@ -13,7 +13,7 @@
                                 <v-col cols="12" class="pt-1">
                                     <strong :style=" $vuetify.breakpoint.smAndDown ? 'font-size: 140%;' : 'font-size: 180%;'" style="text-shadow: #000000 3px 3px 4px;" >Cursos</strong>
                                 </v-col>
-                                <v-col cols="7" sm="9" md="9" class="align-self-end" >
+                                <v-col cols="12" sm="9" md="9" class="align-self-end" >
                                     <v-text-field
                                     v-model="search"
                                     append-icon="mdi-magnify"
@@ -29,20 +29,20 @@
                                     ></v-text-field>                                
                                 </v-col>                                
                             </v-row>
-                     </v-card-title> 
+                    </v-card-title> 
                     </v-img>
                     <v-data-iterator :items="listaInsCursos" :search="search" :sort-by="sortBy.toLowerCase()" class="px-2 py-2" :loading="cargando">
-                         <template v-slot:default="props">
+                        <template v-slot:default="props">
                             <v-row>
                                 <v-col v-for="item in props.items" :key="item.nomCurso" cols="12" sm="6" md="4" lg="4">
-                                    <v-card  class="mx-1" style="background-color:#F7FFF7; border-style:solid; border-color:rgba(0,0,0,0.5);">
+                                    <v-card  class="mx-1" style="background-color:#FFFFFF; border-style:solid; border-color:rgba(0,0,0,0.5);">
                                         <v-container class="pt-0 mt-0 pb-0">
                                             <v-row>
                                                 <v-col cols="12" class=" pt-0 pl-0 pr-0 pb-0">
                                                     <v-card-title class="mt-0 pt-0 pl-0 pr-0 " >
-                                                        <v-img class="mx-auto white--text align-end justify-center "
+                                                        <v-img class="mx-auto white--text align-end justify-center secondary"
                                                                 width="100%" height="30px"       
-                                                                src="@/assets/Globales/background-panel-08.jpg" >
+                                                                >
                                                         </v-img>
                                                     </v-card-title>
                                                 </v-col>
@@ -77,8 +77,8 @@
             <v-col cols="12" md="1"></v-col>
         </v-row>
 
-        <v-dialog v-model="dialogAyudantes" :loading="cargando" max-width="450px" >
-            <v-card class="mx-auto  pb-5" max-width="450" >
+        <v-dialog v-model="dialogAyudantes" :loading="cargando" max-width="500px" >
+            <v-card class="mx-auto  pb-5" max-width="500" >
                 <v-card-title class="headline primary text--center" primary-title >
                     <h5 class="white--text ">Lista Ayudantes</h5>
                 </v-card-title>

@@ -1,6 +1,6 @@
 <template>
-<v-navigation-drawer app right v-model="drawers.drawer" :mini-variant="drawers.miniVarianteAdm"  :permanent="$vuetify.breakpoint.mdAndUp" :temporary="$vuetify.breakpoint.smAndDown"
-    src="@/assets/Globales/background-panel-02.jpg"
+<v-navigation-drawer color="accent" app right v-model="drawers.drawer" :mini-variant="drawers.miniVarianteAdm"  :permanent="$vuetify.breakpoint.mdAndUp" :temporary="$vuetify.breakpoint.smAndDown"
+    
 >
         <v-tooltip left color="primary" :disabled="!drawers.miniVarianteAdm">
             <template v-slot:activator="{ on }">
@@ -51,7 +51,7 @@
                 </template>
                 <span><strong>Observaciones</strong></span>
             </v-tooltip>
-            <v-list-item v-if="$vuetify.breakpoint.smAndDown ? true:false" class=" difuminado align-self-end" style="background-color: #FF6B6B" @click="unLogin">
+            <v-list-item v-if="$vuetify.breakpoint.smAndDown ? true:false" class=" difuminado align-self-end" style="background-color: #E63946" @click="unLogin">
                 <v-list-item-icon >
                     <v-icon color="white" style="font-size: 125%">fas fa-power-off</v-icon>
                 </v-list-item-icon>
@@ -59,7 +59,7 @@
             </v-list-item>    
         </v-list>
         <template v-slot:append >
-        <v-list-item v-if="$vuetify.breakpoint.smAndDown ? false:true" class=" difuminado" style="background-color: #FF6B6B" @click="unLogin">
+        <v-list-item v-if="$vuetify.breakpoint.smAndDown ? false:true" class=" difuminado" style="background-color: #E63946" @click="unLogin">
             <v-list-item-icon >
                 <v-icon color="white" style="font-size: 125%">fas fa-power-off</v-icon>
             </v-list-item-icon>
