@@ -190,7 +190,7 @@
                         //console.log(error);
                         this.alertError = true;
                         this.cargando = false;
-                        this.textoError = 'Error al cargar los datos, intente más tarde'
+                        this.textoError = 'Error al cargar los datos, inténtelo más tarde.'
                     } else {
                         if (error.response.data.success == false) {
                             switch (error.response.data.code) {

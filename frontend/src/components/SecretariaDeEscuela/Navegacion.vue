@@ -69,9 +69,15 @@
                 </template>
                 <span><strong>Observaciones</strong></span>
             </v-tooltip>
+            <v-list-item v-if="$vuetify.breakpoint.smAndDown ? true:false" class=" difuminado align-self-end" style="background-color: #FF6B6B" @click="unLogin">
+                <v-list-item-icon >
+                    <v-icon color="white" style="font-size: 125%">fas fa-power-off</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title class="white--text letra" ><strong>Cerrar sesion</strong></v-list-item-title>
+            </v-list-item>
         </v-list>
         <template v-slot:append >
-        <v-list-item class=" difuminado" style="background-color: #FF6B6B" @click="unLogin">
+        <v-list-item v-if="$vuetify.breakpoint.smAndDown ? false:true" class=" difuminado" style="background-color: #FF6B6B" @click="unLogin">
             <v-list-item-icon >
                 <v-icon color="white" style="font-size: 125%">fas fa-power-off</v-icon>
             </v-list-item-icon>

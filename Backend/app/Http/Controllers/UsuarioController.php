@@ -245,6 +245,7 @@ class UsuarioController extends Controller{
         if(!array_key_exists ("password" , $entradas)){
             $entradas['password'] = null;
         }
+        //este comando solo funciona en una maquina windows, en una linux invierta el /
         if($entradas['foto']==null){
             // Nombre de la imagen
             $path = 'image.png';
@@ -257,7 +258,7 @@ class UsuarioController extends Controller{
             $entradas['foto'] = $base64;
         }
 
-        //En el servidor se trabaja de esta manera
+        //En servidores compartidos utilizar el siguiente codigo
         // if($entradas['foto']==null){
         //     // Nombre de la imagen
             

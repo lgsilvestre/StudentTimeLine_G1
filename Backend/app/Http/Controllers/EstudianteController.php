@@ -206,9 +206,7 @@ class EstudianteController extends Controller
                         'data' => ['error'=>$ex]
                     ], 409 );
                 }
-
             }
-
 
             return response()->json([
                 'success' => false,

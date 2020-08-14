@@ -152,7 +152,7 @@ export default {
             textoAlertas: '',
             alertaError: false,
             columnasAyudante:[
-                { text: 'Matricula', value: 'matricula',align: 'center'},
+                { text: 'Matrícula', value: 'matricula',align: 'center'},
                 { text: 'Nombre Completo', value: 'nombre'},
                 {text:'Ir', value:'opciones',align: 'center', sortable: false,},
             ],
@@ -196,7 +196,7 @@ export default {
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
                     this.cargando = false;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -246,7 +246,7 @@ export default {
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
                     this.cargando = false;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {

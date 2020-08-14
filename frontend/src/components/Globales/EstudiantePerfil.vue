@@ -561,7 +561,7 @@
                             outlined
                             color="secondary"
                             prepend-inner-icon="fas fa-heading"
-                            :rules="[v => !!v || 'El titulo es requerido']"
+                            :rules="[v => !!v || 'El título es requerido']"
                             ></v-text-field>
 
                             <v-select   
@@ -571,7 +571,7 @@
                             label="Tipo" outlined
                             color="secondary"
                             prepend-inner-icon="fas fa-exclamation-circle"
-                            :rules="[v => !!v || 'El tipo de observacion es requerido']"
+                            :rules="[v => !!v || 'El tipo de observación es requerido']"
                             ></v-select >
                             <v-row no-gutters  >
                                 <v-col cols="11">
@@ -620,7 +620,7 @@
                             outlined
                             color="secondary"
                             label="Descripción"
-                            :rules="[v => !!v || 'La descripcion es requerida.']"
+                            :rules="[v => !!v || 'La descripción es requerida.']"
                             ></v-textarea>
                             <div class="pb-1" style="text-align:right;">  
                                 <v-btn 
@@ -690,7 +690,7 @@
                             v-model="estudianteEditar.rut"
                             label="Rut" outlined
                             color="secondary"
-                            hint="Ingrese rut sin puntos, guion o dígito verificador"
+                            hint="Ingrese rut sin puntos, guión o dígito verificador"
                             prepend-inner-icon="fas fa-address-card"
                             :rules="reglas_rut"
                             ></v-text-field>
@@ -1025,14 +1025,14 @@ export default {
             form_añadirObservacionValido:true,
             form_solicitarEstudianteValido:true,
             formCategoria: true,
-             reglas_matricula:[
-             value => !!value || 'Requerido',
-             value => /^[0-9]+$/.test(value) || 'Matricula solo debe incluir numeros',
-             value => /^[0-9]{10}$/.test(value) || 'La matricula debe compuesta de 10 numeros',
+            reglas_matricula:[
+            value => !!value || 'Requerido',
+            value => /^[0-9]+$/.test(value) || 'Matrícula solo debe incluir números',
+            value => /^[0-9]{10}$/.test(value) || 'La matrícula debe compuesta de 10 números',
             ],
             reglas_rut:[
                 value => !!value || 'Requerido',
-                value => /^[0-9]+$/.test(value) || 'El rut debe estar compuesto solo por numeros',                
+                value => /^[0-9]+$/.test(value) || 'El rut debe estar compuesto solo por números',                
                 value => /^[0-9]{7,8}$/.test(value) || 'El rut debe contener entre 7 y 8 dígitos',
             ],
             reglas_Nombre:[
@@ -1112,7 +1112,7 @@ export default {
                         //console.log(error);
                         this.alertError = true;
                         this.cargando = false;
-                        this.textoError = 'Error al cargar los datos, intente más tarde'
+                        this.textoError = 'Error al cargar los datos, inténtelo más tarde'
                     } else {
                         if (error.response.data.success == false) {
                             switch (error.response.data.code) {
@@ -1189,7 +1189,7 @@ export default {
                 if (error.message == 'Network Error') {
                     //console.log(error);
                     this.alertError = true;
-                    this.textoError = 'Error, intente más tarde'
+                    this.textoError = 'Error, inténtelo más tarde'
                 } else {
                     if (error.response.data.success == false) {
                         this.alertError = true;
@@ -1220,7 +1220,7 @@ export default {
                 if (error.message == 'Network Error') {
                     //console.log(error);
                     this.alertError = true;
-                    this.textoError = 'Error, intente más tarde'
+                    this.textoError = 'Error, inténtelo más tarde'
                 } else {
                     if (error.response.data.success == false) {
                         this.alertError = true;
@@ -1246,13 +1246,13 @@ export default {
                 this.$refs.form_añadirObservacion.resetValidation();
                 this.dialogCrearCategoria = false;
                 this.alertAcept = true;
-                this.textoAcept = "Se agregó la categoria con exito";
+                this.textoAcept = "Se ha agregado correctamente la categoría.";
             })
             .catch((error) => {
                 if (error.message == 'Network Error') {
                     //console.log(error);
                     this.alertError = true;
-                    this.textoError = 'Error, intente más tarde'
+                    this.textoError = 'Error, inténtelo más tarde'
                 } else {
                     if (error.response.data.success == false) {
                         this.dialogCrearCategoria = false;
@@ -1331,7 +1331,7 @@ export default {
                     //if (result.data.success == true)  {
                         //console.log('se cargo el estudiante');
                         this.alertAcept = true;
-                        this.textoAcept = 'Se agregó el estudiante correctamente ';
+                        this.textoAcept = 'Se ha agregado correctamente el estudiante.';
                         this.dialogAEditarEstudiante = false;
                         this.obtenerEstudiante(1);
                     //}
@@ -1340,7 +1340,7 @@ export default {
                     if (error.message == 'Network Error') {
                         //console.log(error);
                         this.alertError = true;
-                        this.textoError = 'Error al cargar los datos, intente más tarde'
+                        this.textoError = 'Error al cargar los datos, inténtelo más tarde.'
                     } else {
                         if (error.response.data.success == false) {
                             //console.log(error.response.data.code +' '+ error.response.data.message);
@@ -1568,7 +1568,7 @@ export default {
                 //console.log(error);
                 this.alertError = true;
                 this.cargando = false;
-                this.textoError = 'Error al cargar los datos, intente más tarde'
+                this.textoError = 'Error al cargar los datos, inténtelo más tarde'
                 } else {
                 if (error.response.data.success == false) {
                     //console.log(error.response.data.code +' '+ error.response.data.message);
@@ -1611,7 +1611,7 @@ export default {
                 if (error.message == 'Network Error') {
                     this.alertError = true;
                     this.cargando = false;
-                    this.textoError = "Error al cargar los datos, intente mas tarde.";
+                    this.textoError = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -1697,7 +1697,7 @@ export default {
                 axios.post(url, post, this.$store.state.config)
                 .then((result) => {
                     this.alertAcept = true;
-                    this.textoAcept = "Se agrego la observacion con exito."
+                    this.textoAcept = "Se ha agregado correctamente la observación."
                     this.resetAgregarObservacion();
                     this.obtenerEstudiante(3);
                     this.$refs.form_añadirObservacion.reset();
@@ -1705,7 +1705,7 @@ export default {
                     if (error.message == 'Network Error') {
                         //console.log(error)
                         this.alertError = true;
-                        this.textoError = "Error al crear una observacion, intente mas tarde."
+                        this.textoError = "Error al crear una observación, inténtelo más tarde."
                         this.resetRegistrarUsuario();
                     }
                     else{
@@ -1720,7 +1720,7 @@ export default {
                         else{
                             //console.log(error)
                             this.alertError = true;
-                            this.textoError = "Error, intente mas tarde."
+                            this.textoError = "Error, inténtelo más tarde."
                             this.resetAgregarObservacion();
                         }
                     }                
@@ -1780,7 +1780,7 @@ export default {
                 this.cargarDatosModificarObservacion(observacion);
             } else {
                 this.alertError = true;
-                this.textoError = "Solo el creador de la observacion puede modificarla"
+                this.textoError = "Solo el creador de la observación posee permisos para modificar."
             }
         },
         modificarObservacion(){
@@ -1817,14 +1817,14 @@ export default {
                 //console.log(result);
                 //console.log(result.data);
                 this.alertAcept = true;
-                this.textoAcept = "Se modifico la observacion con exito."
+                this.textoAcept = "Se ha modificado correctamente la observación."
                 this.resetModificarObservacion();
                 this.obtenerEstudiante(3);
             }).catch((error)=>{
                 if (error.message == 'Network Error') {
                     //console.log(error)
                     this.alertError = true;
-                    this.textoError = "Error al modificar la observacion, intente mas tarde."
+                    this.textoError = "Error al modificar la observación, inténtelo más tarde."
                     this.resetModificarObservacion();
                 }
                 else{
@@ -1839,7 +1839,7 @@ export default {
                     else{
                         //console.log(error)
                         this.alertError = true;
-                        this.textoError = "Error al modificar la observacion, intente mas tarde."
+                        this.textoError = "Error al modificar la observación, inténtelo más tarde."
                         this.resetModificarObservacion();
                     }
                 }                
@@ -1888,7 +1888,7 @@ export default {
                 this.cargarDatosEliminarObservacion(observacion);
             } else {
                 this.alertError = true;
-                this.textoError = "Solo el creador de la observacion puede eliminarla";
+                this.textoError = "Solo el creador de la observación posee permisos para eliminar.";
             }
         },
         EliminarObservacion(){
@@ -1898,14 +1898,14 @@ export default {
                 //console.log(result);
                 //console.log(result.data);
                 this.alertAcept = true;
-                this.textoAcept = "Se elimino la observacion con exito."
+                this.textoAcept = "Se ha eliminado correctamente la observación."
                 this.resetEliminarObservacion();
                 this.obtenerEstudiante(3);
             }).catch((error)=>{
                 if (error.message == 'Network Error') {
                     //console.log(error)
                     this.alertError = true;
-                    this.textoError = "Error al eliminar la observacion, intente mas tarde."
+                    this.textoError = "Error al eliminar la observación, inténtelo más tarde."
                     this.resetEliminarObservacion();
                 }
                 else{
@@ -1920,7 +1920,7 @@ export default {
                     else{
                         //console.log(error)
                         this.alertError = true;
-                        this.textoError = "Error al eliminar la observacion, intente mas tarde."
+                        this.textoError = "Error al eliminar la observación, inténtelo más tarde."
                         this.resetEliminarObservacion();
                     }
                 }                
@@ -2000,7 +2000,7 @@ export default {
                     // console.log(result);
                     // console.log(result.data);
                     this.alertAcept = true;
-                    this.textoAcept = "Se envió la solicitud con exito"
+                    this.textoAcept = "Se ha enviado correctamente la solicitud."
                     this.resetDialogSolicitud();
                     
                 }).catch((error)=>{
@@ -2008,7 +2008,7 @@ export default {
                     if (error.message == 'Network Error') {
                         // console.log(error)
                         this.alertError = true;
-                        this.textoError = "Error al enviar la solicitud, intente mas tarde."
+                        this.textoError = "Error al enviar la solicitud, inténtelo más tarde."
                         this.resetDialogSolicitud();                        
                     } 
                     else{
