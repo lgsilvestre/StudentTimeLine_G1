@@ -278,7 +278,8 @@
                                                 :rules="[() => !!datosUsuario.escuela ||'Requerido']"
                                                 prepend-inner-icon="mdi-school"
                                             ></v-select> 
-                                            <v-select  v-model="datosUsuario.escuelaAux"
+                                            <v-select  v-show="datosUsuario.role!='Profesor' && datosUsuario.role!=''"
+                                                v-model="datosUsuario.escuelaAux"
                                                 :items="listaEscuela"
                                                 item-text="nombre"
                                                 item-value="id"
