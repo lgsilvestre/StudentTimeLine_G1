@@ -249,26 +249,26 @@
                     <v-container class="px-5 mt-5" >
                         <v-form  ref="formCrearCurso"  style="margin:0;padding:0;" v-model="formularioCrearCursoValido" lazy-validation>
                             <v-text-field
-                                v-model="datosCurso.nombre"
+                                v-model="datosCursoAux.nombre"
                                 label="Nombre del Curso"
-                                :rules="[() => !!datosCurso.nombre ||'Requerido']"
+                                :rules="[() => !!datosCursoAux.nombre ||'Requerido']"
                                 outlined
                                 prepend-inner-icon="mdi-account"
                             ></v-text-field>
                             <v-text-field
-                                v-model="datosCurso.plan"
+                                v-model="datosCursoAux.plan"
                                 label="Plan al que Pertenece el Curso"
-                                :rules="[() => !!datosCurso.plan ||'Requerido']"
+                                :rules="[() => !!datosCursoAux.plan ||'Requerido']"
                                 outlined
                                 prepend-inner-icon="mdi-account"
                             ></v-text-field>
                             <v-select
-                                v-model="datosCurso.idEscuela"
+                                v-model="datosCursoAux.escuela"
                                 label="Escuela"
                                 :items="listaEscuela"
                                 item-text="nomEscuela"
                                 item-value="idEscuela"
-                                :rules="[() => !!datosCurso.idEscuela ||'Requerido']"
+                                :rules="[() => !!datosCursoAux.escuela ||'Requerido']"
                                 outlined
                                 prepend-inner-icon="mdi-school"
                             ></v-select>   
@@ -293,24 +293,24 @@
                         <h5 class="white--text ">Modificar Curso</h5>
                     </v-card-title>
                     <v-container class="px-5 mt-5">
-                        <v-text-field v-model="datosCurso.nombre" label="Nombre del Curso" outlined
+                        <v-text-field v-model="datosCursoAux.nombre" label="Nombre del Curso" outlined
                             color="secondary"
-                            :rules="[() => !!datosCurso.nombre ||'Requerido']"
+                            :rules="[() => !!datosCursoAux.nombre ||'Requerido']"
                             prepend-inner-icon="mdi-account"
                         ></v-text-field>
-                        <v-text-field v-model="datosCurso.plan" label="Plan" outlined
+                        <v-text-field v-model="datosCursoAux.plan" label="Plan" outlined
                             color="secondary"
-                            :rules="[() => !!datosCurso.plan ||'Requerido']"
+                            :rules="[() => !!datosCursoAux.plan ||'Requerido']"
                             prepend-inner-icon="mdi-account"
                         ></v-text-field>
-                        <v-select  v-model="datosCurso.nomEscuela"
+                        <v-select  v-model="datosCursoAux.escuela"
                             :items="listaEscuela"
                             item-text="nomEscuela"
-                            item-value="id"
+                            item-value="idEscuela"
                             label="Escuela"
                             outlined
                             :small-chips="$vuetify.breakpoint.smAndDown ? true : false"
-                            :rules="[() => !!datosCurso.nomEscuela ||'Requerido']"
+                            :rules="[() => !!datosCursoAux.escuela ||'Requerido']"
                             prepend-inner-icon="mdi-school"
                         ></v-select>
                         <div style="text-align:right;" class="mb-1 " >
@@ -340,10 +340,9 @@
                         </v-card-title> 
                         <!-- <v-container fluid class=" text-left"> -->
                         <v-card-title class="text-justify" style="font-size: 100%;">Esta seguro que desea eliminar el siguiente Curso?</v-card-title>
-                        <v-card-text>Nombre : {{ this.datosCurso.nombre }}</v-card-text>
-                        <v-card-text>Plan : {{ this.datosCurso.plan }}</v-card-text>
-                        <v-card-text>Escuela : {{ this.datosCurso.escuela }}</v-card-text>
-                        <v-card-text>Descripcion : {{ this.datosCurso.descripcion }}</v-card-text>
+                        <v-card-text>Nombre : {{ this.datosCursoAux.nombre }}</v-card-text>
+                        <v-card-text>Plan : {{ this.datosCursoAux.plan }}</v-card-text>
+                        <v-card-text>Escuela : {{ this.datosCursoAux.nomEscuela }}</v-card-text>                        
                         <!-- </v-container > -->
                         <div style="text-align:right;">
                             <v-btn rounded color="warning" class=" mb-4 "  @click="dialogEliminarCurso = false">
@@ -934,6 +933,7 @@ export default {
             timeout: 6000,
             /* --------------- */
             datosCurso: [{id:''},{nombre:''},{plan:''},{escuela:''},{descripcion:''}],
+            datosCursoAux: [{id:''},{nombre:''},{plan:''},{escuela:''},{nomEscuela:''},{descripcion:''}],
             datosInsCurso: [{id:''},{semestre:''},{curso:''},{nomCurso:''}],
             listaDeSeccionesDisponibles:['A','B','C','D','E','F','G','H'],
             cargando: false,
@@ -1069,8 +1069,8 @@ export default {
                 value => !!value || 'Requerido'
                 ],
             //Texto
-            ModificacionExitosa:'Las Modificaciones se realizaron correctamente.',
-            ModificacionError:'Las Modificaciones No realizaron correctamente.',
+            ModificacionExitosa:'Las modificaciones se realizaron correctamente.',
+            ModificacionError:'Las modificaciones no se han realizado correctamente.',
             //
             semestreValido:true,
         }
@@ -1137,7 +1137,6 @@ export default {
             
         },
         restarProfesor(){
-
             if(this.contadorProfesores== 2 ){
                 this.contadorProfesores--;
                 this.profesorSeleccionado2=null;
@@ -1303,7 +1302,7 @@ export default {
             ).catch((error)=>{
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -1341,7 +1340,7 @@ export default {
             ).catch((error)=>{
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -1384,7 +1383,7 @@ export default {
             ).catch((error)=>{
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -1420,7 +1419,7 @@ export default {
             ).catch((error)=>{ 
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -1462,7 +1461,7 @@ export default {
                 this.cargando = false;
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -1506,7 +1505,7 @@ export default {
                 }).catch((error)=>{ 
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -1574,7 +1573,7 @@ export default {
                 if (error.message == 'Network Error') {
                     // console.log(error)  
                     this.alertaError = true;
-                    this.textoAlertas = "Error al asignar el profesor intente mas tarde."
+                    this.textoAlertas = "Error al asignar el profesor, inténtelo más tarde."
                     this.resetAsignarCurso();
                 }
                 else{
@@ -1638,7 +1637,7 @@ export default {
                 .then((result)=>{
                 
                     this.alertaExito = true;
-                    this.textoAlertas = "Se desvinculo el el profesor con exito "
+                    this.textoAlertas = "El profesor ha sido desvinculado correctamente."
                     this.obtenerInstanciasCursos();
                     this.dialogProfesoresInsCurso=false;
                     this.obtenerInstanciasCursos();
@@ -1646,7 +1645,7 @@ export default {
                 }).catch((error)=>{
                     if (error.message == 'Network Error') {
                         this.alertaError = true;
-                        this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
+                        this.textoAlertas = "Error al eliminar profesor, inténtelo más tarde."
                     }
                     else{
                         if (error.response.data.success == false) {
@@ -1679,10 +1678,13 @@ export default {
             var valido=this.$refs.formCrearCurso.validate();
             console.log("llege aca : "+valido )
             if(valido == true){
-                var nombre=this.datosCurso.nombre; 
-                var plan = this.datosCurso.plan;
-                var escuela = this.datosCurso.idEscuela
+                var nombre=this.datosCursoAux.nombre; 
+                var plan = this.datosCursoAux.plan;
+                var escuela = this.datosCursoAux.escuela;
 
+                console.log(nombre);
+                console.log(plan);
+                console.log(escuela);
                 if(nombre!='' && plan!='' && escuela!=''){
                     let post = {
                     "nombre": nombre,
@@ -1695,7 +1697,7 @@ export default {
                     .then((result) => {
                         // console.log(result)
                         this.alertaExito = true;
-                        this.textoAlertas = "Se creó el curso con exito."
+                        this.textoAlertas = "El curso ha sido creado correctamente."
                         this.resetCrearCurso();
                         this.obtenerCursos(); 
                         this.KeyDialogCrearCurso ++; 
@@ -1704,7 +1706,7 @@ export default {
                         if (error.message == 'Network Error') {
                             // console.log(error)
                             this.alertaError = true;
-                            this.textoAlertas = "Error al crear el curso, intente mas tarde."
+                            this.textoAlertas = "Error al crear el curso, inténtelo más tarde."
                             this.resetCrearCurso();
                             this.KeyDialogCrearCurso ++;
                         }
@@ -1726,34 +1728,43 @@ export default {
         },
 
         resetCrearCurso(){
-            this.datosCurso.nombre ='';
+            this.datosCursoAux.nombre ='';
+            this.datosCursoAux.plan ='';
+            this.datosCursoAux.escuela ='';
             this.dialogCrearCurso = false;
-            this.$refs.formCrearCurso.reset()
+            this.$refs.formCrearCurso.reset();
             this.KeyDialogCrearCurso ++;
         },
 
-        setModificarCurso(item){
-
-             this.datosCurso=item;
+        setModificarCurso(item){          
+            this.datosCursoAux.id = item.id;
+            this.datosCursoAux.nombre = item.nombre;
+            this.datosCursoAux.plan = item.plan;
+            this.datosCursoAux.escuela = item.idEscuela;
+            this.datosCursoAux.nomEscuela = item.nomEscuela;            
             this.dialogModificarCurso = true;
         },
         resetModificarCurso(){
-            this.datosCurso= '';
+            this.datosCursoAux.id = '';
+            this.datosCursoAux.nombre = '';
+            this.datosCursoAux.plan = '';
+            this.datosCursoAux.escuela = '';
+            this.datosCursoAux.nomEscuela = ''; 
             this.dialogModificarCurso = false;
         },
         modificarCurso(){
-            var url = this.$store.state.rutaDinamica+`api/v1/curso/${this.datosCurso.id}`;
+            var url = this.$store.state.rutaDinamica+`api/v1/curso/${this.datosCursoAux.id}`;
             let put ={                
-                "nombre": this.datosCurso.nombre,
-                "plan": this.datosCurso.plan,
-                "escuela": this.datosCurso.idEscuela,
+                "nombre": this.datosCursoAux.nombre,
+                "plan": this.datosCursoAux.plan,
+                "escuela": this.datosCursoAux.escuela,
                 "descripcion": ''
             };
             console.log(put)
             axios.put(url,put,this.$store.state.config)
             .then((result)=>{
                 this.alertaExito = true;
-                this.textoAlertas = "Se modificó el curso con exito."
+                this.textoAlertas = "El curso ha sido modificado correctamente."
                 this.obtenerCursos(); 
                 this.resetModificarCurso();
               
@@ -1762,7 +1773,7 @@ export default {
                 if (error.message == 'Network Error') {
                     // console.log(error)
                     this.alertaError = true;
-                    this.textoAlertas = "Error al modificar el curso, intente mas tarde."
+                    this.textoAlertas = "Error al modificar el curso, inténtelo más tarde."
                 }
                 else{
                     // console.log(error.response);
@@ -1799,31 +1810,35 @@ export default {
         },
         
         setEliminarCurso(item){
-            this.datosCurso= item
+            this.datosCursoAux.id = item.id;
+            this.datosCursoAux.nombre = item.nombre;
+            this.datosCursoAux.plan = item.plan;
+            this.datosCursoAux.escuela = item.idEscuela;
+            this.datosCursoAux.nomEscuela = item.nomEscuela; 
             this.dialogEliminarCurso = true;
         },
         resetEliminarCurso(){
-            this.datosCurso.id= '';
-            this.datosCurso.nombre = '';
-            this.datosCurso.plan = '';
-            this.datosCurso.escuela = '';
-            this.datosCurso.descripcion = '';
+            this.datosCursoAux.id= '';
+            this.datosCursoAux.nombre = '';
+            this.datosCursoAux.plan = '';
+            this.datosCursoAux.escuela = '';
+            this.datosCursoAux.nomEscuela = '';            
             this.dialogEliminarCurso = false;
         },
         eliminarCurso(){
-            var url = this.$store.state.rutaDinamica+'api/v1/curso/'+this.datosCurso.id;
+            var url = this.$store.state.rutaDinamica+'api/v1/curso/'+this.datosCursoAux.id;
             axios.delete(url,this.$store.state.config)
             .then((result)=>{
                 this.obtenerCursos();
                 this.resetEliminarCurso(); 
                 this.alertaExito = true;
-                this.textoAlertas = "Se elimino el curso con exito "
+                this.textoAlertas = "El curso ha sido eliminado correctamente."
             
             }).catch((error)=>{
                 if (error.message == 'Network Error') {
                     // console.log(error)
                     this.alertaError = true;
-                    this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
+                    this.textoAlertas = "Error al eliminar el usuario, inténtelo más tarde."
                 }
                 else{
                     // console.log(error.response);
@@ -1868,7 +1883,7 @@ export default {
             .then((result)=>{
             if (result.statusText=='OK') {
                 this.alertaExito = true;
-                this.textoAlertas = "Se desvinculo el ayudante con exito "
+                this.textoAlertas = "El ayudante ha sido desvinculado correctamente."
                 this.obtenerInstanciasCursos();
                 this.dialogAyudantesInsCurso=false;
             }
@@ -1876,7 +1891,7 @@ export default {
                 if (error.message == 'Network Error') {
                     // console.log(error)
                     this.alertaError = true;
-                    this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
+                    this.textoAlertas = "Error al eliminar el ayudante, inténtelo más tarde."
                 }
                 else{
                     // console.log(error.response);
@@ -2001,7 +2016,7 @@ export default {
                             // console.log( error.response.data);
                             if (error.message == 'Network Error') {
                                 this.alertaError = true;
-                                this.textoAlertas = "Error al asignar el curso, intente mas tarde."
+                                this.textoAlertas = "Error al asignar el curso, inténtelo más tarde."
                                 this.cerrarDialogAsignarCurso(); 
                             }
                             else{
@@ -2048,11 +2063,12 @@ export default {
          */
         agregarProfesorCurso(post2){
             var url2 = this.$store.state.rutaDinamica+'api/v1/profesorConCurso'; 
+            console.log(post2)
             /* crear profesor con curso */
             if(post2.curso!='' && post2.profesor!=''){
                 axios.post(url2, post2, this.$store.state.config)
             .then((result) => {
-                this.textoAlertas = "Se asignó el profesor correctamente"
+                this.textoAlertas = "El profesor ha sido asignado correctamente."
                 this.alertaExito=true;
                 this.obtenerInstanciasCursos();
                 
@@ -2060,8 +2076,9 @@ export default {
                 if (error.message == 'Network Error') {
                     console.log(error)  
                     this.alertaError = true;
-                    this.textoAlertas = "Error al asignar el profesor intente mas tarde."
+                    this.textoAlertas = "Error al asignar el profesor, inténtelo más tarde."
                     this.resetAsignarCurso();
+
                 }
                 else{
                     if(error.response.data.success == false){
@@ -2083,7 +2100,7 @@ export default {
             });
             }
             // console.log("OBTENIENDO LAS NUEVAS INSTANCIAS")
-            this.obtenerInstanciasCursos(); 
+            
         },
         /**
          * Cierra el dialog de modificar instancia curso.
@@ -2115,6 +2132,11 @@ export default {
             this.profesorConCurso3=null;
             this.profesorConCurso4=null;
             this.profesorConCurso5=null;
+            this.profesorSeleccionadoAux=null;
+            this.profesorSeleccionadoAux2=null;
+            this.profesorSeleccionadoAux3=null;
+            this.profesorSeleccionadoAux4=null;
+            this.profesorSeleccionadoAux5=null;
             this.contadorProfesores=1;
             this.numeroDeProfesoresModificar=0;
 
@@ -2123,20 +2145,18 @@ export default {
         },
         DesvincularUnProfesorInsCurso(id){
             var url = this.$store.state.rutaDinamica+'api/v1/profesorConCurso/'+id;
-            console.log(url)
                 axios.delete(url,this.$store.state.config)
                 .then((result)=>{
                 if (result.statusText=='OK') {
                     this.alertaExito = true;
-                    this.textoAlertas = "Se desvinculo el el profesor con exito "
-                    
+                    this.textoAlertas = "Se ha desvinculado correctamente al profesor."
                     this.obtenerInstanciasCursos();
                     this.dialogProfesoresInsCurso=false;
                 }
                 }).catch((error)=>{
                     if (error.message == 'Network Error') {
                         this.alertaError = true;
-                        this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
+                        this.textoAlertas = "Error al eliminar el profesor, inténtelo más tarde."
                     }
                     else{
                         if(error.response.data.success == false){
@@ -2157,12 +2177,12 @@ export default {
                 });
         },
         modificarProfesores(profesorPrincipal, ProfesorAux,idProfesorConCurso,insCurso,num){
-            // console.log("==================="+num+"==================")
+            // console.log("====######=========="+num+"==================")
             // console.log(profesorPrincipal)
             // console.log(ProfesorAux)
             // console.log(insCurso)
             // console.log(idProfesorConCurso)
-            // console.log("===========================================")
+            // console.log("=======######===============================")
             // console.log()
             if( ProfesorAux!= null && idProfesorConCurso!= null && profesorPrincipal!=null &&ProfesorAux!=profesorPrincipal){
                 if(idProfesorConCurso!=''){
@@ -2181,7 +2201,7 @@ export default {
             // Eliminar profesor de una instancia de curso
             if(ProfesorAux!= null && idProfesorConCurso!=null && profesorPrincipal==null ){
                 if(idProfesorConCurso!=''){
-                    // console.log("Eliminar profesor pricipal")
+                    //  console.log("Eliminar profesor pricipal")
                     // console.log(profesorPrincipal)
                     this.DesvincularUnProfesorInsCurso( idProfesorConCurso);
                 }
@@ -2189,7 +2209,7 @@ export default {
             // Agregar profesor a instancia de curso
             if(ProfesorAux==null && idProfesorConCurso==null && profesorPrincipal!=null ){
                 if(profesorPrincipal!=''){
-                    // console.log("añadimos un nuevo profesor")
+                    //  console.log("añadimos un nuevo profesor")
                     let post2 = {
                     "profesor" :  profesorPrincipal,
                     "curso":  insCurso,
@@ -2211,12 +2231,12 @@ export default {
             axios.put(url,put,this.$store.state.config)
             .then((result)=>{
                  this.alertaExito = true;
-            this.textoAlertas = "Se modifico la sección con exito";
+            this.textoAlertas = "Se ha modificado correctamente la sección.";
                 
            }).catch((error)=>{   
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
-                    this.textoAlertas = "Error al modificar el curso, intente mas tarde."
+                    this.textoAlertas = "Error al modificar la sección, inténtelo más tarde."
                     this.obtenerInstanciasCursos(); 
                     this.cerrarDialogModificarInstanciaCurso();
                 }
@@ -2299,11 +2319,11 @@ export default {
                 this.obtenerInstanciasCursos();
                 this.cerrarDialogCerrarInstanciaCurso(); 
                 this.alertaExito = true;
-                this.textoAlertas = "Se elimino el curso con exito "
+                this.textoAlertas = "Se ha eliminado correctamente el curso."
             }).catch((error)=>{
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
-                    this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
+                    this.textoAlertas = "Error al eliminar el curso, inténtelo más tarde."
                     this.cerrarDialogCerrarInstanciaCurso(); 
                 }
                 else{

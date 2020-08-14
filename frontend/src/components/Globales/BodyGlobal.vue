@@ -141,7 +141,7 @@
                 <v-icon color="white" class="mr-2">
                     fas fa-check-circle
                 </v-icon>
-                <p><strong>{{textoAcept}}</strong></p>
+                <strong>{{textoAcept}}</strong>
             </div>
             <v-btn color="white" elevation="0" x-small
             fab @click="alertAcept = ! alertAcept" > 
@@ -199,8 +199,8 @@ export default {
             imagenMiniatura:null,
             correo:'',
             reglasNombre:[
-                v => /^[a-zA-Z ]+$/.test(v) || 'Nombre no Válido.',
-                v => /^[a-zA-Z ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',
+                v => /^[a-zA-ZÀ-ÿ\u00f1\u00d1 ]+$/.test(v) || 'Nombre no Válido.',
+                v => /^[a-zA-ZÀ-ÿ\u00f1\u00d1 ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',
             ],
             reglasEmail: [
                 v => /.+@utalca.cl/.test(v) || /.+@alumnos.utalca.cl/.test(v) || 'Correo no Válido', 
@@ -269,7 +269,7 @@ export default {
                     //console.log(error);
                     state.verificacionLogin= true;
                     state.cargaLogin=false;
-                    state.mensajeErrorLogin= 'Error al comunicarse con el servidor, intente más tarde';
+                    state.mensajeErrorLogin= 'Error al comunicarse con el servidor, inténtelo más tarde';
                 } else {
                     if (error.response.data.success == false) {
                         switch (error.response.data.code) {
@@ -331,7 +331,7 @@ export default {
                     //console.log(error);
                     this.cargando = false;
                     this.alertError = true;
-                    var mensaje="La modificación del perfil fue realizada con exito";
+                    var mensaje="Se ha modificado correctamente el perfil.";
                     this.textoError=mensaje;
                     this.reset();
                 } else 

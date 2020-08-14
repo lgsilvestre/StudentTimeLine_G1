@@ -422,13 +422,11 @@ export default {
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
                     this.cargando = false;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
                         if(error.response.data.code == 101){
-                            //console.log(error.response.data.code +' '+ error.response.data.message);
-                            //console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;                            
                         }
@@ -465,17 +463,14 @@ export default {
 
             }
             ).catch((error)=>{
-                //console.log(error)
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
                     this.cargando = false;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
                         if(error.response.data.code == 101){
-                            //console.log(error.response.data.code +' '+ error.response.data.message);
-                           //console.log(error.response.data);
                             this.textoAlertas = error.response.data.message;
                             this.alertaError = true;                            
                         }
@@ -504,25 +499,20 @@ export default {
                     this.obtenerProfesores();
                     this.resetEliminarprofesor(); 
                     this.alertaExito = true;
-                    this.textoAlertas = "Se elimino el usuario con exito "
+                    this.textoAlertas = "Se ha eliminado correctamente el usuario."
                 }
                 }).catch((error)=>{
                     if (error.message == 'Network Error') {
-                        // console.log(error)
                         this.alertaError = true;
-                        this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
+                        this.textoAlertas = "Error al eliminar el usuario, inténtelo más tarde."
                     }
                     else{
                         if (error.response.data.success == false) {
                             if(error.response.data.code == 701){
-                                // console.log(error.response.data.code +' '+ error.response.data.message);
-                                // console.log(error.response.data);
                                 this.textoAlertas = error.response.data.message;
                                 this.alertaError = true;
                             }
                             if(error.response.data.code == 702){
-                                // console.log(error.response.data.code +' '+ error.response.data.message);
-                                // console.log(error.response.data);
                                 this.textoAlertas = error.response.data.message;
                                 this.alertaError = true;
                             }
@@ -559,18 +549,15 @@ export default {
             var url =this.$store.state.rutaDinamica+`api/v1/usuario/restore/${this.datosUsuario.id}`;
             axios.post(url,null,this.$store.state.config)
             .then((result)=>{
-                // console.log("USUARIO RESTAURADO")
-                // console.log(result)
                 this.obtenerProfesoresDeshabilitados();
                 this.dialogHabilitar = false;
                 this.alertaExito = true;
-                this.textoAlertas = "Es usuario esta habilitado nuevamente.";
+                this.textoAlertas = "El usuario ha sido habilitado correctamente.";
             
             }).catch((error)=>{
                 if (error.message == 'Network Error') {
-                    // console.log(error)
                     this.alertaError = true;
-                    this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
+                    this.textoAlertas = "Error al eliminar el usuario, inténtelo más tarde."
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -613,7 +600,7 @@ export default {
                     this.dialogAviso = false;
                     this.alertaExito = true;
                     this.resetAviso();
-                    this.textoAlertas = "Se ha enviado el aviso con exito"
+                    this.textoAlertas = "Se ha enviado el aviso con éxito."
                 }
                 ).catch((error)=>{
                     if (error.message == 'Network Error') {
@@ -621,7 +608,7 @@ export default {
                         this.cargando = false;
                         this.alertaError = true;         
                         this.resetAviso();               
-                        this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                        this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                     }
                     else{
                         if (error.response.data.success == false) {

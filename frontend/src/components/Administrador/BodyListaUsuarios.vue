@@ -479,8 +479,8 @@ export default {
             //Reglas
             reglasNombre:[
                 v => !!v || 'Requerido',
-                v => /^[a-zA-Z ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',
-                v => /^[a-zA-Z ]+$/.test(v) || 'Nombre no Válido.'
+                v => /^[a-zA-ZÀ-ÿ\u00f1\u00d1 ]{3,40}$/.test(v) || 'Largo del Nombre no Válido',
+                v => /^[a-zA-ZÀ-ÿ\u00f1\u00d1 ]+$/.test(v) || 'Nombre no Válido.'
             ],
             reglasEmail: [
                 v => !!v || 'Requerido',
@@ -559,7 +559,7 @@ export default {
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
                     this.cargando = false;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -606,7 +606,7 @@ export default {
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
                     this.cargando = false;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -684,7 +684,7 @@ export default {
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
                     this.cargando = false;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -722,7 +722,9 @@ export default {
                         correo: element.email,   
                         escuela: element.escuela,
                     };                         
-                    
+                    if(element.escuelaAux != "no posee otra escuela"){
+                        usuario.escuelaAux = element.escuelaAux;
+                    }
                     this.listaUsuariosAux[index]=usuario;
                 }
                 this.cargando = false;
@@ -732,7 +734,7 @@ export default {
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
                     this.cargando = false;
-                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -788,7 +790,7 @@ export default {
                 if (error.message == 'Network Error') {
                     //console.log(error)
                     this.alertaError = true;
-                    this.textoAlertas = "Error al modificar el usuario, intente mas tarde."
+                    this.textoAlertas = "Error al modificar el usuario, inténtelo más tarde."
                     this.resetRegistrarUsuario();
                 }
                 else{
@@ -856,7 +858,10 @@ export default {
                 };
                 for(var numEscuela = 0; numEscuela < this.listaEscuela.length; numEscuela++){                        
                     if(item.escuela == this.listaEscuela[numEscuela].nombre){                                                   
-                        this.datosUsuario.escuela = this.listaEscuela[numEscuela].id;
+                        this.datosUsuario.escuela = this.listaEscuela[numEscuela].id;                        
+                    }
+                    if(item.escuelaAux == this.listaEscuela[numEscuela].nombre){                                                   
+                        this.datosUsuario.escuelaAux = this.listaEscuela[numEscuela].id;                        
                     }
                  };  
             }else{
@@ -901,14 +906,14 @@ export default {
             axios.put(url,put,this.$store.state.config)
             .then((result)=>{
                 this.alertaExito = true;
-                this.textoAlertas = "Se modificó el usuario con exito."
+                this.textoAlertas = "Se ha modificado correctamente el usuario."
                 this.obtenerUsuarios(); 
                 this.resetModificacionUsuario();
             }).catch((error)=>{                
                 if (error.message == 'Network Error') {
                     //console.log(error)
                     this.alertaError = true;
-                    this.textoAlertas = "Error al modificar el usuario, intente mas tarde."
+                    this.textoAlertas = "Error al modificar el usuario, inténtelo más tarde."
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -965,12 +970,12 @@ export default {
                     this.obtenerUsuarios();
                     this.resetEliminarUsuario(); 
                     this.alertaExito = true;
-                    this.textoAlertas = "Se elimino el usuario con exito "
+                    this.textoAlertas = "Se ha eliminado correctamente el usuario."
                 }).catch((error)=>{
                     if (error.message == 'Network Error') {
                         //console.log(error)
                         this.alertaError = true;
-                        this.textoAlertas = "Error al eliminar el usuario, intente mas tarde."
+                        this.textoAlertas = "Error al eliminar el usuario, inténtelo más tarde."
                     }
                     else{
                         if (error.response.data.success == false) {
@@ -1017,7 +1022,7 @@ export default {
                 this.dialogEliminar = true;
             }else{
                 this.alertaError = true;
-                this.textoAlertas = "No puede eliminar su propia cuenta"
+                this.textoAlertas = "No puede eliminar su propia cuenta."
             }
         },
     }

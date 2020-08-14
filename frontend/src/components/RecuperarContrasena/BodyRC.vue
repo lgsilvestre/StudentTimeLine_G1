@@ -127,7 +127,6 @@ export default {
         let post ={
             "email": this.email,
         };
-        //console.log(this.email);
         var url = this.$store.state.rutaDinamica+'api/v1/auth/sendRestartPassword';
         axios.post(url,post)
         .then((result)=>{
@@ -143,29 +142,22 @@ export default {
         .catch((error)=>{
           this.$refs.RC.reset();
           if (error.message == 'Network Error') {
-              //console.log(error);
               this.RCstatus = false;
               this.alertError= true;
-              this.textoError= "Error usted no esta registrado o existe un problema en red, intente mas tarde";
+              this.textoError= "Error usted no está registrado o existe un problema en red, inténtelo más tarde.";
           } else {
               this.RCstatus = false;
               if (error.response.data.success == false) {
                   switch (error.response.data.code) {
                       case 2:
-                          //console.log(error.response.data.code +' '+ error.response.data.message);
-                          //console.log(error.response.data);
                           this.alertError= true;
                           this.textoError= error.response.data.message;
                           break;
                       case 3:
-                          //console.log(error.response.data.code +' '+ error.response.data.message);
-                          //console.log(error.response.data);
                           this.alertError= true;
                           this.textoError= error.response.data.message;
                           break;
                       case 4:
-                          //console.log(error.response.data.code +' '+ error.response.data.message);
-                          //console.log(error.response.data);
                           this.alertError= true;
                           this.textoError= error.response.data.message;
                           break;
