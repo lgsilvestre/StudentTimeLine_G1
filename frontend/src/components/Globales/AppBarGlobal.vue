@@ -233,7 +233,7 @@ import axios from 'axios'
         if(this.$vuetify.breakpoint.name == 'sm' || this.$vuetify.breakpoint.name == 'xs'){
             this.$store.state.drawers.drawer = !this.$store.state.drawers.drawer;
             this.$store.state.drawers.miniVarianteAdm = false;
-            console.log(this.icono);
+            //console.log(this.icono);
             this.icono=true;
         }
         else{
@@ -277,7 +277,13 @@ import axios from 'axios'
               ).catch((error)=>{
                   if (error.message == 'Network Error') {
                       this.alertaError = true;                        
-                      this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                      this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
+                  }
+                  else{
+                    if (error.response.data.success == false) {
+                        this.alertaError = true;                        
+                        this.textoAlertas = error.response.data.message;
+                    }
                   }
           })
       },
@@ -308,7 +314,7 @@ import axios from 'axios'
               "motivo": this.datosContactar.motivo,
               "descripcion": this.datosContactar.descripcion,
           };                     
-          console.log(post.destinatarios);
+          //console.log(post.destinatarios);
           var url = this.$store.state.rutaDinamica+'api/v1/usuario/contactar';
           axios.post(url, post, this.$store.state.config)
           .then((result)=>{       
@@ -323,7 +329,14 @@ import axios from 'axios'
                       this.cargando = false;
                       this.alertaError = true;         
                       this.resetContactar();               
-                      this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                      this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
+                  }else{
+                    if (error.response.data.success == false) {
+                        this.cargando = false;
+                        this.alertaError = true;
+                        this.resetContactar(); 
+                        this.textoAlertas = error.response.data.message;
+                    }
                   }
           })
       },

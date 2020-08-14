@@ -245,6 +245,7 @@ class UsuarioController extends Controller{
         if(!array_key_exists ("password" , $entradas)){
             $entradas['password'] = null;
         }
+        //este comando solo funciona en una maquina windows, en una linux invierta el /
         if($entradas['foto']==null){
             // Nombre de la imagen
             $path = 'image.png';
@@ -257,7 +258,7 @@ class UsuarioController extends Controller{
             $entradas['foto'] = $base64;
         }
 
-        //En el servidor se trabaja de esta manera
+        //En servidores compartidos utilizar el siguiente codigo
         // if($entradas['foto']==null){
         //     // Nombre de la imagen
             
@@ -313,7 +314,7 @@ class UsuarioController extends Controller{
                 return response()->json([
                     'success' => false,
                     'code' => 302,
-                    'message' => "Error: el id de la escuela debe ser mayor a 0",
+                    'message' => "Error: El id de la escuela debe ser positivo",
                     'data' => ['error'=>$ex]
                 ], 409  );
             }else if($ex->errorInfo[1]==1452){
@@ -331,7 +332,7 @@ class UsuarioController extends Controller{
                     return response()->json([
                         'success' => false,
                         'code' => 302,
-                        'message' => "Error: El correo ingresado ya existe en el sistema, por favor ingrese otro",
+                        'message' => "Error: El correo ingresado ya existe en el sistema. \nPor favor ingrese otro",
                         'data' => ['error'=>$ex]
                     ], 409  );
                 }
@@ -357,7 +358,7 @@ class UsuarioController extends Controller{
         return response()->json([
             'success' => false,
             'code' => 401,
-            'message' => 'el cliente debe usar un protocolo distinto',
+            'message' => 'Error: El cliente debe usar un protocolo distinto',
             'data' => ['error'=>'El el protocolo se llama store']
         ], 426 );
     }
@@ -384,7 +385,7 @@ class UsuarioController extends Controller{
                 return response()->json([
                     'success' => false,
                     'code' => 501,
-                    'message' => 'No existe ninguna usuario con esa id',
+                    'message' => 'Error: No tenemos información referente a este usuario en nuestra base de datos',
                     'data' => null
                 ], 409);
             }
@@ -421,7 +422,7 @@ class UsuarioController extends Controller{
             return response()->json([
                 'success' => false,
                 'code' => 502,
-                'message' => "Error en la base de datos",
+                'message' => "Error: Tenemos problemas con nuestra base de datos, intente mas tarde ",
                 'data' => ['error'=>$ex]
             ], 409 );
         }
@@ -457,7 +458,7 @@ class UsuarioController extends Controller{
             return response()->json([
                 'success' => false,
                 'code' => 601,
-                'message' => 'Error en datos ingresados',
+                'message' => 'Error: Los datos ingresados son incorrectos',
                 'data' =>['error'=> $validator->errors()]
             ], 422);
         }
@@ -496,7 +497,7 @@ class UsuarioController extends Controller{
                 return response()->json([
                     'success' => false,
                     'code' => 602,
-                    'message' => 'El usuario con el id '.$id.' no existe',
+                    'message' => 'Error: El usuario con el id '.$id.' no existe en nuestro sistema',
                     'data' => null
                 ], 409);
             }
@@ -544,7 +545,7 @@ class UsuarioController extends Controller{
                     return response()->json([
                         'success' => false,
                         'code' => 603,
-                        'message' => "No tienes los permisos necesarios para realizar esta operacion",
+                        'message' => "Error: No cuenta con los permisos necesarios para realizar esta operacion",
                         'data' => ['error'=>"Intento modificar 3 variables que con ese permiso seria imposible, se elimino el token"]
                     ], 403);
                 }
@@ -576,12 +577,41 @@ class UsuarioController extends Controller{
                 'data' =>  $ex,
                 'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
             ]);
+
+            if($ex->errorInfo[1]==1264){
+                return response()->json([
+                    'success' => false,
+                    'code' => 302,
+                    'message' => "Error: l id de la escuela debe ser positivo",
+                    'data' => ['error'=>$ex]
+                ], 409  );
+            }else if($ex->errorInfo[1]==1452){
+                if(strlen(strstr($ex->errorInfo[2],'FOREIGN KEY (`escuela`) REFERENCES `escuelas` (`id`)'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: Escuela inexistente en nuestros registros ",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+ 
+                }
+            }else if($ex->errorInfo[1]==1062){
+                if(strlen(strstr($ex->errorInfo[2],'users_email_unique'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El correo ingresado ya existe en el sistema. \nPor favor ingrese otro",
+                        'data' => ['error'=>$ex]
+                    ], 409 );
+                }
+            }
             return response()->json([
                 'success' => false,
-                'code' => 604,
-                'message' => "Error en la base de datos",
+                'code' => 302,
+                'message' => "Error: No cuenta con los permisos necesarios para realizar esta operacion",
                 'data' => ['error'=>$ex]
-            ], 409 );
+            ], 409);
+
         }
     }
 
@@ -641,7 +671,7 @@ class UsuarioController extends Controller{
             return response()->json([
                 'success' => false,
                 'code' => 702,
-                'message' => "Error en la base de datos",
+                'message' => "Error: Tenemos problemas con nuestra base de datos, intente mas tarde ",
                 'data' => ['error'=>$ex]
             ], 409 );
         }

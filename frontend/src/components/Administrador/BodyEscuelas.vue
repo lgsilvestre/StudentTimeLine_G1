@@ -434,6 +434,7 @@
       reglasNombreEscuela: [
         value => !!value || 'Requerido',
         value => (value || '').length <= 40 || 'Max. 40 caracteres',
+        v => /^[a-zA-ZÀ-ÿ\u00f1\u00d1 ]+$/.test(v) || 'Nombre no Válido.'
       ],
       reglasCodigoCarrera: [
         value => !!value || 'Requerido',
@@ -503,7 +504,7 @@
               //console.log(error);
               this.alertError = true;
               this.cargando = false;
-              this.textoError = 'Error al cargar los datos, intente más tarde'
+              this.textoError = 'Error al cargar los datos, inténtelo más tarde'
             } else {
               if (error.response.data.success == false) {
                 switch (error.response.data.code) {
@@ -515,6 +516,9 @@
                       this.textoError = error.response.data.message;
                       break;
                   default:
+                      this.alertError = true;
+                      this.cargando = false;
+                      this.textoError = error.response.data.message;
                       break;
                 }
               }
@@ -549,7 +553,7 @@
               //console.log(error);
               this.alertError = true;
               this.cargando = false;
-              this.textoError = 'Error al cargar los datos, intente más tarde'
+              this.textoError = 'Error al cargar los datos, inténtelo más tarde'
             } else {
               if (error.response.data.success == false) {
                 switch (error.response.data.code) {
@@ -561,6 +565,9 @@
                       this.textoError = error.response.data.message;
                       break;
                   default:
+                      this.alertError = true;
+                      this.cargando = false;
+                      this.textoError = error.response.data.message;
                       break;
                 }
               }
@@ -593,7 +600,7 @@
             if (error.message == 'Network Error') {
                 //console.log(error)
                 this.alertError = true;
-                this.textoError = "Error al modificar el usuario, intente mas tarde."
+                this.textoError = "Error al modificar el usuario, inténtelo más tarde."
             }
             else{
                 if (error.response.data.success == false) {
@@ -608,7 +615,11 @@
                         //console.log(error.response.data);
                         this.textoError = error.response.data.message;
                         this.alertError = true;
-                    }                    
+                    } 
+                    else{
+                      this.textoError = error.response.data.message;
+                      this.alertError = true;
+                    }                   
                 }
             }
         });
@@ -627,7 +638,7 @@
             this.obtenerEscuelas(); 
             this.resetCreacionEscuela();
             this.alertAcept = true;
-            this.textoAcept = 'La escuela se creó correctamente'
+            this.textoAcept = 'La escuela se creó correctamente.'
           }
         })
         .catch((error) => {
@@ -635,7 +646,7 @@
             //console.log(error);
             this.resetCreacionEscuela();
             this.alertError = true;
-            this.textoError = 'Error en la conexion, intente más tarde';
+            this.textoError = 'Error en la conexión, inténtelo más tarde';
           } else {
             if (error.response.data.success == false) {
               switch (error.response.data.code) {
@@ -654,6 +665,9 @@
                     this.textoError = error.response.data.message;
                     break;
                 default:
+                    this.resetCreacionEscuela();
+                    this.alertError = true;
+                    this.textoError = error.response.data.message;
                     break;
               }
             }
@@ -673,7 +687,7 @@
             this.resetEditarEscuela();
             this.dialogModificar=false;
             this.alertAcept = true;
-            this.textoAcept = 'La escuela se modificó correctamente'
+            this.textoAcept = 'La escuela se modificó correctamente.'
           }
         })
         .catch((error) => {
@@ -681,7 +695,7 @@
             //console.log(error);
             this.resetEditarEscuela();
             this.alertError = true;
-            this.textoError = 'Error en la conexion, intente más tarde';
+            this.textoError = 'Error en la conexión, inténtelo más tarde.';
           } else {
             if (error.response.data.success == false) {
               switch (error.response.data.code) {
@@ -710,6 +724,10 @@
                     this.textoError = error.response.data.message;
                     break;
                 default:
+                    this.resetEditarEscuela();
+                    this.dialogModificar=false;
+                    this.alertError = true;
+                    this.textoError = error.response.data.message;
                     break;
               }
             }
@@ -725,7 +743,7 @@
             this.obtenerEscuelasEliminadas();
             this.dialogEliminar=false;
             this.alertAcept = true;
-            this.textoAcept = 'La escuela se borró correctamente';
+            this.textoAcept = 'La escuela se borró correctamente.';
           }
         })
         .catch((error) => {
@@ -733,7 +751,7 @@
             //console.log(error);
             this.dialogEliminar=false;
             this.alertError = true;
-            this.textoError = 'Error al borrar escuela, intente más tarde';
+            this.textoError = 'Error al borrar escuela, inténtelo más tarde';
           } else {
             if (error.response.data.success == false) {
               switch (error.response.data.code) {
@@ -752,6 +770,9 @@
                     this.textoError = error.response.data.message;
                     break;
                 default:
+                    this.dialogEliminar = false;
+                    this.alertError = true;
+                    this.textoError = error.response.data.message;
                     break;
               }
             }

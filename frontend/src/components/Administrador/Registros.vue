@@ -170,7 +170,14 @@
                     if (error.message == 'Network Error') {
                         this.alertaError = true;
                         this.cargando = false;
-                        this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
+                        this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
+                    }else{
+                        if (error.response.data.success == false) {
+                            this.alertaError = true;
+                            this.cargando = false;
+                            this.textoAlertas = error.response.data.message;
+                        }
+
                     }
                 })},
         },

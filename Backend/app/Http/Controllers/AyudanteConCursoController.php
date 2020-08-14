@@ -98,6 +98,35 @@ class AyudanteConCursoController extends Controller
                 'data' => ['ayudanteCurso'=>$ayudanteCurso]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
+            if($ex->errorInfo[1]==1452){
+                if(strlen(strstr($ex->errorInfo[2],'FOREIGN KEY (`estudiante`)'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El estudiante solicitado no está registrado ",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+ 
+                }else if (strlen(strstr($ex->errorInfo[2],'FOREIGN KEY (`curso`)'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El curso solicitado no está registrado ",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+
+                }
+            }else if($ex->errorInfo[1]==1062){
+                if(strlen(strstr($ex->errorInfo[2],'ayudante__con__cursos_estudiante_curso_unique'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El estudiante solicitado ya es ayudante del curso",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+                }
+            }
+
             return response()->json([
                 'success' => false,
                 'code' => 302,
@@ -203,7 +232,35 @@ class AyudanteConCursoController extends Controller
                 'message' => "Operacion realizada con exito",
                 'data' => ['ayudanteCurso'=>$ayudanteCurso]
             ], 200);
-        }catch(\Illuminate\Database\QueryException $ex){ 
+        }catch(\Illuminate\Database\QueryException $ex){
+            if($ex->errorInfo[1]==1452){
+                if(strlen(strstr($ex->errorInfo[2],'FOREIGN KEY (`estudiante`)'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El estudiante solicitado no está registrado ",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+ 
+                }else if (strlen(strstr($ex->errorInfo[2],'FOREIGN KEY (`curso`)'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El curso solicitado no está registrado ",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+                }
+            }else if($ex->errorInfo[1]==1062){
+                if(strlen(strstr($ex->errorInfo[2],'ayudante__con__cursos_estudiante_curso_unique'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El estudiante solicitado ya es ayudante del curso",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+                }
+            }
+                   
             return response()->json([
                 'success' => false,
                 'code' => 603,
