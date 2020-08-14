@@ -1,5 +1,5 @@
 <template>
-<v-navigation-drawer color="accent" app right v-model="drawers.drawer" :mini-variant="drawers.miniVarianteAdm"  :permanent="$vuetify.breakpoint.mdAndUp" :temporary="$vuetify.breakpoint.smAndDown"
+<v-navigation-drawer color="secondary" app right v-model="drawers.drawer" :mini-variant="drawers.miniVarianteAdm"  :permanent="$vuetify.breakpoint.mdAndUp" :temporary="$vuetify.breakpoint.smAndDown"
     
 >
         <v-tooltip left color="primary" :disabled="!drawers.miniVarianteAdm">

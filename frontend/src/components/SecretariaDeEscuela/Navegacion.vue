@@ -1,6 +1,6 @@
 <template>
-    <v-navigation-drawer app right v-model="drawers.drawer" :mini-variant="drawers.miniVarianteAdm"  :permanent="$vuetify.breakpoint.mdAndUp" :temporary="$vuetify.breakpoint.smAndDown"
-        src="@/assets/Globales/background-panel-02.jpg"
+    <v-navigation-drawer color="secondary" app right v-model="drawers.drawer" :mini-variant="drawers.miniVarianteAdm"  :permanent="$vuetify.breakpoint.mdAndUp" :temporary="$vuetify.breakpoint.smAndDown"
+        
     >
     <!-- Lista general del navigation drawer -->
         <!-- Seccion de Mi Perfil -->
