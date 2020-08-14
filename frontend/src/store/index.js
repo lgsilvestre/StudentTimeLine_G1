@@ -39,7 +39,7 @@ export default new Vuex.Store({
         mensajeErrorLogin: '',
         perfilEstudiante: '',
         infoSemestre: null,
-        rutaDinamica: 'http://3.17.172.58/StudentTimeLine_G1-master/Backend/public/',
+        rutaDinamica: 'http://3.21.37.232/StudentTimeLine_G1-master/Backend/public/',
     },
     mutations: {
         calcularRol(state, nuevoSemestre) {
