@@ -152,7 +152,7 @@ export default {
             textoAlertas: '',
             alertaError: false,
             columnasAyudante:[
-                { text: 'Matrícula', value: 'matricula',align: 'center'},
+                { text: 'Matricula', value: 'matricula',align: 'center'},
                 { text: 'Nombre Completo', value: 'nombre'},
                 {text:'Ir', value:'opciones',align: 'center', sortable: false,},
             ],
@@ -196,7 +196,7 @@ export default {
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
                     this.cargando = false;
-                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
+                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -221,32 +221,40 @@ export default {
             });
         },
 
-        obtenerListaAyudantes(id,pos){
-            this.ayudantes = [];
-            this.ayudantesAux = [];
+        obtenerListaAyudantes(id,pos){                                    
             var aux;    
             var url = this.$store.state.rutaDinamica+`api/v1/ayudanteCurso/`+id;
             axios.get(url,this.$store.state.config)
             .then((result)=>{      
-                //console.log(result);
+                //console.log(result);                
                 for (let index = 0; index < result.data.data.ayudantesCurso.length; index++) {
+                    
                     const element = result.data.data.ayudantesCurso[index]; 
                     let estudiante = {
                         id: element.get_estudiante.id,
                         nombre: element.estudiante,
                         matricula: element.get_estudiante.matricula,
-                    }; 
-                    this.ayudantesAux[index]=estudiante;                                                         
+                    };                     
+                    this.ayudantesAux[index]=estudiante;   
+                    
                 }
-                this.ayudantes = this.ayudantesAux;  
-                this.listaInsCursos[pos].ayudantes = this.ayudantes;
-                this.cargando = false;
+                if(result.data.data.ayudantesCurso.length == 0)                                         {
+                    this.listaInsCursos[pos].ayudantes = [];
+                }
+                else{
+                    this.ayudantes = this.ayudantesAux;                   
+                    this.listaInsCursos[pos].ayudantes = this.ayudantes;
+                    this.ayudantes = [];
+                    this.ayudantesAux= [];
+                    this.cargando = false;                    
+                }
+                
             }
             ).catch((error)=>{
                 if (error.message == 'Network Error') {
                     this.alertaError = true;
                     this.cargando = false;
-                    this.textoAlertas = "Error al cargar los datos, inténtelo más tarde.";
+                    this.textoAlertas = "Error al cargar los datos, intente mas tarde.";
                 }
                 else{
                     if (error.response.data.success == false) {
@@ -265,7 +273,7 @@ export default {
             });
         },
 
-        setAyudantes(item){
+        setAyudantes(item){                        
             this.ayudantes = item.ayudantes;
             this.dialogAyudantes = true;
         },
