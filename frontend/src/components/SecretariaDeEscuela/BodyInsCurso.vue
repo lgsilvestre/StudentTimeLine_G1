@@ -745,7 +745,6 @@
                                 :items="listaProspectosAyudante"
                                 item-text="nombre"
                                 item-value="id"
-                                :rules="[() => !!ayudanteSeleccionado ||'Requerido']"
                                 outlined
                                 prepend-inner-icon="mdi-school"
                                 solo
