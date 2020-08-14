@@ -1469,7 +1469,7 @@ export default {
                         //this.validacionObservacionesFalse = false;
                         //this.validacionObservaciones=false;
                     }
-                    this.estudianteObservacion.categoria = this.categorias[0];
+                    this.estudianteObservacion.categoria = this.categorias[0].id;
                 }
                 if (opcion == 1 || opcion == 3) {
                     var contador = 0;
