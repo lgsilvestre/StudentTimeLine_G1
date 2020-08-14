@@ -422,7 +422,6 @@ export default {
         abrirDialogAgregarSemestre(){
             this.añoActual=new Date().getFullYear();
             this.dialogAñadirSemestre =true;
-            // this.resetValidacionesCrearNuevoSemestre();
         },
         
         /**
@@ -455,11 +454,9 @@ export default {
             }
             ).catch((error)=>{
                 if (error.message == "Network Error") {
-                    //console.log(error);
                     this.textoAlertas =this.errorServidor;
                     this.alertaError = true;
                     this.cargando = false;
-                    // state.mensajeErrorLogin= 'Error al comunicarse con el servidor, intente más tarde';
                 } else {
                     if (error.response.data.success == false) {
                         switch (error.response.data.code) {
@@ -487,9 +484,7 @@ export default {
          */
         registrarSemestre(){
             var valido=this.$refs.form_nuevoSemestre.validate();
-            // console.log("semestre valido :" + valido)
             if(valido == true){
-
                 var año_Aux = new Date().getFullYear()
                 if(this.añoActual <= año_Aux && this.añoActual>= 1981 && this.semestreActual>=1 && this.semestreActual <= 3){
                     let post = {
@@ -500,6 +495,7 @@ export default {
                 axios.post(url, post, this.$store.state.config)
                 .then((result) => {
                     if (result.data.success==true){
+                        this.dialogAñadirSemestre = false;
                         this.textoAlertas = "El semestre se ha registrado correctamente.";
                         this.alertaExito=true;
                         this.obtenerListaDeSemestres(); 
@@ -507,7 +503,6 @@ export default {
                     }
                 }).catch((error)=>{ 
                     if (error.message == 'Network Error') {
-                        //onsole.log(error)
                         this.alertaError = true;
                         this.textoAlertas =this.errorServidor;
                         this.dialogAñadirSemestre =false;
@@ -544,12 +539,10 @@ export default {
         modificarSemestre(){
             var año_Aux = new Date().getFullYear()
             if(this.añoActual <= año_Aux && this.añoActual>= 1981 && this.semestreActual>=1 && this.semestreActual <= 3){
-                //  console.log("ENTRE")
                 let put = {
                         "semestre": this.semestreActual,
                         "anio": this.añoActual
                     }
-                    // console.log(post)
                     var url = this.$store.state.rutaDinamica+`api/v1/semestre/${this.semestreActual_1.id} `;
                     axios.put(url, put, this.$store.state.config)
                     .then((result) => {
@@ -560,12 +553,9 @@ export default {
                             this.textoAlertas = "El semestre ha sido creado correctamente."
                             this.alertaExito=true;
                             this.obtenerListaDeSemestres();
-
                         }
                     }).catch((error)=>{
-                        
                         if (error.message == 'Network Error') {
-                            ///console.log(error)
                             this.textoAlertas = "Error al modificar el semestre, inténtelo más tarde."
                             this.alertaError = true;
                             this.dialogModificarSemestre = false;
@@ -575,8 +565,6 @@ export default {
                         else{
                             if (error.response.data.success == false) {
                                 if(error.response.data.code == 301){
-                                    //console.log(error.response.data.code +' '+ error.response.data.message);
-                                    //console.log(error.response.data);
                                     this.textoAlertas = error.response.data.message;
                                     this.alertaError = true;   
                                     this.dialogModificarSemestre = false;
@@ -584,8 +572,6 @@ export default {
                                     this.semestreActual= 1;   
                                 }
                                 if(error.response.data.code == 601){
-                                    //console.log(error.response.data.code +' '+ error.response.data.message);
-                                    //console.log(error.response.data);
                                     this.textoAlertas = error.response.data.message;
                                     this.alertaError = true;   
                                     this.dialogModificarSemestre = false;
@@ -593,8 +579,6 @@ export default {
                                     this.semestreActual= 1;   
                                 }
                                 if(error.response.data.code == 602){
-                                    //console.log(error.response.data.code +' '+ error.response.data.message);
-                                    //console.log(error.response.data);
                                     this.textoAlertas = error.response.data.message;
                                     this.alertaError = true;  
                                     this.dialogModificarSemestre = false;
@@ -602,8 +586,6 @@ export default {
                                     this.semestreActual= 1;    
                                 }
                                 if(error.response.data.code == 603){
-                                    //console.log(error.response.data.code +' '+ error.response.data.message);
-                                    //console.log(error.response.data);
                                     this.textoAlertas = "Error al registrar el semestre";
                                     this.alertaError = true; 
                                     this.dialogModificarSemestre = false;
@@ -617,7 +599,6 @@ export default {
                                     this.añoActual= new Date().getFullYear();
                                     this.semestreActual= 1;    
                                 }
-                                //console.log(error.response.data.code +' '+ error.response.data.message);
                             }
                         }                
                     });
@@ -629,26 +610,19 @@ export default {
          */
         acionesSobreSemestre(acciones,item){
             if(acciones =='Modificar Semestre'){
-                console.log("Modificar Semestre")  
                 this.dialogModificarSemestre=true;
                 this.semestreActual_1=item;
                 this.añoActual=item.anio;
-                this.semestreActual = item.semestre;
-                
+                this.semestreActual = item.semestre;       
             }
             if(acciones=='Cerrar Semestre'){
-                console.log("Eliminar semestre")
                 this.semestreActual_1=item;
                 this.dialogEliminarSemestre = true;
-                // console.log(this.$store.state.usuario.usuario.rol)
-                
             }
             if(acciones=='Re-abrir semestre'){
-               // console.log("Re-abrir semestre")
                 this.semestreActual_1=item;
                 this.dialogReAbrirSemestre = true;
             }
-            
         },
         /**
          * deshabilita un semetre del sistema
@@ -665,22 +639,17 @@ export default {
                 }
                 }).catch((error)=>{
                     if (error.message == 'Network Error') {
-                        // console.log(error)
                         this.textoAlertas = "Error al eliminar el semestre, inténtelo más tarde."
                         this.alertaError = true;
                     }
                     else{
                         if (error.response.data.success == false) {
                             if(error.response.data.code == 701){
-                                // console.log(error.response.data.code +' '+ error.response.data.message);
-                                // console.log(error.response.data);
                                 this.textoAlertas = error.response.data.message;
                                 this.alertaError = true;
                                 this.dialogEliminarSemestre= false;
                             }
                             if(error.response.data.code == 702){
-                                // console.log(error.response.data.code +' '+ error.response.data.message);
-                                // console.log(error.response.data);
                                 this.textoAlertas = error.response.data.message;
                                 this.alertaError = true;
                                 this.dialogEliminarSemestre= false;

@@ -97,6 +97,40 @@ class ProfesorConCursoController extends Controller
                 'data' => ['profesorCurso'=>$profesorCurso]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
+
+            if($ex->errorInfo[1]==1452){
+                if(strlen(strstr($ex->errorInfo[2],'FOREIGN KEY (`profesor`)'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El profesor solicitado no existe. ",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+ 
+                }else if(strlen(strstr($ex->errorInfo[2],'FOREIGN KEY (`curso`)'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El curso solicitado no existe. ",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+ 
+                }
+                
+            }else if($ex->errorInfo[1]==1062){
+                if(strlen(strstr($ex->errorInfo[2],'profesor__con__cursos_profesor_curso_unique'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El profesor ya esta asignado a este curso",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+                }
+            }
+
+
+            
+
             return response()->json([
                 'success' => false,
                 'code' => 302,
@@ -215,6 +249,37 @@ class ProfesorConCursoController extends Controller
                 'data' => ['profesorCurso'=>$profesorCurso]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
+            
+            if($ex->errorInfo[1]==1452){
+                if(strlen(strstr($ex->errorInfo[2],'FOREIGN KEY (`profesor`)'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El profesor solicitado no existe. ",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+ 
+                }else if(strlen(strstr($ex->errorInfo[2],'FOREIGN KEY (`curso`)'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El curso solicitado no existe. ",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+ 
+                }
+                
+            }else if($ex->errorInfo[1]==1062){
+                if(strlen(strstr($ex->errorInfo[2],'profesor__con__cursos_profesor_curso_unique'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El profesor ya esta asignado a este curso",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+                }
+            }
+
             return response()->json([
                 'success' => false,
                 'code' => 603,
@@ -222,7 +287,7 @@ class ProfesorConCursoController extends Controller
                 'data' => ['error'=>$ex]
             ], 409 );
         }
-        }
+    }
 
     /**
      * Remove the specified resource from storage.
