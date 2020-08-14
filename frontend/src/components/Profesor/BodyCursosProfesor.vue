@@ -59,7 +59,7 @@
                                                 <v-col cols="12" class=" pt-1 pl-1 pr-0 pb-2" >
                                                     <v-card-text class="pt-0 pl-2 pr-0 pr-0 pb-0 font-weight-black text-truncate" style=" font-size: 100%;">
                                                         Ayudante/s: 
-                                                        <v-btn class="pt-0  pb-0 "  outlined x-small  @click="dialogAyudantes = true">
+                                                        <v-btn class="pt-0  pb-0 "  outlined x-small  @click="setAyudantes(item)">
                                                             Ver
                                                         </v-btn>
                                                     </v-card-text>
@@ -140,7 +140,7 @@ export default {
     data() {
         return {
             listaInsCursosAux:[],
-            listaInsCursos:[{id:''},{anio:''},{semestre:''},{seccion:''},{nomCurso:''},{plan:''},{escuela:''}],
+            listaInsCursos:[{id:''},{anio:''},{semestre:''},{seccion:''},{nomCurso:''},{plan:''},{escuela:''},{ayudantes:[]}],
             cargando: true,
             search: '',
             sortBy:'nomCurso',
@@ -221,7 +221,7 @@ export default {
             });
         },
 
-        obtenerListaAyudantes(id){
+        obtenerListaAyudantes(id,pos){
             this.ayudantes = [];
             this.ayudantesAux = [];
             var aux;    
@@ -239,6 +239,7 @@ export default {
                     this.ayudantesAux[index]=estudiante;                                                         
                 }
                 this.ayudantes = this.ayudantesAux;  
+                this.listaInsCursos[pos].ayudantes = this.ayudantes;
                 this.cargando = false;
             }
             ).catch((error)=>{
@@ -263,10 +264,15 @@ export default {
                 }
             });
         },
+
+        setAyudantes(item){
+            this.ayudantes = item.ayudantes;
+            this.dialogAyudantes = true;
+        },
         
         setDialogAyudantes(){        
             for (let index = 0; index < this.listaInsCursos.length; index++){
-                this.obtenerListaAyudantes(this.listaInsCursos[index].idCurso);
+                this.obtenerListaAyudantes(this.listaInsCursos[index].idCurso,index);
             }
         },
 

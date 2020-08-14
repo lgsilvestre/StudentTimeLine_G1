@@ -499,14 +499,16 @@ export default {
                         this.textoAlertas = "El semestre se ha registrado correctamente.";
                         this.alertaExito=true;
                         this.obtenerListaDeSemestres(); 
+                        this.dialogAñadirSemestre =false;
                     }
                 }).catch((error)=>{ 
                     if (error.message == 'Network Error') {
                         this.alertaError = true;
                         this.textoAlertas =this.errorServidor;
-                        this.alertaError = true;  
+                        this.dialogAñadirSemestre =false;
                     }
                     else{
+                        this.dialogAñadirSemestre =false;
                         if (error.response.data.success == false) {
                             if(error.response.data.code == 301){
                                 this.textoAlertas = error.response.data.message;
@@ -517,6 +519,7 @@ export default {
                                 this.alertaError = true;      
                             }
                             else{
+                                console.log(error.response.data.message);
                                 this.textoAlertas = error.response.data.message;
                                 this.alertaError = true;
                             }
