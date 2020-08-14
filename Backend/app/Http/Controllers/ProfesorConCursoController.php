@@ -249,6 +249,7 @@ class ProfesorConCursoController extends Controller
                 'data' => ['profesorCurso'=>$profesorCurso]
             ], 200);
         }catch(\Illuminate\Database\QueryException $ex){ 
+            
             if($ex->errorInfo[1]==1452){
                 if(strlen(strstr($ex->errorInfo[2],'FOREIGN KEY (`profesor`)'))>0){
                     return response()->json([
@@ -278,9 +279,6 @@ class ProfesorConCursoController extends Controller
                     ], 409  );
                 }
             }
-
-
-
 
             return response()->json([
                 'success' => false,
