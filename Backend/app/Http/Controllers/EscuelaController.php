@@ -133,6 +133,17 @@ class EscuelaController extends Controller
                 'data' =>  $ex,
                 'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
             ]);
+            if($ex->errorInfo[1]==1062){
+                if(strlen(strstr($ex->errorInfo[2],'escuelas_cod_escuela_unique'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El Codigo de Escuela ingresado ya esta en uso en nuestro sistema, por favor ingrese otro",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+                }
+            }
+
             return response()->json([
                 'success' => false,
                 'code' => 302,
@@ -257,6 +268,17 @@ class EscuelaController extends Controller
                 'data' =>  $ex,
                 'usuario' =>  JWTAuth::parseToken()->authenticate()['id']
             ]);
+
+            if($ex->errorInfo[1]==1062){
+                if(strlen(strstr($ex->errorInfo[2],'escuelas_cod_escuela_unique'))>0){
+                    return response()->json([
+                        'success' => false,
+                        'code' => 302,
+                        'message' => "Error: El Codigo de Escuela ingresado ya esta en uso en nuestro sistema, por favor ingrese otro",
+                        'data' => ['error'=>$ex]
+                    ], 409  );
+                }
+            }    
             return response()->json([
                 'success' => false,
                 'code' => 603,

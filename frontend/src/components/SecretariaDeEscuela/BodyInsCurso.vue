@@ -1137,7 +1137,6 @@ export default {
             
         },
         restarProfesor(){
-
             if(this.contadorProfesores== 2 ){
                 this.contadorProfesores--;
                 this.profesorSeleccionado2=null;
@@ -2064,6 +2063,7 @@ export default {
          */
         agregarProfesorCurso(post2){
             var url2 = this.$store.state.rutaDinamica+'api/v1/profesorConCurso'; 
+            console.log(post2)
             /* crear profesor con curso */
             if(post2.curso!='' && post2.profesor!=''){
                 axios.post(url2, post2, this.$store.state.config)
@@ -2078,6 +2078,7 @@ export default {
                     this.alertaError = true;
                     this.textoAlertas = "Error al asignar el profesor, inténtelo más tarde."
                     this.resetAsignarCurso();
+
                 }
                 else{
                     if(error.response.data.success == false){
@@ -2099,7 +2100,7 @@ export default {
             });
             }
             // console.log("OBTENIENDO LAS NUEVAS INSTANCIAS")
-            this.obtenerInstanciasCursos(); 
+            
         },
         /**
          * Cierra el dialog de modificar instancia curso.
@@ -2131,6 +2132,11 @@ export default {
             this.profesorConCurso3=null;
             this.profesorConCurso4=null;
             this.profesorConCurso5=null;
+            this.profesorSeleccionadoAux=null;
+            this.profesorSeleccionadoAux2=null;
+            this.profesorSeleccionadoAux3=null;
+            this.profesorSeleccionadoAux4=null;
+            this.profesorSeleccionadoAux5=null;
             this.contadorProfesores=1;
             this.numeroDeProfesoresModificar=0;
 
@@ -2139,13 +2145,11 @@ export default {
         },
         DesvincularUnProfesorInsCurso(id){
             var url = this.$store.state.rutaDinamica+'api/v1/profesorConCurso/'+id;
-            console.log(url)
                 axios.delete(url,this.$store.state.config)
                 .then((result)=>{
                 if (result.statusText=='OK') {
                     this.alertaExito = true;
                     this.textoAlertas = "Se ha desvinculado correctamente al profesor."
-                    
                     this.obtenerInstanciasCursos();
                     this.dialogProfesoresInsCurso=false;
                 }
@@ -2173,12 +2177,12 @@ export default {
                 });
         },
         modificarProfesores(profesorPrincipal, ProfesorAux,idProfesorConCurso,insCurso,num){
-            // console.log("==================="+num+"==================")
+            // console.log("====######=========="+num+"==================")
             // console.log(profesorPrincipal)
             // console.log(ProfesorAux)
             // console.log(insCurso)
             // console.log(idProfesorConCurso)
-            // console.log("===========================================")
+            // console.log("=======######===============================")
             // console.log()
             if( ProfesorAux!= null && idProfesorConCurso!= null && profesorPrincipal!=null &&ProfesorAux!=profesorPrincipal){
                 if(idProfesorConCurso!=''){
@@ -2197,7 +2201,7 @@ export default {
             // Eliminar profesor de una instancia de curso
             if(ProfesorAux!= null && idProfesorConCurso!=null && profesorPrincipal==null ){
                 if(idProfesorConCurso!=''){
-                    // console.log("Eliminar profesor pricipal")
+                    //  console.log("Eliminar profesor pricipal")
                     // console.log(profesorPrincipal)
                     this.DesvincularUnProfesorInsCurso( idProfesorConCurso);
                 }
@@ -2205,7 +2209,7 @@ export default {
             // Agregar profesor a instancia de curso
             if(ProfesorAux==null && idProfesorConCurso==null && profesorPrincipal!=null ){
                 if(profesorPrincipal!=''){
-                    // console.log("añadimos un nuevo profesor")
+                    //  console.log("añadimos un nuevo profesor")
                     let post2 = {
                     "profesor" :  profesorPrincipal,
                     "curso":  insCurso,
